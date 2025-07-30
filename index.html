@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MojAvto.si</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    header {
+      background-color: #004aad;
+      padding: 20px;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.2s;
+      display: inline-block;
+      margin: 10px;
+      width: 300px;
+      vertical-align: top;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #004aad;
+    }
+
+    .card-text {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .card-button {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 16px;
+      background-color: #004aad;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .card-button:hover {
+      background-color: #00327a;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>MojAvto.si</h1>
+    <p>Najdi svoj sanjski avto</p>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <img src="https://cdn3.avto.net/images/2024/07/19/1/300175484.1.jpg" alt="Volkswagen Passat">
+      <div class="card-body">
+        <div class="card-title">Volkswagen Passat Variant</div>
+        <div class="card-text">1.6 TDI | 2017 | 189.000 km</div>
+        <div class="card-text">Cena: 8.499 €</div>
+        <a href="details.html" class="card-button">Veè</a>
+      </div>
+    </div>
+
+    <!-- Add more cards below this if needed -->
+
+  </div>
+
+</body>
+</html>
