@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registracija – MojAvto.si</title>
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <div class="register-container">
+    <h1>Ustvari račun</h1>
+    <form id="registerForm">
+      <label for="fullname">Polno ime</label>
+      <input type="text" id="fullname" name="fullname" required />
+
+      <label for="email">Email naslov</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="username">Uporabniško ime</label>
+      <input type="text" id="username" name="username" required />
+
+      <label for="password">Geslo</label>
+      <input type="password" id="password" name="password" required minlength="6" />
+
+      <label for="confirmPassword">Potrdi geslo</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6" />
+
+      <div class="checkbox">
+        <input type="checkbox" id="terms" name="terms" />
+        <label for="terms">Strinjam se s <a href="terms.html" target="_blank">pogoji uporabe</a></label>
+      </div>
+
+      <button type="submit">Registriraj se</button>
+    </form>
+
+    <p>Že imaš račun? <a href="login.html">Prijavi se</a></p>
+  </div>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const fullname = document.getElementById("fullname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const termsAccepted = document.getElementById("terms").checked;
+
+      if (password !== confirmPassword) {
+        alert("Gesli se ne ujemata.");
+        return;
+      }
+
+      if (!termsAccepted) {
+        alert("Potrebno je sprejeti pogoje.");
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("mojavto_users")) || [];
+
+      const userExists = users.find(u => u.username === username || u.email === email);
+      if (userExists) {
+        alert("Uporabnik s tem emailom ali imenom že obstaja.");
+        return;
+      }
+
+      const newUser = {
+        fullname,
+        email,
+        username,
+        password // For production, do NOT store plain passwords!
+      };
+
+      users.push(newUser);
+      localStorage.setItem("mojavto_users", JSON.stringify(users));
+
+      alert("Uspešna registracija! Preusmerjanje na prijavo...");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

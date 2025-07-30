@@ -12,8 +12,9 @@
     <div class="logo">MojAvto.si</div>
     <nav>
       <a href="napredno_iskanje.html">Napredno iskanje</a>
-      <a href="#">Prijava</a>
+      <a href="login.html" id="loginLink">Prijava</a>
     </nav>
+    <p id="userGreeting" style="margin-top: 10px; display: none;">Dobrodošel, <span id="userName"></span></p>
   </header>
 
   <main>
@@ -58,5 +59,18 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+    window.onload = () => {
+      const user = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
+      const greeting = document.getElementById("userGreeting");
+      const loginLink = document.getElementById("loginLink");
+
+      if (user && user.fullname) {
+        document.getElementById("userName").textContent = user.fullname;
+        greeting.style.display = "block";
+        loginLink.style.display = "none"; // Hide "Prijava" if logged in
+      }
+    };
+  </script>
 </body>
 </html>

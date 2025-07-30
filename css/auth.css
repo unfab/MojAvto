@@ -1,0 +1,86 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f6f7f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.register-container {
+  background: #fff;
+  padding: 2rem;
+  width: 350px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 0.5rem;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 0.6rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+button {
+  margin-top: 1.5rem;
+  padding: 0.7rem;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005fa3;
+}
+
+p {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Add some spacing between checkbox and label text */
+.checkbox input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+/* Optional: focus styles for better accessibility */
+input:focus,
+button:focus {
+  outline: 2px solid #0077cc;
+  outline-offset: 2px;
+}
+
+/* Responsive tweak for small screens */
+@media (max-width: 400px) {
+  .register-container {
+    width: 90vw;
+    padding: 1rem;
+  }
+}
