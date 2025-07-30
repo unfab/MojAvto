@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Podrobnosti vozila</title>
+  <link rel="stylesheet" href="css/styles.css" />
+<script src="js/userMenu.js" defer></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -63,21 +66,31 @@
   </header>
 
   <div class="container">
-    <a href="index.html" class="back-button">‹ Nazaj</a>
+    <a href="index.html" class="back-button">ï¿½ Nazaj</a>
 
     <h2>Volkswagen Passat Variant</h2>
     <img src="https://cdn3.avto.net/images/2024/07/19/1/300175484.1.jpg" alt="Volkswagen Passat" class="car-image" />
 
     <div class="info">
-      <p><strong>Cena:</strong> 8.499 €</p>
+      <p><strong>Cena:</strong> 8.499 ï¿½</p>
       <p><strong>Lokacija:</strong> Ljubljana</p>
       <p><strong>Letnik:</strong> 2017</p>
       <p><strong>Motor:</strong> 1.6 TDI, 88kW</p>
       <p><strong>Kilometri:</strong> 189,000 km</p>
-      <p><strong>Menjalnik:</strong> Roèni</p>
-      <p><strong>Dodatno:</strong> Avto je redno servisiran, zelo dobro ohranjen. Na voljo za takojšnji prevzem.</p>
+      <p><strong>Menjalnik:</strong> Roï¿½ni</p>
+      <p><strong>Dodatno:</strong> Avto je redno servisiran, zelo dobro ohranjen. Na voljo za takojï¿½nji prevzem.</p>
     </div>
   </div>
+<div id="header"></div>
+
+<script>
+  fetch('header.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('header').innerHTML = data;
+      // Initialize your menu scripts here if needed
+    });
+</script>
 
 </body>
 </html>

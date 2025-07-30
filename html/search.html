@@ -1,0 +1,12 @@
+<div id="header"></div>
+
+<script>
+  fetch('header.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('header').innerHTML = data;
+      // Initialize your menu scripts here if needed
+    });
+</script>
+<link rel="stylesheet" href="css/styles.css" />
+<script src="js/userMenu.js" defer></script>

@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Registracija – MojAvto.si</title>
   <link rel="stylesheet" href="css/auth.css" />
+<script src="js/userMenu.js" defer></script>
+
 </head>
 <body>
   <div class="register-container">
@@ -35,7 +37,7 @@
 
     <p>Že imaš račun? <a href="login.html">Prijavi se</a></p>
   </div>
-
+  <script src="js/auth.js"></script>
   <script>
     document.getElementById("registerForm").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -79,5 +81,16 @@
       window.location.href = "login.html";
     });
   </script>
+  <div id="header"></div>
+
+<script>
+  fetch('header.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('header').innerHTML = data;
+      // Initialize your menu scripts here if needed
+    });
+</script>
+
 </body>
 </html>

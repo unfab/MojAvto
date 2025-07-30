@@ -6,15 +6,28 @@
   <title>MojAvto.si - Domov</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
+<script src="js/userMenu.js" defer></script>
+
 </head>
 <body>
   <header>
-    <div class="logo">MojAvto.si</div>
+    <div class="logo"><a href="index.html">MojAvto.si</a></div>
     <nav>
+      <a href="index.html">Domov</a>
       <a href="napredno_iskanje.html">Napredno iskanje</a>
+
+      <!-- User menu dropdown, hidden by default -->
+      <span id="userMenu" style="display:none;">
+        <button id="userDropdownBtn">Moj račun ▼</button>
+        <div id="userDropdown">
+          <a href="create_listing.html">Ustvari oglas</a>
+          <a href="#" id="logoutBtn">Odjava</a>
+        </div>
+      </span>
+
+      <!-- Login link shown only if logged out -->
       <a href="login.html" id="loginLink">Prijava</a>
     </nav>
-    <p id="userGreeting" style="margin-top: 10px; display: none;">Dobrodošel, <span id="userName"></span></p>
   </header>
 
   <main>
@@ -29,6 +42,7 @@
             <option value="mercedes">Mercedes</option>
             <option value="audi">Audi</option>
             <option value="toyota">Toyota</option>
+            <option value="volkswagen">VolksWagen</option>
           </select>
         </div>
         <div>
@@ -57,20 +71,18 @@
   <footer>
     &copy; 2025 MojAvto.si - Vse pravice pridržane
   </footer>
+  <script src="js/main.js"></script>    <!-- listings and search -->
+  <script src="js/userMenu.js"></script> <!-- user menu, login/logout UI -->
+  <div id="header"></div>
 
-  <script src="js/main.js"></script>
-  <script>
-    window.onload = () => {
-      const user = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
-      const greeting = document.getElementById("userGreeting");
-      const loginLink = document.getElementById("loginLink");
+<script>
+  fetch('header.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('header').innerHTML = data;
+      // Initialize your menu scripts here if needed
+    });
+</script>
 
-      if (user && user.fullname) {
-        document.getElementById("userName").textContent = user.fullname;
-        greeting.style.display = "block";
-        loginLink.style.display = "none"; // Hide "Prijava" if logged in
-      }
-    };
-  </script>
 </body>
 </html>
