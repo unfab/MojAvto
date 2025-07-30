@@ -1,108 +1,62 @@
 <!DOCTYPE html>
 <html lang="sl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MojAvto.si</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f5f5;
-    }
-
-    header {
-      background-color: #004aad;
-      padding: 20px;
-      color: white;
-      text-align: center;
-    }
-
-    h1 {
-      margin: 0;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 10px;
-    }
-
-    .card {
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      overflow: hidden;
-      transition: transform 0.2s;
-      display: inline-block;
-      margin: 10px;
-      width: 300px;
-      vertical-align: top;
-    }
-
-    .card:hover {
-      transform: scale(1.02);
-    }
-
-    .card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-
-    .card-body {
-      padding: 15px;
-    }
-
-    .card-title {
-      font-size: 18px;
-      font-weight: bold;
-      color: #004aad;
-    }
-
-    .card-text {
-      margin-top: 8px;
-      font-size: 14px;
-      color: #333;
-    }
-
-    .card-button {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 8px 16px;
-      background-color: #004aad;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    .card-button:hover {
-      background-color: #00327a;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MojAvto.si - Domov</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-
   <header>
-    <h1>MojAvto.si</h1>
-    <p>Najdi svoj sanjski avto</p>
+    <div class="logo">MojAvto.si</div>
+    <nav>
+      <a href="napredno_iskanje.html">Napredno iskanje</a>
+      <a href="#">Prijava</a>
+    </nav>
   </header>
 
-  <div class="container">
-    <div class="card">
-      <img src="https://cdn3.avto.net/images/2024/07/19/1/300175484.1.jpg" alt="Volkswagen Passat">
-      <div class="card-body">
-        <div class="card-title">Volkswagen Passat Variant</div>
-        <div class="card-text">1.6 TDI | 2017 | 189.000 km</div>
-        <div class="card-text">Cena: 8.499 �</div>
-        <a href="details.html" class="card-button">Ve�</a>
+  <main>
+    <section class="hero-search" aria-label="Hitro iskanje vozil">
+      <h1>Najdi svoj naslednji avtomobil</h1>
+      <form class="search-form" id="quickSearchForm" onsubmit="event.preventDefault(); quickSearch();">
+        <div>
+          <label for="make">Znamka</label>
+          <select id="make" name="make">
+            <option value="">Vse znamke</option>
+            <option value="bmw">BMW</option>
+            <option value="mercedes">Mercedes</option>
+            <option value="audi">Audi</option>
+            <option value="toyota">Toyota</option>
+          </select>
+        </div>
+        <div>
+          <label for="yearFrom">Letnik od</label>
+          <input type="number" id="yearFrom" name="yearFrom" placeholder="npr. 2010" min="1900" max="2025" />
+        </div>
+        <div>
+          <label for="priceTo">Cena do (€)</label>
+          <input type="number" id="priceTo" name="priceTo" placeholder="npr. 15000" min="0" />
+        </div>
+        <div>
+          <button class="search-btn" type="submit" aria-label="Izvedi iskanje">Išči</button>
+        </div>
+      </form>
+    </section>
+
+    <section aria-label="Aktualni oglasi" id="listingsSection">
+      <h2>Aktualni oglasi</h2>
+      <div class="listings-grid" id="listingsContainer"></div>
+      <div class="no-listings" id="noListingsMessage" style="display:none;">
+        Zaenkrat ni aktivnih oglasov.
       </div>
-    </div>
+    </section>
+  </main>
 
-    <!-- Add more cards below this if needed -->
+  <footer>
+    &copy; 2025 MojAvto.si - Vse pravice pridržane
+  </footer>
 
-  </div>
-
+  <script src="js/main.js"></script>
 </body>
 </html>
