@@ -37,6 +37,16 @@
 
     <p>Že imaš račun? <a href="login.html">Prijavi se</a></p>
   </div>
+  <div id="header"></div>
+<script>
+  fetch("header.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("header").innerHTML = data;
+      // re-run your header JavaScript here if needed
+    });
+</script>
+
   <script src="js/auth.js"></script>
   <script>
     document.getElementById("registerForm").addEventListener("submit", function (e) {
@@ -90,6 +100,42 @@
       document.getElementById('header').innerHTML = data;
       // Initialize your menu scripts here if needed
     });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const user = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
+    const userMenu = document.getElementById("userMenu");
+    const loginLink = document.getElementById("loginLink");
+    const userDropdownBtn = document.getElementById("userDropdownBtn");
+    const userDropdown = document.getElementById("userDropdown");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (user && user.fullname) {
+      userMenu.style.display = "inline-block";
+      loginLink.style.display = "none";
+      userDropdownBtn.textContent = `Moj račun ▼ (${user.fullname})`;
+    } else {
+      userMenu.style.display = "none";
+      loginLink.style.display = "inline";
+    }
+
+    userDropdownBtn?.addEventListener("click", () => {
+      userDropdown.style.display = userDropdown.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!userMenu.contains(e.target)) {
+        userDropdown.style.display = "none";
+      }
+    });
+
+    logoutBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.removeItem("mojavto_loggedUser");
+      alert("Odjava uspešna.");
+      window.location.href = "login.html";
+    });
+  });
 </script>
 
 </body>

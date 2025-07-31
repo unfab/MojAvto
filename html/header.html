@@ -1,15 +1,20 @@
-<div id="header"></div>
-
-<script>
-  fetch('header.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('header').innerHTML = data;
-      // Initialize your menu scripts here if needed
-    });
-</script>
-<link rel="stylesheet" href="css/styles.css" />
-<script src="js/userMenu.js" defer></script>
+<header>
+  <div class="logo"><a href="index.html">MojAvto.si</a></div>
+  <nav>
+    <a href="index.html">Domov</a>
+    <a href="napredno_iskanje.html">Napredno iskanje</a>
+    <a href="compare_prices.html">Primerjaj cene</a>
+    <span id="userMenu" style="display:none;">
+      <button id="userDropdownBtn">Moj račun ▼</button>
+      <div id="userDropdown">
+        <a href="create_listing.html">Ustvari oglas</a>
+        <a href="register.html">Registracija</a>
+        <a href="#" id="logoutBtn">Odjava</a>
+      </div>
+    </span>
+    <a href="login.html" id="loginLink">Prijava</a>
+  </nav>
+</header>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const user = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
@@ -46,3 +51,4 @@
     });
   });
 </script>
+>

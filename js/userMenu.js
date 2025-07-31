@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+function initUserMenu() {
   const user = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
   const userMenu = document.getElementById("userMenu");
   const loginLink = document.getElementById("loginLink");
@@ -16,11 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   userDropdownBtn?.addEventListener("click", () => {
-    if (userDropdown.style.display === "block") {
-      userDropdown.style.display = "none";
-    } else {
-      userDropdown.style.display = "block";
-    }
+    userDropdown.style.display = userDropdown.style.display === "block" ? "none" : "block";
   });
 
   document.addEventListener("click", (e) => {
@@ -35,4 +31,4 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("Odjava uspešna.");
     window.location.href = "login.html";
   });
-});
+}
