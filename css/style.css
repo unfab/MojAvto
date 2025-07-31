@@ -1,8 +1,8 @@
-/* Put all your CSS here from the previous inline style */
 /* Reset and basics */
 * {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -12,31 +12,102 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
-/* ... rest of your styles from the previous block ... */
-  <style>
-    /* Simple styles for dropdown positioning */
-    #userMenu {
-      position: relative;
-      display: inline-block;
-    }
-    #userDropdown {
-      display: none;
-      position: absolute;
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-top: 5px;
-      right: 0;
-      min-width: 150px;
-      z-index: 1000;
-    }
-    #userDropdown a {
-      display: block;
-      padding: 5px 0;
-      text-decoration: none;
-      color: #333;
-    }
-    #userDropdown a:hover {
-      background-color: #f0f0f0;
-    }
-  </style>
+
+/* Header Layout */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 12px 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 10;
+}
+
+.logo a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #111827;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
+
+nav a:hover {
+  color: #1f2937;
+}
+
+/* User Menu Dropdown */
+#userMenu {
+  position: relative;
+  display: inline-block;
+}
+
+#userDropdown {
+  display: none;
+  position: absolute;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 8px;
+  margin-top: 5px;
+  right: 0;
+  min-width: 160px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+#userDropdown a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #111827;
+  border-radius: 4px;
+}
+
+#userDropdown a:hover {
+  background-color: #f3f4f6;
+}
+
+.burger {
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .burger {
+    display: inline-block;
+  }
+
+  #navLinks {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #navLinks.open {
+    display: flex;
+  }
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+}
+
