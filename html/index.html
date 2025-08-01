@@ -6,126 +6,72 @@
   <title>MojAvto.si - Domov</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
-<script src="js/userMenu.js" defer></script>
-
 </head>
 <body>
-  <header>
-    <div class="logo"><a href="index.html">MojAvto.si</a></div>
-    <nav>
-      <a href="index.html">Domov</a>
-      <a href="napredno_iskanje.html">Napredno iskanje</a>
 
-      <!-- User menu dropdown, hidden by default -->
-      <span id="userMenu" style="display:none;">
-        <button id="userDropdownBtn">Moj račun ▼</button>
-        <div id="userDropdown">
-          <a href="create_listing.html">Ustvari oglas</a>
-          <a href="#" id="logoutBtn">Odjava</a>
-        </div>
-      </span>
+<header>
+  <div class="logo"><a href="index.html">MojAvto.si</a></div>
+  <nav id="navLinks">
+    <a href="index.html">Domov</a>
+    <a href="napredno_iskanje.html">Napredno iskanje</a>
 
-      <!-- Login link shown only if logged out -->
-      <a href="login.html" id="loginLink">Prijava</a>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero-search" aria-label="Hitro iskanje vozil">
-      <h1>Najdi svoj naslednji avtomobil</h1>
-      <form class="search-form" id="quickSearchForm" onsubmit="event.preventDefault(); quickSearch();">
-        <div>
-          <label for="make">Znamka</label>
-          <select id="make" name="make">
-            <option value="">Vse znamke</option>
-            <option value="bmw">BMW</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
-            <option value="toyota">Toyota</option>
-            <option value="volkswagen">VolksWagen</option>
-          </select>
-        </div>
-        <div>
-          <label for="yearFrom">Letnik od</label>
-          <input type="number" id="yearFrom" name="yearFrom" placeholder="npr. 2010" min="1900" max="2025" />
-        </div>
-        <div>
-          <label for="priceTo">Cena do (€)</label>
-          <input type="number" id="priceTo" name="priceTo" placeholder="npr. 15000" min="0" />
-        </div>
-        <div>
-          <button class="search-btn" type="submit" aria-label="Izvedi iskanje">Išči</button>
-        </div>
-      </form>
-    </section>
-
-    <section aria-label="Aktualni oglasi" id="listingsSection">
-      <h2>Aktualni oglasi</h2>
-      <div class="listings-grid" id="listingsContainer"></div>
-      <div class="no-listings" id="noListingsMessage" style="display:none;">
-        Zaenkrat ni aktivnih oglasov.
+    <!-- User menu dropdown, privzeto skrito -->
+    <span id="userMenu" style="display:none;">
+      <button id="userDropdownBtn">Moj račun ▼</button>
+      <div id="userDropdown">
+        <a href="create_listing.html">Ustvari oglas</a>
+        <a href="#" id="logoutBtn">Odjava</a>
       </div>
-      <div id="header"></div>
+    </span>
+
+    <!-- Link za prijavo, prikazan če ni prijavljen -->
+    <a href="login.html" id="loginLink">Prijava</a>
+  </nav>
+  <button class="burger" aria-label="Odpri meni">&#9776;</button>
+</header>
+
+<main>
+  <section class="hero-search" aria-label="Hitro iskanje vozil">
+    <h1>Najdi svoj naslednji avtomobil</h1>
+    <form class="filter-panel" id="quickSearchForm" onsubmit="event.preventDefault(); filterListings();">
+      <select id="make" name="make">
+        <option value="">Vse znamke</option>
+        <!-- JS napolni znamke -->
+      </select>
+
+      <select id="model" name="model" disabled>
+        <option value="">Najprej izberi znamko</option>
+      </select>
+
+      <input type="number" id="yearFrom" name="yearFrom" placeholder="Letnik od (npr. 2010)" min="1900" max="2025" />
+      <input type="number" id="priceTo" name="priceTo" placeholder="Cena do (€)" min="0" />
+      <button class="search-btn" type="submit" aria-label="Izvedi iskanje">Išči</button>
+    </form>
+  </section>
+
+  <section aria-label="Aktualni oglasi" id="listingsSection">
+    <h2>Aktualni oglasi</h2>
+    <div class="listings-grid" id="listingsContainer"></div>
+    <div class="no-listings" id="noListingsMessage" style="display:none;">
+      Zaenkrat ni aktivnih oglasov.
+    </div>
+  </section>
+</main>
+
+<footer>
+  &copy; 2025 MojAvto.si - Vse pravice pridržane
+</footer>
+
+<script src="js/main.js" defer></script>
+<script src="js/userMenu.js" defer></script>
 <script>
-  fetch("header.html")
-    .then(res => res.text())
-    .then(data => {
-      document.getElementById("header").innerHTML = data;
-      // re-run your header JavaScript here if needed
-    });
-</script>
+  // Burger meni toggle (če želiš)
+  document.addEventListener('DOMContentLoaded', () => {
+    const burger = document.querySelector('.burger');
+    const navLinks = document.getElementById('navLinks');
 
-    </section>
-  </main>
-
-  <footer>
-    &copy; 2025 MojAvto.si - Vse pravice pridržane
-  </footer>
-  <script src="js/main.js"></script>    <!-- listings and search -->
-  <script src="js/userMenu.js"></script> <!-- user menu, login/logout UI -->
-  <div id="header"></div>
-
-<script>
-  fetch('header.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('header').innerHTML = data;
-      // Initialize your menu scripts here if needed
-    });
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const user = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
-    const userMenu = document.getElementById("userMenu");
-    const loginLink = document.getElementById("loginLink");
-    const userDropdownBtn = document.getElementById("userDropdownBtn");
-    const userDropdown = document.getElementById("userDropdown");
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    if (user && user.fullname) {
-      userMenu.style.display = "inline-block";
-      loginLink.style.display = "none";
-      userDropdownBtn.textContent = `Moj račun ▼ (${user.fullname})`;
-    } else {
-      userMenu.style.display = "none";
-      loginLink.style.display = "inline";
-    }
-
-    userDropdownBtn?.addEventListener("click", () => {
-      userDropdown.style.display = userDropdown.style.display === "block" ? "none" : "block";
-    });
-
-    document.addEventListener("click", (e) => {
-      if (!userMenu.contains(e.target)) {
-        userDropdown.style.display = "none";
-      }
-    });
-
-    logoutBtn?.addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("mojavto_loggedUser");
-      alert("Odjava uspešna.");
-      window.location.href = "login.html";
+    burger?.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
     });
   });
 </script>

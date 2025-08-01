@@ -1,4 +1,4 @@
-/* Reset and basics */
+/* Reset in osnovne nastavitve */
 * {
   box-sizing: border-box;
 }
@@ -11,9 +11,10 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  /* Če nočeš horizontalnega centriranja, ne dodajaj align-items */
 }
 
-/* Header Layout */
+/* Header */
 header {
   display: flex;
   justify-content: space-between;
@@ -49,7 +50,7 @@ nav a:hover {
   color: #1f2937;
 }
 
-/* User Menu Dropdown */
+/* User menu dropdown */
 #userMenu {
   position: relative;
   display: inline-block;
@@ -80,6 +81,7 @@ nav a:hover {
   background-color: #f3f4f6;
 }
 
+/* Burger menu (mobilna navigacija) */
 .burger {
   display: none;
   font-size: 24px;
@@ -104,13 +106,108 @@ nav a:hover {
   }
 }
 
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 16px;
+/* Main container in vsebina */
+main {
+  flex: 1;
+  max-width: 1000px;
+  width: 100%;
+  padding: 20px;
+  margin: 0 auto;
 }
 
+/* Filter panel */
+.filter-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+  justify-content: center;
+}
+
+.filter-panel select,
+.filter-panel input {
+  flex: 1 1 150px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+.filter-panel select:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.filter-panel select:focus,
+.filter-panel input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 5px #3b82f6;
+}
+
+/* Oglasi - grid container */
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Kartice oglasov */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin: 0 0 6px;
+}
+
+.card-details {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: auto;
+}
+
+.card-price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #16a34a;
+  margin-top: 10px;
+}
+
+/* Sporočilo, če ni oglasov */
+.no-listings {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin-top: 40px;
+}
+
+/* Predogled slik (če uporabljaš) */
 .image-preview {
   display: flex;
   flex-wrap: wrap;
