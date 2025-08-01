@@ -1,142 +1,72 @@
 <!DOCTYPE html>
 <html lang="sl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Registracija – MojAvto.si</title>
-  <link rel="stylesheet" href="css/auth.css" />
-<script src="js/userMenu.js" defer></script>
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registracija – MojAvto.si</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/auth.css" />
 </head>
 <body>
-  <div class="register-container">
-    <h1>Ustvari račun</h1>
-    <form id="registerForm">
-      <label for="fullname">Polno ime</label>
-      <input type="text" id="fullname" name="fullname" required />
+    <div id="header"></div>
 
-      <label for="email">Email naslov</label>
-      <input type="email" id="email" name="email" required />
+    <div class="auth-container">
+        <h1>Ustvari račun</h1>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="fullname">Polno ime</label>
+                <input type="text" id="fullname" name="fullname" required />
+            </div>
+            <div class="form-group">
+                <label for="email">Email naslov</label>
+                <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-group">
+                <label for="username">Uporabniško ime</label>
+                <input type="text" id="username" name="username" required />
+            </div>
+            <div class="form-group">
+                <label for="region">Regija</label>
+                <select id="region" name="region" required>
+                    <option value="">Izberite vašo regijo</option>
+                    <option>Osrednjeslovenska</option>
+                    <option>Podravska</option>
+                    <option>Savinjska</option>
+                    <option>Gorenjska</option>
+                    <option>Goriška</option>
+                    <option>Primorsko-notranjska</option>
+                    <option>Obalno-kraška</option>
+                    <option>Jugovzhodna Slovenija</option>
+                    <option>Koroška</option>
+                    <option>Pomurska</option>
+                    <option>Posavska</option>
+                    <option>Zasavska</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="password">Geslo</label>
+                <input type="password" id="password" name="password" required minlength="8" />
+                <div class="password-strength">
+                    <div id="strength-bar" class="strength-bar"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Potrdi geslo</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" />
+            </div>
+            
+            <div id="error-message" class="error-message"></div>
 
-      <label for="username">Uporabniško ime</label>
-      <input type="text" id="username" name="username" required />
+            <div class="form-group checkbox">
+                <input type="checkbox" id="terms" name="terms" required/>
+                <label for="terms">Strinjam se s <a href="#" target="_blank">pogoji uporabe</a></label>
+            </div>
 
-      <label for="password">Geslo</label>
-      <input type="password" id="password" name="password" required minlength="6" />
+            <button type="submit">Registriraj se</button>
+        </form>
+        <p>Že imaš račun? <a href="login.html">Prijavi se</a></p>
+    </div>
 
-      <label for="confirmPassword">Potrdi geslo</label>
-      <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6" />
-
-      <div class="checkbox">
-        <input type="checkbox" id="terms" name="terms" />
-        <label for="terms">Strinjam se s <a href="terms.html" target="_blank">pogoji uporabe</a></label>
-      </div>
-
-      <button type="submit">Registriraj se</button>
-    </form>
-
-    <p>Že imaš račun? <a href="login.html">Prijavi se</a></p>
-  </div>
-  <div id="header"></div>
-<script>
-  fetch("header.html")
-    .then(res => res.text())
-    .then(data => {
-      document.getElementById("header").innerHTML = data;
-      // re-run your header JavaScript here if needed
-    });
-</script>
-
-  <script src="js/auth.js"></script>
-  <script>
-    document.getElementById("registerForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const fullname = document.getElementById("fullname").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-      const termsAccepted = document.getElementById("terms").checked;
-
-      if (password !== confirmPassword) {
-        alert("Gesli se ne ujemata.");
-        return;
-      }
-
-      if (!termsAccepted) {
-        alert("Potrebno je sprejeti pogoje.");
-        return;
-      }
-
-      const users = JSON.parse(localStorage.getItem("mojavto_users")) || [];
-
-      const userExists = users.find(u => u.username === username || u.email === email);
-      if (userExists) {
-        alert("Uporabnik s tem emailom ali imenom že obstaja.");
-        return;
-      }
-
-      const newUser = {
-        fullname,
-        email,
-        username,
-        password // For production, do NOT store plain passwords!
-      };
-
-      users.push(newUser);
-      localStorage.setItem("mojavto_users", JSON.stringify(users));
-
-      alert("Uspešna registracija! Preusmerjanje na prijavo...");
-      window.location.href = "login.html";
-    });
-  </script>
-  <div id="header"></div>
-
-<script>
-  fetch('header.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('header').innerHTML = data;
-      // Initialize your menu scripts here if needed
-    });
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const user = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
-    const userMenu = document.getElementById("userMenu");
-    const loginLink = document.getElementById("loginLink");
-    const userDropdownBtn = document.getElementById("userDropdownBtn");
-    const userDropdown = document.getElementById("userDropdown");
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    if (user && user.fullname) {
-      userMenu.style.display = "inline-block";
-      loginLink.style.display = "none";
-      userDropdownBtn.textContent = `Moj račun ▼ (${user.fullname})`;
-    } else {
-      userMenu.style.display = "none";
-      loginLink.style.display = "inline";
-    }
-
-    userDropdownBtn?.addEventListener("click", () => {
-      userDropdown.style.display = userDropdown.style.display === "block" ? "none" : "block";
-    });
-
-    document.addEventListener("click", (e) => {
-      if (!userMenu.contains(e.target)) {
-        userDropdown.style.display = "none";
-      }
-    });
-
-    logoutBtn?.addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("mojavto_loggedUser");
-      alert("Odjava uspešna.");
-      window.location.href = "login.html";
-    });
-  });
-</script>
-
+    <script src="js/auth.js" defer></script>
 </body>
 </html>

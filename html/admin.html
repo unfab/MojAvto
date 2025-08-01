@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administracija - MojAvto.si</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div id="header"></div>
+
+    <main class="admin-container">
+        <h1>Administratorska plošča</h1>
+        
+        <section class="admin-section stats-section">
+            <h2>Statistika strani (simulacija)</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <p class="stat-value" id="total-users">0</p>
+                    <p class="stat-label">Registriranih uporabnikov</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-value" id="total-listings">0</p>
+                    <p class="stat-label">Skupno število oglasov</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-value" id="avg-price">0 €</p>
+                    <p class="stat-label">Povprečna cena vozila</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-section">
+            <h2>Upravljanje z oglasi</h2>
+            <table class="listings-table">
+                <thead>
+                    <tr>
+                        <th>ID Oglasa</th>
+                        <th>Naslov</th>
+                        <th>Avtor</th>
+                        <th>Cena</th>
+                        <th>Akcije</th>
+                    </tr>
+                </thead>
+                <tbody id="listings-table-body">
+                    </tbody>
+            </table>
+        </section>
+    </main>
+    
+    <script src="js/admin.js" defer></script>
+</body>
+</html>
