@@ -1,58 +1,56 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Podrobnosti oglasa - MojAvto.si</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/listing.css" /> </head>
+<body>
+
 <div id="header"></div>
 
-<script>
-  fetch('header.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('header').innerHTML = data;
-      // Initialize your menu scripts here if needed
-    });
-</script>
-<link rel="stylesheet" href="css/styles.css" />
-<script src="js/userMenu.js" defer></script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const user = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
-    const userMenu = document.getElementById("userMenu");
-    const loginLink = document.getElementById("loginLink");
-    const userDropdownBtn = document.getElementById("userDropdownBtn");
-    const userDropdown = document.getElementById("userDropdown");
-    const logoutBtn = document.getElementById("logoutBtn");
+<main class="listing-container">
+    <div class="back-link-container">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Vsi oglasi</a>
+    </div>
 
-    if (user && user.fullname) {
-      userMenu.style.display = "inline-block";
-      loginLink.style.display = "none";
-      userDropdownBtn.textContent = `Moj račun ▼ (${user.fullname})`;
-    } else {
-      userMenu.style.display = "none";
-      loginLink.style.display = "inline";
-    }
+    <h1 id="listing-title"></h1>
 
-    userDropdownBtn?.addEventListener("click", () => {
-      userDropdown.style.display = userDropdown.style.display === "block" ? "none" : "block";
-    });
+    <div class="listing-layout">
+        <div class="image-gallery">
+            <div class="main-image-container">
+                <img id="main-image" src="" alt="Glavna slika vozila">
+                <button class="nav-btn prev" id="prev-btn">&#10094;</button>
+                <button class="nav-btn next" id="next-btn">&#10095;</button>
+            </div>
+            <div class="thumbnail-container" id="thumbnail-container">
+                </div>
+        </div>
 
-    document.addEventListener("click", (e) => {
-      if (!userMenu.contains(e.target)) {
-        userDropdown.style.display = "none";
-      }
-    });
+        <div class="details-panel">
+            <div class="price-tag">
+                <h2 id="price"></h2>
+            </div>
 
-    logoutBtn?.addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("mojavto_loggedUser");
-      alert("Odjava uspešna.");
-      window.location.href = "login.html";
-    });
-  });
-</script>
-<main class="listing-details">
-  <div class="image-gallery">
-    <button id="prevBtn">⟨</button>
-    <img id="mainImage" src="" alt="Vozilo" />
-    <button id="nextBtn">⟩</button>
-  </div>
-  <div class="thumbnails" id="thumbnails"></div>
+            <h3>Ključni podatki</h3>
+            <div class="key-details" id="key-details">
+                </div>
+            
+            <h3>Opis vozila</h3>
+            <p id="description"></p>
+
+            <h3>Podatki o prodajalcu</h3>
+            <div class="seller-info">
+                <p><i class="fas fa-user"></i> <strong id="seller-name"></strong></p>
+                <p><i class="fas fa-map-marker-alt"></i> <span id="seller-location"></span></p>
+                <button class="contact-btn"><i class="fas fa-phone"></i> Pokaži telefonsko</button>
+            </div>
+        </div>
+    </div>
 </main>
 
-<script src="js/listings.js" defer></script>
+<script src="js/listing.js" defer></script>
+</body>
+</html>
