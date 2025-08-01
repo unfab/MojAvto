@@ -15,7 +15,6 @@
       <label for="brand">Znamka vozila:</label>
       <select id="brand" name="brand" required>
         <option value="">Izberi znamko</option>
-        <!-- Dinamično generirano -->
       </select>
 
       <label for="model">Model:</label>
@@ -46,7 +45,6 @@
       <label for="year">Letnik:</label>
       <select id="year" name="year" required>
         <option value="">Izberi letnik</option>
-        <!-- Dinamično napolni od 1990 do letos -->
       </select>
 
       <label for="transmission">Menjalnik:</label>
@@ -69,15 +67,15 @@
 
       <label for="images">Naloži slike:</label>
       <input type="file" id="images" name="images" accept="image/*" multiple required />
+      <div id="preview" class="image-preview"></div>
 
       <button type="submit">Objavi oglas</button>
     </form>
   </main>
 
-  <!-- Load your user menu script -->
   <script src="js/userMenu.js" defer></script>
 
-  <!-- Inject header and initialize -->
+  <!-- Nalaganje headerja -->
   <script>
     fetch("header.html")
       .then(res => res.text())
@@ -85,71 +83,82 @@
         document.getElementById("header").innerHTML = data;
         initUserMenu();
       })
-      .catch(err => console.error("Failed to load header:", err));
+      .catch(err => console.error("Napaka pri nalaganju headerja:", err));
   </script>
 
+  <!-- Dinamično nalaganje znamk in modelov -->
   <script>
-    // Znamke in modeli - lahko kasneje naložiš iz zunanjo JSON datoteko
-    const brandModelData = {
-      "Audi": ["A1", "A3", "A4", "A6", "A8", "Q2", "Q3", "Q5", "Q7", "Q8"],
-      "BMW": ["1 Series", "3 Series", "5 Series", "7 Series", "X1", "X3", "X5"],
-      "Volkswagen": ["Golf", "Passat", "Tiguan", "Polo", "Touareg", "Arteon"],
-      "Škoda": ["Fabia", "Octavia", "Superb", "Kamiq", "Karoq", "Enyaq"],
-      "Mercedes-Benz": ["A-Class", "C-Class", "E-Class", "S-Class", "GLA", "GLE", "GLC"],
-      "Ford": ["Fiesta", "Focus", "Mondeo", "Kuga", "Puma", "EcoSport"],
-      "Renault": ["Clio", "Megane", "Captur", "Kadjar", "Talisman"],
-      "Peugeot": ["208", "308", "2008", "3008", "5008"],
-      "Toyota": ["Aygo", "Yaris", "Corolla", "C-HR", "RAV4"],
-      "Honda": ["Civic", "Jazz", "CR-V", "HR-V"],
-      "Hyundai": ["i10", "i20", "i30", "Tucson", "Santa Fe"],
-      "Kia": ["Picanto", "Rio", "Ceed", "Sportage", "Sorento"],
-      "Fiat": ["500", "Panda", "Tipo", "Punto"],
-      "Dacia": ["Sandero", "Logan", "Duster", "Lodgy"],
-      "Cupra": ["Ateca", "Leon", "Formentor"],
-      "DS Automobiles": ["DS3", "DS4", "DS7"],
-      "Alfa Romeo": ["Giulietta", "Giulia", "Stelvio", "Tonale"],
-      "Tesla": ["Model 3", "Model S", "Model X", "Model Y"],
-      "Porsche": ["Cayenne", "Panamera", "Macan", "Taycan"]
-    };
-
-    // Napolni znamke ob nalaganju strani
     document.addEventListener("DOMContentLoaded", () => {
       const brandSelect = document.getElementById("brand");
       const modelSelect = document.getElementById("model");
       const yearSelect = document.getElementById("year");
 
-      // Polnjenje znamk
-      Object.keys(brandModelData).sort().forEach(brand => {
-        const option = document.createElement("option");
-        option.value = brand;
-        option.textContent = brand;
-        brandSelect.appendChild(option);
-      });
-
       // Polnjenje letnikov od letos do 1990
       const currentYear = new Date().getFullYear();
-      for(let y = currentYear; y >= 1990; y--) {
+      for (let y = currentYear; y >= 1990; y--) {
         const opt = document.createElement("option");
         opt.value = y;
         opt.textContent = y;
         yearSelect.appendChild(opt);
       }
 
-      // Ko izbereš znamko, se napolnijo modeli
-      brandSelect.addEventListener("change", function() {
-        modelSelect.innerHTML = '<option value="">Izberi model</option>';
-        modelSelect.disabled = true;
-
-        const selectedBrand = this.value;
-        if(selectedBrand && brandModelData[selectedBrand]) {
-          brandModelData[selectedBrand].forEach(model => {
-            const opt = document.createElement("option");
-            opt.value = model;
-            opt.textContent = model;
-            modelSelect.appendChild(opt);
+      // Fetch brand-model JSON
+      fetch("data/brands_models_global.json")
+        .then(res => res.json())
+        .then(brandModelData => {
+          const sortedBrands = Object.keys(brandModelData).sort();
+          sortedBrands.forEach(brand => {
+            const option = document.createElement("option");
+            option.value = brand;
+            option.textContent = brand;
+            brandSelect.appendChild(option);
           });
-          modelSelect.disabled = false;
-        }
+
+          brandSelect.addEventListener("change", function () {
+            const selectedBrand = this.value;
+            modelSelect.innerHTML = '<option value="">Izberi model</option>';
+            modelSelect.disabled = true;
+
+            if (selectedBrand && brandModelData[selectedBrand]) {
+              brandModelData[selectedBrand].forEach(model => {
+                const opt = document.createElement("option");
+                opt.value = model;
+                opt.textContent = model;
+                modelSelect.appendChild(opt);
+              });
+              modelSelect.disabled = false;
+            }
+          });
+        })
+        .catch(err => {
+          console.error("Napaka pri nalaganju znamk in modelov:", err);
+        });
+    });
+  </script>
+
+  <!-- Predogled slik -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const input = document.getElementById("images");
+      const preview = document.getElementById("preview");
+
+      input.addEventListener("change", () => {
+        preview.innerHTML = ""; // Počisti obstoječe slike
+
+        const files = input.files;
+        if (!files.length) return;
+
+        Array.from(files).forEach(file => {
+          if (!file.type.startsWith("image/")) return;
+
+          const reader = new FileReader();
+          reader.onload = e => {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            preview.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
       });
     });
   </script>
