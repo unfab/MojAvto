@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moj profil - MojAvto.si</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div id="header"></div>
+
+    <main class="dashboard-container">
+        <h1 id="welcome-message"></h1>
+        
+        <div class="tabs">
+            <button class="tab-link active" data-tab="tab-listings">Moji oglasi</button>
+            <button class="tab-link" data-tab="tab-favorites">Priljubljeni</button>
+            <button class="tab-link" data-tab="tab-recent">Nazadnje ogledano</button>
+            <button class="tab-link" data-tab="tab-edit-profile">Uredi profil</button>
+        </div>
+
+        <div class="tab-content active" id="tab-listings">
+            <div class="listings-grid" id="my-listings-container"></div>
+            <div id="no-listings-message" class="empty-state">Nimate objavljenih oglasov.</div>
+        </div>
+
+        <div class="tab-content" id="tab-favorites">
+            <div class="listings-grid" id="favorite-listings-container"></div>
+            <div id="no-favorites-message" class="empty-state">Nimate shranjenih priljubljenih oglasov.</div>
+        </div>
+        
+        <div class="tab-content" id="tab-recent">
+            <div class="listings-grid" id="recent-listings-container"></div>
+            <div id="no-recent-message" class="empty-state">Nimate nazadnje ogledanih oglasov.</div>
+        </div>
+
+        <div class="tab-content" id="tab-edit-profile">
+            <form id="profile-edit-form" class="profile-form">
+                <h3>Uredi osebne podatke</h3>
+                <div class="form-group">
+                    <label for="fullname">Polno ime</label>
+                    <input type="text" id="fullname" name="fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email naslov</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPhone">Telefonska številka</label>
+                    <input type="tel" id="userPhone" name="userPhone">
+                </div>
+                <button type="submit" class="btn-primary">Shrani spremembe</button>
+            </form>
+        </div>
+    </main>
+    
+    <script src="js/dashboard.js" defer></script>
+</body>
+</html>

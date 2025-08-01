@@ -1,81 +1,77 @@
 <!DOCTYPE html>
 <html lang="sl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MojAvto.si - Domov</title>
-  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MojAvto.si - Domov</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="css/styles.css" />
-  </head>
 </head>
 <body>
 
 <header>
-  <div class="logo"><a href="index.html">MojAvto.si</a></div>
-  <nav id="navLinks">
-    <a href="index.html">Domov</a>
-    <a href="napredno_iskanje.html">Napredno iskanje</a>
+    <div class="logo"><a href="index.html">MojAvto.si</a></div>
+    <nav id="navLinks">
+        <a href="index.html">Domov</a>
+        <a href="advanced-search.html">Napredno iskanje</a>
 
-    <!-- User menu dropdown, privzeto skrito -->
-    <span id="userMenu" style="display:none;">
-      <button id="userDropdownBtn">Moj račun ▼</button>
-      <div id="userDropdown">
-        <a href="create_listing.html">Ustvari oglas</a>
-        <a href="#" id="logoutBtn">Odjava</a>
-      </div>
-    </span>
-
-    <!-- Link za prijavo, prikazan če ni prijavljen -->
-    <a href="login.html" id="loginLink">Prijava</a>
-  </nav>
-  <button class="burger" aria-label="Odpri meni">&#9776;</button>
+        <span id="userMenu" style="display:none;">
+            <button id="userDropdownBtn">Moj račun ▼</button>
+            <div id="userDropdown">
+                <a href="create_listing.html">Ustvari oglas</a>
+                <a href="profile.html">Moj profil</a>
+                <a href="#" id="logoutBtn">Odjava</a>
+            </div>
+        </span>
+        <a href="login.html" id="loginLink">Prijava</a>
+    </nav>
+    <button class="burger" aria-label="Odpri meni">&#9776;</button>
 </header>
 
 <main>
-  <section class="hero-search" aria-label="Hitro iskanje vozil">
-    <h1>Najdi svoj naslednji avtomobil</h1>
-    <form class="filter-panel" id="quickSearchForm" onsubmit="event.preventDefault(); filterListings();">
-      <select id="make" name="make">
-        <option value="">Vse znamke</option>
-        <!-- JS napolni znamke -->
-      </select>
+    <section class="hero-search" aria-label="Hitro iskanje vozil">
+        <h1>Najdi svoj naslednji avtomobil</h1>
+        <form class="filter-panel" id="quickSearchForm" onsubmit="event.preventDefault(); handleFilterChange();">
+            <select id="make" name="make">
+                <option value="">Vse znamke</option>
+            </select>
+            <select id="model" name="model" disabled>
+                <option value="">Najprej izberi znamko</option>
+            </select>
+            <input type="number" id="yearFrom" name="yearFrom" placeholder="Letnik od (npr. 2010)" min="1900" />
+            <input type="number" id="priceTo" name="priceTo" placeholder="Cena do (€)" min="0" />
+            <button class="search-btn" type="submit" aria-label="Izvedi iskanje">Išči</button>
+        </form>
+    </section>
 
-      <select id="model" name="model" disabled>
-        <option value="">Najprej izberi znamko</option>
-      </select>
-
-      <input type="number" id="yearFrom" name="yearFrom" placeholder="Letnik od (npr. 2010)" min="1900" max="2025" />
-      <input type="number" id="priceTo" name="priceTo" placeholder="Cena do (€)" min="0" />
-      <button class="search-btn" type="submit" aria-label="Izvedi iskanje">Išči</button>
-    </form>
-  </section>
-
-  <section aria-label="Aktualni oglasi" id="listingsSection">
-    <h2>Aktualni oglasi</h2>
-    <div class="listings-grid" id="listingsContainer"></div>
-    <div class="no-listings" id="noListingsMessage" style="display:none;">
-      Zaenkrat ni aktivnih oglasov.
-    </div>
-  </section>
-</main>
+    <section aria-label="Aktualni oglasi" id="listingsSection">
+        <h2>Aktualni oglasi</h2>
+        <div class="listings-grid" id="listingsContainer"></div>
+        
+        <div id="pagination-container" class="pagination">
+            </div>
+        
+        <div class="no-listings" id="noListingsMessage" style="display:none;">
+            Za iskalne nize ni najdenih oglasov.
+        </div>
+    </section>
+    </main>
 
 <footer>
-  &copy; 2025 MojAvto.si - Vse pravice pridržane
+    &copy; 2025 MojAvto.si - Vse pravice pridržane
 </footer>
 
 <script src="js/main.js" defer></script>
 <script src="js/userMenu.js" defer></script>
 <script>
-  // Burger meni toggle (če želiš)
-  document.addEventListener('DOMContentLoaded', () => {
-    const burger = document.querySelector('.burger');
-    const navLinks = document.getElementById('navLinks');
-
-    burger?.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
+    document.addEventListener('DOMContentLoaded', () => {
+        const burger = document.querySelector('.burger');
+        const navLinks = document.getElementById('navLinks');
+        burger?.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
     });
-  });
 </script>
 
 </body>

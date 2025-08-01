@@ -337,3 +337,73 @@ main {
 #compareLink:hover {
     background-color: #e5e7eb;
 }
+/* ... obstoječi stili ... */
+
+/* Stili za paginacijo */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.pagination button {
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 6px;
+    min-width: 40px;
+    height: 40px;
+    padding: 0.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.pagination button:hover {
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+.pagination button.active {
+    background-color: #f97316; /* Uporabimo oranžno barvo za poudarek */
+    border-color: #f97316;
+    color: #fff;
+    font-weight: bold;
+}
+
+.pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+/* ... obstoječi stili ... */
+
+/* Stil za gumb za priljubljene na kartici */
+.fav-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #333;
+    transition: all 0.2s ease-in-out;
+    backdrop-filter: blur(2px);
+}
+
+.fav-btn:hover {
+    transform: scale(1.1);
+}
+
+.fav-btn.favorited {
+    color: #ef4444; /* Rdeča barva za všečkan oglas */
+}
