@@ -1,4 +1,4 @@
-function initUserMenu() {
+document.addEventListener("DOMContentLoaded", () => {
   const user = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
   const userMenu = document.getElementById("userMenu");
   const loginLink = document.getElementById("loginLink");
@@ -12,16 +12,15 @@ function initUserMenu() {
     userDropdownBtn.textContent = `Moj račun ▼ (${user.fullname})`;
   } else {
     userMenu.style.display = "none";
-    loginLink.style.display = "inline-block";
+    loginLink.style.display = "inline";
   }
 
-  userDropdownBtn?.addEventListener("click", (e) => {
-    e.stopPropagation(); // prevent triggering document click immediately
+  userDropdownBtn?.addEventListener("click", () => {
     userDropdown.style.display = userDropdown.style.display === "block" ? "none" : "block";
   });
 
   document.addEventListener("click", (e) => {
-    if (!userDropdown.contains(e.target) && e.target !== userDropdownBtn) {
+    if (!userMenu.contains(e.target)) {
       userDropdown.style.display = "none";
     }
   });
@@ -32,13 +31,4 @@ function initUserMenu() {
     alert("Odjava uspešna.");
     window.location.href = "login.html";
   });
-}
-
-// Burger menu toggle
-document.getElementById("burgerBtn")?.addEventListener("click", () => {
-  const nav = document.getElementById("navLinks");
-  nav.classList.toggle("open");
 });
-
-// Run when DOM is ready
-document.addEventListener("DOMContentLoaded", initUserMenu);
