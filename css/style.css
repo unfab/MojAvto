@@ -279,3 +279,61 @@ main {
 .thumbnails img.active {
   border-color: #3b82f6;
 }
+/* ... obstoječi stili ... */
+
+/* Stil za gumb za primerjavo na kartici */
+.card-image-container {
+  position: relative;
+  width: 100%;
+  height: 180px;
+}
+
+.card-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.compare-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #333;
+  transition: all 0.2s ease-in-out;
+  backdrop-filter: blur(2px);
+}
+
+.compare-btn:hover {
+  background-color: white;
+  transform: scale(1.1);
+}
+
+.compare-btn.selected {
+  background-color: #f97316; /* Oranžna barva iz vašega primera */
+  color: white;
+  border-color: #f97316;
+}
+
+/* Stil za povezavo v glavi */
+#compareLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: #f3f4f6;
+  transition: background-color 0.2s;
+}
+#compareLink:hover {
+    background-color: #e5e7eb;
+}

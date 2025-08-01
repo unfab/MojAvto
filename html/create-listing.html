@@ -5,162 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ustvari oglas - MojAvto.si</title>
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/forms.css" />
 </head>
 <body>
   <div id="header"></div>
 
-  <main>
-    <h2>Ustvari oglas</h2>
+  <main class="form-container">
+    <h2>Ustvari nov oglas</h2>
     <form id="listingForm">
-      <label for="brand">Znamka vozila:</label>
-      <select id="brand" name="brand" required>
-        <option value="">Izberi znamko</option>
-      </select>
+      
+      <label for="title">Naslov oglasa:</label>
+      <input type="text" id="title" name="title" required placeholder="Npr. Odlično ohranjen VW Golf">
 
-      <label for="model">Model:</label>
-      <select id="model" name="model" required disabled>
-        <option value="">Najprej izberi znamko</option>
-      </select>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="brand">Znamka vozila:</label>
+          <select id="brand" name="brand" required>
+            <option value="">Izberi znamko</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="model">Model:</label>
+          <select id="model" name="model" required disabled>
+            <option value="">Najprej izberi znamko</option>
+          </select>
+        </div>
+      </div>
 
-      <label for="fuel">Vrsta goriva:</label>
-      <select id="fuel" name="fuel" required>
-        <option value="">Izberi</option>
-        <option>Bencin</option>
-        <option>Dizel</option>
-        <option>Hibrid</option>
-        <option>Elektrika</option>
-        <option>Plin</option>
-      </select>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="price">Cena (€):</label>
+          <input type="number" id="price" name="price" min="0" required placeholder="Vnesite ceno">
+        </div>
+        <div class="form-group">
+            <label for="year">Letnik:</label>
+            <select id="year" name="year" required>
+              <option value="">Izberi letnik</option>
+            </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+            <label for="mileage">Prevoženi kilometri:</label>
+            <input type="number" id="mileage" name="mileage" min="0" required placeholder="Vnesite kilometre">
+        </div>
+        <div class="form-group">
+            <label for="power">Moč motorja (kW):</label>
+            <input type="number" id="power" name="power" min="0" placeholder="Vnesite moč v kW">
+        </div>
+      </div>
 
-      <label for="mileage">Kilometri:</label>
-      <select id="mileage" name="mileage" required>
-        <option value="">Izberi razpon</option>
-        <option>0 - 10.000 km</option>
-        <option>10.001 - 50.000 km</option>
-        <option>50.001 - 100.000 km</option>
-        <option>100.001 - 200.000 km</option>
-        <option>200.001 km+</option>
-      </select>
-
-      <label for="year">Letnik:</label>
-      <select id="year" name="year" required>
-        <option value="">Izberi letnik</option>
-      </select>
-
-      <label for="transmission">Menjalnik:</label>
-      <select id="transmission" name="transmission" required>
-        <option value="">Izberi</option>
-        <option>Ročni</option>
-        <option>Avtomatski</option>
-      </select>
-
-      <label for="drive">Pogon:</label>
-      <select id="drive" name="drive" required>
-        <option value="">Izberi</option>
-        <option>Prednji</option>
-        <option>Zadnji</option>
-        <option>4x4</option>
-      </select>
+      <div class="form-row">
+        <div class="form-group">
+            <label for="fuel">Vrsta goriva:</label>
+            <select id="fuel" name="fuel" required>
+              <option value="">Izberi</option>
+              <option>Bencin</option>
+              <option>Dizel</option>
+              <option>Hibrid</option>
+              <option>Elektrika</option>
+              <option>Plin</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="transmission">Menjalnik:</label>
+            <select id="transmission" name="transmission" required>
+              <option value="">Izberi</option>
+              <option>Ročni</option>
+              <option>Avtomatski</option>
+            </select>
+        </div>
+      </div>
+      
+      <div class="form-row" id="electric-fields" style="display: none;">
+        <div class="form-group">
+          <label for="battery">Kapaciteta baterije (kWh):</label>
+          <input type="number" id="battery" name="battery" min="0">
+        </div>
+        <div class="form-group">
+          <label for="range">Domet (km):</label>
+          <input type="number" id="range" name="range" min="0">
+        </div>
+      </div>
 
       <label for="description">Opis vozila:</label>
       <textarea id="description" name="description" rows="5" required></textarea>
 
-      <label for="images">Naloži slike:</label>
-      <input type="file" id="images" name="images" accept="image/*" multiple required />
+      <label for="images">Naloži slike (zunanjost):</label>
+      <input type="file" id="images" name="images" accept="image/*" multiple />
       <div id="preview" class="image-preview"></div>
 
-      <button type="submit">Objavi oglas</button>
+      <button type="submit" id="submitBtn">Objavi oglas</button>
     </form>
   </main>
 
-  <script src="js/userMenu.js" defer></script>
-
-  <!-- Nalaganje headerja -->
-  <script>
-    fetch("header.html")
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById("header").innerHTML = data;
-        initUserMenu();
-      })
-      .catch(err => console.error("Napaka pri nalaganju headerja:", err));
-  </script>
-
-  <!-- Dinamično nalaganje znamk in modelov -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const brandSelect = document.getElementById("brand");
-      const modelSelect = document.getElementById("model");
-      const yearSelect = document.getElementById("year");
-
-      // Polnjenje letnikov od letos do 1990
-      const currentYear = new Date().getFullYear();
-      for (let y = currentYear; y >= 1990; y--) {
-        const opt = document.createElement("option");
-        opt.value = y;
-        opt.textContent = y;
-        yearSelect.appendChild(opt);
-      }
-
-      // Fetch brand-model JSON
-      fetch("data/brands_models_global.json")
-        .then(res => res.json())
-        .then(brandModelData => {
-          const sortedBrands = Object.keys(brandModelData).sort();
-          sortedBrands.forEach(brand => {
-            const option = document.createElement("option");
-            option.value = brand;
-            option.textContent = brand;
-            brandSelect.appendChild(option);
-          });
-
-          brandSelect.addEventListener("change", function () {
-            const selectedBrand = this.value;
-            modelSelect.innerHTML = '<option value="">Izberi model</option>';
-            modelSelect.disabled = true;
-
-            if (selectedBrand && brandModelData[selectedBrand]) {
-              brandModelData[selectedBrand].forEach(model => {
-                const opt = document.createElement("option");
-                opt.value = model;
-                opt.textContent = model;
-                modelSelect.appendChild(opt);
-              });
-              modelSelect.disabled = false;
-            }
-          });
-        })
-        .catch(err => {
-          console.error("Napaka pri nalaganju znamk in modelov:", err);
-        });
-    });
-  </script>
-
-  <!-- Predogled slik -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const input = document.getElementById("images");
-      const preview = document.getElementById("preview");
-
-      input.addEventListener("change", () => {
-        preview.innerHTML = ""; // Počisti obstoječe slike
-
-        const files = input.files;
-        if (!files.length) return;
-
-        Array.from(files).forEach(file => {
-          if (!file.type.startsWith("image/")) return;
-
-          const reader = new FileReader();
-          reader.onload = e => {
-            const img = document.createElement("img");
-            img.src = e.target.result;
-            preview.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-    });
-  </script>
+  <script src="js/create-listing.js" defer></script>
 </body>
 </html>

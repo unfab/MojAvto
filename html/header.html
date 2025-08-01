@@ -4,20 +4,21 @@
       <a href="index.html">MojAvto.si</a>
     </div>
 
-    <!-- Burger button (only visible on small screens) -->
     <button id="burgerBtn" class="burger">☰</button>
 
-    <!-- Navigation Links -->
     <nav id="navLinks">
       <a href="index.html">Domov</a>
       <a href="napredno_iskanje.html">Napredno iskanje</a>
-      <a href="compare_prices.html">Primerjaj cene</a>
+      
+      <a href="compare.html" id="compareLink" title="Primerjaj izbrana vozila">
+          <i class="fas fa-balance-scale"></i> Primerjava (0)
+      </a>
 
       <span id="userMenu" style="display:none;">
         <button id="userDropdownBtn">Moj račun ▼</button>
         <div id="userDropdown">
+          <a href="profile.html">Moj profil</a>
           <a href="create_listing.html">Ustvari oglas</a>
-          <a href="register.html">Registracija</a>
           <a href="#" id="logoutBtn">Odjava</a>
         </div>
       </span>
