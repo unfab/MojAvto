@@ -407,3 +407,47 @@ main {
 .fav-btn.favorited {
     color: #ef4444; /* Rdeča barva za všečkan oglas */
 }
+/* ... obstoječi stili ... */
+
+/* Stili za nogo strani (Footer) */
+footer {
+    background-color: #1f2937; /* Temnejša barva za kontrast */
+    color: #e5e7eb;
+    padding: 2rem 1rem;
+    margin-top: auto; /* Potisne nogo na dno, če je vsebina kratka */
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+}
+
+.footer-links a {
+    color: #d1d5db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.footer-copyright {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    border-top: 1px solid #374151;
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+}

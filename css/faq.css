@@ -1,0 +1,76 @@
+.faq-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: #6b7280;
+}
+
+.faq-category {
+    font-size: 1.5rem;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.faq-list details {
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Odstranimo puščico, če je ob robu odprtina */
+.faq-list details:not([open]) {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.faq-list summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none; /* Odstrani privzeto puščico */
+}
+
+/* Dodamo svojo puščico z ikono */
+.faq-list summary::after {
+    content: '\f078'; /* Font Awesome ikona za puščico dol */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    transition: transform 0.2s ease-in-out;
+}
+
+.faq-list details[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.faq-list details p {
+    padding: 0 1.25rem 1.25rem 1.25rem;
+    margin: 0;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.faq-list details p a {
+    color: #f97116;
+    font-weight: 500;
+}

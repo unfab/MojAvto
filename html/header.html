@@ -1,30 +1,26 @@
 <header>
   <div class="header-container">
-    <div class="logo">
-      <a href="index.html">MojAvto.si</a>
-    </div>
-
+    <div class="logo"><a href="index.html">MojAvto.si</a></div>
     <button id="burgerBtn" class="burger">☰</button>
-
     <nav id="navLinks">
-      <a href="index.html">Domov</a>
-      <a href="advanced-search.html">Napredno iskanje</a>
-      <a href="compare.html" id="compareLink" title="Primerjaj izbrana vozila">
-      <a href="contact.html">Kontakt</a>
-          <i class="fas fa-balance-scale"></i> Primerjava (0)
-      </a>
-
+      <a href="index.html" data-i18n-key="nav_home">Domov</a>
+      <a href="advanced-search.html" data-i18n-key="nav_advanced_search">Napredno iskanje</a>
+      <a href="about.html" data-i18n-key="nav_about">O nas</a>
+      <a href="contact.html" data-i18n-key="nav_contact">Kontakt</a>
+      <a href="faq.html" data-i18n-key="nav_faq">Pomoč (FAQ)</a>
+      <div class="lang-switcher">
+          <a href="?lang=sl" data-lang="sl">SL</a> | <a href="?lang=en" data-lang="en">EN</a>
+      </div>
       <span id="userMenu" style="display:none;">
-        <button id="userDropdownBtn">Moj račun ▼</button>
+        <button id="userDropdownBtn" data-i18n-key="my_account">Moj račun ▼</button>
         <div id="userDropdown">
-          <a href="dashboard.html">Moj profil</a>
-          <a href="create_listing.html">Ustvari oglas</a>
-          <a href="admin.html" id="adminLink" style="display: none;">Administracija</a>
-          <a href="#" id="logoutBtn">Odjava</a>
+          <a href="dashboard.html" data-i18n-key="my_profile">Moj profil</a>
+          <a href="create_listing.html" data-i18n-key="create_listing">Ustvari oglas</a>
+          <a href="admin.html" id="adminLink" style="display: none;" data-i18n-key="administration">Administracija</a>
+          <a href="#" id="logoutBtn" data-i18n-key="logout">Odjava</a>
         </div>
       </span>
-      
-      <a href="login.html" id="loginLink">Prijava</a>
+      <a href="login.html" id="loginLink" data-i18n-key="login">Prijava</a>
     </nav>
   </div>
 </header>

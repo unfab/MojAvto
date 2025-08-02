@@ -3,70 +3,61 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Registracija – MojAvto.si</title>
+    <title data-i18n-key="page_title_register">Registracija – MojAvto.si</title>
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/auth.css" />
 </head>
 <body>
     <div id="header"></div>
-
     <div class="auth-container">
-        <h1>Ustvari račun</h1>
+        <h1 data-i18n-key="create_account_title">Ustvari račun</h1>
         <form id="registerForm">
             <div class="form-group">
-                <label for="fullname">Polno ime</label>
+                <label for="fullname" data-i18n-key="form_fullname">Polno ime</label>
                 <input type="text" id="fullname" name="fullname" required />
             </div>
             <div class="form-group">
-                <label for="email">Email naslov</label>
+                <label for="email" data-i18n-key="form_email">Email naslov</label>
                 <input type="email" id="email" name="email" required />
             </div>
             <div class="form-group">
-                <label for="username">Uporabniško ime</label>
+                <label for="username" data-i18n-key="form_username">Uporabniško ime</label>
                 <input type="text" id="username" name="username" required />
             </div>
             <div class="form-group">
-                <label for="region">Regija</label>
+                <label for="region" data-i18n-key="form_region">Regija</label>
                 <select id="region" name="region" required>
-                    <option value="">Izberite vašo regijo</option>
-                    <option>Osrednjeslovenska</option>
-                    <option>Podravska</option>
-                    <option>Savinjska</option>
-                    <option>Gorenjska</option>
-                    <option>Goriška</option>
-                    <option>Primorsko-notranjska</option>
-                    <option>Obalno-kraška</option>
-                    <option>Jugovzhodna Slovenija</option>
-                    <option>Koroška</option>
-                    <option>Pomurska</option>
-                    <option>Posavska</option>
-                    <option>Zasavska</option>
-                </select>
+                    <option value="" data-i18n-key="form_region_select">Izberite vašo regijo</option>
+                    </select>
             </div>
             <div class="form-group">
-                <label for="password">Geslo</label>
+                <label for="password" data-i18n-key="form_password">Geslo</label>
                 <input type="password" id="password" name="password" required minlength="8" />
-                <div class="password-strength">
-                    <div id="strength-bar" class="strength-bar"></div>
-                </div>
+                <div class="password-strength"><div id="strength-bar" class="strength-bar"></div></div>
             </div>
             <div class="form-group">
-                <label for="confirmPassword">Potrdi geslo</label>
+                <label for="confirmPassword" data-i18n-key="form_confirm_password">Potrdi geslo</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" />
             </div>
-            
             <div id="error-message" class="error-message"></div>
-
             <div class="form-group checkbox">
                 <input type="checkbox" id="terms" name="terms" required/>
-                <label for="terms">Strinjam se s <a href="#" target="_blank">pogoji uporabe</a></label>
+                <label for="terms">
+                    <span data-i18n-key="form_terms_agree">Strinjam se s</span> 
+                    <a href="#" target="_blank" data-i18n-key="form_terms_link">pogoji uporabe</a>
+                </label>
             </div>
-
-            <button type="submit">Registriraj se</button>
+            <button type="submit" data-i18n-key="register_button">Registriraj se</button>
         </form>
-        <p>Že imaš račun? <a href="login.html">Prijavi se</a></p>
+        <p>
+            <span data-i18n-key="already_have_account">Že imaš račun?</span> 
+            <a href="login.html" data-i18n-key="login_now">Prijavi se</a>
+        </p>
     </div>
 
+    <div id="footer"></div>
+
+    <script src="js/i18n.js" defer></script>
     <script src="js/auth.js" defer></script>
 </body>
 </html>

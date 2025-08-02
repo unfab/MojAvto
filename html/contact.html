@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kontakt - MojAvto.si</title>
+    <title data-i18n-key="page_title_contact">Kontakt - MojAvto.si</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="css/styles.css">
@@ -14,95 +14,61 @@
 
     <main class="contact-container">
         <div class="page-header">
-            <h1>Stopite v stik z nami</h1>
-            <p>Imate vprašanje ali predlog? Z veseljem vam bomo prisluhnili.</p>
+            <h1 data-i18n-key="contact_h1">Stopite v stik z nami</h1>
+            <p data-i18n-key="contact_p1">Imate vprašanje ali predlog? Z veseljem vam bomo prisluhnili.</p>
         </div>
-
         <div class="contact-layout">
             <div class="contact-info">
                 <div class="info-block">
-                    <h3><i class="fas fa-map-marker-alt"></i> Naš naslov</h3>
+                    <h3 data-i18n-key="contact_address"><i class="fas fa-map-marker-alt"></i> Naš naslov</h3>
                     <p>Avtomobilska ulica 1<br>1000 Ljubljana, Slovenija</p>
                 </div>
                 <div class="info-block">
-                    <h3><i class="fas fa-phone"></i> Pokličite nas</h3>
-                    <p>Splošne informacije: <a href="tel:+38611234567">+386 1 123 4567</a><br>Podpora uporabnikom: <a href="tel:+38611234568">+386 1 123 4568</a></p>
+                    <h3 data-i18n-key="contact_call_us"><i class="fas fa-phone"></i> Pokličite nas</h3>
+                    <p><span data-i18n-key="contact_info_general">Splošne informacije:</span> <a href="tel:+38611234567">+386 1 123 4567</a><br><span data-i18n-key="contact_info_support">Podpora uporabnikom:</span> <a href="tel:+38611234568">+386 1 123 4568</a></p>
                 </div>
                 <div class="info-block">
-                    <h3><i class="fas fa-envelope"></i> Pišite nam</h3>
-                    <p>Splošne informacije: <a href="mailto:info@mojavto.si">info@mojavto.si</a><br>Podpora: <a href="mailto:podpora@mojavto.si">podpora@mojavto.si</a></p>
+                    <h3 data-i18n-key="contact_write_us"><i class="fas fa-envelope"></i> Pišite nam</h3>
+                    <p><span data-i18n-key="contact_info_general">Splošne informacije:</span> <a href="mailto:info@mojavto.si">info@mojavto.si</a><br><span data-i18n-key="contact_info_support">Podpora:</span> <a href="mailto:podpora@mojavto.si">podpora@mojavto.si</a></p>
                 </div>
-                <div class="info-block">
-                    <h3><i class="fas fa-clock"></i> Delovni čas</h3>
-                    <p>
-                        Ponedeljek - Petek: <strong>8:00 - 16:00</strong><br>
-                        Sobota, Nedelja in prazniki: <strong>Zaprto</strong>
-                    </p>
-                </div>
-                <div class="info-block social-media">
-                    <h3>Sledite nam</h3>
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                 <div class="info-block">
+                    <h3 data-i18n-key="contact_hours"><i class="fas fa-clock"></i> Delovni čas</h3>
+                    <p><span data-i18n-key="contact_hours_mon_fri">Ponedeljek - Petek:</span> <strong>8:00 - 16:00</strong><br><span data-i18n-key="contact_hours_sat_sun">Sobota, Nedelja in prazniki:</span> <strong data-i18n-key="contact_hours_closed">Zaprto</strong></p>
                 </div>
             </div>
-
             <div class="contact-form-container">
-                <h2>Pošljite nam sporočilo</h2>
+                <h2 data-i18n-key="contact_form_h2">Pošljite nam sporočilo</h2>
                 <form id="contactForm">
                     <div class="form-group">
-                        <label for="name">Ime in priimek</label>
+                        <label for="name" data-i18n-key="form_fullname">Ime in priimek</label>
                         <input type="text" id="name" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Vaš email naslov</label>
+                        <label for="email" data-i18n-key="form_email">Vaš email naslov</label>
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="subject">Zadeva</label>
+                        <label for="subject" data-i18n-key="form_subject">Zadeva</label>
                         <input type="text" id="subject" name="subject" required>
                     </div>
                     <div class="form-group">
-                        <label for="message">Sporočilo</label>
+                        <label for="message" data-i18n-key="form_message">Sporočilo</label>
                         <textarea id="message" name="message" rows="6" required></textarea>
                     </div>
-                    <button type="submit" class="btn-primary">Pošlji sporočilo</button>
+                    <button type="submit" class="btn-primary" data-i18n-key="send_message_btn">Pošlji sporočilo</button>
                 </form>
             </div>
         </div>
-
         <div class="map-section">
-            <h2>Kje nas najdete?</h2>
+            <h2 data-i18n-key="contact_map_h2">Kje nas najdete?</h2>
             <div class="map-container">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2766.502989139226!2d14.50313831557879!3d46.0499824791121!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47652d65261f76e1%3A0x7235af5657e05f63!2sPre%C5%A1ernov%20trg%2C%201000%20Ljubljana!5e0!3m2!1sen!2ssi!4v1690886400000!5m2!1sen!2ssi" 
-                    width="100%" 
-                    height="450" 
-                    style="border:0;" 
-                    allowfullscreen="" 
-                    loading="lazy" 
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
+                <iframe src="https://maps.google.com/maps?q=Ljubljana&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
     </main>
 
-    <footer style="text-align: center; padding: 1rem; margin-top: 2rem; background-color: #e5e7eb;">
-        &copy; 2025 MojAvto.si - Vse pravice pridržane
-    </footer>
-
-    <script>
-        // Nalaganje glave in uporabniškega menija
-        document.addEventListener("DOMContentLoaded", () => {
-            fetch("header.html")
-              .then(res => res.text())
-              .then(data => {
-                document.getElementById("header").innerHTML = data;
-                const userMenuScript = document.createElement('script');
-                userMenuScript.src = 'js/userMenu.js';
-                document.body.appendChild(userMenuScript);
-              });
-        });
-    </script>
+    <div id="footer"></div>
+    
+    <script src="js/i18n.js" defer></script>
 </body>
 </html>

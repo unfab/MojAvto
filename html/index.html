@@ -3,76 +3,41 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MojAvto.si - Domov</title>
+    <title data-i18n-key="page_title_home">MojAvto.si - Domov</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+    <div id="header"></div>
 
-<header>
-    <div class="logo"><a href="index.html">MojAvto.si</a></div>
-    <nav id="navLinks">
-        <a href="index.html">Domov</a>
-        <a href="advanced-search.html">Napredno iskanje</a>
+    <main>
+        <section class="hero-search">
+            <h1 data-i18n-key="hero_title">Najdi svoj naslednji avtomobil</h1>
+            <form class="filter-panel" id="quickSearchForm">
+                <select id="make" name="make">
+                    <option value="" data-i18n-key="all_brands">Vse znamke</option>
+                </select>
+                <select id="model" name="model" disabled>
+                    <option value="" data-i18n-key="select_brand_first">Najprej izberi znamko</option>
+                </select>
+                <input type="number" id="yearFrom" name="yearFrom" data-i18n-key="year_from_placeholder" data-i18n-target="placeholder" />
+                <input type="number" id="priceTo" name="priceTo" data-i18n-key="price_to_placeholder" data-i18n-target="placeholder" />
+                <button class="search-btn" type="submit" data-i18n-key="search">Išči</button>
+            </form>
+        </section>
 
-        <span id="userMenu" style="display:none;">
-            <button id="userDropdownBtn">Moj račun ▼</button>
-            <div id="userDropdown">
-                <a href="create_listing.html">Ustvari oglas</a>
-                <a href="profile.html">Moj profil</a>
-                <a href="#" id="logoutBtn">Odjava</a>
-            </div>
-        </span>
-        <a href="login.html" id="loginLink">Prijava</a>
-    </nav>
-    <button class="burger" aria-label="Odpri meni">&#9776;</button>
-</header>
-
-<main>
-    <section class="hero-search" aria-label="Hitro iskanje vozil">
-        <h1>Najdi svoj naslednji avtomobil</h1>
-        <form class="filter-panel" id="quickSearchForm" onsubmit="event.preventDefault(); handleFilterChange();">
-            <select id="make" name="make">
-                <option value="">Vse znamke</option>
-            </select>
-            <select id="model" name="model" disabled>
-                <option value="">Najprej izberi znamko</option>
-            </select>
-            <input type="number" id="yearFrom" name="yearFrom" placeholder="Letnik od (npr. 2010)" min="1900" />
-            <input type="number" id="priceTo" name="priceTo" placeholder="Cena do (€)" min="0" />
-            <button class="search-btn" type="submit" aria-label="Izvedi iskanje">Išči</button>
-        </form>
-    </section>
-
-    <section aria-label="Aktualni oglasi" id="listingsSection">
-        <h2>Aktualni oglasi</h2>
-        <div class="listings-grid" id="listingsContainer"></div>
-        
-        <div id="pagination-container" class="pagination">
-            </div>
-        
-        <div class="no-listings" id="noListingsMessage" style="display:none;">
-            Za iskalne nize ni najdenih oglasov.
-        </div>
-    </section>
+        <section id="listingsSection">
+            <h2 data-i18n-key="current_listings">Aktualni oglasi</h2>
+            <div class="listings-grid" id="listingsContainer"></div>
+            <div id="pagination-container" class="pagination"></div>
+            <div class="no-listings" id="noListingsMessage" style="display:none;" data-i18n-key="no_listings_found">Za iskalne nize ni najdenih oglasov.</div>
+        </section>
     </main>
 
-<footer>
-    &copy; 2025 MojAvto.si - Vse pravice pridržane
-</footer>
+    <div id="footer"></div>
 
-<script src="js/main.js" defer></script>
-<script src="js/userMenu.js" defer></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const burger = document.querySelector('.burger');
-        const navLinks = document.getElementById('navLinks');
-        burger?.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
-        });
-    });
-</script>
-
+    <script src="js/i18n.js" defer></script>
+    <script src="js/main.js" defer></script>
 </body>
 </html>
