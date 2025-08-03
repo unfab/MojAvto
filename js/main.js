@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // --- 1. KORAK: PRIDOBIVANJE DOM ELEMENTOV IN NASTAVITEV STANJA ---
     const makeSelect = document.getElementById("make");
     const modelSelect = document.getElementById("model");
     const yearFromInput = document.getElementById("yearFrom");
@@ -16,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const listingsPerPage = 9;
     let currentPage = 1;
 
-    // --- 2. KORAK: NALAGANJE PODATKOV ---
     const initialListings = [
         { id: 1, make: "Toyota", model: "Corolla", title: "Toyota Corolla 1.8 Hybrid", year: 2019, mileage: 35000, price: 15900, power: 90, fuel: "Hibrid", transmission: "Avtomatski", region: "Osrednjeslovenska", phone: "041 123 456", images: { exterior: ["https://cdn3.avto.net/images/2024/07/21/1/300427843.1.jpg"], interior: [] } },
         { id: 2, make: "Volkswagen", model: "Golf", title: "Volkswagen Golf 8 2.0 TDI", year: 2021, mileage: 48000, price: 24500, power: 110, fuel: "Dizel", transmission: "Ročni", region: "Podravska", images: { exterior: ["https://cdn3.avto.net/images/2024/07/22/1/300516801.1.jpg"], interior: [] } },
@@ -35,8 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch("json/brands_models_global.json")
         .then(res => res.json())
         .then(data => { brandModelData = data; populateMakeOptions(); });
-
-    // --- 3. KORAK: DEFINICIJA VSEH FUNKCIJ ---
 
     function displayPage(listingsToShow) {
         renderListings(listingsToShow);
@@ -57,19 +53,19 @@ document.addEventListener("DOMContentLoaded", () => {
             card.innerHTML = `
                 <div class="card-image-container">
                     <img src="${listing.images?.exterior[0] || 'https://via.placeholder.com/300x180?text=Avto'}" alt="${listing.title}" />
-                    <button class="fav-btn" data-id="${listing.id}" title="Dodaj med priljubljene"><i class="far fa-heart"></i></button>
-                    <button class="compare-btn" data-id="${listing.id}" title="Dodaj v primerjavo"><i class="fas fa-balance-scale"></i></button>
+                    <button class="fav-btn" data-id="${listing.id}" title="${translate('add_to_favorites')}"><i class="far fa-heart"></i></button>
+                    <button class="compare-btn" data-id="${listing.id}" title="${translate('nav_compare')}"><i class="fas fa-balance-scale"></i></button>
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">${listing.title}</h3>
-                    <p class="card-details">Letnik: ${listing.year} | Prevoženih: ${listing.mileage.toLocaleString()} km</p>
+                    <p class="card-details">${translate('spec_year')}: ${listing.year} | ${translate('spec_mileage')}: ${listing.mileage.toLocaleString()} km</p>
                     <p class="card-price">${listing.price.toLocaleString()} €</p>
                 </div>`;
 
             card.addEventListener("click", (e) => {
                 if (e.target.closest('.compare-btn') || e.target.closest('.fav-btn')) return;
                 localStorage.setItem("selectedListing", JSON.stringify(listing));
-                window.location.href = "listing.html";
+                window.location.href = `listing.html?lang=${currentLang}`;
             });
 
             card.querySelector('.compare-btn').addEventListener('click', (e) => {
@@ -150,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function populateMakeOptions() {
-        makeSelect.innerHTML = '<option value="">Vse znamke</option>';
+        makeSelect.innerHTML = `<option value="">${translate('all_brands')}</option>`;
         Object.keys(brandModelData).sort().forEach(make => {
             const option = document.createElement("option");
             option.value = make;
@@ -223,7 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- 4. KORAK: VEZAVA DOGODKOV IN ZAČETNI ZAGON ---
     makeSelect.addEventListener("change", () => {
         const selectedMake = makeSelect.value;
         modelSelect.innerHTML = `<option value="">${translate('all_models') || 'Vsi modeli'}</option>`;

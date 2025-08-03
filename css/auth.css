@@ -60,6 +60,15 @@ body {
     text-align: center;
 }
 
+/* DODATEK: Stil za sporočila o napakah pod vnosnimi polji */
+.inline-error {
+    color: #ef4444;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 5px;
+    min-height: 1rem; /* Prepreči "poskakovanje" postavitve */
+}
+
 .checkbox {
     display: flex;
     align-items: center;

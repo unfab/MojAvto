@@ -23,6 +23,7 @@
   "create_listing": "Ustvari oglas",
   "my_profile": "Moj profil",
   "administration": "Administracija",
+  "dashboard_link": "Nadzorna plošča",
   "hero_title": "Najdi svoj naslednji avtomobil",
   "search": "Išči",
   "all_brands": "Vse znamke",
@@ -95,5 +96,7 @@
   "edit_personal_details": "Uredi osebne podatke",
   "form_phone_number": "Telefonska številka",
   "save_changes": "Shrani spremembe",
-  "dashboard_link": "Nadzorna plošča"
+  "delete_btn": "Izbriši",
+  "saving": "Shranjevanje...",
+  "error_invalid_email_format": "Vnesite veljaven email naslov."
 }

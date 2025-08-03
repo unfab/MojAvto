@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="sl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title data-i18n-key="page_title_login">Prijava – MojAvto.si</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/auth.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title data-i18n-key="page_title_login">Prijava – MojAvto.si</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/auth.css" />
 </head>
 <body>
     <div id="header"></div>
@@ -21,6 +21,9 @@
                 <label for="password" data-i18n-key="form_password">Geslo</label>
                 <input type="password" id="password" required />
             </div>
+
+            <div id="error-message" class="error-message"></div>
+
             <button type="submit" data-i18n-key="login_now">Prijavi se</button>
         </form>
         <p>

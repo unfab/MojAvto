@@ -11,14 +11,15 @@
     <div id="header"></div>
     <div class="auth-container">
         <h1 data-i18n-key="create_account_title">Ustvari račun</h1>
-        <form id="registerForm">
-            <div class="form-group">
+        <form id="registerForm" novalidate> <div class="form-group">
                 <label for="fullname" data-i18n-key="form_fullname">Polno ime</label>
                 <input type="text" id="fullname" name="fullname" required />
             </div>
+
             <div class="form-group">
                 <label for="email" data-i18n-key="form_email">Email naslov</label>
                 <input type="email" id="email" name="email" required />
+                <div class="inline-error" id="email-error"></div>
             </div>
             <div class="form-group">
                 <label for="username" data-i18n-key="form_username">Uporabniško ime</label>
@@ -39,7 +40,9 @@
                 <label for="confirmPassword" data-i18n-key="form_confirm_password">Potrdi geslo</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" />
             </div>
-            <div id="error-message" class="error-message"></div>
+            
+            <div id="form-error-message" class="error-message"></div>
+            
             <div class="form-group checkbox">
                 <input type="checkbox" id="terms" name="terms" required/>
                 <label for="terms">

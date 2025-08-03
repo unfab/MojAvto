@@ -23,6 +23,7 @@
   "create_listing": "Create Listing",
   "my_profile": "My Profile",
   "administration": "Administration",
+  "dashboard_link": "Dashboard",
   "hero_title": "Find Your Next Car",
   "search": "Search",
   "all_brands": "All Brands",
@@ -94,6 +95,8 @@
   "no_recently_viewed": "You have no recently viewed listings.",
   "edit_personal_details": "Edit Personal Details",
   "form_phone_number": "Phone Number",
-  "dashboard_link": "Dashboard",
-  "save_changes": "Save Changes"
+  "save_changes": "Save Changes",
+  "delete_btn": "Delete",
+  "saving": "Saving...",
+  "error_invalid_email_format": "Please enter a valid email address."
 }

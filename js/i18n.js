@@ -1,7 +1,6 @@
 let translations = {};
-let currentLang = 'sl'; // Privzeta vrednost
+let currentLang = 'sl';
 
-// Globalna funkcija za prevajanje dinamičnih JS sporočil
 function translate(key, replacements = {}) {
     let translation = translations[key] || key;
     for (const placeholder in replacements) {
@@ -10,7 +9,6 @@ function translate(key, replacements = {}) {
     return translation;
 }
 
-// Glavna funkcija za prevajanje strani
 async function setLanguage(lang) {
     const validLangs = ['sl', 'en'];
     currentLang = validLangs.includes(lang) ? lang : 'sl';
@@ -38,13 +36,11 @@ async function setLanguage(lang) {
     });
 }
 
-// Zaznaj jezik ob nalaganju strani
 const urlParams = new URLSearchParams(window.location.search);
 const langFromUrl = urlParams.get('lang');
 const langFromStorage = localStorage.getItem('mojavto_lang');
 setLanguage(langFromUrl || langFromStorage || 'sl');
 
-// Dinamično nalaganje glave in noge ter ponovno prevajanje
 document.addEventListener("DOMContentLoaded", () => {
     const headerPlaceholder = document.getElementById("header");
     const footerPlaceholder = document.getElementById("footer");
@@ -54,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .then(res => res.text())
           .then(async data => {
             headerPlaceholder.innerHTML = data;
-            await setLanguage(currentLang);
+            await setLanguage(currentLang); 
             const userMenuScript = document.createElement('script');
             userMenuScript.src = 'js/userMenu.js';
             document.body.appendChild(userMenuScript);
