@@ -1,0 +1,55 @@
+<div class="contact-container">
+    <div class="page-header">
+        <h1 data-i18n-key="contact_h1">Stopite v stik z nami</h1>
+        <p data-i18n-key="contact_p1">Imate vprašanje ali predlog? Z veseljem vam bomo prisluhnili.</p>
+    </div>
+    <div class="contact-layout">
+        <div class="contact-info">
+            <div class="info-block">
+                <h3 data-i18n-key="contact_address"><i class="fas fa-map-marker-alt"></i> Naš naslov</h3>
+                <p>Avtomobilska ulica 1<br>1000 Ljubljana, Slovenija</p>
+            </div>
+            <div class="info-block">
+                <h3 data-i18n-key="contact_call_us"><i class="fas fa-phone"></i> Pokličite nas</h3>
+                <p><span data-i18n-key="contact_info_general">Splošne informacije:</span> <a href="tel:+38611234567">+386 1 123 4567</a><br><span data-i18n-key="contact_info_support">Podpora uporabnikom:</span> <a href="tel:+38611234568">+386 1 123 4568</a></p>
+            </div>
+            <div class="info-block">
+                <h3 data-i18n-key="contact_write_us"><i class="fas fa-envelope"></i> Pišite nam</h3>
+                <p><span data-i18n-key="contact_info_general">Splošne informacije:</span> <a href="mailto:info@mojavto.si">info@mojavto.si</a><br><span data-i18n-key="contact_info_support">Podpora:</span> <a href="mailto:podpora@mojavto.si">podpora@mojavto.si</a></p>
+            </div>
+             <div class="info-block">
+                <h3 data-i18n-key="contact_hours"><i class="fas fa-clock"></i> Delovni čas</h3>
+                <p><span data-i18n-key="contact_hours_mon_fri">Ponedeljek - Petek:</span> <strong>8:00 - 16:00</strong><br><span data-i18n-key="contact_hours_sat_sun">Sobota, Nedelja in prazniki:</span> <strong data-i18n-key="contact_hours_closed">Zaprto</strong></p>
+            </div>
+        </div>
+        <div class="contact-form-container">
+            <h2 data-i18n-key="contact_form_h2">Pošljite nam sporočilo</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name" data-i18n-key="form_fullname">Ime in priimek</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" data-i18n-key="form_your_email">Vaš email naslov</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject" data-i18n-key="form_subject">Zadeva</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message" data-i18n-key="form_message">Sporočilo</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+                </div>
+                <div id="form-feedback" class="form-feedback"></div>
+                <button type="submit" class="btn-primary" data-i18n-key="send_message_btn">Pošlji sporočilo</button>
+            </form>
+        </div>
+    </div>
+    <div class="map-section">
+        <h2 data-i18n-key="contact_map_h2">Kje nas najdete?</h2>
+        <div class="map-container">
+            <iframe src="http://googleusercontent.com/maps.google.com/3" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</div>
