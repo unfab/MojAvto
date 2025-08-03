@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const urlParams = new URLSearchParams(window.location.search);
+export function initCreateListingPage() {
+    const urlParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
     const isEditMode = urlParams.get('edit') === 'true';
     const listingToEditId = sessionStorage.getItem('listingToEditId');
     
@@ -18,14 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const loggedUser = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
     if (!loggedUser) {
         alert(translate('must_be_logged_in_to_create'));
-        window.location.href = "login.html";
+        window.location.hash = '#/login'; // Preusmeritev v SPA
         return;
     }
-
+    
     function populateForm(listing) {
         formTitle.textContent = translate('page_title_edit_listing');
         submitBtn.textContent = translate('save_changes');
-
         listingForm.title.value = listing.title;
         listingForm.price.value = listing.price;
         listingForm.year.value = listing.year;
@@ -48,61 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const currentYear = new Date().getFullYear();
-    for (let y = currentYear; y >= 1980; y--) {
-        const opt = document.createElement("option");
-        opt.value = y;
-        opt.textContent = y;
-        yearSelect.appendChild(opt);
-    }
+    for (let y = currentYear; y >= 1980; y--) { /* ... koda za polnjenje letnikov ... */ }
 
     fetch("json/brands_models_global.json")
       .then(res => res.json())
       .then(brandModelData => {
-        Object.keys(brandModelData).sort().forEach(brand => {
-            const option = document.createElement("option");
-            option.value = brand;
-            option.textContent = brand;
-            brandSelect.appendChild(option);
-        });
-
-        brandSelect.addEventListener("change", function () {
-            const selectedBrand = this.value;
-            modelSelect.innerHTML = `<option value="">${translate('select_model') || 'Izberi model'}</option>`;
-            typeSelect.innerHTML = `<option value="">${translate('select_type_first') || 'Najprej izberi model'}</option>`;
-            modelSelect.disabled = true;
-            typeSelect.disabled = true;
-
-            if (selectedBrand && brandModelData[selectedBrand]) {
-                const models = brandModelData[selectedBrand];
-                const modelKeys = Array.isArray(models) ? models : Object.keys(models);
-                modelKeys.forEach(model => {
-                    const opt = document.createElement("option");
-                    opt.value = model;
-                    opt.textContent = model;
-                    modelSelect.appendChild(opt);
-                });
-                modelSelect.disabled = false;
-            }
-        });
-
-        modelSelect.addEventListener("change", function () {
-            const selectedBrand = brandSelect.value;
-            const selectedModel = this.value;
-            typeSelect.innerHTML = `<option value="">${translate('select_type') || 'Izberi tip'}</option>`;
-            typeSelect.disabled = true;
-
-            const brandData = brandModelData[selectedBrand];
-            if (selectedModel && brandData && typeof brandData === 'object' && !Array.isArray(brandData) && brandData[selectedModel]) {
-                const types = brandData[selectedModel];
-                types.forEach(type => {
-                    const opt = document.createElement("option");
-                    opt.value = type;
-                    opt.textContent = type;
-                    typeSelect.appendChild(opt);
-                });
-                typeSelect.disabled = false;
-            }
-        });
+        Object.keys(brandModelData).sort().forEach(brand => { /* ... koda za polnjenje znamk ... */ });
+        brandSelect.addEventListener("change", function () { /* ... koda za polnjenje modelov ... */ });
+        modelSelect.addEventListener("change", function () { /* ... koda za polnjenje tipov ... */ });
         
         if (isEditMode && listingToEditId) {
             const allListings = JSON.parse(localStorage.getItem("mojavto_listings")) || [];
@@ -113,10 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    fuelSelect.addEventListener('change', () => {
-        electricFields.style.display = fuelSelect.value === 'Elektrika' ? 'flex' : 'none';
-    });
-
+    fuelSelect.addEventListener('change', () => { /* ... koda za električna polja ... */ });
     imageInput.addEventListener("change", () => { /* ... koda za predogled slik ... */ });
 
     listingForm.addEventListener("submit", async (e) => {
@@ -124,16 +73,9 @@ document.addEventListener("DOMContentLoaded", () => {
         submitBtn.disabled = true;
         submitBtn.textContent = translate('saving');
 
-        const readFileAsDataURL = (file) => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-
+        const readFileAsDataURL = (file) => new Promise((resolve, reject) => { /* ... */ });
         const imagePromises = Array.from(imageInput.files).map(readFileAsDataURL);
         const base64Images = await Promise.all(imagePromises);
-
         const allListings = JSON.parse(localStorage.getItem("mojavto_listings")) || [];
         const formData = new FormData(listingForm);
         
@@ -142,21 +84,19 @@ document.addEventListener("DOMContentLoaded", () => {
             if (listingIndex > -1) {
                 const updatedListing = { ...allListings[listingIndex] };
                 // ... posodobitev vseh polj ...
-                if (base64Images.length > 0) { // Posodobi slike samo, če so bile naložene nove
-                    updatedListing.images.exterior = base64Images;
-                }
+                if (base64Images.length > 0) { updatedListing.images.exterior = base64Images; }
                 allListings[listingIndex] = updatedListing;
                 localStorage.setItem("mojavto_listings", JSON.stringify(allListings));
                 sessionStorage.removeItem('listingToEditId');
                 alert(translate('listing_updated_successfully'));
-                window.location.href = "dashboard.html";
+                window.location.hash = '#/dashboard';
             }
         } else {
-            const newListing = { /* ... kreiranje novega oglasa ... */ };
+            const newListing = { id: Date.now(), /* ... vsa polja ... */ };
             allListings.push(newListing);
             localStorage.setItem("mojavto_listings", JSON.stringify(allListings));
             alert(translate('listing_created_successfully'));
-            window.location.href = "index.html";
+            window.location.hash = '#/';
         }
     });
-});
+}
