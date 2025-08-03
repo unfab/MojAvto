@@ -98,5 +98,7 @@
   "save_changes": "Save Changes",
   "delete_btn": "Delete",
   "saving": "Saving...",
+  "contact_form_sending": "Sending message...",
+  "contact_form_success": "Thank you for your message! We will get back to you as soon as possible.",
   "error_invalid_email_format": "Please enter a valid email address."
 }

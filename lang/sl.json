@@ -98,5 +98,7 @@
   "save_changes": "Shrani spremembe",
   "delete_btn": "Izbriši",
   "saving": "Shranjevanje...",
+  "contact_form_sending": "Pošiljanje sporočila...",
+  "contact_form_success": "Hvala za sporočilo! Odgovorili vam bomo v najkrajšem možnem času.",
   "error_invalid_email_format": "Vnesite veljaven email naslov."
 }
