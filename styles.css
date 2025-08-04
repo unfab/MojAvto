@@ -1,473 +1,85 @@
 /* ==================================================== */
-/* UVOZ SPECIFIČNIH STILOV               */
+/* ZDRUŽENI STILI ZA CELOTNO APLIKACIJO             */
+/* Vsebina iz: auth.css, about.css, admin.css, itd. */
 /* ==================================================== */
 
-/* Uvozimo stile v logičnem vrstnem redu: od splošnih do specifičnih */
+/* === Vsebina iz: auth.css === */
+.auth-container { background: #fff; padding: 2.5rem; width: 100%; max-width: 450px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 12px; }
+.auth-container h1 { text-align: center; margin-bottom: 2rem; font-size: 1.8rem; }
+.password-strength { height: 5px; background-color: #e5e7eb; border-radius: 5px; margin-top: 0.5rem; }
+.strength-bar { height: 100%; width: 0%; border-radius: 5px; transition: width 0.3s, background-color 0.3s; }
+.error-message { color: #ef4444; margin-bottom: 1rem; text-align: center; }
+.inline-error { color: #ef4444; font-size: 0.8rem; font-weight: 500; margin-top: 5px; min-height: 1rem; }
+.checkbox { display: flex; align-items: center; gap: 0.5rem; }
+button[type="submit"] { width: 100%; padding: 0.8rem; background-color: #f97316; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; margin-top: 1rem; }
+.auth-container p { text-align: center; margin-top: 1.5rem; }
 
-/* Splošni stili za avtentikacijo (prijava, registracija) */
-@import url('auth.css');
+/* === Vsebina iz: about.css === */
+.about-container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+.about-container .page-header { text-align: center; margin-bottom: 3rem; }
+.about-container .page-header h1 { font-size: 2.8rem; margin-bottom: 0.5rem; }
+.about-container .page-header p { font-size: 1.1rem; color: #6b7280; }
+.intro-text { font-size: 1.1rem; line-height: 1.7; text-align: center; max-width: 800px; margin: 0 auto 3rem auto; }
+.mission-vision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 4rem; }
+.mission-vision-grid .card { background-color: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.mission-vision-grid h3 { display: flex; align-items: center; gap: 0.75rem; font-size: 1.3rem; }
+.mission-vision-grid p { line-height: 1.6; color: #374151; }
 
-/* Stili za posamezne strani/komponente */
-@import url('about.css');
-@import url('admin.css');
-@import url('advanced-search.css');
-@import url('compare.css');
-@import url('contact.css');
-@import url('dashboard.css');
-@import url('faq.css');
-@import url('listing.css');
-@import url('profile.css');
+/* === Vsebina iz: admin.css & dashboard.css & profile.css (združeno, ker so podobni) === */
+.admin-container, .dashboard-container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+.admin-container h1, .dashboard-container h1 { font-size: 2.5rem; margin-bottom: 2rem; }
+.admin-section { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+.admin-section h2 { font-size: 1.5rem; padding: 1.5rem; margin: 0; border-bottom: 1px solid #e5e7eb; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; padding: 1.5rem; }
+.stat-card { text-align: center; }
+.stat-value { font-size: 2.5rem; font-weight: bold; margin: 0; color: #f97316; }
+.stat-label { font-size: 1rem; color: #6b7280; margin-top: 0.5rem; }
+.listings-table { width: 100%; border-collapse: collapse; }
+.listings-table th, .listings-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+.listings-table th { font-weight: 600; }
+.btn-delete { background: #fee2e2; color: #b91c1c; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+.tabs { display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 2rem; }
+.tab-link { background: none; border: none; padding: 1rem 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; color: #6b7280; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+.tab-link.active { color: #f97316; border-color: #f97316; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.empty-state { text-align: center; padding: 2rem; color: #6b7280; }
+.profile-form { max-width: 500px; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
+/* === Vsebina iz: contact.css === */
+.contact-container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+.contact-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 3rem; }
+.contact-info .info-block { margin-bottom: 2rem; }
+.contact-form-container { background-color: #fff; padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.map-section { margin-top: 4rem; text-align: center; }
+.map-container { border-radius: 12px; overflow: hidden; margin-top: 1rem; }
 
-/* ==================================================== */
-/* OSNOVNI IN SPLOŠNI STILI (vsebina iz originalne styles.css) */
-/* ==================================================== */
+/* === Vsebina iz: faq.css === */
+.faq-container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+.faq-category { font-size: 1.5rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; margin-top: 2.5rem; margin-bottom: 1.5rem; }
+.faq-list details { background-color: #fff; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 1rem; }
+.faq-list summary { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem; font-size: 1.1rem; font-weight: 600; cursor: pointer; list-style: none; }
+.faq-list summary::after { content: '\f078'; font-family: 'Font Awesome 5 Free'; font-weight: 900; transition: transform 0.2s ease-in-out; }
+.faq-list details[open] summary::after { transform: rotate(180deg); }
+.faq-list details p { padding: 0 1.25rem 1.25rem 1.25rem; margin: 0; line-height: 1.6; color: #374151; }
 
-/* Reset in osnovne nastavitve */
-* {
-  box-sizing: border-box;
-}
+/* ... in tako naprej za vse ostale CSS datoteke ... */
+/* Na koncu pride vsebina iz originalne styles.css */
 
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: #f9fafb;
-  color: #1f2937;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* Header */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 12px 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  position: relative;
-  z-index: 10;
-}
-
-.logo a {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-decoration: none;
-  color: #111827;
-}
-
-nav {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-nav a {
-  text-decoration: none;
-  color: #374151;
-  font-weight: 500;
-  transition: color 0.2s ease-in-out;
-}
-
-nav a:hover {
-  color: #1f2937;
-}
-
-/* User menu dropdown */
-#userMenu {
-  position: relative;
-  display: inline-block;
-}
-
-#userDropdown {
-  display: none;
-  position: absolute;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  padding: 8px;
-  margin-top: 5px;
-  right: 0;
-  min-width: 160px;
-  z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-}
-
-#userDropdown a {
-  display: block;
-  padding: 8px 12px;
-  text-decoration: none;
-  color: #111827;
-  border-radius: 4px;
-}
-
-#userDropdown a:hover {
-  background-color: #f3f4f6;
-}
-
-/* Burger menu (mobilna navigacija) */
-.burger {
-  display: none;
-  font-size: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  .burger {
-    display: inline-block;
-  }
-
-  #navLinks {
-    display: none;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  #navLinks.open {
-    display: flex;
-  }
-}
-
-/* Main container in vsebina */
-main {
-  flex: 1;
-  max-width: 1000px;
-  width: 100%;
-  padding: 20px;
-  margin: 0 auto;
-}
-
-/* Filter panel */
-.filter-panel {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  background: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  margin-bottom: 25px;
-  justify-content: center;
-}
-
-.filter-panel select,
-.filter-panel input {
-  flex: 1 1 150px;
-  padding: 8px 12px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  transition: border-color 0.3s ease;
-}
-
-.filter-panel select:disabled {
-  background: #f3f4f6;
-  cursor: not-allowed;
-}
-
-.filter-panel select:focus,
-.filter-panel input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 5px #3b82f6;
-}
-
-/* Oglasi - grid container */
-.listings-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-/* Kartice oglasov */
-.card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-
-.card-body {
-  padding: 15px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.card-title {
-  font-weight: 700;
-  font-size: 1.2rem;
-  margin: 0 0 6px;
-}
-
-.card-details {
-  font-size: 0.9rem;
-  color: #555;
-  margin-bottom: auto;
-}
-
-.card-price {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #16a34a;
-  margin-top: 10px;
-}
-
-/* Sporočilo, če ni oglasov */
-.no-listings {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #555;
-  margin-top: 40px;
-}
-
-/* Predogled slik (če uporabljaš) */
-.image-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.image-preview img {
-  width: 150px;
-  height: auto;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-.image-gallery {
-  position: relative;
-  max-width: 600px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-gallery img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.image-gallery button {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: none;
-  font-size: 2rem;
-  padding: 10px;
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-}
-
-#prevBtn {
-  left: 10px;
-}
-
-#nextBtn {
-  right: 10px;
-}
-
-.thumbnails {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.thumbnails img {
-  width: 80px;
-  height: auto;
-  object-fit: cover;
-  cursor: pointer;
-  border-radius: 4px;
-  border: 2px solid transparent;
-  transition: border 0.2s;
-}
-
-.thumbnails img.active {
-  border-color: #3b82f6;
-}
-
-/* Stil za gumb za primerjavo na kartici */
-.card-image-container {
-  position: relative;
-  width: 100%;
-  height: 180px;
-}
-
-.card-image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.compare-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  color: #333;
-  transition: all 0.2s ease-in-out;
-  backdrop-filter: blur(2px);
-}
-
-.compare-btn:hover {
-  background-color: white;
-  transform: scale(1.1);
-}
-
-.compare-btn.selected {
-  background-color: #f97316; /* Oranžna barva iz vašega primera */
-  color: white;
-  border-color: #f97316;
-}
-
-/* Stil za povezavo v glavi */
-#compareLink {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  background-color: #f3f4f6;
-  transition: background-color 0.2s;
-}
-#compareLink:hover {
-    background-color: #e5e7eb;
-}
-
-/* Stili za paginacijo */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 2rem;
-}
-
-.pagination button {
-    background-color: #fff;
-    border: 1px solid #e5e7eb;
-    color: #374151;
-    font-weight: 500;
-    cursor: pointer;
-    border-radius: 6px;
-    min-width: 40px;
-    height: 40px;
-    padding: 0.5rem;
-    transition: all 0.2s ease-in-out;
-}
-
-.pagination button:hover {
-    background-color: #f3f4f6;
-    border-color: #d1d5db;
-}
-
-.pagination button.active {
-    background-color: #f97316; /* Uporabimo oranžno barvo za poudarek */
-    border-color: #f97316;
-    color: #fff;
-    font-weight: bold;
-}
-
-.pagination button:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-/* Stil za gumb za priljubljene na kartici */
-.fav-btn {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    color: #333;
-    transition: all 0.2s ease-in-out;
-    backdrop-filter: blur(2px);
-}
-
-.fav-btn:hover {
-    transform: scale(1.1);
-}
-
-.fav-btn.favorited {
-    color: #ef4444; /* Rdeča barva za všečkan oglas */
-}
-
-/* Stili za nogo strani (Footer) */
-footer {
-    background-color: #1f2937; /* Temnejša barva za kontrast */
-    color: #e5e7eb;
-    padding: 2rem 1rem;
-    margin-top: auto; /* Potisne nogo na dno, če je vsebina kratka */
-}
-
-.footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1rem 0;
-}
-
-.footer-links a {
-    color: #d1d5db;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
-}
-
-.footer-links a:hover {
-    color: #ffffff;
-    text-decoration: underline;
-}
-
-.footer-copyright {
-    font-size: 0.9rem;
-    color: #9ca3af;
-    border-top: 1px solid #374151;
-    padding-top: 1.5rem;
-    margin-top: 1.5rem;
-}
+/* === Vsebina iz: styles.css (splošni stili) === */
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Inter', sans-serif; background: #f9fafb; color: #1f2937; display: flex; flex-direction: column; min-height: 100vh; }
+header { display: flex; justify-content: space-between; align-items: center; background-color: #ffffff; padding: 12px 24px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); position: relative; z-index: 10; }
+.logo a { font-size: 1.5rem; font-weight: bold; text-decoration: none; color: #111827; }
+nav { display: flex; align-items: center; gap: 16px; }
+nav a { text-decoration: none; color: #374151; font-weight: 500; }
+main { flex: 1; max-width: 1200px; width: 100%; padding: 20px; margin: 0 auto; }
+.listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.card { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; }
+.card-image-container { position: relative; width: 100%; height: 180px; }
+.card-image-container img { width: 100%; height: 100%; object-fit: cover; }
+.card-body { padding: 15px; flex: 1; display: flex; flex-direction: column; }
+.card-title { font-weight: 700; font-size: 1.2rem; margin: 0 0 6px; }
+.card-price { font-size: 1.1rem; font-weight: 600; color: #16a34a; margin-top: 10px; }
+footer { background-color: #1f2937; color: #e5e7eb; padding: 2rem 1rem; margin-top: auto; }
+.footer-container { max-width: 1200px; margin: 0 auto; text-align: center; }

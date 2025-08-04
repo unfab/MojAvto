@@ -15,7 +15,10 @@ export async function setLanguage(lang) {
     document.documentElement.lang = currentLang;
 
     try {
-        const response = await fetch(`lang/${currentLang}.json`);
+        // SPREMEMBA: Dodana relativna pot './'
+        const response = await fetch(`./lang/${currentLang}.json`);
+        if (!response.ok) throw new Error(`Jezikovna datoteka ni bila najdena.`);
+        
         translations = await response.json();
     } catch (error) {
         console.error(`Could not load language file: ${currentLang}.json`, error);
