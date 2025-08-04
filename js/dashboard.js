@@ -1,3 +1,4 @@
+import { translate } from './i18n.js';
 // Pomembno: Ne pozabite v <head> vaše glavne index.html datoteke dodati:
 // <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

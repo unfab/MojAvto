@@ -1,3 +1,4 @@
+import { translate } from './i18n.js';
 // Izvozimo funkcijo, ki jo bo poklical ruter
 export function initAdvancedSearchPage() {
     // DOM ELEMENTI

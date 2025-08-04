@@ -1,3 +1,4 @@
+import { translate } from './i18n.js';
 export function initComparePage() {
     const comparisonGrid = document.getElementById("comparisonGrid");
     const noSelectionMessage = document.getElementById("noSelectionMessage");

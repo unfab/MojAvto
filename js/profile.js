@@ -1,3 +1,4 @@
+import { translate } from './i18n.js';
 export function initProfilePage() {
     // --- VARNOSTNA KONTROLA ---
     const loggedUser = JSON.parse(localStorage.getItem("mojavto_loggedUser"));

@@ -1,3 +1,4 @@
+import { translate } from './i18n.js';
 function getFavorites() {
     const loggedUser = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
     if (!loggedUser) return [];

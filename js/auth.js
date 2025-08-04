@@ -1,3 +1,4 @@
+import { translate } from './i18n.js';
 // Izvozimo eno glavno funkcijo, ki jo bo poklical ruter
 export function initAuthPage() {
 

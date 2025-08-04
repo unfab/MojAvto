@@ -1,6 +1,7 @@
 let translations = {};
 
-function translate(key, replacements = {}) {
+// SPREMEMBA: Dodana ključna beseda "export", da lahko drugi moduli uporabljajo to funkcijo.
+export function translate(key, replacements = {}) {
     let translation = translations[key] || key;
     for (const placeholder in replacements) {
         translation = translation.replace(`{${placeholder}}`, replacements[placeholder]);
@@ -15,7 +16,6 @@ export async function setLanguage(lang) {
     document.documentElement.lang = currentLang;
 
     try {
-        // SPREMEMBA: Dodana relativna pot './'
         const response = await fetch(`./lang/${currentLang}.json`);
         if (!response.ok) throw new Error(`Jezikovna datoteka ni bila najdena.`);
         

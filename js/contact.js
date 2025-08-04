@@ -1,3 +1,4 @@
+import { translate } from './i18n.js';
 // Izvozimo funkcijo, da jo lahko ruter pokliče
 export function initContactPage() {
     const contactForm = document.getElementById('contactForm');

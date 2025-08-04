@@ -1,3 +1,4 @@
+import { translate } from './i18n.js';
 // Uvozimo VSE "init" funkcije, ki jih ruter potrebuje za zagon specifičnih strani.
 import { initHomePage } from './main.js';
 import { initAuthPage } from './auth.js';

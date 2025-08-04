@@ -1,3 +1,4 @@
+import { translate } from './i18n.js';
 // Uvozimo samo "init" funkcije iz drugih, specializiranih modulov.
 // Vsak modul skrbi za svoje področje.
 import { setLanguage } from './i18n.js';

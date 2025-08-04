@@ -1,3 +1,4 @@
+import { translate } from './i18n.js';
 export function initCreateListingPage() {
     const urlParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
     const isEditMode = urlParams.get('edit') === 'true';
