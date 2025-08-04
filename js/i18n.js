@@ -1,6 +1,6 @@
 let translations = {};
 
-// SPREMEMBA: Dodana ključna beseda "export", da lahko drugi moduli uporabljajo to funkcijo.
+// PREVERITE: Ključna beseda "export" mora biti tukaj.
 export function translate(key, replacements = {}) {
     let translation = translations[key] || key;
     for (const placeholder in replacements) {
