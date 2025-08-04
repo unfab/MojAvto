@@ -31,7 +31,7 @@ async function loadComponent(url, containerId) {
  */
 async function main() {
     // 1. Vzporedno naložimo osnovne statične komponente (glavo in nogo).
-    // S Promise.all počakamo, da sta obe končani, preden nadaljujemo.
+    // Uporabimo relativne poti ('./'), da bo delovalo tudi na GitHub Pages.
     await Promise.all([
         loadComponent('./components/header.html', 'header-container'),
         loadComponent('./components/footer.html', 'footer-container')

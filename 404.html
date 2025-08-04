@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Preusmerjanje...</title>
+    <script>
+      // Pridobimo ime repozitorija iz URL-ja (v vašem primeru "MojAvto")
+      const repoName = window.location.pathname.split('/')[1];
+
+      // Preusmerimo takoj na index.html in ohranimo pot za ruter
+      // Primer: /MojAvto/login -> /MojAvto/#/login
+      sessionStorage.redirect = location.pathname;
+      
+      // Zgradimo nov URL z hashem
+      const newUrl = `/${repoName}/#${location.pathname.substring(repoName.length + 1)}${location.search}`;
+      
+      // Preusmerimo
+      location.replace(newUrl);
+
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

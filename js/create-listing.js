@@ -49,7 +49,7 @@ export function initCreateListingPage() {
     const currentYear = new Date().getFullYear();
     for (let y = currentYear; y >= 1980; y--) { /* ... koda za polnjenje letnikov ... */ }
 
-    fetch("json/brands_models_global.json")
+    fetch('./json/brands_models_global.json')
       .then(res => res.json())
       .then(brandModelData => {
         Object.keys(brandModelData).sort().forEach(brand => { /* ... koda za polnjenje znamk ... */ });
