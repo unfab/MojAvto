@@ -1,61 +1,41 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title data-i18n-key="page_title_listing">Podrobnosti oglasa - MojAvto.si</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/listing.css" /> 
-</head>
-<body>
-    <div id="header"></div>
-
-    <main class="listing-container">
-        <div class="back-link-container">
-            <a href="index.html" class="back-link" data-i18n-key="all_listings"><i class="fas fa-arrow-left"></i> Vsi oglasi</a>
-        </div>
-        <div class="title-container">
-            <h1 id="listing-title"></h1>
-            <button class="fav-btn-details" id="fav-btn-details">
-                <i class="far fa-heart"></i> <span data-i18n-key="add_to_favorites">Dodaj med priljubljene</span>
-            </button>
-        </div>
-        <div class="listing-layout">
-            <div class="image-gallery">
-                <div class="main-image-container">
-                    <img id="main-image" src="" alt="Glavna slika vozila">
-                    <button class="nav-btn prev" id="prev-btn">&#10094;</button>
-                    <button class="nav-btn next" id="next-btn">&#10095;</button>
-                </div>
-                <div class="thumbnail-container" id="thumbnail-container"></div>
+<main class="listing-container">
+    <div class="back-link-container">
+        <a href="#/" class="back-link" data-i18n-key="all_listings"><i class="fas fa-arrow-left"></i> Vsi oglasi</a>
+    </div>
+    <div class="title-container">
+        <h1 id="listing-title"></h1>
+        <button class="fav-btn-details" id="fav-btn-details">
+            <i class="far fa-heart"></i> <span data-i18n-key="add_to_favorites">Dodaj med priljubljene</span>
+        </button>
+    </div>
+    <div class="listing-layout">
+        <div class="image-gallery">
+            <div class="main-image-container">
+                <img id="main-image" src="" alt="Glavna slika vozila">
+                <button class="nav-btn prev" id="prev-btn">&#10094;</button>
+                <button class="nav-btn next" id="next-btn">&#10095;</button>
             </div>
-            <div class="details-panel">
-                <div class="price-tag"><h2 id="price"></h2></div>
-                <h3 data-i18n-key="key_specs">Ključni podatki</h3>
-                <div class="key-details" id="key-details"></div>
-                <h3 data-i18n-key="vehicle_description">Opis vozila</h3>
-                <p id="description"></p>
-                <h3 data-i18n-key="seller_info">Podatki o prodajalcu</h3>
-                <div class="seller-info">
-                    <p><i class="fas fa-user"></i> <strong id="seller-name"></strong></p>
-                    <p><i class="fas fa-map-marker-alt"></i> <span id="seller-location"></span></p>
-                    <div class="contact-btn-group">
-                        <button id="show-phone-btn" class="contact-btn phone-btn" style="display: none;" data-i18n-key="show_phone"><i class="fas fa-phone"></i> Pokaži telefonsko</button>
-                        <button id="contact-email-btn" class="contact-btn email-btn" data-i18n-key="contact_seller"><i class="fas fa-envelope"></i> Kontaktiraj prodajalca</button>
-                    </div>
+            <div class="thumbnail-container" id="thumbnail-container"></div>
+        </div>
+        <div class="details-panel">
+            <div class="price-tag"><h2 id="price"></h2></div>
+            <h3 data-i18n-key="key_specs">Ključni podatki</h3>
+            <div class="key-details" id="key-details"></div>
+            <h3 data-i18n-key="vehicle_description">Opis vozila</h3>
+            <p id="description"></p>
+            <h3 data-i18n-key="seller_info">Podatki o prodajalcu</h3>
+            <div class="seller-info">
+                <p><i class="fas fa-user"></i> <strong id="seller-name"></strong></p>
+                <p><i class="fas fa-map-marker-alt"></i> <span id="seller-location"></span></p>
+                <div class="contact-btn-group">
+                    <button id="show-phone-btn" class="contact-btn phone-btn" style="display: none;" data-i18n-key="show_phone"><i class="fas fa-phone"></i> Pokaži telefonsko</button>
+                    <button id="contact-email-btn" class="contact-btn email-btn" data-i18n-key="contact_seller"><i class="fas fa-envelope"></i> Kontaktiraj prodajalca</button>
                 </div>
             </div>
         </div>
-        <section class="similar-vehicles-section">
-            <h2 data-i18n-key="similar_listings">Podobni oglasi</h2>
-            <div class="listings-grid" id="similar-vehicles-container"></div>
-        </section>
-    </main>
-
-    <div id="footer"></div>
-
-    <script src="js/i18n.js" defer></script>
-    <script src="js/listing.js" defer></script>
-</body>
-</html>
+    </div>
+    <section class="similar-vehicles-section">
+        <h2 data-i18n-key="similar_listings">Podobni oglasi</h2>
+        <div class="listings-grid" id="similar-vehicles-container"></div>
+    </section>
+</main>

@@ -1,30 +1,11 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n-key="page_title_compare">Primerjava vozil - MojAvto.si</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/compare.css" />
-</head>
-<body>
-    <div id="header"></div>
-
-    <main>
-        <section class="comparison-section">
-            <h2 data-i18n-key="compare_h2">Primerjava izbranih vozil</h2>
-            <div class="comparison-grid" id="comparisonGrid"></div>
-            <div id="noSelectionMessage" style="display: none; text-align: center; margin-top: 40px;">
-                <h3 data-i18n-key="compare_no_selection_h3">Niste izbrali nobenega vozila za primerjavo.</h3>
-                <p data-i18n-key="compare_no_selection_p">Pojdite na <a href="index.html">domačo stran</a> in pri oglasih kliknite na ikono <i class="fas fa-balance-scale"></i>, da jih dodate v primerjavo.</p>
+<main>
+    <section class="comparison-section">
+        <h2 data-i18n-key="compare_h2">Primerjava izbranih vozil</h2>
+        <div class="comparison-grid" id="comparisonGrid">
             </div>
-        </section>
-    </main>
-
-    <div id="footer"></div>
-    
-    <script src="js/i18n.js" defer></script>
-    <script src="js/compare.js" defer></script>
-</body>
-</html>
+        <div id="noSelectionMessage" style="display: none; text-align: center; margin-top: 40px;">
+            <h3 data-i18n-key="compare_no_selection_h3">Niste izbrali nobenega vozila za primerjavo.</h3>
+            <p data-i18n-key="compare_no_selection_p">Pojdite na <a href="#/">domačo stran</a> in pri oglasih kliknite na ikono <i class="fas fa-balance-scale"></i>, da jih dodate v primerjavo.</p>
+        </div>
+    </section>
+</main>

@@ -1,112 +1,88 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n-key="page_title_advanced_search">Napredno iskanje - MojAvto.si</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" />
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/advanced-search.css">
-</head>
-<body>
-    <div id="header"></div>
-
-    <main>
-        <div class="search-container">
-            <h1 data-i18n-key="advanced_search_h1">Napredno iskanje</h1>
-            <form id="advancedSearchForm">
-                <section class="filter-section">
-                    <h3 data-i18n-key="basic_info"><i class="fas fa-car"></i>Osnovni podatki</h3>
-                    <div class="filter-content">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="make" data-i18n-key="form_brand">Znamka</label>
-                                <select id="make" name="make"><option value="" data-i18n-key="all_brands">Vse znamke</option></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="model" data-i18n-key="form_model">Model</label>
-                                <select id="model" name="model" disabled><option value="" data-i18n-key="all_models">Vsi modeli</option></select>
-                            </div>
+<main>
+    <div class="search-container">
+        <h1 data-i18n-key="advanced_search_h1">Napredno iskanje</h1>
+        <form id="advancedSearchForm">
+            <section class="filter-section">
+                <h3 data-i18n-key="basic_info"><i class="fas fa-car"></i>Osnovni podatki</h3>
+                <div class="filter-content">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="make" data-i18n-key="form_brand">Znamka</label>
+                            <select id="make" name="make"><option value="" data-i18n-key="all_brands">Vse znamke</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="model" data-i18n-key="form_model">Model</label>
+                            <select id="model" name="model" disabled><option value="" data-i18n-key="all_models">Vsi modeli</option></select>
                         </div>
                     </div>
-                </section>
-                <section class="filter-section">
-                    <h3 data-i18n-key="price_year_mileage"><i class="fas fa-sliders-h"></i>Cena, letnik, kilometri</h3>
-                    <div class="filter-content">
-                        <div class="form-row">
-                            <div class="form-group price-slider-group">
-                                <label data-i18n-key="form_price">Cena (€)</label>
-                                <div id="price-slider"></div>
-                                <div class="slider-values">
-                                    <span id="price-lower"></span> - <span id="price-upper"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="year-from" data-i18n-key="form_year_from">1. registracija od</label>
-                                <select id="year-from" name="yearFrom"><option value="" data-i18n-key="all_years">Vse</option></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="year-to" data-i18n-key="form_year_to">1. registracija do</label>
-                                <select id="year-to" name="yearTo"><option value="" data-i18n-key="all_years">Vse</option></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="mileage-to" data-i18n-key="form_mileage_to">Prevoženi km do</label>
-                                <input type="number" id="mileage-to" name="mileageTo" data-i18n-key="form_mileage_placeholder" data-i18n-target="placeholder">
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section class="filter-section">
-                    <h3 data-i18n-key="technical_specs"><i class="fas fa-cogs"></i>Tehnični podatki</h3>
-                    <div class="filter-content">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="fuel" data-i18n-key="form_fuel">Vrsta goriva</label>
-                                <select id="fuel" name="fuel">
-                                    <option value="" data-i18n-key="all_fuel_types">Vse</option>
-                                    <option value="Bencin" data-i18n-key="fuel_petrol">Bencin</option>
-                                    <option value="Dizel" data-i18n-key="fuel_diesel">Dizel</option>
-                                    <option value="Elektrika" data-i18n-key="fuel_electric">Elektrika</option>
-                                    <option value="Hibrid" data-i18n-key="fuel_hybrid">Hibrid</option>
-                                    <option value="Plin" data-i18n-key="fuel_gas">Plin</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="gearbox" data-i18n-key="form_gearbox">Menjalnik</label>
-                                <select id="gearbox" name="gearbox">
-                                    <option value="" data-i18n-key="all_gearboxes">Vse</option>
-                                    <option value="Ročni" data-i18n-key="gearbox_manual">Ročni</option>
-                                    <option value="Avtomatski" data-i18n-key="gearbox_automatic">Avtomatski</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="region" data-i18n-key="form_region">Regija</label>
-                                <select id="region" name="region">
-                                    <option value="" data-i18n-key="all_regions">Vse regije</option>
-                                    <option value="Osrednjeslovenska">Osrednjeslovenska</option>
-                                    <option value="Podravska">Podravska</option>
-                                    <option value="Savinjska">Savinjska</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <div class="search-actions">
-                    <button type="button" id="saveSearchBtn" class="btn btn-secondary" data-i18n-key="save_search_btn"><i class="fas fa-save"></i> Shrani iskanje</button>
-                    <button type="reset" class="btn btn-secondary" data-i18n-key="reset_filters_btn">Ponastavi filtre</button>
-                    <button type="submit" class="btn btn-primary" data-i18n-key="show_results_btn">Prikaži rezultate</button>
                 </div>
-                </form>
+            </section>
+            <section class="filter-section">
+                <h3 data-i18n-key="price_year_mileage"><i class="fas fa-sliders-h"></i>Cena, letnik, kilometri</h3>
+                <div class="filter-content">
+                    <div class="form-row">
+                        <div class="form-group price-slider-group">
+                            <label data-i18n-key="form_price">Cena (€)</label>
+                            <div id="price-slider"></div>
+                            <div class="slider-values">
+                                <span id="price-lower"></span> - <span id="price-upper"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="year-from" data-i18n-key="form_year_from">1. registracija od</label>
+                            <select id="year-from" name="yearFrom"><option value="" data-i18n-key="all_years">Vse</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="year-to" data-i18n-key="form_year_to">1. registracija do</label>
+                            <select id="year-to" name="yearTo"><option value="" data-i18n-key="all_years">Vse</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mileage-to" data-i18n-key="form_mileage_to">Prevoženi km do</label>
+                            <input type="number" id="mileage-to" name="mileageTo" data-i18n-key="form_mileage_placeholder" data-i18n-target="placeholder">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="filter-section">
+                <h3 data-i18n-key="technical_specs"><i class="fas fa-cogs"></i>Tehnični podatki</h3>
+                <div class="filter-content">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fuel" data-i18n-key="form_fuel">Vrsta goriva</label>
+                            <select id="fuel" name="fuel">
+                                <option value="" data-i18n-key="all_fuel_types">Vse</option>
+                                <option value="Bencin" data-i18n-key="fuel_petrol">Bencin</option>
+                                <option value="Dizel" data-i18n-key="fuel_diesel">Dizel</option>
+                                <option value="Elektrika" data-i18n-key="fuel_electric">Elektrika</option>
+                                <option value="Hibrid" data-i18n-key="fuel_hybrid">Hibrid</option>
+                                <option value="Plin" data-i18n-key="fuel_gas">Plin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gearbox" data-i18n-key="form_gearbox">Menjalnik</label>
+                            <select id="gearbox" name="gearbox">
+                                <option value="" data-i18n-key="all_gearboxes">Vse</option>
+                                <option value="Ročni" data-i18n-key="gearbox_manual">Ročni</option>
+                                <option value="Avtomatski" data-i18n-key="gearbox_automatic">Avtomatski</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="region" data-i18n-key="form_region">Regija</label>
+                            <select id="region" name="region">
+                                <option value="" data-i18n-key="all_regions">Vse regije</option>
+                                <option value="Osrednjeslovenska">Osrednjeslovenska</option>
+                                <option value="Podravska">Podravska</option>
+                                <option value="Savinjska">Savinjska</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="search-actions">
+                <button type="button" id="saveSearchBtn" class="btn btn-secondary" data-i18n-key="save_search_btn"><i class="fas fa-save"></i> Shrani iskanje</button>
+                <button type="reset" class="btn btn-secondary" data-i18n-key="reset_filters_btn">Ponastavi filtre</button>
+                <button type="submit" class="btn btn-primary" data-i18n-key="show_results_btn">Prikaži rezultate</button>
             </div>
-        </main>
+        </form>
     </div>
-
-    <div id="footer"></div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
-    <script src="js/i18n.js" defer></script>
-    <script src="js/advanced-search.js" defer></script>
-</body>
-</html>
+</main>

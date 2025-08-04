@@ -1,61 +1,62 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Nalaganje glave in preverjanje prijave
-    fetch("header.html").then(res => res.text()).then(data => {
-        const headerDiv = document.getElementById("header");
-        if(headerDiv) headerDiv.innerHTML = data;
-        const userMenuScript = document.createElement('script');
-        userMenuScript.src = 'js/userMenu.js';
-        document.body.appendChild(userMenuScript);
-    });
-    
+// Pomembno: Ne pozabite v <head> vaše glavne index.html datoteke dodati:
+// <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+export function initDashboardPage() {
+    // --- VARNOSTNA KONTROLA ---
     const loggedUser = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
-    if (!loggedUser) { window.location.href = "login.html"; return; }
+    if (!loggedUser || !loggedUser.isAdmin) {
+        alert(translate('admin_unauthorized_access'));
+        window.location.hash = '#/'; // Preusmeritev na domačo stran
+        return;
+    }
+
     document.getElementById('welcome-message').textContent = `${translate('dashboard_welcome')}, ${loggedUser.fullname}!`;
 
+    const allUsers = JSON.parse(localStorage.getItem('mojavto_users')) || [];
     const allListings = JSON.parse(localStorage.getItem('mojavto_listings')) || [];
 
-    // Logika za preklapljanje med zavihki
-    const tabs = document.querySelectorAll('.tab-link');
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            tabContents.forEach(content => content.classList.remove('active'));
-            document.getElementById(tab.dataset.tab).classList.add('active');
+    // --- PRIKAZ OSNOVNE STATISTIKE ---
+    document.getElementById('total-users').textContent = allUsers.length;
+    document.getElementById('total-listings').textContent = allListings.length;
+
+    // Štetje oglasov, objavljenih danes
+    const today = new Date().toISOString().slice(0, 10);
+    const newToday = allListings.filter(l => l.createdAt && l.createdAt.slice(0, 10) === today).length;
+    document.getElementById('new-listings-today').textContent = newToday;
+
+    // --- PRIPRAVA PODATKOV ZA GRAF ---
+    const usersByRegion = allUsers.reduce((acc, user) => {
+        const region = user.region || 'Neznano';
+        acc[region] = (acc[region] || 0) + 1;
+        return acc;
+    }, {});
+
+    // --- IZRIS GRAFA Z UPORABO Chart.js ---
+    const ctx = document.getElementById('regionChart');
+    if (ctx && typeof Chart !== 'undefined') {
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(usersByRegion),
+                datasets: [{
+                    label: `# ${translate('admin_stat_users') || 'število uporabnikov'}`,
+                    data: Object.values(usersByRegion),
+                    backgroundColor: 'rgba(249, 115, 22, 0.6)',
+                    borderColor: 'rgba(249, 115, 22, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1 // Prikaži samo cela števila na y-osi
+                        }
+                    }
+                },
+                maintainAspectRatio: false
+            }
         });
-    });
-
-    // --- VSE FUNKCIJE ZA PRIKAZ VSEBINE ---
-
-    function displayMyListings() {
-        const container = document.getElementById('my-listings-container');
-        const message = document.getElementById('no-listings-message');
-        const userListings = allListings.filter(listing => listing.author === loggedUser.username);
-        // ... preostanek kode za prikaz, kot v prejšnjih verzijah ...
     }
-
-    function displayFavoriteListings() {
-        const container = document.getElementById('favorite-listings-container');
-        const message = document.getElementById('no-favorites-message');
-        const allFavorites = JSON.parse(localStorage.getItem("mojavto_favorites")) || {};
-        const userFavorites = allFavorites[loggedUser.username] || [];
-        // ... preostanek kode za prikaz, kot v prejšnjih verzijah ...
-    }
-    
-    function displayRecentlyViewed() {
-        const container = document.getElementById('recent-listings-container');
-        const message = document.getElementById('no-recent-message');
-        const recentlyViewedIds = JSON.parse(localStorage.getItem('mojavto_recentlyViewed')) || [];
-        // ... preostanek kode za prikaz, kot v prejšnjih verzijah ...
-    }
-    
-    // --- UREJANJE PROFILA ---
-    const profileForm = document.getElementById('profile-edit-form');
-    // ... preostanek kode za urejanje profila ...
-
-    // Začetni zagon vseh funkcij
-    displayMyListings();
-    displayFavoriteListings();
-    displayRecentlyViewed();
-});
+}

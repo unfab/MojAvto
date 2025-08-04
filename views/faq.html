@@ -1,37 +1,58 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n-key="page_title_faq">Pogosta vprašanja (FAQ) - MojAvto.si</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/faq.css">
-</head>
-<body>
-    <div id="header"></div>
+<main class="faq-container">
+    <div class="page-header">
+        <h1 data-i18n-key="faq_h1">Pogosta vprašanja</h1>
+        <p data-i18n-key="faq_p1">Tukaj boste našli odgovore na najpogostejša vprašanja o uporabi našega portala.</p>
+    </div>
 
-    <main class="faq-container">
-        <div class="page-header">
-            <h1 data-i18n-key="faq_h1">Pogosta vprašanja</h1>
-            <p data-i18n-key="faq_p1">Tukaj boste našli odgovore na najpogostejša vprašanja o uporabi našega portala.</p>
-        </div>
-        <h2 class="faq-category" data-i18n-key="faq_cat_general">Splošna vprašanja</h2>
-        <div class="faq-list">
-            <details>
-                <summary data-i18n-key="faq_q_what_is">Kaj je MojAvto.si?</summary>
-                <p data-i18n-key="faq_a_what_is">MojAvto.si je sodoben spletni oglasnik, namenjen enostavni prodaji in nakupu novih ter rabljenih vozil v Sloveniji.</p>
-            </details>
-            <details>
-                <summary data-i18n-key="faq_q_is_it_free">Ali je uporaba portala brezplačna?</summary>
-                <p data-i18n-key="faq_a_is_it_free">Da, tako registracija kot objava oglasov za fizične osebe sta popolnoma brezplačni. Za poslovne uporabnike ponujamo posebne pakete.</p>
-            </details>
-        </div>
-        </main>
+    <h2 class="faq-category" data-i18n-key="faq_cat_general">Splošna vprašanja</h2>
+    <div class="faq-list">
+        <details>
+            <summary data-i18n-key="faq_q_what_is">Kaj je MojAvto.si?</summary>
+            <p data-i18n-key="faq_a_what_is">MojAvto.si je sodoben spletni oglasnik, namenjen enostavni prodaji in nakupu novih ter rabljenih vozil v Sloveniji.</p>
+        </details>
+        <details>
+            <summary data-i18n-key="faq_q_is_it_free">Ali je uporaba portala brezplačna?</summary>
+            <p data-i18n-key="faq_a_is_it_free">Da, tako registracija kot objava oglasov za fizične osebe sta popolnoma brezplačni. Za poslovne uporabnike ponujamo posebne pakete.</p>
+        </details>
+    </div>
 
-    <div id="footer"></div>
+    <h2 class="faq-category" data-i18n-key="faq_cat_buyers">Vprašanja za kupce</h2>
+    <div class="faq-list">
+        <details>
+            <summary data-i18n-key="faq_q_how_to_search">Kako poiščem željeno vozilo?</summary>
+            <p data-i18n-key="faq_a_how_to_search">Uporabite lahko hitri iskalnik na domači strani ali pa se poslužite naprednega iskalnika, kjer lahko določite številne kriterije, kot so cena, letnik, prevoženi kilometri, oprema in regija.</p>
+        </details>
+        <details>
+            <summary data-i18n-key="faq_q_how_to_contact">Kako kontaktiram prodajalca?</summary>
+            <p data-i18n-key="faq_a_how_to_contact">Na strani vsakega oglasa boste v desnem stolpcu našli podatke o prodajalcu. Na voljo sta gumba za kontakt preko e-pošte (odpre vaš e-poštni program) in za prikaz telefonske številke, v kolikor jo je prodajalec navedel.</p>
+        </details>
+         <details>
+            <summary data-i18n-key="faq_q_how_to_save">Kako si shranim zanimive oglase?</summary>
+            <p data-i18n-key="faq_a_how_to_save">Vsak oglas ima ikono srčka. S klikom na ikono oglas dodate med priljubljene, ki si jih lahko kasneje ogledate na svojem profilu pod zavihkom "Priljubljeni". Za to funkcionalnost morate biti prijavljeni.</p>
+        </details>
+    </div>
 
-    <script src="js/i18n.js" defer></script>
-</body>
-</html>
+    <h2 class="faq-category" data-i18n-key="faq_cat_sellers">Vprašanja za prodajalce</h2>
+    <div class="faq-list">
+        <details>
+            <summary data-i18n-key="faq_q_how_to_post">Kako oddam oglas?</summary>
+            <p data-i18n-key="faq_a_how_to_post">Za oddajo oglasa se morate najprej registrirati in prijaviti. Nato v uporabniškem meniju kliknete na "Ustvari oglas" in sledite korakom v obrazcu.</p>
+        </details>
+        <details>
+            <summary data-i18n-key="faq_q_can_i_edit">Ali lahko svoj oglas kasneje uredim ali izbrišem?</summary>
+            <p data-i18n-key="faq_a_can_i_edit">Da. Na svoji profilni strani (Dashboard) pod zavihkom "Moji oglasi" lahko vsak svoj oglas poljubno urejate ali ga trajno izbrišete.</p>
+        </details>
+    </div>
+    
+    <h2 class="faq-category" data-i18n-key="faq_cat_support">Tehnična pomoč</h2>
+    <div class="faq-list">
+         <details>
+            <summary data-i18n-key="faq_q_forgot_password">Pozabil sem geslo. Kaj naj storim?</summary>
+            <p data-i18n-key="faq_a_forgot_password">Trenutno naša stran še nima avtomatskega sistema za ponastavitev gesla. Prosimo, pišite nam na <a href="mailto:podpora@mojavto.si">podpora@mojavto.si</a> in pomagali vam bomo.</p>
+        </details>
+        <details>
+            <summary data-i18n-key="faq_q_how_to_change_data">Kako lahko spremenim svoje osebne podatke?</summary>
+            <p data-i18n-key="faq_a_how_to_change_data">Svoje podatke, kot so ime, e-mail in telefonska številka, lahko urejate na svojem profilu pod zavihkom "Uredi profil".</p>
+        </details>
+    </div>
+</main>

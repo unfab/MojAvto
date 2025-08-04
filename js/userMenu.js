@@ -43,8 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Zapiranje menija ob kliku izven njega (ostane enako)
     document.addEventListener("click", (e) => {
-        if (userMenu && !userMenu.contains(e.target) && userDropdown) {
-            userDropdown.style.display = "none";
+        if (userMenu && !userMenu.contains(e.target) && userDropdown && userDropdown.style.display === 'block') {
+            if (!userMenu.contains(e.target)) {
+                userDropdown.style.display = "none";
+            }
         }
     });
 
@@ -53,6 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         localStorage.removeItem("mojavto_loggedUser");
         alert(translate('logout_successful'));
-        window.location.href = "login.html";
+        window.location.hash = '#/login';
     });
 });

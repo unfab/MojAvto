@@ -1,68 +1,49 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n-key="page_title_dashboard">Moj profil - MojAvto.si</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/dashboard.css"> </head>
-<body>
-    <div id="header"></div>
-
-    <main class="dashboard-container">
-        <h1 id="welcome-message"></h1>
-        
-        <div class="tabs">
-            <button class="tab-link active" data-tab="tab-listings" data-i18n-key="tab_my_listings">Moji oglasi</button>
-            <button class="tab-link" data-tab="tab-favorites" data-i18n-key="tab_favorites">Priljubljeni</button>
-            <button class="tab-link" data-tab="tab-recent" data-i18n-key="tab_recent">Nazadnje ogledano</button>
-            <button class="tab-link" data-tab="tab-edit-profile" data-i18n-key="tab_edit_profile">Uredi profil</button>
-        </div>
-
-        <div class="tab-content active" id="tab-listings">
-            <div class="listings-grid" id="my-listings-container"></div>
-            <div id="no-listings-message" class="empty-state" data-i18n-key="no_listings_posted">Nimate objavljenih oglasov.</div>
-        </div>
-
-        <div class="tab-content" id="tab-favorites">
-            <div class="listings-grid" id="favorite-listings-container"></div>
-            <div id="no-favorites-message" class="empty-state" data-i18n-key="no_favorites_saved">Nimate shranjenih priljubljenih oglasov.</div>
-        </div>
-        
-        <div class="tab-content" id="tab-recent">
-            <div class="listings-grid" id="recent-listings-container"></div>
-            <div id="no-recent-message" class="empty-state" data-i18n-key="no_recently_viewed">Nimate nazadnje ogledanih oglasov.</div>
-        </div>
-
-        <div class="tab-content" id="tab-edit-profile">
-            <form id="profile-edit-form" class="profile-form">
-                <h3 data-i18n-key="edit_personal_details">Uredi osebne podatke</h3>
-                <div class="form-group">
-                    <label for="fullname" data-i18n-key="form_fullname">Polno ime</label>
-                    <input type="text" id="fullname" name="fullname" required>
-                </div>
-                <div class="form-group">
-                    <label for="email" data-i18n-key="form_email">Email naslov</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                 <div class="form-group">
-                    <label for="userRegion" data-i18n-key="form_region">Regija</label>
-                    <select id="userRegion" name="userRegion" required>
-                         </select>
-                </div>
-                <div class="form-group">
-                    <label for="userPhone" data-i18n-key="form_phone_number">Telefonska številka</label>
-                    <input type="tel" id="userPhone" name="userPhone">
-                </div>
-                <button type="submit" class="btn-primary" data-i18n-key="save_changes">Shrani spremembe</button>
-            </form>
-        </div>
-    </main>
+<main class="dashboard-container">
+    <h1 id="welcome-message"></h1>
     
-    <div id="footer"></div>
+    <div class="tabs">
+        <button class="tab-link active" data-tab="tab-listings" data-i18n-key="tab_my_listings">Moji oglasi</button>
+        <button class="tab-link" data-tab="tab-favorites" data-i18n-key="tab_favorites">Priljubljeni</button>
+        <button class="tab-link" data-tab="tab-recent" data-i18n-key="tab_recent">Nazadnje ogledano</button>
+        <button class="tab-link" data-tab="tab-edit-profile" data-i18n-key="tab_edit_profile">Uredi profil</button>
+    </div>
+
+    <div class="tab-content active" id="tab-listings">
+        <div class="listings-grid" id="my-listings-container"></div>
+        <div id="no-listings-message" class="empty-state" data-i18n-key="no_listings_posted">Nimate objavljenih oglasov.</div>
+    </div>
+
+    <div class="tab-content" id="tab-favorites">
+        <div class="listings-grid" id="favorite-listings-container"></div>
+        <div id="no-favorites-message" class="empty-state" data-i18n-key="no_favorites_saved">Nimate shranjenih priljubljenih oglasov.</div>
+    </div>
     
-    <script src="js/i18n.js" defer></script>
-    <script src="js/profile.js" defer></script>
-</body>
-</html>
+    <div class="tab-content" id="tab-recent">
+        <div class="listings-grid" id="recent-listings-container"></div>
+        <div id="no-recent-message" class="empty-state" data-i18n-key="no_recently_viewed">Nimate nazadnje ogledanih oglasov.</div>
+    </div>
+
+    <div class="tab-content" id="tab-edit-profile">
+        <form id="profile-edit-form" class="profile-form">
+            <h3 data-i18n-key="edit_personal_details">Uredi osebne podatke</h3>
+            <div class="form-group">
+                <label for="fullname" data-i18n-key="form_fullname">Polno ime</label>
+                <input type="text" id="fullname" name="fullname" required>
+            </div>
+            <div class="form-group">
+                <label for="email" data-i18n-key="form_email">Email naslov</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="userRegion" data-i18n-key="form_region">Regija</label>
+                <select id="userRegion" name="userRegion" required>
+                     </select>
+            </div>
+            <div class="form-group">
+                <label for="userPhone" data-i18n-key="form_phone_number">Telefonska številka</label>
+                <input type="tel" id="userPhone" name="userPhone">
+            </div>
+            <button type="submit" class="btn-primary" data-i18n-key="save_changes">Shrani spremembe</button>
+        </form>
+    </div>
+</main>

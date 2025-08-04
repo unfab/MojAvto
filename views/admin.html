@@ -1,55 +1,38 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n-key="page_title_admin">Administracija - MojAvto.si</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/admin.css">
-</head>
-<body>
-    <div id="header"></div>
-
-    <main class="admin-container">
-        <h1 data-i18n-key="admin_h1">Administratorska plošča</h1>
-        <section class="admin-section stats-section">
-            <h2 data-i18n-key="admin_stats_h2">Statistika strani (simulacija)</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <p class="stat-value" id="total-users">0</p>
-                    <p class="stat-label" data-i18n-key="admin_stat_users">Registriranih uporabnikov</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-value" id="total-listings">0</p>
-                    <p class="stat-label" data-i18n-key="admin_stat_listings">Skupno število oglasov</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-value" id="avg-price">0 €</p>
-                    <p class="stat-label" data-i18n-key="admin_stat_avg_price">Povprečna cena vozila</p>
-                </div>
-            </div>
-        </section>
-        <section class="admin-section">
-            <h2 data-i18n-key="admin_listings_h2">Upravljanje z oglasi</h2>
-            <table class="listings-table">
-                <thead>
-                    <tr>
-                        <th data-i18n-key="admin_th_id">ID Oglasa</th>
-                        <th data-i18n-key="admin_th_title">Naslov</th>
-                        <th data-i18n-key="admin_th_author">Avtor</th>
-                        <th data-i18n-key="admin_th_price">Cena</th>
-                        <th data-i18n-key="admin_th_actions">Akcije</th>
-                    </tr>
-                </thead>
-                <tbody id="listings-table-body"></tbody>
-            </table>
-        </section>
-    </main>
+<main class="admin-container">
+    <h1 data-i18n-key="admin_h1">Administratorska plošča</h1>
     
-    <div id="footer"></div>
+    <section class="admin-section stats-section">
+        <h2 data-i18n-key="admin_stats_h2">Statistika strani (simulacija)</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <p class="stat-value" id="total-users">0</p>
+                <p class="stat-label" data-i18n-key="admin_stat_users">Registriranih uporabnikov</p>
+            </div>
+            <div class="stat-card">
+                <p class="stat-value" id="total-listings">0</p>
+                <p class="stat-label" data-i18n-key="admin_stat_listings">Skupno število oglasov</p>
+            </div>
+            <div class="stat-card">
+                <p class="stat-value" id="avg-price">0 €</p>
+                <p class="stat-label" data-i18n-key="admin_stat_avg_price">Povprečna cena vozila</p>
+            </div>
+        </div>
+    </section>
 
-    <script src="js/i18n.js" defer></script>
-    <script src="js/admin.js" defer></script>
-</body>
-</html>
+    <section class="admin-section">
+        <h2 data-i18n-key="admin_listings_h2">Upravljanje z oglasi</h2>
+        <table class="listings-table">
+            <thead>
+                <tr>
+                    <th data-i18n-key="admin_th_id">ID Oglasa</th>
+                    <th data-i18n-key="admin_th_title">Naslov</th>
+                    <th data-i18n-key="admin_th_author">Avtor</th>
+                    <th data-i18n-key="admin_th_price">Cena</th>
+                    <th data-i18n-key="admin_th_actions">Akcije</th>
+                </tr>
+            </thead>
+            <tbody id="listings-table-body">
+                </tbody>
+        </table>
+    </section>
+</main>

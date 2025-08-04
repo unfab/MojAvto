@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+export function initHomePage() {
     const makeSelect = document.getElementById("make");
     const modelSelect = document.getElementById("model");
     const yearFromInput = document.getElementById("yearFrom");
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.addEventListener("click", (e) => {
                 if (e.target.closest('.compare-btn') || e.target.closest('.fav-btn')) return;
                 localStorage.setItem("selectedListing", JSON.stringify(listing));
-                window.location.href = `listing.html?lang=${currentLang}`;
+                window.location.hash = `#/listing/${listing.id}`;
             });
 
             card.querySelector('.compare-btn').addEventListener('click', (e) => {
@@ -252,4 +252,4 @@ document.addEventListener("DOMContentLoaded", () => {
     displayPage(currentFilteredListings);
     updateCompareUI();
     updateFavoritesUI();
-});
+}
