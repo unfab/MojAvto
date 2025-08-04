@@ -1,4 +1,4 @@
-const brandsModels = {
+{
   "Abarth": {
     "124 Spider": ["124 Spider"],
     "500": ["500", "500C"],

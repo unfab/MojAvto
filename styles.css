@@ -1,3 +1,28 @@
+/* ==================================================== */
+/* UVOZ SPECIFIČNIH STILOV               */
+/* ==================================================== */
+
+/* Uvozimo stile v logičnem vrstnem redu: od splošnih do specifičnih */
+
+/* Splošni stili za avtentikacijo (prijava, registracija) */
+@import url('auth.css');
+
+/* Stili za posamezne strani/komponente */
+@import url('about.css');
+@import url('admin.css');
+@import url('advanced-search.css');
+@import url('compare.css');
+@import url('contact.css');
+@import url('dashboard.css');
+@import url('faq.css');
+@import url('listing.css');
+@import url('profile.css');
+
+
+/* ==================================================== */
+/* OSNOVNI IN SPLOŠNI STILI (vsebina iz originalne styles.css) */
+/* ==================================================== */
+
 /* Reset in osnovne nastavitve */
 * {
   box-sizing: border-box;
@@ -11,7 +36,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* Če nočeš horizontalnega centriranja, ne dodajaj align-items */
 }
 
 /* Header */
@@ -279,7 +303,6 @@ main {
 .thumbnails img.active {
   border-color: #3b82f6;
 }
-/* ... obstoječi stili ... */
 
 /* Stil za gumb za primerjavo na kartici */
 .card-image-container {
@@ -337,7 +360,6 @@ main {
 #compareLink:hover {
     background-color: #e5e7eb;
 }
-/* ... obstoječi stili ... */
 
 /* Stili za paginacijo */
 .pagination {
@@ -378,7 +400,6 @@ main {
     cursor: not-allowed;
     opacity: 0.6;
 }
-/* ... obstoječi stili ... */
 
 /* Stil za gumb za priljubljene na kartici */
 .fav-btn {
@@ -407,7 +428,6 @@ main {
 .fav-btn.favorited {
     color: #ef4444; /* Rdeča barva za všečkan oglas */
 }
-/* ... obstoječi stili ... */
 
 /* Stili za nogo strani (Footer) */
 footer {

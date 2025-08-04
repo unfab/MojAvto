@@ -1,5 +1,4 @@
 let translations = {};
-let currentLang = 'sl';
 
 function translate(key, replacements = {}) {
     let translation = translations[key] || key;
@@ -9,9 +8,9 @@ function translate(key, replacements = {}) {
     return translation;
 }
 
-async function setLanguage(lang) {
+export async function setLanguage(lang) {
     const validLangs = ['sl', 'en'];
-    currentLang = validLangs.includes(lang) ? lang : 'sl';
+    const currentLang = validLangs.includes(lang) ? lang : 'sl';
     localStorage.setItem('mojavto_lang', currentLang);
     document.documentElement.lang = currentLang;
 
@@ -25,44 +24,14 @@ async function setLanguage(lang) {
 
     document.querySelectorAll('[data-i18n-key]').forEach(element => {
         const key = element.getAttribute('data-i18n-key');
+        const targetAttr = element.getAttribute('data-i18n-target');
+        
         if (translations[key]) {
-            const target = element.getAttribute('data-i18n-target') || 'innerHTML';
-            if (target === 'innerHTML') {
-                element.innerHTML = translations[key];
+            if (targetAttr) {
+                element.setAttribute(targetAttr, translations[key]);
             } else {
-                element.setAttribute(target, translations[key]);
+                element.innerHTML = translations[key];
             }
         }
     });
 }
-
-const urlParams = new URLSearchParams(window.location.search);
-const langFromUrl = urlParams.get('lang');
-const langFromStorage = localStorage.getItem('mojavto_lang');
-setLanguage(langFromUrl || langFromStorage || 'sl');
-
-document.addEventListener("DOMContentLoaded", () => {
-    const headerPlaceholder = document.getElementById("header");
-    const footerPlaceholder = document.getElementById("footer");
-
-    if (headerPlaceholder) {
-        fetch("header.html")
-          .then(res => res.text())
-          .then(async data => {
-            headerPlaceholder.innerHTML = data;
-            await setLanguage(currentLang); 
-            const userMenuScript = document.createElement('script');
-            userMenuScript.src = 'js/userMenu.js';
-            document.body.appendChild(userMenuScript);
-          });
-    }
-
-    if (footerPlaceholder) {
-        fetch("footer.html")
-          .then(res => res.text())
-          .then(async data => {
-            footerPlaceholder.innerHTML = data;
-            await setLanguage(currentLang);
-          });
-    }
-});

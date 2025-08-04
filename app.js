@@ -1,62 +1,54 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const appContainer = document.getElementById('app-container');
-    const headerContainer = document.getElementById('header-container');
-    const footerContainer = document.getElementById('footer-container');
+// Uvozimo samo "init" funkcije iz drugih, specializiranih modulov.
+// Vsak modul skrbi za svoje področje.
+import { setLanguage } from './i18n.js';
+import { initRouter } from './router.js';
+import { initUserMenu } from './userMenu.js';
 
-    // Funkcija za nalaganje komponent (header, footer)
-    const loadComponent = async (url, container) => {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`Napaka pri nalaganju ${url}`);
-            const html = await response.text();
-            container.innerHTML = html;
-        } catch (error) {
-            console.error(error);
-            container.innerHTML = `<p style="color:red; text-align:center;">${error.message}</p>`;
-        }
-    };
+/**
+ * Asinhrono naloži vsebino HTML komponente (npr. glava, noga) v določen vsebnik.
+ * @param {string} url - Pot do HTML datoteke komponente.
+ * @param {string} containerId - ID HTML elementa, v katerega se naloži vsebina.
+ */
+async function loadComponent(url, containerId) {
+    try {
+        const container = document.getElementById(containerId);
+        // Če vsebnik na strani ne obstaja, tiho končamo.
+        if (!container) return;
 
-    // Funkcija za nalaganje pogleda (vsebine strani)
-    const loadView = async (viewName) => {
-        try {
-            const response = await fetch(`./views/${viewName}.html`);
-            if (!response.ok) {
-                 // Če stran ne obstaja, naloži 404 stran
-                const response404 = await fetch('./views/404.html');
-                const html404 = await response404.text();
-                appContainer.innerHTML = html404;
-                return;
-            }
-            const html = await response.text();
-            appContainer.innerHTML = html;
-            // Po nalaganju vsebine lahko po potrebi zaženemo specifične skripte
-            // Npr. initLoginPage(), initRegisterPage() itd.
-        } catch (error) {
-            console.error('Napaka pri nalaganju pogleda:', error);
-            appContainer.innerHTML = `<p style="color:red; text-align:center;">Prišlo je do napake pri nalaganju vsebine.</p>`;
-        }
-    };
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Komponenta na naslovu ${url} ni bila najdena.`);
+        
+        container.innerHTML = await response.text();
+    } catch (error) {
+        // V primeru napake izpišemo v konzolo, da ne zrušimo celotne aplikacije.
+        console.error(`Napaka pri nalaganju komponente ${url}:`, error);
+    }
+}
 
-    // Ruter, ki se odziva na spremembe v URL-ju (#)
-    const router = () => {
-        const path = window.location.hash.slice(1) || '/'; // Odstrani # in dobi pot
-        const route = path === '/' ? 'home' : path.split('/')[1];
-        loadView(route);
-    };
+/**
+ * Glavna funkcija za zagon aplikacije.
+ * Določa pravilen vrstni red nalaganja in inicializacije.
+ */
+async function main() {
+    // 1. Vzporedno naložimo osnovne statične komponente (glavo in nogo).
+    // S Promise.all počakamo, da sta obe končani, preden nadaljujemo.
+    await Promise.all([
+        loadComponent('./components/header.html', 'header-container'),
+        loadComponent('./components/footer.html', 'footer-container')
+    ]);
 
-    // Poslušaj na spremembe hasha v URL-ju
-    window.addEventListener('hashchange', router);
+    // 2. Inicializiramo sistem za prevajanje (i18n).
+    // To bo poskrbelo, da se tudi pravkar naložena glava in noga pravilno prevedeta.
+    const langFromUrl = new URLSearchParams(window.location.search).get('lang');
+    const langFromStorage = localStorage.getItem('mojavto_lang');
+    await setLanguage(langFromUrl || langFromStorage || 'sl');
+    
+    // 3. Ko sta glava in prevod pripravljena, inicializiramo logiko za uporabniški meni.
+    initUserMenu();
 
-    // Začetno nalaganje
-    const initApp = async () => {
-        // Naloži statične komponente
-        await Promise.all([
-            loadComponent('./components/header.html', headerContainer),
-            loadComponent('./components/footer.html', footerContainer)
-        ]);
-        // Naloži začetni pogled
-        router();
-    };
+    // 4. Na koncu zaženemo ruter, ki bo poskrbel za nalaganje dinamične vsebine strani.
+    initRouter();
+}
 
-    initApp();
-});
+// Ko brskalnik zgradi osnovno HTML strukturo (DOM), zaženemo našo glavno funkcijo.
+document.addEventListener('DOMContentLoaded', main);
