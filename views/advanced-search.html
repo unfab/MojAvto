@@ -22,11 +22,12 @@
             <h3><i class="fas fa-ban"></i>Izključi znamke</h3>
             <div class="filter-content">
                 <div class="form-group">
-                    <label for="exclude-make">Izberi znamke, ki jih ne želiš videti</label>
-                    <select id="exclude-make" name="excludeMake" multiple>
+                    <label for="exclude-make-input">Dodaj znamko za izključitev</label>
+                    <select id="exclude-make-input">
+                        <option value="">Izberi...</option>
                         </select>
-                    <p class="field-hint">Za izbiro več znamk držite tipko CTRL (ali CMD na Macu) in klikajte.</p>
                 </div>
+                <div id="excluded-brands-container"></div>
             </div>
         </section>
         <section class="filter-section">
