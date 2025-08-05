@@ -190,3 +190,7 @@ select[multiple] option {
 .remove-brand-btn:hover {
     color: var(--error-color);
 }
+/* Privzeto skrije polje za domet pri naprednem iskanju */
+#range-group {
+    display: none;
+}

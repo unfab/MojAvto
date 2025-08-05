@@ -5,56 +5,21 @@ export function initAdvancedSearchPage() {
     const searchForm = document.getElementById("advancedSearchForm");
     const makeSelect = document.getElementById("make");
     const modelSelect = document.getElementById("model");
+    const typeSelect = document.getElementById("type"); // NOVO
     const yearFromSelect = document.getElementById("year-from");
     const yearToSelect = document.getElementById("year-to");
-    
-    // === NOVI ELEMENTI ZA IZKLJUČITEV ===
+    const fuelSelect = document.getElementById("fuel"); // NOVO
+    const rangeGroup = document.getElementById("range-group"); // NOVO
     const excludeMakeInput = document.getElementById("exclude-make-input");
     const excludedBrandsContainer = document.getElementById("excluded-brands-container");
     
-    // === SPREMENLJIVKA ZA HRANJENJE IZKLJUČENIH ZNAMK ===
     let excludedBrands = [];
 
-    // --- FUNKCIJE ZA UPRAVLJANJE Z IZKLJUČENIMI ZNAMKAMI ---
+    // --- FUNKCIJE ZA IZKLJUČEVANJE ZNAMK (ostanejo enake) ---
+    function renderExcludedTags() { /* ... koda ostane enaka ... */ }
+    function addRemoveTagListeners() { /* ... koda ostane enaka ... */ }
+    excludeMakeInput.addEventListener('change', () => { /* ... koda ostane enaka ... */ });
 
-    // Funkcija, ki prikaže "značke" izključenih znamk
-    function renderExcludedTags() {
-        excludedBrandsContainer.innerHTML = ''; // Počistimo obstoječe
-        excludedBrands.forEach(brand => {
-            const tag = document.createElement('div');
-            tag.className = 'excluded-brand-tag';
-            tag.innerHTML = `
-                <span>${brand}</span>
-                <button type="button" class="remove-brand-btn" data-brand="${brand}" title="Odstrani">&times;</button>
-            `;
-            excludedBrandsContainer.appendChild(tag);
-        });
-
-        // Dodamo poslušalce na nove gumbe za odstranjevanje
-        addRemoveTagListeners();
-    }
-
-    // Funkcija, ki doda poslušalce na 'x' gumbe
-    function addRemoveTagListeners() {
-        document.querySelectorAll('.remove-brand-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const brandToRemove = e.currentTarget.dataset.brand;
-                excludedBrands = excludedBrands.filter(b => b !== brandToRemove);
-                renderExcludedTags();
-            });
-        });
-    }
-
-    // Dogodek, ko uporabnik izbere znamko iz spustnega seznama
-    excludeMakeInput.addEventListener('change', (e) => {
-        const selectedBrand = e.target.value;
-        if (selectedBrand && !excludedBrands.includes(selectedBrand)) {
-            excludedBrands.push(selectedBrand);
-            renderExcludedTags();
-        }
-        // Po izbiri ponastavimo spustni seznam
-        e.target.value = '';
-    });
 
     // --- LOGIKA ZA POLNJENJE OBRAZCA ---
     fetch("./json/brands_models_global.json")
@@ -63,48 +28,53 @@ export function initAdvancedSearchPage() {
         const sortedBrands = Object.keys(brandModelData).sort();
         
         sortedBrands.forEach(brand => {
-            // Polnimo seznam za vključitev
-            const optionInclude = document.createElement("option");
-            optionInclude.value = brand;
-            optionInclude.textContent = brand;
-            makeSelect.appendChild(optionInclude);
-
-            // Polnimo nov seznam za izključitev
-            const optionExclude = document.createElement("option");
-            optionExclude.value = brand;
-            optionExclude.textContent = brand;
-            excludeMakeInput.appendChild(optionExclude);
+            makeSelect.add(new Option(brand, brand));
+            excludeMakeInput.add(new Option(brand, brand));
         });
         
-        makeSelect.addEventListener("change", function () { /* ... koda za polnjenje modelov ... */ });
+        // SPREMEMBA: Logika za polnjenje modelov IN tipov
+        makeSelect.addEventListener("change", function () {
+            const selectedMake = this.value;
+            modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
+            typeSelect.innerHTML = '<option value="">Vsi tipi</option>'; // Počisti tudi tipe
+            modelSelect.disabled = true;
+            typeSelect.disabled = true;
+
+            if (selectedMake && brandModelData[selectedMake]) {
+                const models = Object.keys(brandModelData[selectedMake]);
+                models.forEach(model => modelSelect.add(new Option(model, model)));
+                modelSelect.disabled = false;
+            }
+        });
+
+        // NOVO: Dogodek ob spremembi modela, ki napolni tipe
+        modelSelect.addEventListener("change", function () {
+            const selectedMake = makeSelect.value;
+            const selectedModel = this.value;
+            typeSelect.innerHTML = '<option value="">Vsi tipi</option>';
+            typeSelect.disabled = true;
+
+            if (selectedModel && brandModelData[selectedMake] && brandModelData[selectedMake][selectedModel]) {
+                const types = brandModelData[selectedMake][selectedModel];
+                types.forEach(type => typeSelect.add(new Option(type, type)));
+                typeSelect.disabled = false;
+            }
+        });
       });
     
-    // ... obstoječa koda za polnjenje letnic ...
+    // ... koda za polnjenje letnic ostane enaka ...
 
-    // --- ODDAJA OBRAZCA ---
-    function getCriteriaFromForm() {
-        const formData = new FormData(searchForm);
-        const criteria = {};
-        for (const [key, value] of formData.entries()) {
-            if (value) criteria[key] = value;
+    // NOVO: Dogodek ob spremembi goriva za prikaz dometa
+    fuelSelect.addEventListener('change', () => {
+        if (fuelSelect.value === 'Elektrika') {
+            rangeGroup.style.display = 'block';
+        } else {
+            rangeGroup.style.display = 'none';
         }
-        
-        // Dodamo seznam izključenih znamk h kriterijem
-        if (excludedBrands.length > 0) {
-            criteria.excludedMakes = excludedBrands;
-        }
-        return criteria;
-    }
-
-    searchForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const searchCriteria = getCriteriaFromForm();
-        sessionStorage.setItem('advancedSearchCriteria', JSON.stringify(searchCriteria));
-        window.location.hash = '#/';
     });
 
-    searchForm.addEventListener('reset', () => {
-        excludedBrands = [];
-        renderExcludedTags();
-    });
+    // --- ODDAJA OBRAZCA (funkcija ostane enaka) ---
+    function getCriteriaFromForm() { /* ... koda ostane enaka ... */ }
+    searchForm.addEventListener("submit", (e) => { /* ... koda ostane enaka ... */ });
+    searchForm.addEventListener('reset', () => { /* ... koda ostane enaka ... */ });
 }

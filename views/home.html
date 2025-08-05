@@ -12,38 +12,39 @@
                 <button class="tab-btn" title="Gospodarska vozila"><i class="fas fa-truck"></i></button>
                 <button class="tab-btn" title="Počitniška vozila"><i class="fas fa-caravan"></i></button>
             </div>
-            <form class="search-form">
+            <form id="homeSearchForm" class="search-form">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="make">Znamka</label>
-                        <select id="make" name="make"><option>Vse znamke</option></select>
+                        <select id="make" name="make"><option value="">Vse znamke</option></select>
                     </div>
                     <div class="form-group">
                         <label for="model">Model</label>
-                        <select id="model" name="model"><option>Vsi modeli</option></select>
+                        <select id="model" name="model" disabled><option value="">Vsi modeli</option></select>
                     </div>
                     <div class="form-group">
                         <label for="reg-from">1. registracija od</label>
-                        <select id="reg-from" name="reg-from"><option>Vse</option></select>
+                        <select id="reg-from" name="yearFrom"><option value="">Vse</option></select>
                     </div>
                     <div class="form-group">
                         <label for="mileage-to">Kilometri do</label>
-                        <select id="mileage-to" name="mileage-to"><option>Neomejeno</option></select>
+                        <input type="number" id="mileage-to" name="mileageTo" placeholder="Neomejeno">
                     </div>
                     <div class="form-group">
                         <label for="fuel-type">Tip goriva</label>
-                        <select id="fuel-type" name="fuel-type"><option>Vse</option></select>
+                        <select id="fuel-type" name="fuel"><option value="">Vse</option></select>
                     </div>
                     <div class="form-group">
                         <label for="price-to">Cena do</label>
-                        <select id="price-to" name="price-to"><option>Neomejena</option></select>
+                        <input type="number" id="price-to" name="priceTo" placeholder="Neomejena">
                     </div>
                     <div class="form-group" style="grid-column: span 2;">
                         <label for="region">Regija Slovenije</label>
-                        <select id="region" name="region"><option>Celotna Slovenija</option></select>
+                        <select id="region" name="region"><option value="">Celotna Slovenija</option></select>
                     </div>
                 </div>
                 <div class="form-actions">
+                    <button type="reset" class="more-filters-btn">Ponastavi</button>
                     <a href="#/advanced-search" class="more-filters-btn">Napredno iskanje</a>
                     <button type="submit" class="submit-btn">
                         <i class="fas fa-search"></i> Poišči ponudbe
@@ -53,3 +54,15 @@
         </div>
     </div>
 </section>
+
+<div class="page-container" style="margin-top: 2rem;">
+    <section id="listingsContainer" class="listings-grid" style="width: 100%;">
+        </section>
+</div>
+
+<div id="noListingsMessage" style="display: none; text-align: center; padding: 2rem;">
+    <h3>Ni najdenih oglasov, ki bi ustrezali vašim kriterijem.</h3>
+</div>
+
+<nav id="pagination-container" class="pagination" style="justify-content: center; margin-top: 2rem;">
+    </nav>

@@ -14,6 +14,10 @@
                         <label for="model">Model</label>
                         <select id="model" name="model" disabled><option value="">Vsi modeli</option></select>
                     </div>
+                    <div class="form-group">
+                        <label for="type">Tip</label>
+                        <select id="type" name="type" disabled><option value="">Vsi tipi</option></select>
+                    </div>
                 </div>
             </div>
         </section>
@@ -23,15 +27,14 @@
             <div class="filter-content">
                 <div class="form-group">
                     <label for="exclude-make-input">Dodaj znamko za izključitev</label>
-                    <select id="exclude-make-input">
-                        <option value="">Izberi...</option>
-                        </select>
+                    <select id="exclude-make-input"><option value="">Izberi...</option></select>
                 </div>
                 <div id="excluded-brands-container"></div>
             </div>
         </section>
+
         <section class="filter-section">
-            <h3><i class="fas fa-sliders-h"></i>Cena, letnik, kilometri</h3>
+            <h3><i class="fas fa-sliders-h"></i>Ključni kriteriji</h3>
             <div class="filter-content">
                 <div class="form-row">
                      <div class="form-group">
@@ -42,6 +45,8 @@
                         <label for="price-to">Cena do (€)</label>
                         <input type="number" id="price-to" name="priceTo" placeholder="npr. 15000">
                     </div>
+                </div>
+                <div class="form-row" style="margin-top: 1.5rem;">
                      <div class="form-group">
                         <label for="year-from">1. registracija od</label>
                         <select id="year-from" name="yearFrom"><option value="">Vse</option></select>
@@ -49,6 +54,38 @@
                     <div class="form-group">
                         <label for="year-to">1. registracija do</label>
                         <select id="year-to" name="yearTo"><option value="">Vse</option></select>
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 1.5rem;">
+                     <div class="form-group">
+                        <label for="mileage-from">Kilometri od</label>
+                        <input type="number" id="mileage-from" name="mileageFrom" placeholder="npr. 50000">
+                    </div>
+                    <div class="form-group">
+                        <label for="mileage-to">Kilometri do</label>
+                        <input type="number" id="mileage-to" name="mileageTo" placeholder="npr. 150000">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <h3><i class="fas fa-gas-pump"></i>Gorivo</h3>
+            <div class="filter-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fuel">Vrsta goriva</label>
+                        <select id="fuel" name="fuel">
+                            <option value="">Vse</option>
+                            <option value="Bencin">Bencin</option>
+                            <option value="Dizel">Dizel</option>
+                            <option value="Elektrika">Elektrika</option>
+                            <option value="Hibrid">Hibrid</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="range-group">
+                        <label for="range">Minimalni domet (km)</label>
+                        <input type="number" name="range" placeholder="npr. 300">
                     </div>
                 </div>
             </div>
