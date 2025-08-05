@@ -23,16 +23,26 @@
         </section>
 
         <section class="filter-section">
-            <h3><i class="fas fa-ban"></i>Izključi znamke</h3>
+            <h3><i class="fas fa-ban"></i>Izključi vozila</h3>
             <div class="filter-content">
-                <div class="form-group">
-                    <label for="exclude-make-input">Dodaj znamko za izključitev</label>
-                    <select id="exclude-make-input"><option value="">Izberi...</option></select>
+                <div class="exclusion-form-row">
+                    <div class="form-group">
+                        <label for="exclude-make">Znamka</label>
+                        <select id="exclude-make"><option value="">Izberi znamko...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exclude-model">Model (opcijsko)</label>
+                        <select id="exclude-model" disabled><option value="">Vsi modeli</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exclude-type">Tip (opcijsko)</label>
+                        <select id="exclude-type" disabled><option value="">Vsi tipi</option></select>
+                    </div>
+                    <button type="button" id="addExclusionBtn" class="btn btn-secondary">Dodaj</button>
                 </div>
-                <div id="excluded-brands-container"></div>
+                <div id="excluded-items-container"></div>
             </div>
         </section>
-
         <section class="filter-section">
             <h3><i class="fas fa-sliders-h"></i>Ključni kriteriji</h3>
             <div class="filter-content">
