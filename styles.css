@@ -1,165 +1,147 @@
 /* ==================================================== */
-/* ZDRUŽENI IN POČIŠČENI STILI ZA CELOTNO APLIKACIJO */
+/* NOVI ZDRUŽENI STILI ZA CELOTNO APLIKACIJO        */
 /* ==================================================== */
 
 :root {
-    --primary-color: #f97316;
-    --primary-color-hover: #ea580c;
-    --text-color: #1f2937;
-    --text-color-light: #6b7280;
-    --background-color: #f9fafb;
-    --card-background: #ffffff;
+    /* Svetla tema (privzeta) */
+    --bg-color: #f0f2f5;
+    --card-color: #ffffff;
     --border-color: #e5e7eb;
-    --success-color: #16a34a;
-    --error-color: #ef4444;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --header-bg: #ffffff;
+    --input-bg: #ffffff;
+    
+    --accent-orange: #f97316;
+    --accent-orange-hover: #ea580c;
+    --accent-blue: #3b82f6;
 }
 
-/* === OSNOVNI STILI IN PONASTAVITVE === */
-* { 
-    box-sizing: border-box; 
+body.dark-mode {
+    /* Temna tema */
+    --bg-color: #111827;
+    --card-color: #1f2937;
+    --border-color: #374151;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --header-bg: #1f2937;
+    --input-bg: #374151;
 }
 
-body { 
-    margin: 0; 
-    font-family: 'Inter', sans-serif; 
-    background: var(--background-color); 
-    color: var(--text-color); 
-    display: flex; 
-    flex-direction: column; 
-    min-height: 100vh; 
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-main { 
-    flex: 1; 
-    max-width: 1200px; 
-    width: 100%; 
-    padding: 20px; 
-    margin: 0 auto; 
+.page-container {
+    display: flex;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    gap: 1.5rem;
 }
 
-/* === HEADER IN FOOTER === */
-header { display: flex; justify-content: space-between; align-items: center; background-color: var(--card-background); padding: 12px 24px; box-shadow: var(--shadow-md); position: relative; z-index: 10; }
-.logo a { font-size: 1.5rem; font-weight: bold; text-decoration: none; color: var(--text-color); }
-nav { display: flex; align-items: center; gap: 16px; }
-nav a { text-decoration: none; color: var(--text-color-light); font-weight: 500; transition: color 0.2s ease-in-out; }
-nav a:hover { color: var(--text-color); }
-#userMenu { position: relative; display: inline-block; }
-#userDropdown { display: none; position: absolute; background: var(--card-background); border: 1px solid var(--border-color); padding: 8px; margin-top: 5px; right: 0; min-width: 160px; z-index: 1000; box-shadow: var(--shadow-md); border-radius: var(--border-radius-md); }
-#userDropdown a { display: block; padding: 8px 12px; text-decoration: none; color: var(--text-color); border-radius: 4px; }
-#userDropdown a:hover { background-color: var(--background-color); }
-footer { background-color: #1f2937; color: #e5e7eb; padding: 2rem 1rem; margin-top: auto; }
-.footer-container { max-width: 1200px; margin: 0 auto; text-align: center; }
-.footer-links { display: flex; justify-content: center; gap: 1.5rem; list-style: none; padding: 0; margin: 0 0 1rem 0; }
-.footer-links a { color: #d1d5db; text-decoration: none; font-weight: 500; transition: color 0.2s; }
-.footer-links a:hover { color: #ffffff; text-decoration: underline; }
-.footer-copyright { font-size: 0.9rem; color: #9ca3af; border-top: 1px solid #374151; padding-top: 1.5rem; margin-top: 1.5rem; }
-.burger { display: none; } /* Poenostavljeno, dodajte @media po potrebi */
+/* === GLAVA IN STRANSKA VRSTICA === */
+header {
+    background-color: var(--header-bg);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
 
-/* === GUMBI IN OBRAZCI === */
-.btn-primary, .auth-container button[type="submit"], .contact-btn, .contact-form-container .btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border: none;
+.header-left { display: flex; align-items: center; gap: 1rem; }
+.sidebar-toggle-btn, #themeToggleBtn { background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; transition: color 0.2s ease; }
+.sidebar-toggle-btn:hover, #themeToggleBtn:hover { color: var(--text-primary); }
+.logo { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); text-decoration: none; }
+.logo span { color: var(--accent-blue); }
+.header-actions { display: flex; align-items: center; gap: 1rem; }
+.header-actions .icon-link { font-size: 1.2rem; color: var(--text-secondary); text-decoration: none; }
+.dark-mode .fa-sun { display: none; }
+body:not(.dark-mode) .fa-moon { display: none; }
+.login-btn { background-color: var(--accent-blue); color: #ffffff; padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: 700; transition: background-color 0.2s; text-decoration: none; }
+.login-btn:hover { background-color: #2563eb; }
+
+.sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background-color: var(--card-color);
+    height: calc(100vh - 70px - 2rem);
+    position: sticky;
+    top: calc(70px + 1rem);
+    padding: 1rem 0;
+    transition: margin-left 0.3s ease-in-out, background-color 0.3s ease;
+    border-radius: 16px; 
+    margin: 1rem 0 1rem 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+    border: 1px solid var(--border-color);
+}
+.page-container.sidebar-collapsed .sidebar { margin-left: calc(-240px - 1rem); }
+.sidebar-nav { list-style: none; padding: 0; margin: 0; }
+.sidebar-nav li a { display: flex; align-items: center; padding: 0.75rem 2rem; color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: background-color 0.2s, color 0.2s; white-space: nowrap; }
+.sidebar-nav li a:hover { background-color: var(--bg-color); color: var(--text-primary); }
+.sidebar-nav li a i { width: 20px; margin-right: 1rem; text-align: center; }
+
+/* === GLAVNA VSEBINA === */
+main {
+    flex-grow: 1; 
+    padding: 1rem; 
+    overflow-y: auto;
+}
+.search-container { max-width: 900px; margin: 0 auto; }
+.search-container h1 { font-size: 2.5rem; margin-bottom: 2rem; }
+.filter-section { background: var(--card-color); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.filter-section h3 { font-size: 1.5rem; padding: 1.5rem; margin: 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem; }
+.filter-content { padding: 1.5rem; }
+.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.form-group label { font-weight: 500; }
+.form-group input, .form-group select { width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--input-bg); color: var(--text-primary); box-sizing: border-box; }
+.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+.checkbox-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem 1rem; }
+.checkbox-options label { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
+.vehicle-type-grid { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 1rem; }
+.vehicle-type { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s ease; width: 120px; height: 100px; }
+.vehicle-type:hover { border-color: var(--accent-blue); }
+.vehicle-type.active { border-color: var(--accent-blue); background-color: rgba(59, 130, 246, 0.1); }
+.vehicle-type i { font-size: 2rem; margin-bottom: 0.75rem; color: var(--accent-blue); }
+.vehicle-type span { font-size: 0.9rem; font-weight: 500; }
+.search-actions { display: flex; justify-content: flex-end; gap: 1rem; padding: 1.5rem; }
+.btn { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background-color 0.2s ease; }
+.btn-secondary { background-color: var(--border-color); color: var(--text-primary); }
+.btn-primary { background-color: var(--accent-orange); color: #ffffff; }
+.btn-primary:hover { background-color: var(--accent-orange-hover); }
+
+@media (max-width: 1024px) {
+    .sidebar { position: fixed; z-index: 1100; margin-left: calc(-240px - 2rem); }
+    .page-container.sidebar-collapsed .sidebar { margin-left: 0; }
+    .sidebar-toggle-btn { display: block !important; } /* Pokažemo gumb */
+}
+    /* Stili za select polje z večkratnim izborom */
+select[multiple] {
+    height: 200px; /* Določimo višino, da je vidnih več opcij */
+    padding: 0.5rem;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius-md);
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.2s ease-in-out;
-    box-shadow: var(--shadow-md);
-    width: auto; /* Prepreči raztezanje, razen če je določeno drugače */
+    color: var(--text-primary);
 }
 
-.btn-primary:hover, .auth-container button[type="submit"]:hover, .contact-btn:hover, .contact-form-container .btn-primary:hover {
-    background-color: var(--primary-color-hover);
-    transform: translateY(-2px);
+select[multiple] option {
+    padding: 5px;
 }
 
-.auth-container button[type="submit"], .contact-form-container .btn-primary {
-    width: 100%; /* Specifično za gumbe v obrazcih */
+/* Stil za namig pod poljem */
+.field-hint {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
 }
-
-.form-group { margin-bottom: 1.25rem; }
-.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); box-sizing: border-box; font-family: 'Inter', sans-serif; transition: all 0.2s ease-in-out;}
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
-}
-
-/* === SPECIFIČNI STILI ZA STRANI (auth, about, admin, itd.) === */
-
-/* auth.css */
-.auth-container { background: var(--card-background); padding: 2.5rem; width: 100%; max-width: 450px; box-shadow: var(--shadow-md); border-radius: var(--border-radius-lg); }
-.auth-container h1 { text-align: center; margin-bottom: 2rem; font-size: 1.8rem; }
-.password-strength { height: 5px; background-color: var(--border-color); border-radius: 5px; margin-top: 0.5rem; }
-.strength-bar { height: 100%; width: 0%; border-radius: 5px; transition: width 0.3s, background-color 0.3s; }
-.error-message { color: var(--error-color); margin-bottom: 1rem; text-align: center; }
-.inline-error { color: var(--error-color); font-size: 0.8rem; font-weight: 500; margin-top: 5px; min-height: 1rem; }
-.checkbox { display: flex; align-items: center; gap: 0.5rem; }
-.auth-container p { text-align: center; margin-top: 1.5rem; }
-
-/* about.css */
-.about-container { max-width: 1000px; }
-.page-header { text-align: center; margin-bottom: 3rem; }
-.page-header h1 { font-size: 2.8rem; margin-bottom: 0.5rem; }
-.page-header p { font-size: 1.1rem; color: var(--text-color-light); }
-.intro-text { font-size: 1.1rem; line-height: 1.7; text-align: center; max-width: 800px; margin: 0 auto 3rem auto; }
-.mission-vision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 4rem; }
-.mission-vision-grid .card { background-color: var(--card-background); padding: 2rem; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); }
-.mission-vision-grid h3 { display: flex; align-items: center; gap: 0.75rem; font-size: 1.3rem; }
-.mission-vision-grid p { line-height: 1.6; color: var(--text-color); }
-@media (max-width: 768px) { .mission-vision-grid { grid-template-columns: 1fr; } }
-
-/* admin.css & dashboard.css & profile.css */
-.admin-container, .dashboard-container, .profile-container { max-width: 1200px; }
-.admin-container h1, .dashboard-container h1, .profile-container h1 { font-size: 2.5rem; margin-bottom: 2rem; }
-.admin-section { background: var(--card-background); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); margin-bottom: 2rem; }
-.admin-section h2 { font-size: 1.5rem; padding: 1.5rem; margin: 0; border-bottom: 1px solid var(--border-color); }
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; padding: 1.5rem; }
-.stat-card { text-align: center; }
-.stat-value { font-size: 2.5rem; font-weight: bold; margin: 0; color: var(--primary-color); }
-.stat-label { font-size: 1rem; color: var(--text-color-light); margin-top: 0.5rem; }
-.listings-table { width: 100%; border-collapse: collapse; }
-.listings-table th, .listings-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
-.listings-table th { font-weight: 600; }
-.btn-delete { background: #fee2e2; color: var(--error-color); border: none; padding: 8px 12px; border-radius: var(--border-radius-md); cursor: pointer; transition: background-color 0.2s; }
-.btn-delete:hover { background-color: #fecaca; }
-.tabs { display: flex; border-bottom: 2px solid var(--border-color); margin-bottom: 2rem; }
-.tab-link { background: none; border: none; padding: 1rem 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; color: var(--text-color-light); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: color 0.2s, border-color 0.2s; }
-.tab-link.active, .tab-link:hover { color: var(--primary-color); border-color: var(--primary-color); }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.empty-state { text-align: center; padding: 2rem; color: var(--text-color-light); }
-.profile-form { max-width: 500px; background: var(--card-background); padding: 2rem; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); }
-.chart-container { padding: 1.5rem; position: relative; height: 400px; }
-
-/* ... in ostali specifični stili za komponente, ki so bili vključeni že prej ... */
-/* Vsebino iz ostalih datotek pustimo, kot je bila, saj večinoma definira razporeditev. */
-
-/* === KARTICE OGLASOV IN MREŽA === */
-.listings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-.card { background: var(--card-background); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
-.card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); }
-.card-image-container { position: relative; width: 100%; height: 180px; }
-.card-image-container img { width: 100%; height: 100%; object-fit: cover; }
-.card-body { padding: 15px; flex: 1; display: flex; flex-direction: column; }
-.card-title { font-weight: 700; font-size: 1.2rem; margin: 0 0 6px; }
-.card-details { font-size: 0.9rem; color: var(--text-color-light); margin-bottom: auto; }
-.card-price { font-size: 1.1rem; font-weight: 600; color: var(--success-color); margin-top: 10px; }
-.fav-btn, .compare-btn { position: absolute; background-color: rgba(255, 255, 255, 0.9); border: 1px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text-color); transition: all 0.2s ease-in-out; backdrop-filter: blur(2px); }
-.fav-btn { top: 10px; left: 10px; }
-.compare-btn { top: 10px; right: 10px; }
-.fav-btn:hover, .compare-btn:hover { background-color: white; transform: scale(1.1); }
-.compare-btn.selected { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
-.fav-btn.favorited { color: var(--error-color); }
-
-/* === Vsebina iz ostalih datotek, kot je bila ... === */
-.listing-container { max-width: 1200px; }
-.listing-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
-@media (max-width: 900px) { .listing-layout { grid-template-columns: 1fr; } }
-/* ...itd... */

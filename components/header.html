@@ -1,26 +1,17 @@
 <header>
-  <div class="header-container">
-    <div class="logo"><a href="#/">MojAvto.si</a></div>
-    <button id="burgerBtn" class="burger" style="display:none;">☰</button> <nav id="navLinks">
-      <a href="#/" data-i18n-key="nav_home">Domov</a>
-      <a href="#/advanced-search" data-i18n-key="nav_advanced_search">Napredno iskanje</a>
-      <a href="#/about" data-i18n-key="nav_about">O nas</a>
-      <a href="#/contact" data-i18n-key="nav_contact">Kontakt</a>
-      <a href="#/faq" data-i18n-key="nav_faq">Pomoč (FAQ)</a>
-      <div class="lang-switcher" style="display:inline-block; margin-left:15px;">
-          <a href="?lang=sl" data-lang="sl">SL</a> | <a href="?lang=en" data-lang="en">EN</a>
-      </div>
-      <span id="userMenu" style="display:none; margin-left: 15px;">
-        <button id="userDropdownBtn" data-i18n-key="my_account">Moj račun ▼</button>
-        <div id="userDropdown" style="display:none;">
-          <a href="#/profile" id="profileLink" data-i18n-key="my_profile">Moj profil</a>
-          <a href="#/dashboard" id="dashboardLink" style="display: none;" data-i1en-key="dashboard_link">Nadzorna plošča</a>
-          <a href="#/create-listing" data-i18n-key="create_listing">Ustvari oglas</a>
-          <a href="#/admin" id="adminLink" style="display: none;" data-i18n-key="administration">Administracija</a>
-          <a href="#" id="logoutBtn" data-i18n-key="logout">Odjava</a>
-        </div>
-      </span>
-      <a href="#/login" id="loginLink" data-i18n-key="login" style="margin-left: 15px;">Prijava</a>
-    </nav>
-  </div>
+    <div class="header-left">
+        <button class="sidebar-toggle-btn" id="sidebarToggle" style="display: none;">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="#/" class="logo">Moj<span>Avto.si</span></a>
+    </div>
+    <div class="header-actions">
+        <button id="themeToggleBtn">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+        </button>
+        <a href="#/profile" class="icon-link" title="Priljubljeni"><i class="far fa-star"></i></a>
+        <a href="#/login" id="loginLink" class="login-btn">Prijava</a>
+        <div id="userMenuContainer"></div> 
+    </div>
 </header>
