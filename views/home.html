@@ -3,3 +3,21 @@
     <p>Vaša vstopna točka v svet avtomobilizma.</p>
     <p>Uporabite navigacijo za raziskovanje strani.</p>
 </div>
+<main>
+    <section class="filter-panel">
+        <select id="make" name="make"><option value="">Vse znamke</option></select>
+        <select id="model" name="model" disabled><option value="">Vsi modeli</option></select>
+        <select id="yearFrom"><option value="">Letnik od</option></select>
+        <input type="number" id="priceTo" placeholder="Cena do (€)">
+        </section>
+
+    <section id="listingsContainer" class="listings-grid">
+        </section>
+
+    <div id="noListingsMessage" style="display: none; text-align: center; padding: 2rem;">
+        <h3>Ni najdenih oglasov, ki bi ustrezali vašim kriterijem.</h3>
+    </div>
+
+    <nav id="pagination-container" class="pagination">
+        </nav>
+</main>
