@@ -5,8 +5,6 @@ export function initHomePage() {
     const listingsContainer = document.getElementById("listingsContainer");
     const noListingsMessage = document.getElementById("noListingsMessage");
     const paginationContainer = document.getElementById("pagination-container");
-
-    // Elementi iskalnika iz novega dizajna
     const homeSearchForm = document.getElementById("homeSearchForm");
     const makeSelect = document.getElementById("make");
     const modelSelect = document.getElementById("model");
@@ -18,6 +16,17 @@ export function initHomePage() {
     let currentFilteredListings = [];
     const listingsPerPage = 9;
     let currentPage = 1;
+
+    // === LOGIKA ZA ZAVIHKI V ISKALNIKU ===
+    const vehicleTabs = document.querySelectorAll('.tab-btn');
+    if (vehicleTabs) {
+        vehicleTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                vehicleTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+    }
 
     // --- LOGIKA ZA PRIMERJAVO ---
     function getCompareItems() {
@@ -107,7 +116,7 @@ export function initHomePage() {
 
         paginatedListings.forEach(listing => {
             const card = document.createElement("article");
-            card.className = "card"; // Uporabite stil za kartice iz styles.css
+            card.className = "card";
             card.innerHTML = `
                 <div class="card-image-container">
                     <img src="${listing.images?.exterior[0] || 'https://via.placeholder.com/300x180?text=Avto'}" alt="${listing.title}" />
@@ -124,33 +133,34 @@ export function initHomePage() {
                 if (e.target.closest('.compare-btn') || e.target.closest('.fav-btn')) return;
                 window.location.hash = `#/listing/${listing.id}`;
             });
-
-            card.querySelector('.compare-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleCompareItem(listing.id);
-            });
-
-            card.querySelector('.fav-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleFavorite(listing.id);
-            });
-            
+            card.querySelector('.compare-btn').addEventListener('click', (e) => { e.stopPropagation(); toggleCompareItem(listing.id); });
+            card.querySelector('.fav-btn').addEventListener('click', (e) => { e.stopPropagation(); toggleFavorite(listing.id); });
             listingsContainer.appendChild(card);
         });
 
         updateCompareUI();
         updateFavoritesUI();
     }
-
+    
     // --- FILTRIRANJE ---
     function applyAdvancedFilters(listings, criteria) {
         let filtered = listings;
         if (!criteria) return filtered;
-        
-        // Vsi filtri delujejo na tej eni funkciji
-        if (criteria.excludedMakes && criteria.excludedMakes.length > 0) {
-            filtered = filtered.filter(listing => !criteria.excludedMakes.includes(listing.make));
+
+        if (criteria.exclusionRules && criteria.exclusionRules.length > 0) {
+            filtered = filtered.filter(listing => {
+                const shouldBeExcluded = criteria.exclusionRules.some(rule => {
+                    const makeMatch = rule.make === listing.make;
+                    if (!rule.model) return makeMatch;
+                    const modelMatch = rule.model === listing.model;
+                    if (!rule.type) return makeMatch && modelMatch;
+                    const typeMatch = rule.type === listing.type;
+                    return makeMatch && modelMatch && typeMatch;
+                });
+                return !shouldBeExcluded;
+            });
         }
+        
         if (criteria.make) filtered = filtered.filter(l => l.make === criteria.make);
         if (criteria.model) filtered = filtered.filter(l => l.model === criteria.model);
         if (criteria.priceFrom) filtered = filtered.filter(l => l.price >= Number(criteria.priceFrom));
@@ -162,27 +172,27 @@ export function initHomePage() {
         if (criteria.range) filtered = filtered.filter(l => l.range && l.range >= Number(criteria.range));
         if (criteria.mileageFrom) filtered = filtered.filter(l => l.mileage >= Number(criteria.mileageFrom));
         if (criteria.mileageTo) filtered = filtered.filter(l => l.mileage <= Number(criteria.mileageTo));
+        if (criteria.battery) filtered = filtered.filter(l => l.battery && l.battery >= Number(criteria.battery));
+        if (criteria.gearbox) filtered = filtered.filter(l => l.transmission === criteria.gearbox);
         
         return filtered;
     }
 
     function displayPage(listingsToShow) {
         renderListings(listingsToShow);
-        // ... vaša koda za paginacijo ...
+        // Tukaj pride vaša koda za paginacijo...
     }
 
     // --- ZAČETNI ZAGON STRANI ---
     async function initializePage() {
-        // Naložimo vse oglase iz JSON datoteke
         try {
             const response = await fetch('./json/listings.json');
             allListings = await response.json();
         } catch (error) {
             console.error("Napaka pri nalaganju oglasov:", error);
-            allListings = []; // V primeru napake prikažemo prazno
+            allListings = [];
         }
         
-        // Naložimo podatke o znamkah za iskalnik
         try {
             const brandsResponse = await fetch('./json/brands_models_global.json');
             brandModelData = await brandsResponse.json();
@@ -201,13 +211,12 @@ export function initHomePage() {
             console.error("Napaka pri nalaganju znamk:", error);
         }
 
-        // Napolnimo leta
         if (yearFromSelect) {
             const currentYear = new Date().getFullYear();
+            yearFromSelect.innerHTML = '<option value="">Letnik od</option>';
             for (let y = currentYear; y >= 1980; y--) yearFromSelect.add(new Option(y, y));
         }
 
-        // Preverimo, če prihajamo iz naprednega iskanja
         const advancedCriteria = JSON.parse(sessionStorage.getItem('advancedSearchCriteria'));
         if (advancedCriteria) {
             currentFilteredListings = applyAdvancedFilters(allListings, advancedCriteria);
@@ -216,7 +225,6 @@ export function initHomePage() {
             currentFilteredListings = allListings;
         }
         
-        // Dogodek za iskanje na domači strani
         homeSearchForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const formData = new FormData(homeSearchForm);

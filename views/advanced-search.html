@@ -43,11 +43,12 @@
                 <div id="excluded-items-container"></div>
             </div>
         </section>
+
         <section class="filter-section">
-            <h3><i class="fas fa-sliders-h"></i>Ključni kriteriji</h3>
+            <h3><i class="fas fa-sliders-h"></i>Cena, letnik in kilometri</h3>
             <div class="filter-content">
                 <div class="form-row">
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="price-from">Cena od (€)</label>
                         <input type="number" id="price-from" name="priceFrom" placeholder="npr. 5000">
                     </div>
@@ -55,9 +56,7 @@
                         <label for="price-to">Cena do (€)</label>
                         <input type="number" id="price-to" name="priceTo" placeholder="npr. 15000">
                     </div>
-                </div>
-                <div class="form-row" style="margin-top: 1.5rem;">
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="year-from">1. registracija od</label>
                         <select id="year-from" name="yearFrom"><option value="">Vse</option></select>
                     </div>
@@ -65,9 +64,7 @@
                         <label for="year-to">1. registracija do</label>
                         <select id="year-to" name="yearTo"><option value="">Vse</option></select>
                     </div>
-                </div>
-                <div class="form-row" style="margin-top: 1.5rem;">
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="mileage-from">Kilometri od</label>
                         <input type="number" id="mileage-from" name="mileageFrom" placeholder="npr. 50000">
                     </div>
@@ -80,7 +77,7 @@
         </section>
 
         <section class="filter-section">
-            <h3><i class="fas fa-gas-pump"></i>Gorivo</h3>
+            <h3><i class="fas fa-cogs"></i>Tehnični podatki in gorivo</h3>
             <div class="filter-content">
                 <div class="form-row">
                     <div class="form-group">
@@ -93,9 +90,23 @@
                             <option value="Hibrid">Hibrid</option>
                         </select>
                     </div>
-                    <div class="form-group" id="range-group">
+                    <div class="form-group">
+                        <label for="gearbox">Menjalnik</label>
+                        <select id="gearbox" name="gearbox">
+                            <option value="">Vse</option>
+                            <option>Ročni</option>
+                            <option>Avtomatski</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" id="electric-options-row" style="margin-top: 1.5rem;">
+                    <div class="form-group">
                         <label for="range">Minimalni domet (km)</label>
                         <input type="number" name="range" placeholder="npr. 300">
+                    </div>
+                    <div class="form-group">
+                        <label for="battery">Min. kapaciteta baterije (kWh)</label>
+                        <input type="number" name="battery" placeholder="npr. 50">
                     </div>
                 </div>
             </div>
