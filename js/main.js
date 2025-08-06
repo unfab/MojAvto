@@ -19,17 +19,6 @@ export function initHomePage() {
     const listingsPerPage = 9;
     let currentPage = 1;
 
-    // === LOGIKA ZA ZAVIHKI V ISKALNIKU ===
-    const vehicleTabs = document.querySelectorAll('.tab-btn');
-    if (vehicleTabs) {
-        vehicleTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                vehicleTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-            });
-        });
-    }
-
     // --- LOGIKA ZA PRIMERJAVO ---
     function getCompareItems() {
         return JSON.parse(localStorage.getItem("mojavto_compareItems")) || [];
