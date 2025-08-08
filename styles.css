@@ -348,3 +348,47 @@ select[multiple] option {
     border-color: #ef4444; /* Rdeča obroba */
     color: #ef4444; /* Rdeč tekst */
 }
+/* Stili za dinamično dodane vrstice s kriteriji */
+.criterion-row {
+    display: grid;
+    /* Ustvari 3 stolpce, ki se prilagajajo širini */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+/* Odstrani spodnjo obrobo in razmik pri zadnji vrstici */
+.criterion-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Gumb za odstranitev vrstice */
+.remove-criterion-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--card-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 26px;
+    text-align: center;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.remove-criterion-btn:hover {
+    border-color: #ef4444; /* Rdeča obroba */
+    color: #ef4444; /* Rdeč tekst */
+    transform: scale(1.1);
+}

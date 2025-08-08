@@ -2,32 +2,26 @@
     <h1>Napredno iskanje</h1>
 
     <form id="advancedSearchForm">
+        <!-- === SPREMEMBA TUKAJ: Popolnoma nova struktura za osnovne podatke === -->
         <section class="filter-section">
             <h3><i class="fas fa-car"></i>Osnovni podatki</h3>
             <div class="filter-content">
-                <div class="form-row">
-                    
-                    <div class="form-group">
-                        <label>Znamka (izberite do 3)</label>
-                        <div id="make-container"></div>
-                        <button type="button" id="addMakeBtn" class="btn btn-secondary" style="margin-top: 8px; padding: 5px 10px; font-size: 12px; display: none;">+ Dodaj znamko</button>
-                    </div>
-                    <div class="form-group">
-                        <label for="model">Model</label>
-                        <select id="model" name="model" disabled><option value="">Najprej izberite 1 znamko</option></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="type">Tip</label>
-                        <select id="type" name="type" disabled><option value="">Najprej izberite 1 znamko</option></select>
-                    </div>
+                <!-- Ta kontejner bo držal vse dinamične vrstice (znamka, model, tip) -->
+                <div id="criteria-container"></div>
+                
+                <!-- Gumb za dodajanje je sedaj ločen -->
+                <div style="margin-top: 1rem;">
+                     <button type="button" id="addCriterionBtn" class="btn btn-secondary">+ Dodaj kriterij</button>
                 </div>
             </div>
         </section>
+        <!-- === KONEC SPREMEMBE === -->
+
 
         <section class="filter-section">
             <h3><i class="fas fa-ban"></i>Izključi vozila</h3>
             <div class="filter-content">
-                <div class="exclusion-form-row">
+                <div class="form-row">
                     <div class="form-group">
                         <label for="exclude-make">Znamka</label>
                         <select id="exclude-make"><option value="">Izberi znamko...</option></select>
@@ -40,9 +34,11 @@
                         <label for="exclude-type">Tip (opcijsko)</label>
                         <select id="exclude-type" disabled><option value="">Vsi tipi</option></select>
                     </div>
+                </div>
+                <div style="margin-top: 1.5rem;">
                     <button type="button" id="addExclusionBtn" class="btn btn-secondary">Dodaj</button>
                 </div>
-                <div id="excluded-items-container"></div>
+                <div id="excluded-items-container" style="margin-top: 1.5rem;"></div>
             </div>
         </section>
 
@@ -117,8 +113,8 @@
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label>Tip hibridnega pogona</label>
                         <div class="checkbox-options" style="margin-top: 0.5rem;">
-                            <label><input type="checkbox" name="hybrid_type" value="PHEV"> Priključni hibrid (PHEV)</label>
-                            <label><input type="checkbox" name="hybrid_type" value="Mild"> Blagi hibrid (Mild)</label>
+                            <label><input type="radio" name="hybrid_type" value="PHEV"> Priključni hibrid (PHEV)</label>
+                            <label><input type="radio" name="hybrid_type" value="Mild"> Blagi hibrid (Mild)</label>
                         </div>
                     </div>
                 </div>
