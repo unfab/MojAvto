@@ -3,45 +3,57 @@
         <h1>Naj tvoj naslednji avto najde tebe</h1>
         <p>Poiščite najboljše zase na največjem slovenskem portalu za vozila.</p>
     </div>
-    
-    <form id="homeSearchForm" class="simple-search-form">
-        <div class="simple-form-row">
-            <label for="make">Znamka</label>
-            <select id="make" name="make"><option value="">Vse znamke</option></select>
-        </div>
-        <div class="simple-form-row">
-            <label for="model">Model</label>
-            <select id="model" name="model" disabled><option value="">Vsi modeli</option></select>
-        </div>
-        <div class="simple-form-row">
-            <label for="reg-from">1. registracija od</label>
-            <select id="reg-from" name="yearFrom"><option value="">Vse</option></select>
-        </div>
-        <div class="simple-form-row">
-            <label for="mileage-to">Kilometri do</label>
-            <input type="number" id="mileage-to" name="mileageTo" placeholder="Neomejeno">
-        </div>
-        <div class="simple-form-row">
-            <label for="fuel-type">Tip goriva</label>
-            <select id="fuel-type" name="fuel"><option value="">Vse</option></select>
-        </div>
-        <div class="simple-form-row">
-            <label for="price-to">Cena do</label>
-            <input type="number" id="price-to" name="priceTo" placeholder="Neomejena">
-        </div>
-        <div class="simple-form-row">
-            <label for="region">Regija Slovenije</label>
-            <select id="region" name="region"><option value="">Celotna Slovenija</option></select>
-        </div>
-        
-        <div class="form-actions">
-            <button type="reset" class="more-filters-btn">Ponastavi</button>
-            <a href="#/advanced-search" class="more-filters-btn">Napredno iskanje</a>
-            <button type="submit" class="submit-btn">
-                <i class="fas fa-search"></i> Poišči ponudbe
-            </button>
-        </div>
-    </form>
+
+    <div class="search-box-container">
+        <form id="homeSearchForm" class="search-box compact">
+            <div class="vehicle-tabs">
+                <button type="button" class="tab-btn active" title="Avtomobili"><i class="fas fa-car-side"></i></button>
+                <button type="button" class="tab-btn" title="Motorji"><i class="fas fa-motorcycle"></i></button>
+                <button type="button" class="tab-btn" title="Gospodarska vozila"><i class="fas fa-truck"></i></button>
+            </div>
+            <div class="search-form">
+                <div class="form-grid four-columns">
+                    <div class="form-group">
+                        <label for="make">Znamka</label>
+                        <select id="make" name="make"><option value="">Vse znamke</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Model</label>
+                        <select id="model" name="model" disabled><option value="">Vsi modeli</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-from">1. registracija od</label>
+                        <select id="reg-from" name="yearFrom"><option value="">Vse</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="price-to">Cena do</label>
+                        <input type="number" id="price-to" name="priceTo" placeholder="Neomejena">
+                    </div>
+                </div>
+                <div class="form-grid three-columns" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="fuel-type">Tip goriva</label>
+                        <select id="fuel-type" name="fuel"><option value="">Vse</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mileage-to">Kilometri do</label>
+                        <input type="number" id="mileage-to" name="mileageTo" placeholder="Neomejeno">
+                    </div>
+                    <div class="form-group">
+                        <label for="region">Regija Slovenije</label>
+                        <select id="region" name="region"><option value="">Celotna Slovenija</option></select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="reset" class="more-filters-btn">Ponastavi</button>
+                    <a href="#/advanced-search" class="more-filters-btn">Napredno iskanje</a>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-search"></i> Poišči ponudbe
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="page-container" style="margin-top: 2rem;">

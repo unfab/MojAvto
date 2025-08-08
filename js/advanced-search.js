@@ -13,6 +13,7 @@ export function initAdvancedSearchPage() {
     // Elementi za gorivo
     const fuelSelect = document.getElementById("fuel");
     const electricOptionsRow = document.getElementById("electric-options-row");
+    const hybridOptionsRow = document.getElementById("hybrid-options-row"); // DODANO
     // Elementi za izključitev
     const excludeMakeSelect = document.getElementById("exclude-make");
     const excludeModelSelect = document.getElementById("exclude-model");
@@ -61,7 +62,6 @@ export function initAdvancedSearchPage() {
             exclusionRules.push(newRule);
             renderExclusionTags();
         }
-        // Resetiraj izbiro
         excludeMakeSelect.value = "";
         excludeModelSelect.innerHTML = '<option value="">Vsi modeli</option>';
         excludeModelSelect.disabled = true;
@@ -76,7 +76,6 @@ export function initAdvancedSearchPage() {
         brandModelData = data;
         const sortedBrands = Object.keys(brandModelData).sort();
         
-        // Ponastavi spustne sezname
         makeSelect.innerHTML = '<option value="">Vse znamke</option>';
         excludeMakeSelect.innerHTML = '<option value="">Izberi znamko...</option>';
 
@@ -85,7 +84,6 @@ export function initAdvancedSearchPage() {
             excludeMakeSelect.add(new Option(brand, brand));
         });
         
-        // Povezovanje spustnih seznamov za VKLJUČITEV
         makeSelect.addEventListener("change", function () {
             const selectedMake = this.value;
             modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
@@ -108,7 +106,6 @@ export function initAdvancedSearchPage() {
             }
         });
 
-        // Povezovanje spustnih seznamov za IZKLJUČITEV
         excludeMakeSelect.addEventListener("change", function() {
             const selectedMake = this.value;
             excludeModelSelect.innerHTML = '<option value="">Vsi modeli</option>';
@@ -137,25 +134,38 @@ export function initAdvancedSearchPage() {
         const currentYear = new Date().getFullYear();
         yearFromSelect.innerHTML = '<option value="">Vse</option>';
         yearToSelect.innerHTML = '<option value="">Vse</option>';
-        for (let y = currentYear; y >= 1980; y--) {
+        for (let y = currentYear; y >= 1900; y--) {
             yearFromSelect.add(new Option(y, y));
             yearToSelect.add(new Option(y, y));
         }
     }
 
-    // Prikaz polj za električna vozila
+    // Prikaz polj za električna in hibridna vozila
     fuelSelect.addEventListener('change', () => {
         if (fuelSelect.value === 'Elektrika') {
             electricOptionsRow.style.display = 'grid';
+            hybridOptionsRow.style.display = 'none';
+        } else if (fuelSelect.value === 'Hibrid') {
+            electricOptionsRow.style.display = 'none';
+            hybridOptionsRow.style.display = 'grid';
         } else {
             electricOptionsRow.style.display = 'none';
+            hybridOptionsRow.style.display = 'none';
         }
     });
 
     // --- ODDAJA OBRAZCA ---
     function getCriteriaFromForm() {
         const formData = new FormData(searchForm);
-        const criteria = Object.fromEntries(formData.entries());
+        const criteria = {};
+
+        for (const [key, value] of formData.entries()) {
+            if (!criteria[key]) {
+                const allValues = formData.getAll(key);
+                criteria[key] = allValues.length > 1 ? allValues : value;
+            }
+        }
+        
         if (exclusionRules.length > 0) {
             criteria.exclusionRules = exclusionRules;
         }
@@ -172,10 +182,11 @@ export function initAdvancedSearchPage() {
     searchForm.addEventListener('reset', () => {
         exclusionRules = [];
         renderExclusionTags();
-        // Resetiraj tudi ostale dinamične selecte
         modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
         modelSelect.disabled = true;
         typeSelect.innerHTML = '<option value="">Vsi tipi</option>';
         typeSelect.disabled = true;
+        electricOptionsRow.style.display = 'none';
+        hybridOptionsRow.style.display = 'none';
     });
 }

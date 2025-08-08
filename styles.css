@@ -194,72 +194,123 @@ select[multiple] option {
 #range-group {
     display: none;
 }
-/* === NOVI STILI ZA PREPROSTO DOMAČO STRAN === */
-.home-container {
-    padding: 2rem;
-}
 
-.home-header {
-    text-align: center;
-    margin-bottom: 2rem;
+/* Privzeto skrije polja za električna vozila pri naprednem iskanju */
+#electric-options-row {
+    display: none;
 }
+/* === NOVI STILI ZA KOMPAKTNI ISKALNIK NA DOMAČI STRANI === */
 
-.home-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.home-header p {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-}
-
-.simple-search-form {
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: var(--card-color);
-    padding: 2rem;
-    border-radius: var(--border-radius-lg);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-md);
-}
-
-.simple-form-row {
-    margin-bottom: 1rem;
-}
-
-.simple-form-row label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-
-.simple-form-row input,
-.simple-form-row select {
+.search-box-container {
     width: 100%;
+    max-width: 1100px;
+    margin: 2rem auto 0 auto;
+}
+
+.search-box.compact {
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 1.5rem;
+}
+
+.vehicle-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-right: 1.5rem;
+    border-right: 1px solid var(--border-color);
+}
+
+.tab-btn {
+    background: none;
+    border: 2px solid transparent;
+    color: var(--text-secondary);
     padding: 0.75rem;
     border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background-color: var(--input-bg);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1.5rem;
+}
+.tab-btn:hover {
+    background-color: var(--bg-color);
     color: var(--text-primary);
-    box-sizing: border-box;
+}
+.tab-btn.active {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--accent-blue);
+    border-color: var(--accent-blue);
 }
 
-.simple-search-form .form-actions {
+.search-form {
+    flex-grow: 1;
+}
+
+.form-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.form-grid.four-columns {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.form-grid.three-columns {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+
+.search-form .form-actions {
     margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 1rem;
 }
 
-.simple-search-form .submit-btn {
+.search-form .submit-btn {
     padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-/* Privzeto skrije polja za električna vozila pri naprednem iskanju */
-#electric-options-row {
+/* Prilagoditve za manjše zaslone */
+@media (max-width: 900px) {
+    .search-box.compact {
+        flex-direction: column;
+    }
+    .vehicle-tabs {
+        flex-direction: row;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding-right: 0;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+        overflow-x: auto;
+    }
+    .form-grid.four-columns,
+    .form-grid.three-columns {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .form-grid.four-columns,
+    .form-grid.three-columns {
+        grid-template-columns: 1fr;
+    }
+}
+/* Privzeto skrije polja za hibridna vozila pri naprednem iskanju */
+#hybrid-options-row {
     display: none;
 }

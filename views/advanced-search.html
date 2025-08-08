@@ -99,6 +99,7 @@
                         </select>
                     </div>
                 </div>
+                
                 <div class="form-row" id="electric-options-row" style="margin-top: 1.5rem;">
                     <div class="form-group">
                         <label for="range">Minimalni domet (km)</label>
@@ -109,9 +110,18 @@
                         <input type="number" name="battery" placeholder="npr. 50">
                     </div>
                 </div>
+
+                <div class="form-row" id="hybrid-options-row" style="margin-top: 1.5rem;">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Tip hibridnega pogona</label>
+                        <div class="checkbox-options" style="margin-top: 0.5rem;">
+                            <label><input type="checkbox" name="hybrid_type" value="PHEV"> Priključni hibrid (PHEV)</label>
+                            <label><input type="checkbox" name="hybrid_type" value="Mild"> Blagi hibrid (Mild)</label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
-
         <div class="search-actions">
             <button class="btn btn-secondary" type="reset">Ponastavi</button>
             <button class="btn btn-primary" type="submit">Prikaži rezultate</button>
