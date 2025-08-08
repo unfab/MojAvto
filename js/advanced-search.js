@@ -1,34 +1,39 @@
 import { translate } from './i18n.js';
 
 export function initAdvancedSearchPage() {
-    // === DOM ELEMENTI ===
+    // === FAZA 1: PREVERJANJE OBSTOJA ELEMENTOV ===
+    // Najprej preverimo, ali so vsi ključni elementi prisotni v DOM-u.
+    // To prepreči napake, če se skripta zažene, preden je HTML naložen.
     const searchForm = document.getElementById("advancedSearchForm");
-    
-    // --- NOVI ELEMENTI ZA DINAMIČNE KRITERIJE ---
     const criteriaContainer = document.getElementById("criteria-container");
     const addCriterionBtn = document.getElementById("addCriterionBtn");
-    const MAX_CRITERIA = 3;
+    const addExclusionBtn = document.getElementById("addExclusionBtn");
 
-    // Elementi za ključne kriterije
+    // Varnostna prekinitev: če katerega od ključnih elementov ni, prekini izvajanje.
+    if (!searchForm || !criteriaContainer || !addCriterionBtn || !addExclusionBtn) {
+        console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka. Prekinjam izvajanje `advanced-search.js`.");
+        return;
+    }
+
+    // === FAZA 2: NADALJEVANJE, ČE SO ELEMENTI NAJDENI ===
+    
+    // --- Ostali DOM Elementi ---
     const yearFromSelect = document.getElementById("year-from");
     const yearToSelect = document.getElementById("year-to");
     const fuelSelect = document.getElementById("fuel");
     const gearboxSelect = document.getElementById("gearbox");
     const electricOptionsRow = document.getElementById("electric-options-row");
     const hybridOptionsRow = document.getElementById("hybrid-options-row");
-    
-    // Elementi za izključitev
     const excludeMakeSelect = document.getElementById("exclude-make");
     const excludeModelSelect = document.getElementById("exclude-model");
     const excludeTypeSelect = document.getElementById("exclude-type");
-    const addExclusionBtn = document.getElementById("addExclusionBtn");
     const excludedItemsContainer = document.getElementById("excluded-items-container");
     
-    // === PODATKI ===
+    // --- Podatki ---
     let brandModelData = {};
     let exclusionRules = []; 
 
-    // --- FUNKCIJE ZA UPRAVLJANJE Z IZKLJUČITVAMI (nespremenjeno) ---
+    // --- Funkcije za izključitve ---
     function renderExclusionTags() {
         excludedItemsContainer.innerHTML = '';
         exclusionRules.forEach((rule, index) => {
@@ -65,48 +70,35 @@ export function initAdvancedSearchPage() {
         excludeTypeSelect.disabled = true;
     });
 
-    // --- GLAVNA LOGIKA ---
+    // --- Glavna logika za dinamične kriterije ---
+    const MAX_CRITERIA = 3;
     
-    // Funkcija za ustvarjanje nove vrstice s kriteriji
     function addCriterionRow() {
         if (criteriaContainer.children.length >= MAX_CRITERIA) return;
-
         const sortedBrands = Object.keys(brandModelData).sort();
         const criterionRow = document.createElement('div');
         criterionRow.className = 'criterion-row';
-
-        // 1. Znamka
-        const makeGroup = document.createElement('div');
-        makeGroup.className = 'form-group';
-        makeGroup.innerHTML = `
-            <label>Znamka</label>
-            <select name="make" class="make-select">
-                <option value="">Izberi znamko...</option>
-                ${sortedBrands.map(brand => `<option value="${brand}">${brand}</option>`).join('')}
-            </select>`;
-        criterionRow.appendChild(makeGroup);
-
-        // 2. Model
-        const modelGroup = document.createElement('div');
-        modelGroup.className = 'form-group';
-        modelGroup.innerHTML = `
-            <label>Model</label>
-            <select name="model" class="model-select" disabled>
-                <option value="">Najprej izberite znamko</option>
-            </select>`;
-        criterionRow.appendChild(modelGroup);
-
-        // 3. Tip
-        const typeGroup = document.createElement('div');
-        typeGroup.className = 'form-group';
-        typeGroup.innerHTML = `
-            <label>Tip</label>
-            <select name="type" class="type-select" disabled>
-                <option value="">Najprej izberite model</option>
-            </select>`;
-        criterionRow.appendChild(typeGroup);
-
-        // Gumb za odstranitev (samo če ni prva vrstica)
+        criterionRow.innerHTML = `
+            <div class="form-group">
+                <label>Znamka</label>
+                <select name="make" class="make-select">
+                    <option value="">Izberi znamko...</option>
+                    ${sortedBrands.map(brand => `<option value="${brand}">${brand}</option>`).join('')}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Model</label>
+                <select name="model" class="model-select" disabled>
+                    <option value="">Najprej izberite znamko</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tip</label>
+                <select name="type" class="type-select" disabled>
+                    <option value="">Najprej izberite model</option>
+                </select>
+            </div>
+        `;
         if (criteriaContainer.children.length > 0) {
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
@@ -114,29 +106,23 @@ export function initAdvancedSearchPage() {
             removeBtn.innerHTML = '&times;';
             criterionRow.appendChild(removeBtn);
         }
-        
         criteriaContainer.appendChild(criterionRow);
         updateAddButtonState();
     }
 
-    // Posodobi stanje gumba za dodajanje
     function updateAddButtonState() {
         addCriterionBtn.style.display = 'block';
         addCriterionBtn.disabled = criteriaContainer.children.length >= MAX_CRITERIA;
     }
     
-    // --- POSLUŠALCI DOGODKOV ---
-
-    // Delegacija dogodkov za dinamično dodane vrstice
+    // --- Poslušalci dogodkov ---
     criteriaContainer.addEventListener('change', (e) => {
         const target = e.target;
         const row = target.closest('.criterion-row');
         if (!row) return;
-
         const makeSelect = row.querySelector('.make-select');
         const modelSelect = row.querySelector('.model-select');
         const typeSelect = row.querySelector('.type-select');
-
         if (target.classList.contains('make-select')) {
             const selectedMake = target.value;
             modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
@@ -148,7 +134,6 @@ export function initAdvancedSearchPage() {
                 modelSelect.disabled = false;
             }
         }
-
         if (target.classList.contains('model-select')) {
             const selectedMake = makeSelect.value;
             const selectedModel = target.value;
@@ -161,7 +146,6 @@ export function initAdvancedSearchPage() {
         }
     });
 
-    // Delegacija za gumb za odstranitev
     criteriaContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('remove-criterion-btn')) {
             e.target.closest('.criterion-row').remove();
@@ -171,7 +155,6 @@ export function initAdvancedSearchPage() {
 
     addCriterionBtn.addEventListener('click', addCriterionRow);
 
-    // Logika za gorivo in menjalnik
     fuelSelect.addEventListener('change', () => {
         const isElectric = fuelSelect.value === 'Elektrika';
         gearboxSelect.disabled = isElectric;
@@ -180,13 +163,10 @@ export function initAdvancedSearchPage() {
         if (hybridOptionsRow) hybridOptionsRow.style.display = fuelSelect.value === 'Hibrid' ? 'grid' : 'none';
     });
 
-    // --- ODDAJA IN PONASTAVITEV OBRAZCA ---
-
+    // --- Oddaja in ponastavitev obrazca ---
     function getCriteriaFromForm() {
         const criteria = {};
         const inclusionCriteria = [];
-        
-        // Zberi dinamične kriterije
         document.querySelectorAll('#criteria-container .criterion-row').forEach(row => {
             const make = row.querySelector('.make-select').value;
             const model = row.querySelector('.model-select').value;
@@ -201,11 +181,9 @@ export function initAdvancedSearchPage() {
         if (inclusionCriteria.length > 0) {
             criteria.inclusionCriteria = inclusionCriteria;
         }
-
-        // Zberi ostale podatke iz forme
         const formData = new FormData(searchForm);
         for (const [key, value] of formData.entries()) {
-            if (['make', 'model', 'type'].includes(key)) continue; // Preskoči že obdelane
+            if (['make', 'model', 'type'].includes(key)) continue;
             if (value) {
                 if (!criteria[key]) {
                     const allValues = formData.getAll(key).filter(v => v);
@@ -215,7 +193,6 @@ export function initAdvancedSearchPage() {
                 }
             }
         }
-        
         if (exclusionRules.length > 0) {
             criteria.exclusionRules = exclusionRules;
         }
@@ -233,23 +210,22 @@ export function initAdvancedSearchPage() {
         exclusionRules = [];
         renderExclusionTags();
         criteriaContainer.innerHTML = '';
-        addCriterionRow(); // Ustvari nazaj prvo vrstico
+        addCriterionRow();
         gearboxSelect.disabled = false;
         if(electricOptionsRow) electricOptionsRow.style.display = 'none';
         if(hybridOptionsRow) hybridOptionsRow.style.display = 'none';
     });
 
-    // --- INICIALIZACIJA PODATKOV IN PRVE VRSTICE ---
+    // --- Inicializacija podatkov ---
     fetch("./json/brands_models_global.json")
-      .then(res => res.json())
+      .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.json();
+      })
       .then(data => {
         brandModelData = data;
-        const sortedBrands = Object.keys(brandModelData).sort();
-        
-        // Ustvari prvo vrstico s kriteriji
         addCriterionRow();
-
-        // Napolni polja za izključitev
+        const sortedBrands = Object.keys(brandModelData).sort();
         excludeMakeSelect.innerHTML = '<option value="">Izberi znamko...</option>';
         sortedBrands.forEach(brand => excludeMakeSelect.add(new Option(brand, brand)));
         excludeMakeSelect.addEventListener("change", function() {
@@ -273,9 +249,12 @@ export function initAdvancedSearchPage() {
                 excludeTypeSelect.disabled = false;
             }
         });
+      })
+      .catch(error => {
+          console.error("Napaka pri nalaganju podatkov o znamkah:", error);
+          // Lahko prikažete sporočilo uporabniku, da podatki niso na voljo
       });
     
-    // Polnjenje letnic (neodvisno od fetch)
     if (yearFromSelect && yearToSelect) {
         const currentYear = new Date().getFullYear();
         yearFromSelect.innerHTML = '<option value="">Vse</option>';
