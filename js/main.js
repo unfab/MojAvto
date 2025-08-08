@@ -9,6 +9,8 @@ export function initHomePage() {
     const makeSelect = document.getElementById("make");
     const modelSelect = document.getElementById("model");
     const yearFromSelect = document.getElementById("reg-from");
+    const fuelSelect = document.getElementById("fuel-type"); // Pravilen ID iz HTML-ja
+    const regionSelect = document.getElementById("region");   // Pravilen ID iz HTML-ja
     
     // === Podatki ===
     let brandModelData = {};
@@ -55,7 +57,6 @@ export function initHomePage() {
             const cardId = parseInt(btn.dataset.id, 10);
             btn.classList.toggle('selected', compareItems.includes(cardId));
         });
-
         const compareLink = document.getElementById("compareLink");
         const compareCount = document.getElementById("compareCount");
         if (compareLink && compareCount) {
@@ -128,7 +129,6 @@ export function initHomePage() {
                     <p class="card-details">${translate('spec_year')}: ${listing.year} | ${listing.mileage.toLocaleString()} km</p>
                     <p class="card-price">${listing.price.toLocaleString()} €</p>
                 </div>`;
-
             card.addEventListener("click", (e) => {
                 if (e.target.closest('.compare-btn') || e.target.closest('.fav-btn')) return;
                 window.location.hash = `#/listing/${listing.id}`;
@@ -141,12 +141,12 @@ export function initHomePage() {
         updateCompareUI();
         updateFavoritesUI();
     }
-    
+
     // --- FILTRIRANJE ---
     function applyAdvancedFilters(listings, criteria) {
         let filtered = listings;
         if (!criteria) return filtered;
-
+        
         if (criteria.exclusionRules && criteria.exclusionRules.length > 0) {
             filtered = filtered.filter(listing => {
                 const shouldBeExcluded = criteria.exclusionRules.some(rule => {
@@ -174,6 +174,10 @@ export function initHomePage() {
         if (criteria.mileageTo) filtered = filtered.filter(l => l.mileage <= Number(criteria.mileageTo));
         if (criteria.battery) filtered = filtered.filter(l => l.battery && l.battery >= Number(criteria.battery));
         if (criteria.gearbox) filtered = filtered.filter(l => l.transmission === criteria.gearbox);
+        if (criteria.hybrid_type) {
+            const selectedTypes = Array.isArray(criteria.hybrid_type) ? criteria.hybrid_type : [criteria.hybrid_type];
+            filtered = filtered.filter(l => l.hybridType && selectedTypes.includes(l.hybridType));
+        }
         
         return filtered;
     }
@@ -181,6 +185,27 @@ export function initHomePage() {
     function displayPage(listingsToShow) {
         renderListings(listingsToShow);
         // Tukaj pride vaša koda za paginacijo...
+    }
+    
+    // --- FUNKCIJE ZA POLNJENJE FILTROV ---
+    function populateFuelOptions() {
+        if (!fuelSelect) return;
+        const fuelTypes = ['Bencin', 'Dizel', 'Elektrika', 'Hibrid', 'Plin'];
+        fuelTypes.forEach(fuel => {
+            fuelSelect.add(new Option(fuel, fuel));
+        });
+    }
+
+    function populateRegionOptions() {
+        if (!regionSelect) return;
+        const regions = [
+            'Osrednjeslovenska', 'Podravska', 'Savinjska', 'Gorenjska', 'Goriška', 
+            'Primorsko-notranjska', 'Obalno-kraška', 'Jugovzhodna Slovenija', 
+            'Koroška', 'Pomurska', 'Posavska', 'Zasavska'
+        ];
+        regions.forEach(region => {
+            regionSelect.add(new Option(region, region));
+        });
     }
 
     // --- ZAČETNI ZAGON STRANI ---
@@ -214,8 +239,12 @@ export function initHomePage() {
         if (yearFromSelect) {
             const currentYear = new Date().getFullYear();
             yearFromSelect.innerHTML = '<option value="">Letnik od</option>';
-            for (let y = currentYear; y >= 1980; y--) yearFromSelect.add(new Option(y, y));
+            for (let y = currentYear; y >= 1900; y--) yearFromSelect.add(new Option(y, y));
         }
+        
+        // Napolnimo goriva in regije
+        populateFuelOptions();
+        populateRegionOptions();
 
         const advancedCriteria = JSON.parse(sessionStorage.getItem('advancedSearchCriteria'));
         if (advancedCriteria) {

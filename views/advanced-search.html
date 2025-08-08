@@ -6,17 +6,19 @@
             <h3><i class="fas fa-car"></i>Osnovni podatki</h3>
             <div class="filter-content">
                 <div class="form-row">
+                    
                     <div class="form-group">
-                        <label for="make">Znamka (vključi)</label>
-                        <select id="make" name="make"><option value="">Vse znamke</option></select>
+                        <label>Znamka (izberite do 3)</label>
+                        <div id="make-container"></div>
+                        <button type="button" id="addMakeBtn" class="btn btn-secondary" style="margin-top: 8px; padding: 5px 10px; font-size: 12px; display: none;">+ Dodaj znamko</button>
                     </div>
                     <div class="form-group">
                         <label for="model">Model</label>
-                        <select id="model" name="model" disabled><option value="">Vsi modeli</option></select>
+                        <select id="model" name="model" disabled><option value="">Najprej izberite 1 znamko</option></select>
                     </div>
                     <div class="form-group">
                         <label for="type">Tip</label>
-                        <select id="type" name="type" disabled><option value="">Vsi tipi</option></select>
+                        <select id="type" name="type" disabled><option value="">Najprej izberite 1 znamko</option></select>
                     </div>
                 </div>
             </div>
