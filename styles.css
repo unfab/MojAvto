@@ -71,6 +71,7 @@ body:not(.dark-mode) .fa-moon { display: none; }
 .login-btn { background-color: var(--accent-blue); color: #ffffff; padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: 700; transition: background-color 0.2s; text-decoration: none; }
 .login-btn:hover { background-color: #2563eb; }
 
+/* === POSODOBLJENO: Sidebar je sedaj flex container === */
 .sidebar {
     width: 240px;
     flex-shrink: 0;
@@ -84,12 +85,36 @@ body:not(.dark-mode) .fa-moon { display: none; }
     margin: 1rem 0 1rem 1rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
     border: 1px solid var(--border-color);
+    display: flex; /* Dodano za pravilno poravnavo noge */
+    flex-direction: column; /* Dodano */
 }
 .page-container.sidebar-collapsed .sidebar { margin-left: calc(-240px - 1rem); }
 .sidebar-nav { list-style: none; padding: 0; margin: 0; }
 .sidebar-nav li a { display: flex; align-items: center; padding: 0.75rem 2rem; color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: background-color 0.2s, color 0.2s; white-space: nowrap; }
 .sidebar-nav li a:hover { background-color: var(--bg-color); color: var(--text-primary); }
 .sidebar-nav li a i { width: 20px; margin-right: 1rem; text-align: center; }
+
+/* === DODANO: Stili za nogo v stranski vrstici === */
+.sidebar-footer {
+    padding: 1rem 1.5rem 0.5rem 1.5rem; /* Prilagojen padding */
+    margin-top: auto; /* To potisne nogo na dno */
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem; /* Razmik med povezavami */
+}
+.sidebar-footer a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+.sidebar-footer a:hover {
+    color: var(--accent-blue);
+}
+/* === KONEC DODANIH STILOV ZA NOGO === */
 
 /* === GLAVNA VSEBINA === */
 main {
@@ -146,20 +171,22 @@ main {
 .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
 .checkbox-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem 1rem; }
 .checkbox-options label { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
-
-/* === POSODOBLJENO: Mreža za tipe vozil === */
 .vehicle-type-grid { 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 1rem;
 }
-/* === KONEC POSODOBITVE === */
-
 .vehicle-type { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s ease; width: 120px; height: 100px; box-sizing: border-box; }
 .vehicle-type:hover { border-color: var(--accent-blue); }
 .vehicle-type.active { border-color: var(--accent-blue); background-color: rgba(59, 130, 246, 0.1); }
 .vehicle-type i { font-size: 2rem; margin-bottom: 0.75rem; color: var(--accent-blue); }
-.vehicle-type span { font-size: 0.9rem; font-weight: 500; }
+
+/* === POSODOBLJENO: Velikost pisave za tipe karoserij === */
+.vehicle-type span { 
+    font-size: 0.85rem; /* Malenkost pomanjšana pisava */
+    font-weight: 500; 
+}
+
 .search-actions { display: flex; justify-content: flex-end; gap: 1rem; padding: 1.5rem; }
 .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background-color 0.2s ease; }
 .btn-secondary { background-color: var(--border-color); color: var(--text-primary); }
