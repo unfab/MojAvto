@@ -1,8 +1,15 @@
 <main>
     <section class="comparison-section">
         <h2 data-i18n-key="compare_h2">Primerjava izbranih vozil</h2>
+        
+        <div class="global-view-controls">
+            <button class="view-btn active" data-view="exterior">Zunanjost</button>
+            <button class="view-btn" data-view="interior">Notranjost</button>
+        </div>
+
         <div class="comparison-grid" id="comparisonGrid">
             </div>
+
         <div id="noSelectionMessage" style="display: none; text-align: center; margin-top: 40px;">
             <h3 data-i18n-key="compare_no_selection_h3">Niste izbrali nobenega vozila za primerjavo.</h3>
             <p data-i18n-key="compare_no_selection_p">Pojdite na <a href="#/">domačo stran</a> in pri oglasih kliknite na ikono <i class="fas fa-balance-scale"></i>, da jih dodate v primerjavo.</p>

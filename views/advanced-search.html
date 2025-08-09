@@ -2,22 +2,31 @@
     <h1>Napredno iskanje</h1>
 
     <form id="advancedSearchForm">
-        <!-- === SPREMEMBA TUKAJ: Popolnoma nova struktura za osnovne podatke === -->
         <section class="filter-section">
             <h3><i class="fas fa-car"></i>Osnovni podatki</h3>
             <div class="filter-content">
-                <!-- Ta kontejner bo držal vse dinamične vrstice (znamka, model, tip) -->
                 <div id="criteria-container"></div>
-                
-                <!-- Gumb za dodajanje je sedaj ločen -->
                 <div style="margin-top: 1rem;">
                      <button type="button" id="addCriterionBtn" class="btn btn-secondary">+ Dodaj kriterij</button>
                 </div>
             </div>
         </section>
-        <!-- === KONEC SPREMEMBE === -->
 
-
+        <section class="filter-section">
+            <h3><i class="fas fa-car-alt"></i> Tip karoserije</h3>
+            <div class="filter-content">
+                <div class="vehicle-type-grid">
+                    <div class="vehicle-type" data-type="Limuzina"><i class="fas fa-car-side"></i><span>Limuzina</span></div>
+                    <div class="vehicle-type" data-type="Karavan"><i class="fas fa-car-side"></i><span>Karavan</span></div>
+                    <div class="vehicle-type" data-type="Kombilimuzina"><i class="fas fa-car"></i><span>Kombilimuzina</span></div>
+                    <div class="vehicle-type" data-type="SUV"><i class="fas fa-car-alt"></i><span>SUV</span></div>
+                    <div class="vehicle-type" data-type="Enoprostorec"><i class="fas fa-van-shuttle"></i><span>Enoprostorec</span></div>
+                    <div class="vehicle-type" data-type="Coupe"><i class="fas fa-car-side"></i><span>Coupe</span></div>
+                    <div class="vehicle-type" data-type="Cabrio"><i class="fas fa-car-side"></i><span>Cabrio</span></div>
+                    <div class="vehicle-type" data-type="Pick-up"><i class="fas fa-truck-pickup"></i><span>Pick-up</span></div>
+                </div>
+            </div>
+        </section>
         <section class="filter-section">
             <h3><i class="fas fa-ban"></i>Izključi vozila</h3>
             <div class="filter-content">

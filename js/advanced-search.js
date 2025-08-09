@@ -2,15 +2,16 @@ import { translate } from './i18n.js';
 
 export function initAdvancedSearchPage() {
     // === FAZA 1: PREVERJANJE OBSTOJA ELEMENTOV ===
-    // Najprej preverimo, ali so vsi ključni elementi prisotni v DOM-u.
-    // To prepreči napake, če se skripta zažene, preden je HTML naložen.
     const searchForm = document.getElementById("advancedSearchForm");
     const criteriaContainer = document.getElementById("criteria-container");
     const addCriterionBtn = document.getElementById("addCriterionBtn");
     const addExclusionBtn = document.getElementById("addExclusionBtn");
+    // === DODANO: Referenca na mrežo za tip karoserije ===
+    const vehicleTypeGrid = document.querySelector(".vehicle-type-grid");
 
     // Varnostna prekinitev: če katerega od ključnih elementov ni, prekini izvajanje.
-    if (!searchForm || !criteriaContainer || !addCriterionBtn || !addExclusionBtn) {
+    // === POSODOBLJENO: Dodano preverjanje za vehicleTypeGrid ===
+    if (!searchForm || !criteriaContainer || !addCriterionBtn || !addExclusionBtn || !vehicleTypeGrid) {
         console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka. Prekinjam izvajanje `advanced-search.js`.");
         return;
     }
@@ -155,6 +156,14 @@ export function initAdvancedSearchPage() {
 
     addCriterionBtn.addEventListener('click', addCriterionRow);
 
+    // === DODANO: Poslušalec za klik na tip karoserije ===
+    vehicleTypeGrid.addEventListener('click', (e) => {
+        const targetType = e.target.closest('.vehicle-type');
+        if (targetType) {
+            targetType.classList.toggle('active');
+        }
+    });
+
     fuelSelect.addEventListener('change', () => {
         const isElectric = fuelSelect.value === 'Elektrika';
         gearboxSelect.disabled = isElectric;
@@ -164,6 +173,7 @@ export function initAdvancedSearchPage() {
     });
 
     // --- Oddaja in ponastavitev obrazca ---
+    // === POSODOBLJENO: Funkcija vključuje zbiranje tipov karoserije ===
     function getCriteriaFromForm() {
         const criteria = {};
         const inclusionCriteria = [];
@@ -181,6 +191,14 @@ export function initAdvancedSearchPage() {
         if (inclusionCriteria.length > 0) {
             criteria.inclusionCriteria = inclusionCriteria;
         }
+
+        // === DODANO: Zbiranje izbranih tipov karoserije ===
+        const selectedBodyTypes = Array.from(vehicleTypeGrid.querySelectorAll('.vehicle-type.active'))
+            .map(el => el.dataset.type);
+        if (selectedBodyTypes.length > 0) {
+            criteria.body_type = selectedBodyTypes;
+        }
+
         const formData = new FormData(searchForm);
         for (const [key, value] of formData.entries()) {
             if (['make', 'model', 'type'].includes(key)) continue;
@@ -206,11 +224,16 @@ export function initAdvancedSearchPage() {
         window.location.hash = '#/';
     });
 
+    // === POSODOBLJENO: Ponastavitev vključuje tipe karoserije ===
     searchForm.addEventListener('reset', () => {
         exclusionRules = [];
         renderExclusionTags();
         criteriaContainer.innerHTML = '';
         addCriterionRow();
+        
+        // === DODANO: Odstrani 'active' class iz vseh tipov karoserije ===
+        vehicleTypeGrid.querySelectorAll('.vehicle-type.active').forEach(el => el.classList.remove('active'));
+
         gearboxSelect.disabled = false;
         if(electricOptionsRow) electricOptionsRow.style.display = 'none';
         if(hybridOptionsRow) hybridOptionsRow.style.display = 'none';
@@ -252,7 +275,6 @@ export function initAdvancedSearchPage() {
       })
       .catch(error => {
           console.error("Napaka pri nalaganju podatkov o znamkah:", error);
-          // Lahko prikažete sporočilo uporabniku, da podatki niso na voljo
       });
     
     if (yearFromSelect && yearToSelect) {
