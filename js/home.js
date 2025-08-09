@@ -1,12 +1,20 @@
 import { translate } from './i18n.js';
 import { createListingCard } from './components/ListingCard.js';
 
+// === DODANO: Seznam slovenskih regij ===
+const SLOVENIAN_REGIONS = [
+    "Osrednjeslovenska", "Gorenjska", "Goriška", "Obalno-kraška", 
+    "Notranjsko-kraška", "Jugovzhodna Slovenija", "Posavska", "Zasavska", 
+    "Savinjska", "Koroška", "Podravska", "Pomurska"
+];
+
 export function initHomePage() {
     // === DOM ELEMENTI ===
     const searchForm = document.getElementById('homeSearchForm');
     const makeSelect = document.getElementById('make');
     const modelSelect = document.getElementById('model');
     const regFromSelect = document.getElementById('reg-from');
+    const regionSelect = document.getElementById('region'); // DODANA referenca
     const listingsGrid = document.getElementById('listingsGrid');
     const noListingsMessage = document.getElementById('noListingsMessage');
     const loadingSpinner = document.getElementById('loading-spinner');
@@ -14,7 +22,7 @@ export function initHomePage() {
     const paginationContainer = document.getElementById('pagination-container');
     
     // Varnostna preverba
-    if (!searchForm || !listingsGrid || !loadingSpinner || !sortOrderSelect) {
+    if (!searchForm || !listingsGrid || !loadingSpinner || !sortOrderSelect || !regionSelect) {
         console.error("Manjka eden od ključnih elementov na domači strani.");
         return;
     }
@@ -25,12 +33,11 @@ export function initHomePage() {
     const ITEMS_PER_PAGE = 12;
     let currentPage = 1;
 
-    // === POSODOBLJENO: Preberemo kriterije iz naprednega iskanja ===
     const advancedSearchCriteria = JSON.parse(sessionStorage.getItem('advancedSearchCriteria')) || null;
 
     // --- INICIALIZACIJA STRANI ---
 
-    // 1. Naloži podatke za znamke in modele ter napolni iskalnik
+    // 1. Naloži podatke za znamke in modele
     fetch('./json/brands_models_global.json')
         .then(res => res.json())
         .then(data => {
@@ -39,33 +46,27 @@ export function initHomePage() {
             sortedBrands.forEach(brand => makeSelect.add(new Option(brand, brand)));
         });
 
-    // 2. Naloži vse oglase in jih prikaži
+    // 2. Naloži vse oglase
     loadingSpinner.style.display = 'block';
-    listingsGrid.innerHTML = '';
     fetch('./json/listings.json')
         .then(res => res.json())
         .then(data => {
             allListings = data;
-            // === POSODOBLJENO: Po nalaganju takoj filtriramo glede na kriterije ===
-            // Če obstajajo kriteriji iz naprednega iskanja, jih uporabimo. Sicer prikažemo vse.
             const listingsToDisplay = filterListings(allListings, advancedSearchCriteria);
             displayPage(listingsToDisplay, 1);
-            
-            // Počistimo kriterije, da se ne uporabijo ponovno ob osvežitvi strani
             if (advancedSearchCriteria) {
                 sessionStorage.removeItem('advancedSearchCriteria');
             }
         })
         .catch(error => {
             console.error("Napaka pri nalaganju oglasov:", error);
-            listingsGrid.innerHTML = `<p>Napaka pri nalaganju oglasov.</p>`;
+            listingsGrid.innerHTML = `<p style="text-align:center; padding: 2rem;">Napaka pri nalaganju oglasov.</p>`;
         })
         .finally(() => {
             loadingSpinner.style.display = 'none';
         });
 
     // --- FUNKCIJE ---
-
     function displayPage(listings, page) {
         currentPage = page;
         listingsGrid.innerHTML = '';
@@ -121,17 +122,10 @@ export function initHomePage() {
             paginationContainer.appendChild(pageBtn);
         }
     }
-
-    // === POSODOBLJENO: Zmogljivejša funkcija za filtriranje ===
-    // Ta funkcija zna obravnavati tako preproste kriterije (iz domače forme)
-    // kot kompleksne (iz naprednega iskanja).
+    
     function filterListings(listings, criteria) {
-        if (!criteria) {
-            return listings; // Če ni kriterijev, vrni vse
-        }
-
+        if (!criteria) return listings;
         return listings.filter(listing => {
-            // Logika za preprosto iskanje (iz domače forme)
             if (criteria.make && listing.make !== criteria.make) return false;
             if (criteria.model && listing.model !== criteria.model) return false;
             if (criteria.yearFrom && listing.year < parseInt(criteria.yearFrom)) return false;
@@ -139,15 +133,11 @@ export function initHomePage() {
             if (criteria.fuel && listing.fuel !== criteria.fuel) return false;
             if (criteria.mileageTo && listing.mileage > parseInt(criteria.mileageTo)) return false;
             if (criteria.region && listing.region !== criteria.region) return false;
-            
-            // Logika za napredno iskanje
             if (criteria.priceFrom && listing.price < parseInt(criteria.priceFrom)) return false;
             if (criteria.yearTo && listing.year > parseInt(criteria.yearTo)) return false;
             if (criteria.mileageFrom && listing.mileage < parseInt(criteria.mileageFrom)) return false;
             if (criteria.gearbox && listing.transmission !== criteria.gearbox) return false;
             if (criteria.body_type && !criteria.body_type.includes(listing.body_type)) return false;
-
-            // Logika za vključitev (inclusionCriteria)
             if (criteria.inclusionCriteria) {
                 const matchesInclusion = criteria.inclusionCriteria.some(inc => 
                     (inc.make === listing.make) &&
@@ -156,8 +146,6 @@ export function initHomePage() {
                 );
                 if (!matchesInclusion) return false;
             }
-
-            // Logika za izključitev (exclusionRules)
             if (criteria.exclusionRules) {
                 const matchesExclusion = criteria.exclusionRules.some(exc => 
                     (exc.make === listing.make) &&
@@ -166,19 +154,20 @@ export function initHomePage() {
                 );
                 if (matchesExclusion) return false;
             }
-
             return true;
         });
     }
     
-    // Pomožna funkcija za pridobivanje kriterijev iz domače forme
     function getCurrentCriteria() {
         const formData = new FormData(searchForm);
-        return Object.fromEntries(formData.entries());
+        const criteria = {};
+        for(const [key, value] of formData.entries()){
+            if(value) criteria[key] = value;
+        }
+        return criteria;
     }
     
     // --- POSLUŠALCI DOGODKOV ---
-
     makeSelect.addEventListener('change', function() {
         modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
         modelSelect.disabled = true;
@@ -203,8 +192,14 @@ export function initHomePage() {
         displayPage(filtered, currentPage);
     });
 
+    // --- Polnjenje statičnih spustnih seznamov ---
     const currentYear = new Date().getFullYear();
     for (let y = currentYear; y >= 1950; y--) {
         regFromSelect.add(new Option(y, y));
     }
+
+    // === DODANO: Polnjenje seznama regij ===
+    SLOVENIAN_REGIONS.forEach(region => {
+        regionSelect.add(new Option(region, region));
+    });
 }

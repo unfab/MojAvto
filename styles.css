@@ -96,7 +96,7 @@ body:not(.dark-mode) .fa-moon { display: none; }
 
 /* === DODANO: Stili za nogo v stranski vrstici === */
 .sidebar-footer {
-    padding: 1rem 1.5rem 0.5rem 1.5rem; /* Prilagojen padding */
+    padding: 1rem 1.5rem 0.5rem 1.5rem;
     margin-top: auto; /* To potisne nogo na dno */
     border-top: 1px solid var(--border-color);
     display: flex;
@@ -180,10 +180,8 @@ main {
 .vehicle-type:hover { border-color: var(--accent-blue); }
 .vehicle-type.active { border-color: var(--accent-blue); background-color: rgba(59, 130, 246, 0.1); }
 .vehicle-type i { font-size: 2rem; margin-bottom: 0.75rem; color: var(--accent-blue); }
-
-/* === POSODOBLJENO: Velikost pisave za tipe karoserij === */
 .vehicle-type span { 
-    font-size: 0.85rem; /* Malenkost pomanjšana pisava */
+    font-size: 0.85rem;
     font-weight: 500; 
 }
 
