@@ -88,7 +88,7 @@ body:not(.dark-mode) .fa-moon { display: none; }
     display: flex; /* Dodano za pravilno poravnavo noge */
     flex-direction: column; /* Dodano */
 }
-.page-container.sidebar-collapsed .sidebar { margin-left: calc(-240px - 1rem); }
+.page-container.sidebar-collapsed .sidebar { margin-left: calc(-240px - 2rem); }
 .sidebar-nav { list-style: none; padding: 0; margin: 0; }
 .sidebar-nav li a { display: flex; align-items: center; padding: 0.75rem 2rem; color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: background-color 0.2s, color 0.2s; white-space: nowrap; }
 .sidebar-nav li a:hover { background-color: var(--bg-color); color: var(--text-primary); }

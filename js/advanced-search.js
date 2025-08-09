@@ -6,19 +6,16 @@ export function initAdvancedSearchPage() {
     const criteriaContainer = document.getElementById("criteria-container");
     const addCriterionBtn = document.getElementById("addCriterionBtn");
     const addExclusionBtn = document.getElementById("addExclusionBtn");
-    // === DODANO: Referenca na mrežo za tip karoserije ===
     const vehicleTypeGrid = document.querySelector(".vehicle-type-grid");
+    const selectAllBodyTypesBtn = document.getElementById("selectAllBodyTypesBtn");
+    const clearAllBodyTypesBtn = document.getElementById("clearAllBodyTypesBtn");
 
-    // Varnostna prekinitev: če katerega od ključnih elementov ni, prekini izvajanje.
-    // === POSODOBLJENO: Dodano preverjanje za vehicleTypeGrid ===
-    if (!searchForm || !criteriaContainer || !addCriterionBtn || !addExclusionBtn || !vehicleTypeGrid) {
-        console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka. Prekinjam izvajanje `advanced-search.js`.");
+    if (!searchForm || !criteriaContainer || !addCriterionBtn || !addExclusionBtn || !vehicleTypeGrid || !selectAllBodyTypesBtn || !clearAllBodyTypesBtn) {
+        console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka.");
         return;
     }
 
     // === FAZA 2: NADALJEVANJE, ČE SO ELEMENTI NAJDENI ===
-    
-    // --- Ostali DOM Elementi ---
     const yearFromSelect = document.getElementById("year-from");
     const yearToSelect = document.getElementById("year-to");
     const fuelSelect = document.getElementById("fuel");
@@ -30,11 +27,9 @@ export function initAdvancedSearchPage() {
     const excludeTypeSelect = document.getElementById("exclude-type");
     const excludedItemsContainer = document.getElementById("excluded-items-container");
     
-    // --- Podatki ---
     let brandModelData = {};
     let exclusionRules = []; 
 
-    // --- Funkcije za izključitve ---
     function renderExclusionTags() {
         excludedItemsContainer.innerHTML = '';
         exclusionRules.forEach((rule, index) => {
@@ -71,7 +66,6 @@ export function initAdvancedSearchPage() {
         excludeTypeSelect.disabled = true;
     });
 
-    // --- Glavna logika za dinamične kriterije ---
     const MAX_CRITERIA = 3;
     
     function addCriterionRow() {
@@ -116,7 +110,14 @@ export function initAdvancedSearchPage() {
         addCriterionBtn.disabled = criteriaContainer.children.length >= MAX_CRITERIA;
     }
     
-    // --- Poslušalci dogodkov ---
+    function updateBodyTypeButtons() {
+        const activeTypes = vehicleTypeGrid.querySelectorAll('.vehicle-type.active');
+        const hasSelection = activeTypes.length > 0;
+        
+        clearAllBodyTypesBtn.style.display = hasSelection ? 'inline-block' : 'none';
+        selectAllBodyTypesBtn.style.display = hasSelection ? 'none' : 'inline-block';
+    }
+
     criteriaContainer.addEventListener('change', (e) => {
         const target = e.target;
         const row = target.closest('.criterion-row');
@@ -156,12 +157,26 @@ export function initAdvancedSearchPage() {
 
     addCriterionBtn.addEventListener('click', addCriterionRow);
 
-    // === DODANO: Poslušalec za klik na tip karoserije ===
     vehicleTypeGrid.addEventListener('click', (e) => {
         const targetType = e.target.closest('.vehicle-type');
         if (targetType) {
             targetType.classList.toggle('active');
+            updateBodyTypeButtons();
         }
+    });
+
+    selectAllBodyTypesBtn.addEventListener('click', () => {
+        vehicleTypeGrid.querySelectorAll('.vehicle-type').forEach(type => {
+            type.classList.add('active');
+        });
+        updateBodyTypeButtons();
+    });
+
+    clearAllBodyTypesBtn.addEventListener('click', () => {
+        vehicleTypeGrid.querySelectorAll('.vehicle-type.active').forEach(type => {
+            type.classList.remove('active');
+        });
+        updateBodyTypeButtons();
     });
 
     fuelSelect.addEventListener('change', () => {
@@ -172,11 +187,10 @@ export function initAdvancedSearchPage() {
         if (hybridOptionsRow) hybridOptionsRow.style.display = fuelSelect.value === 'Hibrid' ? 'grid' : 'none';
     });
 
-    // --- Oddaja in ponastavitev obrazca ---
-    // === POSODOBLJENO: Funkcija vključuje zbiranje tipov karoserije ===
     function getCriteriaFromForm() {
         const criteria = {};
         const inclusionCriteria = [];
+        
         document.querySelectorAll('#criteria-container .criterion-row').forEach(row => {
             const make = row.querySelector('.make-select').value;
             const model = row.querySelector('.model-select').value;
@@ -192,7 +206,6 @@ export function initAdvancedSearchPage() {
             criteria.inclusionCriteria = inclusionCriteria;
         }
 
-        // === DODANO: Zbiranje izbranih tipov karoserije ===
         const selectedBodyTypes = Array.from(vehicleTypeGrid.querySelectorAll('.vehicle-type.active'))
             .map(el => el.dataset.type);
         if (selectedBodyTypes.length > 0) {
@@ -211,35 +224,35 @@ export function initAdvancedSearchPage() {
                 }
             }
         }
+        
         if (exclusionRules.length > 0) {
             criteria.exclusionRules = exclusionRules;
         }
         return criteria;
     }
 
+    // === POSODOBLJENO: Preusmeritev na stran z rezultati ===
     searchForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const searchCriteria = getCriteriaFromForm();
         sessionStorage.setItem('advancedSearchCriteria', JSON.stringify(searchCriteria));
-        window.location.hash = '#/';
+        window.location.hash = '#/search-results';
     });
 
-    // === POSODOBLJENO: Ponastavitev vključuje tipe karoserije ===
     searchForm.addEventListener('reset', () => {
         exclusionRules = [];
         renderExclusionTags();
         criteriaContainer.innerHTML = '';
         addCriterionRow();
         
-        // === DODANO: Odstrani 'active' class iz vseh tipov karoserije ===
         vehicleTypeGrid.querySelectorAll('.vehicle-type.active').forEach(el => el.classList.remove('active'));
+        updateBodyTypeButtons();
 
         gearboxSelect.disabled = false;
         if(electricOptionsRow) electricOptionsRow.style.display = 'none';
         if(hybridOptionsRow) hybridOptionsRow.style.display = 'none';
     });
 
-    // --- Inicializacija podatkov ---
     fetch("./json/brands_models_global.json")
       .then(res => {
           if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
