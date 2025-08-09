@@ -1,5 +1,5 @@
 /* ==================================================== */
-/* NOVI ZDRUŽENI STILI ZA CELOTNO APLIKACIJO            */
+/* ZDRUŽENI STILI ZA CELOTNO APLIKACIJO                 */
 /* ==================================================== */
 
 :root {
@@ -15,6 +15,7 @@
     --accent-orange: #f97316;
     --accent-orange-hover: #ea580c;
     --accent-blue: #3b82f6;
+    --error-color: #ef4444;
 }
 
 body.dark-mode {
@@ -99,21 +100,49 @@ main {
 .search-container { max-width: 900px; margin: 0 auto; }
 .search-container h1 { font-size: 2.5rem; margin-bottom: 2rem; }
 .filter-section { background: var(--card-color); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-.filter-section h3 { font-size: 1.5rem; padding: 1.5rem; margin: 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem; }
+
+.filter-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--accent-blue);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.2s, text-decoration 0.2s;
+}
+.btn-link:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+    text-decoration: underline;
+}
+.filter-section h3 { 
+    font-size: 1.5rem; 
+    padding: 0; 
+    margin: 0; 
+    border-bottom: none; 
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+}
 .filter-content { padding: 1.5rem; }
 .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
 .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
 .form-group label { font-weight: 500; }
 .form-group input, .form-group select { width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--input-bg); color: var(--text-primary); box-sizing: border-box; }
 
-/* === DODAN POPRAVEK ZA RADIO GUMBE IN CHECKBOXE === */
 .form-group input[type="radio"],
 .form-group input[type="checkbox"] {
-    width: auto; /* Prepreči, da bi se raztegnili čez celotno širino */
+    width: auto;
     flex-shrink: 0;
 }
-/* === KONEC POPRAVKA === */
-
 .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
 .checkbox-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem 1rem; }
 .checkbox-options label { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
@@ -129,62 +158,32 @@ main {
 .btn-primary { background-color: var(--accent-orange); color: #ffffff; }
 .btn-primary:hover { background-color: var(--accent-orange-hover); }
 
-@media (max-width: 1024px) {
-    .sidebar { position: fixed; z-index: 1100; margin-left: calc(-240px - 2rem); }
-    .page-container.sidebar-collapsed .sidebar { margin-left: 0; }
-    .sidebar-toggle-btn { display: block !important; } /* Pokažemo gumb */
-}
-    /* Stili za select polje z večkratnim izborom */
 select[multiple] {
-    height: 200px; /* Določimo višino, da je vidnih več opcij */
+    height: 200px;
     padding: 0.5rem;
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
     color: var(--text-primary);
-}
-/* Stili za nogo (footer) */
-.footer-links {
-    display: flex; /* Postavi elemente v vrstico */
-    flex-wrap: wrap; /* Dovolii prelom v novo vrstico na manjših zaslonih */
-    justify-content: center; /* Centriraj povezave */
-    gap: 1.5rem; /* Dodaj razmik med povezavami */
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1rem 0;
 }
 select[multiple] option {
     padding: 5px;
 }
-
-/* Stil za namig pod poljem */
 .field-hint {
     font-size: 0.8rem;
     color: var(--text-secondary);
     margin-top: 0.5rem;
 }
-/* === NOVI STILI ZA IZKLJUČENE ZNAMKE === */
-#excluded-brands-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-}
-
 .excluded-brand-tag {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     background-color: var(--bg-color);
     border: 1px solid var(--border-color);
-    border-radius: 9999px; /* Popolnoma zaobljeni robovi */
+    border-radius: 9999px;
     padding: 0.25rem 0.75rem;
     font-size: 0.875rem;
     font-weight: 500;
 }
-
 .remove-brand-btn {
     background: none;
     border: none;
@@ -193,29 +192,21 @@ select[multiple] option {
     cursor: pointer;
     color: var(--text-secondary);
     font-size: 1rem;
-    line-height: 1; /* Za boljšo poravnavo */
+    line-height: 1;
 }
-
 .remove-brand-btn:hover {
     color: var(--error-color);
 }
-/* Privzeto skrije polje za domet pri naprednem iskanju */
-#range-group {
+#range-group, #electric-options-row, #hybrid-options-row {
     display: none;
 }
 
-/* Privzeto skrije polja za električna vozila pri naprednem iskanju */
-#electric-options-row {
-    display: none;
-}
-/* === NOVI STILI ZA KOMPAKTNI ISKALNIK NA DOMAČI STRANI === */
-
+/* === STILI ZA KOMPAKTNI ISKALNIK NA DOMAČI STRANI === */
 .search-box-container {
     width: 100%;
     max-width: 1100px;
     margin: 2rem auto 0 auto;
 }
-
 .search-box.compact {
     background-color: var(--card-color);
     border: 1px solid var(--border-color);
@@ -225,7 +216,6 @@ select[multiple] option {
     display: flex;
     gap: 1.5rem;
 }
-
 .vehicle-tabs {
     display: flex;
     flex-direction: column;
@@ -233,7 +223,6 @@ select[multiple] option {
     padding-right: 1.5rem;
     border-right: 1px solid var(--border-color);
 }
-
 .tab-btn {
     background: none;
     border: 2px solid transparent;
@@ -253,31 +242,26 @@ select[multiple] option {
     color: var(--accent-blue);
     border-color: var(--accent-blue);
 }
-
 .search-form {
     flex-grow: 1;
 }
-
 .form-grid {
     display: grid;
     gap: 1rem;
 }
-
 .form-grid.four-columns {
     grid-template-columns: repeat(4, 1fr);
 }
-
 .form-grid.three-columns {
     grid-template-columns: repeat(3, 1fr);
 }
-
-.form-group label {
+.search-box.compact .form-group label {
     font-size: 0.875rem;
     color: var(--text-secondary);
     margin-bottom: 0.5rem;
     text-align: left;
+    font-weight: normal;
 }
-
 .search-form .form-actions {
     margin-top: 1.5rem;
     display: flex;
@@ -285,7 +269,6 @@ select[multiple] option {
     align-items: center;
     gap: 1rem;
 }
-
 .search-form .submit-btn {
     padding: 0.75rem 1.5rem;
     display: flex;
@@ -293,74 +276,9 @@ select[multiple] option {
     gap: 0.5rem;
 }
 
-/* Prilagoditve za manjše zaslone */
-@media (max-width: 900px) {
-    .search-box.compact {
-        flex-direction: column;
-    }
-    .vehicle-tabs {
-        flex-direction: row;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        padding-right: 0;
-        padding-bottom: 1rem;
-        margin-bottom: 1rem;
-        overflow-x: auto;
-    }
-    .form-grid.four-columns,
-    .form-grid.three-columns {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 600px) {
-    .form-grid.four-columns,
-    .form-grid.three-columns {
-        grid-template-columns: 1fr;
-    }
-}
-/* Privzeto skrije polja za hibridna vozila pri naprednem iskanju */
-#hybrid-options-row {
-    display: none;
-}
-/* === NOVI STILI ZA IZBIRO VEČ ZNAMK === */
-.make-selector-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem; /* Razmik med select in gumbom */
-    margin-bottom: 0.75rem; /* Razmik med vrsticami */
-}
-
-.make-selector-row:last-child {
-    margin-bottom: 0;
-}
-
-.make-selector-row select {
-    flex-grow: 1; /* Polje se razširi po preostali širini */
-}
-
-.remove-make-btn {
-    background: var(--card-color);
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    border-radius: 6px;
-    width: 38px;
-    height: 38px;
-    flex-shrink: 0;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2rem;
-    transition: all 0.2s ease;
-}
-
-.remove-make-btn:hover {
-    border-color: #ef4444; /* Rdeča obroba */
-    color: #ef4444; /* Rdeč tekst */
-}
-/* Stili za dinamično dodane vrstice s kriteriji */
+/* === STILI ZA DINAMIČNE VRSTICE V NAPREDNEM ISKANJU === */
 .criterion-row {
     display: grid;
-    /* Ustvari 3 stolpce, ki se prilagajajo širini */
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
     padding-bottom: 1.5rem;
@@ -368,15 +286,11 @@ select[multiple] option {
     border-bottom: 1px solid var(--border-color);
     position: relative;
 }
-
-/* Odstrani spodnjo obrobo in razmik pri zadnji vrstici */
 .criterion-row:last-child {
     border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
 }
-
-/* Gumb za odstranitev vrstice */
 .remove-criterion-btn {
     position: absolute;
     top: -10px;
@@ -395,9 +309,64 @@ select[multiple] option {
     transition: all 0.2s ease;
     z-index: 10;
 }
-
 .remove-criterion-btn:hover {
-    border-color: #ef4444; /* Rdeča obroba */
-    color: #ef4444; /* Rdeč tekst */
+    border-color: var(--error-color);
+    color: var(--error-color);
     transform: scale(1.1);
+} 
+
+/* === STILI ZA LOADING SPINNER === */
+#loading-spinner {
+    display: none;
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--border-color);
+    border-top-color: var(--accent-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+.listings-grid {
+    position: relative;
+    min-height: 300px;
+}
+@keyframes spin {
+    to {
+        transform: translateX(-50%) rotate(360deg);
+    }
+}
+
+/* === MEDIA QUERIES === */
+@media (max-width: 1024px) {
+    .sidebar { position: fixed; z-index: 1100; margin-left: calc(-240px - 2rem); }
+    .page-container.sidebar-collapsed .sidebar { margin-left: 0; }
+    .sidebar-toggle-btn { display: block !important; }
+}
+@media (max-width: 900px) {
+    .search-box.compact {
+        flex-direction: column;
+    }
+    .vehicle-tabs {
+        flex-direction: row;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding-right: 0;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+        overflow-x: auto;
+    }
+    .form-grid.four-columns,
+    .form-grid.three-columns {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 600px) {
+    .form-grid.four-columns,
+    .form-grid.three-columns {
+        grid-template-columns: 1fr;
+    }
 }
