@@ -11,8 +11,10 @@ import { initComparePage } from './compare.js';
 import { initContactPage } from './contact.js';
 import { initAdvancedSearchPage } from './advanced-search.js';
 import { initProfilePage } from './profile.js';
-// === DODANO: Uvoz za novo stran z rezultati ===
 import { initSearchResultsPage } from './search-results.js';
+// === DODANO: Uvoz za novo stran "Všečki" ===
+import { initLikesPage } from './likes.js';
+
 
 const routes = {
     '/': { view: 'home.html', init: initHomePage },
@@ -27,8 +29,9 @@ const routes = {
     '/create-listing': { view: 'create-listing.html', init: initCreateListingPage },
     '/advanced-search': { view: 'advanced-search.html', init: initAdvancedSearchPage },
     '/compare': { view: 'compare.html', init: initComparePage },
+    // === DODANO: Nova pot za stran z všečki ===
+    '/likes': { view: 'likes.html', init: initLikesPage },
     '/listing/:id': { view: 'listing.html', init: initListingPage },
-    // === DODANO: Nova pot za stran z rezultati iskanja ===
     '/search-results': { view: 'search-results.html', init: initSearchResultsPage },
     '/404': { view: '404.html' }
 };

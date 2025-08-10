@@ -1,8 +1,9 @@
-// Uvozimo vse "init" funkcije, ki jih potrebujemo za zagon aplikacije.
 import { setLanguage } from './i18n.js';
 import { initRouter } from './router.js';
-import { initGlobalUI } from './ui.js'; // SPREMEMBA: Uporabimo novo globalno funkcijo
+import { initGlobalUI } from './ui.js';
 import { initUserMenu } from './userMenu.js';
+// === DODANO: Uvozimo nov servis za podatke ===
+import { initDataService } from './dataService.js';
 
 /**
  * Asinhrono naloži vsebino HTML komponente (npr. glava, noga) v določen vsebnik.
@@ -12,14 +13,13 @@ import { initUserMenu } from './userMenu.js';
 async function loadComponent(url, containerId) {
     try {
         const container = document.getElementById(containerId);
-        if (!container) return; // Če vsebnik na strani ne obstaja, tiho končamo.
+        if (!container) return; 
 
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Komponenta na naslovu ${url} ni bila najdena.`);
         
         container.innerHTML = await response.text();
     } catch (error) {
-        // V primeru napake izpišemo v konzolo.
         console.error(`Napaka pri nalaganju komponente ${url}:`, error);
     }
 }
@@ -42,10 +42,16 @@ async function main() {
     await setLanguage(langFromUrl || langFromStorage || 'sl');
     
     // 3. KORAK: Ko so komponente naložene, inicializiramo njihove interaktivne dele.
-    initGlobalUI(); // << SPREMEMBA: Ta funkcija zdaj skrbi za temo in stransko vrstico.
+    initGlobalUI(); 
     initUserMenu();
 
-    // 4. KORAK: Na koncu zaženemo ruter, ki bo naložil dinamično vsebino strani.
+    // === DODANO: 4. KORAK - Centralno nalaganje podatkov ===
+    // Počakamo, da se vsi oglasi in znamke naložijo, PREDEN zaženemo ruter.
+    // To zagotovi, da imajo vse strani takojšen dostop do podatkov.
+    await initDataService();
+
+    // === POSODOBLJENO: 5. KORAK (prej 4.) ===
+    // Na koncu zaženemo ruter, ki bo naložil dinamično vsebino strani.
     initRouter();
 }
 

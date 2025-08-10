@@ -1,5 +1,6 @@
 import { translate } from './i18n.js';
 import { createListingCard } from './components/ListingCard.js';
+import { getListings, getBrands } from './dataService.js';
 
 const SLOVENIAN_REGIONS = [
     "Osrednjeslovenska", "Gorenjska", "Goriška", "Obalno-kraška", 
@@ -24,53 +25,48 @@ export function initHomePage() {
         return;
     }
 
-    let allListings = [];
-    let brandModelData = {};
+    const allListings = getListings();
+    const brandModelData = getBrands();
     const ITEMS_PER_PAGE = 12;
     let currentPage = 1;
 
     // --- INICIALIZACIJA STRANI ---
-    fetch('./json/brands_models_global.json')
-        .then(res => res.json())
-        .then(data => {
-            brandModelData = data;
-            const sortedBrands = Object.keys(brandModelData).sort();
-            sortedBrands.forEach(brand => makeSelect.add(new Option(brand, brand)));
-        });
+    const sortedBrands = Object.keys(brandModelData).sort();
+    sortedBrands.forEach(brand => makeSelect.add(new Option(brand, brand)));
+    
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear; y >= 1950; y--) {
+        regFromSelect.add(new Option(y, y));
+    }
 
-    loadingSpinner.style.display = 'block';
-    fetch('./json/listings.json')
-        .then(res => res.json())
-        .then(data => {
-            allListings = data;
-            // Domača stran sedaj vedno prikaže vse oglase (filtriranje je na search-results)
-            displayPage(allListings, 1);
-        })
-        .catch(error => {
-            console.error("Napaka pri nalaganju oglasov:", error);
-            listingsGrid.innerHTML = `<p style="text-align:center; padding: 2rem;">Napaka pri nalaganju oglasov.</p>`;
-        })
-        .finally(() => {
-            loadingSpinner.style.display = 'none';
-        });
+    SLOVENIAN_REGIONS.forEach(region => {
+        regionSelect.add(new Option(region, region));
+    });
 
+    displayPage(allListings, 1);
+    
+    // --- FUNKCIJE ---
     function displayPage(listings, page) {
         currentPage = page;
         listingsGrid.innerHTML = '';
         noListingsMessage.style.display = 'none';
+
         if (listings.length === 0) {
             noListingsMessage.style.display = 'block';
             renderPagination(0, page);
             return;
         }
+        
         const sorted = sortListings(listings, sortOrderSelect.value);
         const start = (page - 1) * ITEMS_PER_PAGE;
         const end = start + ITEMS_PER_PAGE;
         const paginatedItems = sorted.slice(start, end);
+
         paginatedItems.forEach(listing => {
             const card = createListingCard(listing);
             listingsGrid.appendChild(card);
         });
+
         renderPagination(listings.length, page);
     }
 
@@ -94,7 +90,7 @@ export function initHomePage() {
             pageBtn.textContent = i;
             pageBtn.className = 'page-btn';
             if (i === currentPage) pageBtn.classList.add('active');
-            pageBtn.addEventListener('click', () => displayPage(allListings, i)); // Sedaj vedno paginira po vseh oglasih
+            pageBtn.addEventListener('click', () => displayPage(allListings, i));
             paginationContainer.appendChild(pageBtn);
         }
     }
@@ -108,6 +104,7 @@ export function initHomePage() {
         return criteria;
     }
     
+    // --- POSLUŠALCI DOGODKOV ---
     makeSelect.addEventListener('change', function() {
         modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
         modelSelect.disabled = true;
@@ -119,7 +116,6 @@ export function initHomePage() {
         }
     });
 
-    // === POSODOBLJENO: Iskalnik sedaj preusmeri na stran z rezultati ===
     searchForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const criteria = getCurrentCriteria();
@@ -128,16 +124,57 @@ export function initHomePage() {
     });
 
     sortOrderSelect.addEventListener('change', () => {
-        // Sortiranje sedaj deluje na vseh oglasih na domači strani
         displayPage(allListings, currentPage);
     });
 
-    const currentYear = new Date().getFullYear();
-    for (let y = currentYear; y >= 1950; y--) {
-        regFromSelect.add(new Option(y, y));
+    // === DODANO: Poslušalec za akcije na karticah (všečki, primerjava) ===
+    listingsGrid.addEventListener('click', (e) => {
+        const target = e.target.closest('.card-action-btn');
+        if (!target) return;
+
+        const card = target.closest('.listing-card');
+        const listingId = card.dataset.id;
+
+        if (target.classList.contains('favorite-btn')) {
+            toggleFavorite(listingId, target);
+        }
+
+        if (target.classList.contains('compare-btn')) {
+            toggleCompare(listingId, target);
+        }
+    });
+
+    function toggleFavorite(id, button) {
+        let favorites = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
+        const heartIcon = button.querySelector('i');
+
+        if (favorites.includes(id)) {
+            favorites = favorites.filter(favId => favId !== id);
+            button.classList.remove('active');
+            heartIcon.classList.remove('fas');
+            heartIcon.classList.add('far');
+        } else {
+            favorites.push(id);
+            button.classList.add('active');
+            heartIcon.classList.remove('far');
+            heartIcon.classList.add('fas');
+        }
+        localStorage.setItem('mojavto_favoriteItems', JSON.stringify(favorites));
     }
 
-    SLOVENIAN_REGIONS.forEach(region => {
-        regionSelect.add(new Option(region, region));
-    });
+    function toggleCompare(id, button) {
+        let compareItems = JSON.parse(localStorage.getItem('mojavto_compareItems')) || [];
+        if (compareItems.includes(id)) {
+            compareItems = compareItems.filter(compId => compId !== id);
+            button.classList.remove('active');
+        } else {
+            if (compareItems.length >= 3) {
+                alert("Primerjate lahko največ 3 oglase.");
+                return;
+            }
+            compareItems.push(id);
+            button.classList.add('active');
+        }
+        localStorage.setItem('mojavto_compareItems', JSON.stringify(compareItems));
+    }
 }

@@ -1,4 +1,6 @@
 import { translate } from './i18n.js';
+// Uvozimo funkcijo za pridobivanje znamk iz centralnega servisa
+import { getBrands } from './dataService.js';
 
 export function initAdvancedSearchPage() {
     // === FAZA 1: PREVERJANJE OBSTOJA ELEMENTOV ===
@@ -27,7 +29,8 @@ export function initAdvancedSearchPage() {
     const excludeTypeSelect = document.getElementById("exclude-type");
     const excludedItemsContainer = document.getElementById("excluded-items-container");
     
-    let brandModelData = {};
+    // Podatke dobimo direktno iz dataService, brez 'fetch' klica
+    const brandModelData = getBrands();
     let exclusionRules = []; 
 
     function renderExclusionTags() {
@@ -231,7 +234,6 @@ export function initAdvancedSearchPage() {
         return criteria;
     }
 
-    // === POSODOBLJENO: Preusmeritev na stran z rezultati ===
     searchForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const searchCriteria = getCriteriaFromForm();
@@ -252,43 +254,34 @@ export function initAdvancedSearchPage() {
         if(electricOptionsRow) electricOptionsRow.style.display = 'none';
         if(hybridOptionsRow) hybridOptionsRow.style.display = 'none';
     });
-
-    fetch("./json/brands_models_global.json")
-      .then(res => {
-          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-          return res.json();
-      })
-      .then(data => {
-        brandModelData = data;
-        addCriterionRow();
-        const sortedBrands = Object.keys(brandModelData).sort();
-        excludeMakeSelect.innerHTML = '<option value="">Izberi znamko...</option>';
-        sortedBrands.forEach(brand => excludeMakeSelect.add(new Option(brand, brand)));
-        excludeMakeSelect.addEventListener("change", function() {
-            const selectedMake = this.value;
-            excludeModelSelect.innerHTML = '<option value="">Vsi modeli</option>';
-            excludeTypeSelect.innerHTML = '<option value="">Vsi tipi</option>';
-            excludeModelSelect.disabled = true;
-            excludeTypeSelect.disabled = true;
-            if (selectedMake && brandModelData[selectedMake]) {
-                Object.keys(brandModelData[selectedMake]).forEach(model => excludeModelSelect.add(new Option(model, model)));
-                excludeModelSelect.disabled = false;
-            }
-        });
-        excludeModelSelect.addEventListener("change", function() {
-            const selectedMake = excludeMakeSelect.value;
-            const selectedModel = this.value;
-            excludeTypeSelect.innerHTML = '<option value="">Vsi tipi</option>';
-            excludeTypeSelect.disabled = true;
-            if (selectedModel && brandModelData[selectedMake]?.[selectedModel]) {
-                brandModelData[selectedMake][selectedModel].forEach(type => excludeTypeSelect.add(new Option(type, type)));
-                excludeTypeSelect.disabled = false;
-            }
-        });
-      })
-      .catch(error => {
-          console.error("Napaka pri nalaganju podatkov o znamkah:", error);
-      });
+    
+    // Inicializacija forme z že naloženimi podatki
+    addCriterionRow();
+    const sortedBrands = Object.keys(brandModelData).sort();
+    excludeMakeSelect.innerHTML = '<option value="">Izberi znamko...</option>';
+    sortedBrands.forEach(brand => excludeMakeSelect.add(new Option(brand, brand)));
+    
+    excludeMakeSelect.addEventListener("change", function() {
+        const selectedMake = this.value;
+        excludeModelSelect.innerHTML = '<option value="">Vsi modeli</option>';
+        excludeTypeSelect.innerHTML = '<option value="">Vsi tipi</option>';
+        excludeModelSelect.disabled = true;
+        excludeTypeSelect.disabled = true;
+        if (selectedMake && brandModelData[selectedMake]) {
+            Object.keys(brandModelData[selectedMake]).forEach(model => excludeModelSelect.add(new Option(model, model)));
+            excludeModelSelect.disabled = false;
+        }
+    });
+    excludeModelSelect.addEventListener("change", function() {
+        const selectedMake = excludeMakeSelect.value;
+        const selectedModel = this.value;
+        excludeTypeSelect.innerHTML = '<option value="">Vsi tipi</option>';
+        excludeTypeSelect.disabled = true;
+        if (selectedModel && brandModelData[selectedMake]?.[selectedModel]) {
+            brandModelData[selectedMake][selectedModel].forEach(type => excludeTypeSelect.add(new Option(type, type)));
+            excludeTypeSelect.disabled = false;
+        }
+    });
     
     if (yearFromSelect && yearToSelect) {
         const currentYear = new Date().getFullYear();

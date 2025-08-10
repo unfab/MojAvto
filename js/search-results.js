@@ -1,8 +1,8 @@
 import { createListingCard } from './components/ListingCard.js';
 import { translate } from './i18n.js';
+import { getListings } from './dataService.js';
 
 export function initSearchResultsPage() {
-    // === DOM ELEMENTI ===
     const listingsGrid = document.getElementById('listingsGrid');
     const noListingsMessage = document.getElementById('noListingsMessage');
     const loadingSpinner = document.getElementById('loading-spinner');
@@ -15,18 +15,13 @@ export function initSearchResultsPage() {
         return;
     }
 
-    // === STANJE APLIKACIJE ===
-    let allListings = [];
+    const allListings = getListings();
     let filteredListings = [];
     const ITEMS_PER_PAGE = 12;
     let currentPage = 1;
 
-    // Preberemo kriterije, ki jih je poslal iskalnik iz sessionStorage
     const searchCriteria = JSON.parse(sessionStorage.getItem('advancedSearchCriteria')) || {};
 
-    // --- FUNKCIJE ---
-
-    // Prikaz aktivnih filtrov na strani
     function displayActiveFilters(criteria) {
         activeFiltersContainer.innerHTML = 'Iskalni filtri: ';
         let hasFilters = false;
@@ -44,7 +39,6 @@ export function initSearchResultsPage() {
         }
     }
     
-    // Vse ostale funkcije so enake kot v home.js (displayPage, sortListings, renderPagination, filterListings)
     function displayPage(listings, page) {
         currentPage = page;
         listingsGrid.innerHTML = '';
@@ -127,24 +121,61 @@ export function initSearchResultsPage() {
 
     // --- INICIALIZACIJA STRANI ---
     displayActiveFilters(searchCriteria);
-    loadingSpinner.style.display = 'block';
-    
-    fetch('./json/listings.json')
-        .then(res => res.json())
-        .then(data => {
-            allListings = data;
-            filteredListings = filterListings(allListings, searchCriteria);
-            displayPage(filteredListings, 1);
-        })
-        .catch(error => {
-            console.error("Napaka pri nalaganju oglasov:", error);
-            listingsGrid.innerHTML = `<p style="text-align:center;">Napaka pri nalaganju oglasov.</p>`;
-        })
-        .finally(() => {
-            loadingSpinner.style.display = 'none';
-        });
+    filteredListings = filterListings(allListings, searchCriteria);
+    displayPage(filteredListings, 1);
         
     sortOrderSelect.addEventListener('change', () => {
         displayPage(filteredListings, currentPage);
     });
+
+    // === DODANO: Poslušalec za akcije na karticah (všečki, primerjava) ===
+    listingsGrid.addEventListener('click', (e) => {
+        const target = e.target.closest('.card-action-btn');
+        if (!target) return;
+
+        const card = target.closest('.listing-card');
+        const listingId = card.dataset.id;
+
+        if (target.classList.contains('favorite-btn')) {
+            toggleFavorite(listingId, target);
+        }
+
+        if (target.classList.contains('compare-btn')) {
+            toggleCompare(listingId, target);
+        }
+    });
+
+    function toggleFavorite(id, button) {
+        let favorites = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
+        const heartIcon = button.querySelector('i');
+
+        if (favorites.includes(id)) {
+            favorites = favorites.filter(favId => favId !== id);
+            button.classList.remove('active');
+            heartIcon.classList.remove('fas');
+            heartIcon.classList.add('far');
+        } else {
+            favorites.push(id);
+            button.classList.add('active');
+            heartIcon.classList.remove('far');
+            heartIcon.classList.add('fas');
+        }
+        localStorage.setItem('mojavto_favoriteItems', JSON.stringify(favorites));
+    }
+
+    function toggleCompare(id, button) {
+        let compareItems = JSON.parse(localStorage.getItem('mojavto_compareItems')) || [];
+        if (compareItems.includes(id)) {
+            compareItems = compareItems.filter(compId => compId !== id);
+            button.classList.remove('active');
+        } else {
+            if (compareItems.length >= 3) {
+                alert("Primerjate lahko največ 3 oglase.");
+                return;
+            }
+            compareItems.push(id);
+            button.classList.add('active');
+        }
+        localStorage.setItem('mojavto_compareItems', JSON.stringify(compareItems));
+    }
 }
