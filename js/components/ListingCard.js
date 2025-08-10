@@ -8,18 +8,21 @@ import { translate } from '../i18n.js';
 export function createListingCard(listing) {
     const card = document.createElement('article');
     card.className = 'listing-card';
-    card.dataset.id = String(listing.id); // Dodamo ID na kartico za lažje upravljanje
+    card.dataset.id = String(listing.id);
 
-    // === POSODOBLJENO: Preverimo, ali je oglas med všečki ===
+    // Preverimo stanje za Všečke
     const favoriteItems = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
     const isFavorited = favoriteItems.includes(String(listing.id));
-
-    const favoriteIconClass = isFavorited ? 'fas' : 'far'; // fas = polno srce, far = prazno
+    const favoriteIconClass = isFavorited ? 'fas' : 'far';
     const favoriteBtnClass = isFavorited ? 'card-action-btn favorite-btn active' : 'card-action-btn favorite-btn';
-    // === KONEC POSODOBITVE ===
+
+    // === DODANO: Preverimo stanje za Primerjavo ===
+    const compareItems = JSON.parse(localStorage.getItem('mojavto_compareItems')) || [];
+    const isCompared = compareItems.includes(String(listing.id));
+    const compareBtnClass = isCompared ? 'card-action-btn compare-btn active' : 'card-action-btn compare-btn';
+    // === KONEC DODATKA ===
 
     const isElectric = listing.fuel === 'Elektrika';
-
     const specificDetails = isElectric
         ? `
             <div class="spec-item">
@@ -42,7 +45,7 @@ export function createListingCard(listing) {
             </div>
         `;
 
-    // === POSODOBLJENO: Uporaba dinamičnih classov za gumb "Všečkaj" ===
+    // === POSODOBLJENO: Uporaba dinamičnega classa tudi za gumb "Primerjaj" ===
     card.innerHTML = `
         <div class="card-image-container">
             <img src="${listing.images?.exterior[0] || 'https://via.placeholder.com/400x250?text=MojAvto.si'}" alt="${listing.title}">
@@ -50,7 +53,7 @@ export function createListingCard(listing) {
                 <button class="${favoriteBtnClass}" title="Dodaj med priljubljene">
                     <i class="${favoriteIconClass} fa-heart"></i>
                 </button>
-                <button class="card-action-btn compare-btn" title="Dodaj v primerjavo">
+                <button class="${compareBtnClass}" title="Dodaj v primerjavo">
                     <i class="fas fa-balance-scale"></i>
                 </button>
             </div>

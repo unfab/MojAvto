@@ -1,21 +1,22 @@
 import { createListingCard } from './components/ListingCard.js';
 import { translate } from './i18n.js';
 import { getListings } from './dataService.js';
+// === DODANO: Uvozimo novo funkcijo za obvestila ===
+import { showNotification } from './notifications.js';
 
-export function initSearchResultsPage() {
+export async function initSearchResultsPage() {
     const listingsGrid = document.getElementById('listingsGrid');
     const noListingsMessage = document.getElementById('noListingsMessage');
-    const loadingSpinner = document.getElementById('loading-spinner');
     const sortOrderSelect = document.getElementById('sortOrder');
     const paginationContainer = document.getElementById('pagination-container');
     const activeFiltersContainer = document.getElementById('active-filters-container');
 
-    if (!listingsGrid || !loadingSpinner || !sortOrderSelect || !activeFiltersContainer) {
+    if (!listingsGrid || !sortOrderSelect || !activeFiltersContainer) {
         console.error("Manjka ključen element na strani z rezultati iskanja.");
         return;
     }
 
-    const allListings = getListings();
+    const allListings = await getListings();
     let filteredListings = [];
     const ITEMS_PER_PAGE = 12;
     let currentPage = 1;
@@ -128,37 +129,35 @@ export function initSearchResultsPage() {
         displayPage(filteredListings, currentPage);
     });
 
-    // === DODANO: Poslušalec za akcije na karticah (všečki, primerjava) ===
     listingsGrid.addEventListener('click', (e) => {
         const target = e.target.closest('.card-action-btn');
         if (!target) return;
-
         const card = target.closest('.listing-card');
         const listingId = card.dataset.id;
-
         if (target.classList.contains('favorite-btn')) {
             toggleFavorite(listingId, target);
         }
-
         if (target.classList.contains('compare-btn')) {
             toggleCompare(listingId, target);
         }
     });
 
+    // === POSODOBLJENO: Funkciji sedaj kličeta obvestila ===
     function toggleFavorite(id, button) {
         let favorites = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
         const heartIcon = button.querySelector('i');
-
         if (favorites.includes(id)) {
             favorites = favorites.filter(favId => favId !== id);
             button.classList.remove('active');
             heartIcon.classList.remove('fas');
             heartIcon.classList.add('far');
+            showNotification('Odstranjeno iz priljubljenih', 'info');
         } else {
             favorites.push(id);
             button.classList.add('active');
             heartIcon.classList.remove('far');
             heartIcon.classList.add('fas');
+            showNotification('Dodano med priljubljene!');
         }
         localStorage.setItem('mojavto_favoriteItems', JSON.stringify(favorites));
     }
@@ -168,13 +167,15 @@ export function initSearchResultsPage() {
         if (compareItems.includes(id)) {
             compareItems = compareItems.filter(compId => compId !== id);
             button.classList.remove('active');
+            showNotification('Odstranjeno iz primerjave', 'info');
         } else {
             if (compareItems.length >= 3) {
-                alert("Primerjate lahko največ 3 oglase.");
+                showNotification('Primerjate lahko največ 3 oglase.', 'error');
                 return;
             }
             compareItems.push(id);
             button.classList.add('active');
+            showNotification('Dodano v primerjavo!');
         }
         localStorage.setItem('mojavto_compareItems', JSON.stringify(compareItems));
     }

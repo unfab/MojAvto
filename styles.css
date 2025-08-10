@@ -402,4 +402,83 @@ select[multiple] option {
     .form-grid.three-columns {
         grid-template-columns: 1fr;
     }
+}/* ==================================================== */
+/* ZDRUŽENI STILI ZA CELOTNO APLIKACIJO                 */
+/* ==================================================== */
+
+/* ... vsi vaši obstoječi stili do konca ... */
+
+.remove-criterion-btn:hover {
+    border-color: var(--error-color);
+    color: var(--error-color);
+    transform: scale(1.1);
+} 
+
+/* === DODANO: Stili za obvestila (Notifications/Toasts) === */
+#notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
+
+.notification-toast {
+    background-color: var(--card-color);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-left: 5px solid var(--accent-blue); /* Privzeta barva za uspeh */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.3s ease forwards;
+    opacity: 0;
+}
+
+.notification-toast.fade-out {
+    animation: slideOut 0.5s ease forwards;
+}
+
+/* Različni tipi obvestil z različnimi barvami */
+.notification-toast.info {
+    border-left-color: var(--text-secondary);
+}
+.notification-toast.error {
+    border-left-color: var(--error-color);
+}
+
+.notification-toast i {
+    font-size: 1.2rem;
+}
+
+.notification-toast.success i { color: var(--accent-blue); }
+.notification-toast.info i { color: var(--text-secondary); }
+.notification-toast.error i { color: var(--error-color); }
+
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+/* === KONEC DODANIH STILOV === */
