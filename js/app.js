@@ -2,7 +2,6 @@ import { setLanguage } from './i18n.js';
 import { initRouter } from './router.js';
 import { initGlobalUI } from './ui.js';
 import { initUserMenu } from './userMenu.js';
-// === DODANO: Uvozimo nov servis za podatke ===
 import { initDataService } from './dataService.js';
 
 /**
@@ -37,21 +36,25 @@ async function main() {
     ]);
 
     // 2. KORAK: Inicializiramo sistem za prevajanje (i18n).
-    const langFromUrl = new URLSearchParams(window.location.search).get('lang');
     const langFromStorage = localStorage.getItem('mojavto_lang');
-    await setLanguage(langFromUrl || langFromStorage || 'sl');
+    await setLanguage(langFromStorage || 'sl');
     
     // 3. KORAK: Ko so komponente naložene, inicializiramo njihove interaktivne dele.
     initGlobalUI(); 
     initUserMenu();
 
-    // === DODANO: 4. KORAK - Centralno nalaganje podatkov ===
-    // Počakamo, da se vsi oglasi in znamke naložijo, PREDEN zaženemo ruter.
-    // To zagotovi, da imajo vse strani takojšen dostop do podatkov.
-    await initDataService();
+    // 4. KORAK: Zaženemo in POČAKAMO, da se naložijo vsi podatki.
+    try {
+        await initDataService();
+    } catch (error) {
+        const appContainer = document.getElementById('app-container');
+        if (appContainer) {
+            appContainer.innerHTML = "<h1>Oops! Nekaj je šlo narobe.</h1><p>Osnovnih podatkov ni bilo mogoče naložiti. Prosimo, osvežite stran.</p>";
+        }
+        return; // Ustavimo zagon aplikacije
+    }
 
-    // === POSODOBLJENO: 5. KORAK (prej 4.) ===
-    // Na koncu zaženemo ruter, ki bo naložil dinamično vsebino strani.
+    // 5. KORAK: Šele ko so podatki pripravljeni, zaženemo ruter.
     initRouter();
 }
 

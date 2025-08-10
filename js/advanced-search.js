@@ -1,8 +1,8 @@
 import { translate } from './i18n.js';
-// Uvozimo funkcijo za pridobivanje znamk iz centralnega servisa
 import { getBrands } from './dataService.js';
 
-export function initAdvancedSearchPage() {
+// === SPREMEMBA: Funkcija je sedaj 'async' ===
+export async function initAdvancedSearchPage() {
     // === FAZA 1: PREVERJANJE OBSTOJA ELEMENTOV ===
     const searchForm = document.getElementById("advancedSearchForm");
     const criteriaContainer = document.getElementById("criteria-container");
@@ -29,20 +29,16 @@ export function initAdvancedSearchPage() {
     const excludeTypeSelect = document.getElementById("exclude-type");
     const excludedItemsContainer = document.getElementById("excluded-items-container");
     
-    // Podatke dobimo direktno iz dataService, brez 'fetch' klica
-    const brandModelData = getBrands();
+    // === SPREMEMBA: Podatke pridobimo asinhrono in počakamo nanje ===
+    const brandModelData = await getBrands();
     let exclusionRules = []; 
 
-    // === DODANO: Varnostna preverba, ali so podatki o znamkah na voljo ===
-    // Prepreči zrušitev, če dataService ne vrne podatkov.
     if (!brandModelData || Object.keys(brandModelData).length === 0) {
         console.error("Podatki o znamkah niso na voljo iz dataService za napredno iskanje.");
-        // Onemogočimo gumbe, da uporabnik ne more nadaljevati, saj dropdowni ne bi delovali
         if(addCriterionBtn) addCriterionBtn.disabled = true;
         if(addExclusionBtn) addExclusionBtn.disabled = true;
         return;
     }
-    // === KONEC SPREMEMBE ===
 
     function renderExclusionTags() {
         excludedItemsContainer.innerHTML = '';
@@ -266,7 +262,7 @@ export function initAdvancedSearchPage() {
         if(hybridOptionsRow) hybridOptionsRow.style.display = 'none';
     });
     
-    // Inicializacija forme z že naloženimi podatki
+    // Inicializacija forme
     addCriterionRow();
     const sortedBrands = Object.keys(brandModelData).sort();
     excludeMakeSelect.innerHTML = '<option value="">Izberi znamko...</option>';

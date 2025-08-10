@@ -8,7 +8,9 @@ const SLOVENIAN_REGIONS = [
     "Savinjska", "Koroška", "Podravska", "Pomurska"
 ];
 
-export function initHomePage() {
+// === SPREMEMBA: Funkcija je sedaj 'async' ===
+export async function initHomePage() {
+    // === DOM ELEMENTI ===
     const searchForm = document.getElementById('homeSearchForm');
     const makeSelect = document.getElementById('make');
     const modelSelect = document.getElementById('model');
@@ -25,15 +27,14 @@ export function initHomePage() {
         return;
     }
 
-    const allListings = getListings();
-    const brandModelData = getBrands();
+    // === SPREMEMBA: Podatke pridobimo asinhrono in počakamo nanje ===
+    const allListings = await getListings();
+    const brandModelData = await getBrands();
     const ITEMS_PER_PAGE = 12;
     let currentPage = 1;
 
-    // === DODANO: Varnostna preverba, ali so podatki o znamkah na voljo ===
     if (!brandModelData || Object.keys(brandModelData).length === 0) {
         console.error("Podatki o znamkah niso na voljo iz dataService. Preverite, ali je datoteka brands_models_global.json pravilno naložena.");
-        // Lahko bi prikazali napako uporabniku
         return;
     }
 
