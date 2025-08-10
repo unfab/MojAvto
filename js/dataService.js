@@ -4,6 +4,9 @@ let listings = [];
 let brands = {};
 let dataLoadedPromise = null;
 
+// === KLJUČEN POPRAVEK TUKAJ ===
+// Dinamično določimo osnovno pot. Če stran teče na github.io, dodamo ime repozitorija.
+// V nasprotnem primeru (za lokalni razvoj) je pot prazna.
 const basePath = window.location.hostname.includes('github.io') ? '/MojAvto' : '';
 
 /**
@@ -12,13 +15,16 @@ const basePath = window.location.hostname.includes('github.io') ? '/MojAvto' : '
 function fetchData() {
     return new Promise(async (resolve, reject) => {
         try {
+            // Uporabimo posodobljeno 'basePath' za pravilne URL-je
             const [listingsResponse, brandsResponse] = await Promise.all([
                 fetch(`${basePath}/json/listings.json`),
                 fetch(`${basePath}/json/brands_models_global.json`)
             ]);
 
             if (!listingsResponse.ok || !brandsResponse.ok) {
-                throw new Error('Napaka pri nalaganju osnovnih podatkov.');
+                console.error('Listings Status:', listingsResponse.statusText);
+                console.error('Brands Status:', brandsResponse.statusText);
+                throw new Error('Napaka pri nalaganju osnovnih podatkov (listings ali brands). Preverite poti do datotek.');
             }
 
             listings = await listingsResponse.json();
@@ -29,7 +35,7 @@ function fetchData() {
             resolve(); // Podatki so uspešno naloženi
         } catch (error) {
             console.error("Kritična napaka v dataService:", error);
-            reject(error); // Javi napako naprej
+            reject(error); // Javi napako naprej v app.js
         }
     });
 }
