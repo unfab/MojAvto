@@ -4,17 +4,19 @@ let listings = [];
 let brands = {};
 let dataLoadedPromise = null;
 
+// Dinamično določimo osnovno pot za združljivost z GitHub Pages.
+const basePath = window.location.hostname.includes('github.io') ? '/MojAvto' : '';
+
 /**
  * Ustvari in vrne obljubo (Promise), ki se razreši, ko so vsi podatki naloženi.
  */
 function fetchData() {
     return new Promise(async (resolve, reject) => {
         try {
-            // === POPRAVEK: Uporabimo preproste relativne poti ===
-            // Pot './' pomeni "v isti mapi kot index.html".
+            // === POPRAVEK TUKAJ: Ime datoteke je popravljeno v 'listing.json' ===
             const [listingsResponse, brandsResponse] = await Promise.all([
-                fetch('./json/listings.json'),
-                fetch('./json/brands_models_global.json')
+                fetch(`${basePath}/json/listing.json`),
+                fetch(`${basePath}/json/brands_models_global.json`)
             ]);
 
             if (!listingsResponse.ok || !brandsResponse.ok) {
