@@ -1,5 +1,4 @@
 import { translate } from './i18n.js';
-import { renderMap } from './maps.js';
 import { createCompareCard } from './components/CompareCard.js';
 // === POSODOBLJENO: Uvozimo funkcijo iz dataService ===
 import { getListings } from './dataService.js';
@@ -36,12 +35,6 @@ export function initComparePage() {
     itemsToCompare.forEach(item => {
         const card = createCompareCard(item);
         comparisonGrid.appendChild(card);
-    });
-    
-    itemsToCompare.forEach(item => {
-        if (item.location) {
-            renderMap(`map-${item.id}`, item.location.lat, item.location.lng);
-        }
     });
 
     function toggleAllViews(view) {
