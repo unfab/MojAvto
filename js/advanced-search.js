@@ -33,6 +33,17 @@ export function initAdvancedSearchPage() {
     const brandModelData = getBrands();
     let exclusionRules = []; 
 
+    // === DODANO: Varnostna preverba, ali so podatki o znamkah na voljo ===
+    // Prepreči zrušitev, če dataService ne vrne podatkov.
+    if (!brandModelData || Object.keys(brandModelData).length === 0) {
+        console.error("Podatki o znamkah niso na voljo iz dataService za napredno iskanje.");
+        // Onemogočimo gumbe, da uporabnik ne more nadaljevati, saj dropdowni ne bi delovali
+        if(addCriterionBtn) addCriterionBtn.disabled = true;
+        if(addExclusionBtn) addExclusionBtn.disabled = true;
+        return;
+    }
+    // === KONEC SPREMEMBE ===
+
     function renderExclusionTags() {
         excludedItemsContainer.innerHTML = '';
         exclusionRules.forEach((rule, index) => {

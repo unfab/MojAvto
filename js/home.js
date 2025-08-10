@@ -30,6 +30,13 @@ export function initHomePage() {
     const ITEMS_PER_PAGE = 12;
     let currentPage = 1;
 
+    // === DODANO: Varnostna preverba, ali so podatki o znamkah na voljo ===
+    if (!brandModelData || Object.keys(brandModelData).length === 0) {
+        console.error("Podatki o znamkah niso na voljo iz dataService. Preverite, ali je datoteka brands_models_global.json pravilno naložena.");
+        // Lahko bi prikazali napako uporabniku
+        return;
+    }
+
     // --- INICIALIZACIJA STRANI ---
     const sortedBrands = Object.keys(brandModelData).sort();
     sortedBrands.forEach(brand => makeSelect.add(new Option(brand, brand)));
@@ -127,18 +134,14 @@ export function initHomePage() {
         displayPage(allListings, currentPage);
     });
 
-    // === DODANO: Poslušalec za akcije na karticah (všečki, primerjava) ===
     listingsGrid.addEventListener('click', (e) => {
         const target = e.target.closest('.card-action-btn');
         if (!target) return;
-
         const card = target.closest('.listing-card');
         const listingId = card.dataset.id;
-
         if (target.classList.contains('favorite-btn')) {
             toggleFavorite(listingId, target);
         }
-
         if (target.classList.contains('compare-btn')) {
             toggleCompare(listingId, target);
         }
@@ -147,7 +150,6 @@ export function initHomePage() {
     function toggleFavorite(id, button) {
         let favorites = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
         const heartIcon = button.querySelector('i');
-
         if (favorites.includes(id)) {
             favorites = favorites.filter(favId => favId !== id);
             button.classList.remove('active');
