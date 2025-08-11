@@ -39,6 +39,32 @@
                 </div>
             </div>
         </section>
+
+        <section class="filter-section">
+             <div class="filter-section-header">
+                <h3><i class="fas fa-ban"></i>Izključi vozila</h3>
+            </div>
+            <div class="filter-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="exclude-make">Znamka</label>
+                        <select id="exclude-make"><option value="">Izberi znamko...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exclude-model">Model (opcijsko)</label>
+                        <select id="exclude-model" disabled><option value="">Vsi modeli</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exclude-type">Tip (opcijsko)</label>
+                        <select id="exclude-type" disabled><option value="">Vsi tipi</option></select>
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <button type="button" id="addExclusionBtn" class="btn btn-secondary">Dodaj</button>
+                </div>
+                <div id="excluded-items-container" style="margin-top: 1.5rem;"></div>
+            </div>
+        </section>
         
         <section class="filter-section">
             <div class="filter-section-header">
@@ -224,7 +250,6 @@
                         <input type="number" name="co2_emissions" placeholder="npr. 120">
                     </div>
                 </div>
-                
                 <div class="form-row" style="margin-top: 1.5rem;">
                     <div class="form-group">
                         <label for="consumption_combined">Kombinirana poraba do (l/100km)</label>
@@ -239,7 +264,6 @@
                         <input type="number" step="0.1" name="consumption_highway" placeholder="npr. 4.5">
                     </div>
                 </div>
-
                 <div class="form-row" style="margin-top: 1.5rem;">
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <div class="checkbox-options single-row">
@@ -328,32 +352,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-        
-        <section class="filter-section">
-             <div class="filter-section-header">
-                <h3><i class="fas fa-ban"></i>Izključi vozila</h3>
-            </div>
-            <div class="filter-content">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="exclude-make">Znamka</label>
-                        <select id="exclude-make"><option value="">Izberi znamko...</option></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exclude-model">Model (opcijsko)</label>
-                        <select id="exclude-model" disabled><option value="">Vsi modeli</option></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exclude-type">Tip (opcijsko)</label>
-                        <select id="exclude-type" disabled><option value="">Vsi tipi</option></select>
-                    </div>
-                </div>
-                <div style="margin-top: 1.5rem;">
-                    <button type="button" id="addExclusionBtn" class="btn btn-secondary">Dodaj</button>
-                </div>
-                <div id="excluded-items-container" style="margin-top: 1.5rem;"></div>
             </div>
         </section>
         
