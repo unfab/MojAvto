@@ -196,7 +196,6 @@ export async function initAdvancedSearchPage() {
         if (hybridOptionsRow) hybridOptionsRow.style.display = fuelSelect.value === 'Hibrid' ? 'grid' : 'none';
     });
 
-    // === POSODOBLJENA FUNKCIJA ZA ZAJEM VSEH PODATKOV IZ OBRAZCA ===
     function getCriteriaFromForm() {
         const criteria = {};
         const inclusionCriteria = [];

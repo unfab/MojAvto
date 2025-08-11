@@ -1,7 +1,7 @@
 import { translate } from './i18n.js';
 import { createCompareCard } from './components/CompareCard.js';
-// === POSODOBLJENO: Uvozimo funkcijo iz dataService ===
-import { getListings } from './dataService.js';
+// === NOVO: Uvozimo stateManager ===
+import { stateManager } from './stateManager.js';
 
 export function initComparePage() {
     const comparisonGrid = document.getElementById("comparisonGrid");
@@ -13,12 +13,11 @@ export function initComparePage() {
         return;
     }
 
-    // === POSODOBLJENO: Seznam vseh oglasov dobimo iz dataService ===
-    const allListings = getListings();
-    // Seznam ID-jev za primerjavo še vedno beremo iz localStorage, kar je pravilno
-    const comparedIds = JSON.parse(localStorage.getItem("mojavto_compareItems")) || [];
+    // === SPREMEMBA: Podatke dobimo direktno iz stateManagerja ===
+    const allListings = stateManager.getListings();
+    const { compareItems } = stateManager.getState();
 
-    if (comparedIds.length === 0) {
+    if (compareItems.length === 0) {
         noSelectionMessage.style.display = "block";
         comparisonGrid.style.display = "none";
         viewButtonsContainer.style.display = 'none';
@@ -30,7 +29,7 @@ export function initComparePage() {
     viewButtonsContainer.style.display = 'block';
     comparisonGrid.innerHTML = ''; 
 
-    const itemsToCompare = allListings.filter(listing => comparedIds.includes(String(listing.id)));
+    const itemsToCompare = allListings.filter(listing => compareItems.includes(String(listing.id)));
 
     itemsToCompare.forEach(item => {
         const card = createCompareCard(item);

@@ -1,5 +1,7 @@
 import { translate } from './i18n.js';
-// Izvozimo eno glavno funkcijo, ki jo bo poklical ruter
+// === NOVO: Uvozimo stateManager ===
+import { stateManager } from './stateManager.js';
+
 export function initAuthPage() {
 
     // --- LOGIKA ZA REGISTRACIJO ---
@@ -35,7 +37,8 @@ export function initAuthPage() {
                 return;
             }
 
-            const users = JSON.parse(localStorage.getItem("mojavto_users")) || [];
+            // === SPREMEMBA: Uporabimo stateManager za preverjanje uporabnikov ===
+            const { users } = stateManager.getState();
             const userExists = users.find(u => u.username === data.username || u.email === data.email);
             if (userExists) {
                 errorMessage.textContent = translate('user_exists_error');
@@ -50,12 +53,11 @@ export function initAuthPage() {
                 region: data.region,
                 isAdmin: false
             };
-
-            users.push(newUser);
-            localStorage.setItem("mojavto_users", JSON.stringify(users));
+            
+            // === SPREMEMBA: Dodamo novega uporabnika preko stateManagerja ===
+            stateManager.addUser(newUser);
             alert(translate('registration_successful'));
             
-            // SPREMEMBA: Uporabimo hash za preusmeritev
             window.location.hash = "#/login";
         });
     }
@@ -70,7 +72,9 @@ export function initAuthPage() {
             
             const usernameOrEmail = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value;
-            const users = JSON.parse(localStorage.getItem("mojavto_users")) || [];
+            
+            // === SPREMEMBA: Uporabimo stateManager za iskanje uporabnika ===
+            const { users } = stateManager.getState();
             const user = users.find(u => (u.username === usernameOrEmail || u.email === usernameOrEmail) && u.password === password);
 
             if (!user) {
@@ -78,10 +82,10 @@ export function initAuthPage() {
                 return;
             }
 
-            localStorage.setItem("mojavto_loggedUser", JSON.stringify(user));
+            // === SPREMEMBA: Prijavimo uporabnika preko stateManagerja ===
+            stateManager.setLoggedInUser(user);
             alert(translate('login_successful'));
 
-            // SPREMEMBA: Uporabimo hash za preusmeritev
             window.location.hash = "#/";
         });
     }

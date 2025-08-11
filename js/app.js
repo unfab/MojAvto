@@ -2,7 +2,8 @@ import { setLanguage } from './i18n.js';
 import { initRouter } from './router.js';
 import { initGlobalUI } from './ui.js';
 import { initUserMenu } from './userMenu.js';
-import { initDataService } from './dataService.js';
+// === SPREMEMBA: Odstranjen uvoz za dataService in dodan uvoz za stateManager ===
+import { stateManager } from './stateManager.js';
 
 /**
  * Asinhrono naloži vsebino HTML komponente (npr. glava, noga) v določen vsebnik.
@@ -35,26 +36,26 @@ async function main() {
         loadComponent('./components/footer.html', 'footer-container')
     ]);
 
-    // 2. KORAK: Inicializiramo sistem za prevajanje (i18n).
-    const langFromStorage = localStorage.getItem('mojavto_lang');
-    await setLanguage(langFromStorage || 'sl');
-    
-    // 3. KORAK: Ko so komponente naložene, inicializiramo njihove interaktivne dele.
-    initGlobalUI(); 
-    initUserMenu();
-
-    // 4. KORAK: Zaženemo in POČAKAMO, da se naložijo vsi podatki.
+    // === SPREMEMBA: 2. KORAK: Inicializiramo State Manager kot prvi korak po nalaganju komponent. ===
+    // To zagotovi, da so vsi podatki na voljo, preden se karkoli drugega zažene.
     try {
-        await initDataService();
+        await stateManager.initialize();
     } catch (error) {
         const appContainer = document.getElementById('app-container');
         if (appContainer) {
             appContainer.innerHTML = "<h1>Oops! Nekaj je šlo narobe.</h1><p>Osnovnih podatkov ni bilo mogoče naložiti. Prosimo, osvežite stran.</p>";
         }
-        return; // Ustavimo zagon aplikacije
+        return; // Ustavimo zagon aplikacije, če podatki niso na voljo.
     }
 
-    // 5. KORAK: Šele ko so podatki pripravljeni, zaženemo ruter.
+    // 3. KORAK: Inicializiramo sistem za prevajanje (i18n) in ostale UI elemente.
+    const langFromStorage = localStorage.getItem('mojavto_lang');
+    await setLanguage(langFromStorage || 'sl');
+    
+    initGlobalUI(); 
+    initUserMenu();
+
+    // 4. KORAK: Šele ko so podatki in UI pripravljeni, zaženemo ruter.
     initRouter();
 }
 

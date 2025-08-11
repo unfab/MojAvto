@@ -511,3 +511,46 @@ select[multiple] option {
         grid-template-columns: 1fr;
     }
 }
+/* Dodaj te stile na konec obstoječe datoteke styles.css ali na ustrezno mesto */
+
+.equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.75rem 1.5rem;
+}
+
+.equipment-grid label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.equipment-grid input[type="checkbox"] {
+    width: auto;
+    flex-shrink: 0;
+}
+
+.checkbox-options.single-row {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    align-items: center;
+}
+
+/* NOVI STILI ZA KATEGORIJE OPREME */
+.equipment-category {
+    margin-bottom: 2rem;
+}
+
+.equipment-category:last-child {
+    margin-bottom: 0;
+}
+
+.equipment-category h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
