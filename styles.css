@@ -12,10 +12,10 @@
     --header-bg: #ffffff;
     --input-bg: #ffffff;
     
-    --accent-orange: #f97316;
-    --accent-orange-hover: #ea580c;
-    --accent-blue: #3b82f6;
-    --error-color: #ef4444;
+    --accent-blue: #0066cc;
+    --accent-blue-hover: #6b7280;
+    --accent-blue: #d9534f;
+    --error-color: #e5e7eb;
 }
 
 body.dark-mode {
@@ -414,7 +414,6 @@ select[multiple] option {
     transform: scale(1.1);
 } 
 
-/* === DODANO: Stili za obvestila (Notifications/Toasts) === */
 #notification-container {
     position: fixed;
     bottom: 20px;
@@ -423,43 +422,83 @@ select[multiple] option {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    align-items: flex-end;
+    pointer-events: none; /* omogoči klik skozi container razen na sam toast */
 }
 
+/* osnovni toast */
 .notification-toast {
-    background-color: var(--card-color);
-    color: var(--text-primary);
-    padding: 12px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border-left: 5px solid var(--accent-blue); /* Privzeta barva za uspeh */
+    min-width: 240px;
+    max-width: 380px;
     display: flex;
     align-items: center;
     gap: 10px;
-    animation: slideIn 0.3s ease forwards;
-    opacity: 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 6px 18px rgba(16,24,40,0.08);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    font-size: 14px;
+    color: #111827;
+    animation: slideIn 0.35s cubic-bezier(.2,.8,.2,1);
+    pointer-events: auto; /* omogoči interakcijo na toast samem */
+    position: relative;
+    overflow: hidden;
 }
 
-.notification-toast.fade-out {
-    animation: slideOut 0.5s ease forwards;
-}
-
-/* Različni tipi obvestil z različnimi barvami */
-.notification-toast.info {
-    border-left-color: var(--text-secondary);
-}
-.notification-toast.error {
-    border-left-color: var(--error-color);
-}
-
+/* ikona v toastu */
 .notification-toast i {
-    font-size: 1.2rem;
+    font-size: 18px;
+    min-width: 22px;
+    text-align: center;
 }
 
+/* tekst */
+.notification-toast span {
+    flex: 1 1 auto;
+}
+
+/* barve glede na tip */
 .notification-toast.success i { color: var(--accent-blue); }
 .notification-toast.info i { color: var(--text-secondary); }
 .notification-toast.error i { color: var(--error-color); }
 
+/* close button - dodano */
+.notification-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    transition: background 0.12s ease, color 0.12s ease;
+    padding: 0;
+}
+.notification-close:hover {
+    background: rgba(0,0,0,0.04);
+    color: #111827;
+}
 
+/* vizualni signal za pause-on-hover (not mandatory, le vizualno) */
+.notification-toast:hover {
+    transform: translateX(-2px);
+}
+
+/* fade out / slide out animacija */
+.notification-toast.fade-out {
+    animation: slideOut 0.45s ease forwards;
+}
+
+/* animacije */
 @keyframes slideIn {
     from {
         transform: translateX(100%);
@@ -477,8 +516,9 @@ select[multiple] option {
         opacity: 1;
     }
     to {
-        transform: translateX(120%);
+        transform: translateX(100%);
         opacity: 0;
     }
 }
-/* === KONEC DODANIH STILOV === */
+
+/* ---------- (ostali obstoječi stili ostanejo enaki) ---------- */
