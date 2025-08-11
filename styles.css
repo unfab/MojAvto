@@ -1,5 +1,5 @@
 /* ==================================================== */
-/* ZDRUŽENI STILI ZA CELOTNO APLIKACIJO                 */
+/* ZDRUŽENI STILI ZA CELOTNO APLIKACIJO                  */
 /* ==================================================== */
 
 :root {
@@ -13,9 +13,10 @@
     --input-bg: #ffffff;
     
     --accent-blue: #0066cc;
-    --accent-blue-hover: #6b7280;
-    --accent-blue: #d9534f;
-    --error-color: #e5e7eb;
+    --accent-blue-hover: #0052a3;
+    --accent-orange: #d9534f;
+    --accent-orange-hover: #c9302c;
+    --error-color: #e53e3e;
 }
 
 body.dark-mode {
@@ -71,7 +72,6 @@ body:not(.dark-mode) .fa-moon { display: none; }
 .login-btn { background-color: var(--accent-blue); color: #ffffff; padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: 700; transition: background-color 0.2s; text-decoration: none; }
 .login-btn:hover { background-color: #2563eb; }
 
-/* === POSODOBLJENO: Sidebar je sedaj flex container === */
 .sidebar {
     width: 240px;
     flex-shrink: 0;
@@ -85,8 +85,8 @@ body:not(.dark-mode) .fa-moon { display: none; }
     margin: 1rem 0 1rem 1rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
     border: 1px solid var(--border-color);
-    display: flex; /* Dodano za pravilno poravnavo noge */
-    flex-direction: column; /* Dodano */
+    display: flex;
+    flex-direction: column;
 }
 .page-container.sidebar-collapsed .sidebar { margin-left: calc(-240px - 2rem); }
 .sidebar-nav { list-style: none; padding: 0; margin: 0; }
@@ -94,15 +94,14 @@ body:not(.dark-mode) .fa-moon { display: none; }
 .sidebar-nav li a:hover { background-color: var(--bg-color); color: var(--text-primary); }
 .sidebar-nav li a i { width: 20px; margin-right: 1rem; text-align: center; }
 
-/* === DODANO: Stili za nogo v stranski vrstici === */
 .sidebar-footer {
     padding: 1rem 1.5rem 0.5rem 1.5rem;
-    margin-top: auto; /* To potisne nogo na dno */
+    margin-top: auto;
     border-top: 1px solid var(--border-color);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1.5rem; /* Razmik med povezavami */
+    gap: 1.5rem;
 }
 .sidebar-footer a {
     color: var(--text-secondary);
@@ -114,7 +113,6 @@ body:not(.dark-mode) .fa-moon { display: none; }
 .sidebar-footer a:hover {
     color: var(--accent-blue);
 }
-/* === KONEC DODANIH STILOV ZA NOGO === */
 
 /* === GLAVNA VSEBINA === */
 main {
@@ -373,6 +371,116 @@ select[multiple] option {
     }
 }
 
+/* === NOVI STILI ZA NAPREDNO ISKANJE (OPREMA, ITD.) === */
+.equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem 1.5rem;
+}
+.equipment-grid label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+.equipment-grid input[type="checkbox"] {
+    width: auto;
+}
+.checkbox-options.single-row {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* === STILI ZA OBVESTILA (NOTIFICATIONS) === */
+#notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    pointer-events: none;
+}
+.notification-toast {
+    min-width: 240px;
+    max-width: 380px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--card-color);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 6px 18px rgba(16,24,40,0.08);
+    font-size: 14px;
+    color: var(--text-primary);
+    animation: slideIn 0.35s cubic-bezier(.2,.8,.2,1);
+    pointer-events: auto;
+    position: relative;
+    overflow: hidden;
+}
+.notification-toast i {
+    font-size: 18px;
+    min-width: 22px;
+    text-align: center;
+}
+.notification-toast span {
+    flex: 1 1 auto;
+}
+.notification-toast.success i { color: var(--accent-blue); }
+.notification-toast.info i { color: var(--text-secondary); }
+.notification-toast.error i { color: var(--error-color); }
+.notification-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    transition: background 0.12s ease, color 0.12s ease;
+    padding: 0;
+}
+.notification-close:hover {
+    background: rgba(0,0,0,0.04);
+    color: #111827;
+}
+.notification-toast:hover {
+    transform: translateX(-2px);
+}
+.notification-toast.fade-out {
+    animation: slideOut 0.45s ease forwards;
+}
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+
 /* === MEDIA QUERIES === */
 @media (max-width: 1024px) {
     .sidebar { position: fixed; z-index: 1100; margin-left: calc(-240px - 2rem); }
@@ -402,123 +510,4 @@ select[multiple] option {
     .form-grid.three-columns {
         grid-template-columns: 1fr;
     }
-}/* ==================================================== */
-/* ZDRUŽENI STILI ZA CELOTNO APLIKACIJO                 */
-/* ==================================================== */
-
-/* ... vsi vaši obstoječi stili do konca ... */
-
-.remove-criterion-btn:hover {
-    border-color: var(--error-color);
-    color: var(--error-color);
-    transform: scale(1.1);
-} 
-
-#notification-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 2000;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-end;
-    pointer-events: none; /* omogoči klik skozi container razen na sam toast */
 }
-
-/* osnovni toast */
-.notification-toast {
-    min-width: 240px;
-    max-width: 380px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    background: #fff;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 6px 18px rgba(16,24,40,0.08);
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    font-size: 14px;
-    color: #111827;
-    animation: slideIn 0.35s cubic-bezier(.2,.8,.2,1);
-    pointer-events: auto; /* omogoči interakcijo na toast samem */
-    position: relative;
-    overflow: hidden;
-}
-
-/* ikona v toastu */
-.notification-toast i {
-    font-size: 18px;
-    min-width: 22px;
-    text-align: center;
-}
-
-/* tekst */
-.notification-toast span {
-    flex: 1 1 auto;
-}
-
-/* barve glede na tip */
-.notification-toast.success i { color: var(--accent-blue); }
-.notification-toast.info i { color: var(--text-secondary); }
-.notification-toast.error i { color: var(--error-color); }
-
-/* close button - dodano */
-.notification-close {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    color: #6b7280;
-    transition: background 0.12s ease, color 0.12s ease;
-    padding: 0;
-}
-.notification-close:hover {
-    background: rgba(0,0,0,0.04);
-    color: #111827;
-}
-
-/* vizualni signal za pause-on-hover (not mandatory, le vizualno) */
-.notification-toast:hover {
-    transform: translateX(-2px);
-}
-
-/* fade out / slide out animacija */
-.notification-toast.fade-out {
-    animation: slideOut 0.45s ease forwards;
-}
-
-/* animacije */
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOut {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-}
-
-/* ---------- (ostali obstoječi stili ostanejo enaki) ---------- */

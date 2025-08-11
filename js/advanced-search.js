@@ -1,7 +1,6 @@
 import { translate } from './i18n.js';
 import { getBrands } from './dataService.js';
 
-// === SPREMEMBA: Funkcija je sedaj 'async' ===
 export async function initAdvancedSearchPage() {
     // === FAZA 1: PREVERJANJE OBSTOJA ELEMENTOV ===
     const searchForm = document.getElementById("advancedSearchForm");
@@ -29,7 +28,6 @@ export async function initAdvancedSearchPage() {
     const excludeTypeSelect = document.getElementById("exclude-type");
     const excludedItemsContainer = document.getElementById("excluded-items-container");
     
-    // === SPREMEMBA: Podatke pridobimo asinhrono in počakamo nanje ===
     const brandModelData = await getBrands();
     let exclusionRules = []; 
 
@@ -57,6 +55,7 @@ export async function initAdvancedSearchPage() {
             });
         });
     }
+    
     addExclusionBtn.addEventListener('click', () => {
         const make = excludeMakeSelect.value;
         const model = excludeModelSelect.value;
@@ -197,6 +196,7 @@ export async function initAdvancedSearchPage() {
         if (hybridOptionsRow) hybridOptionsRow.style.display = fuelSelect.value === 'Hibrid' ? 'grid' : 'none';
     });
 
+    // === POSODOBLJENA FUNKCIJA ZA ZAJEM VSEH PODATKOV IZ OBRAZCA ===
     function getCriteriaFromForm() {
         const criteria = {};
         const inclusionCriteria = [];
@@ -221,10 +221,15 @@ export async function initAdvancedSearchPage() {
         if (selectedBodyTypes.length > 0) {
             criteria.body_type = selectedBodyTypes;
         }
+        
+        const equipmentCheckboxes = document.querySelectorAll('input[name="equipment"]:checked');
+        if (equipmentCheckboxes.length > 0) {
+            criteria.equipment = Array.from(equipmentCheckboxes).map(cb => cb.value);
+        }
 
         const formData = new FormData(searchForm);
         for (const [key, value] of formData.entries()) {
-            if (['make', 'model', 'type'].includes(key)) continue;
+            if (['make', 'model', 'type', 'equipment'].includes(key)) continue;
             if (value) {
                 if (!criteria[key]) {
                     const allValues = formData.getAll(key).filter(v => v);
@@ -279,6 +284,7 @@ export async function initAdvancedSearchPage() {
             excludeModelSelect.disabled = false;
         }
     });
+
     excludeModelSelect.addEventListener("change", function() {
         const selectedMake = excludeMakeSelect.value;
         const selectedModel = this.value;

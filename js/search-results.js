@@ -1,7 +1,6 @@
 import { createListingCard } from './components/ListingCard.js';
 import { translate } from './i18n.js';
 import { getListings } from './dataService.js';
-// === DODANO: Uvozimo novo funkcijo za obvestila ===
 import { showNotification } from './notifications.js';
 
 export async function initSearchResultsPage() {
@@ -85,21 +84,42 @@ export async function initSearchResultsPage() {
         }
     }
     
+    // === CELOVITO POSODOBLJENA FUNKCIJA ZA FILTRIRANJE ===
     function filterListings(listings, criteria) {
         if (!criteria || Object.keys(criteria).length === 0) return listings;
+        
         return listings.filter(listing => {
+            // Obstoječi osnovni filtri
             if (criteria.make && listing.make !== criteria.make) return false;
             if (criteria.model && listing.model !== criteria.model) return false;
-            if (criteria.yearFrom && listing.year < parseInt(criteria.yearFrom)) return false;
-            if (criteria.priceTo && listing.price > parseInt(criteria.priceTo)) return false;
+            if (criteria.yearFrom && listing.year < parseInt(criteria.yearFrom, 10)) return false;
+            if (criteria.priceTo && listing.price > parseInt(criteria.priceTo, 10)) return false;
             if (criteria.fuel && listing.fuel !== criteria.fuel) return false;
-            if (criteria.mileageTo && listing.mileage > parseInt(criteria.mileageTo)) return false;
+            if (criteria.mileageTo && listing.mileage > parseInt(criteria.mileageTo, 10)) return false;
             if (criteria.region && listing.region !== criteria.region) return false;
-            if (criteria.priceFrom && listing.price < parseInt(criteria.priceFrom)) return false;
-            if (criteria.yearTo && listing.year > parseInt(criteria.yearTo)) return false;
-            if (criteria.mileageFrom && listing.mileage < parseInt(criteria.mileageFrom)) return false;
+            if (criteria.priceFrom && listing.price < parseInt(criteria.priceFrom, 10)) return false;
+            if (criteria.yearTo && listing.year > parseInt(criteria.yearTo, 10)) return false;
+            if (criteria.mileageFrom && listing.mileage < parseInt(criteria.mileageFrom, 10)) return false;
             if (criteria.gearbox && listing.transmission !== criteria.gearbox) return false;
             if (criteria.body_type && !criteria.body_type.includes(listing.body_type)) return false;
+            
+            // Novi filtri iz razširjenega iskalnika
+            if (criteria.condition && listing.condition !== criteria.condition) return false;
+            if (criteria.owners && listing.owners > parseInt(criteria.owners, 10)) return false;
+            if (criteria.service_history === 'true' && !listing.history?.service_book) return false;
+            if (criteria.undamaged === 'true' && !listing.history?.undamaged) return false;
+
+            if (criteria.equipment && criteria.equipment.length > 0) {
+                if (!listing.equipment || !criteria.equipment.every(item => listing.equipment.includes(item))) {
+                    return false;
+                }
+            }
+            
+            if (criteria.euro_norm && listing.specs?.euro_norm !== criteria.euro_norm) return false;
+            if (criteria.co2_emissions && listing.specs?.co2_emissions > parseInt(criteria.co2_emissions, 10)) return false;
+            if (criteria.interior_color && listing.specs?.interior_color?.toLowerCase() !== criteria.interior_color.toLowerCase()) return false;
+
+            // Obstoječa logika za vključitvene/izključitvene kriterije
             if (criteria.inclusionCriteria) {
                 const matchesInclusion = criteria.inclusionCriteria.some(inc => 
                     (inc.make === listing.make) &&
@@ -116,6 +136,7 @@ export async function initSearchResultsPage() {
                 );
                 if (matchesExclusion) return false;
             }
+            
             return true;
         });
     }
@@ -142,7 +163,6 @@ export async function initSearchResultsPage() {
         }
     });
 
-    // === POSODOBLJENO: Funkciji sedaj kličeta obvestila ===
     function toggleFavorite(id, button) {
         let favorites = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
         const heartIcon = button.querySelector('i');

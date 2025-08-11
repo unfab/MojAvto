@@ -39,6 +39,90 @@
                 </div>
             </div>
         </section>
+        
+        <section class="filter-section">
+            <div class="filter-section-header">
+                <h3><i class="fas fa-history"></i> Stanje in zgodovina vozila</h3>
+            </div>
+            <div class="filter-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="condition">Stanje vozila</label>
+                        <select id="condition" name="condition">
+                            <option value="">Vse</option>
+                            <option value="Novo">Novo</option>
+                            <option value="Jahreswagen">"Jahreswagen" (do 1 leta)</option>
+                            <option value="Rabljeno">Rabljeno</option>
+                            <option value="Oldtimer">Klasično vozilo ("Oldtimer")</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="owners">Število prejšnjih lastnikov</label>
+                        <select id="owners" name="owners">
+                            <option value="">Neomejeno</option>
+                            <option value="1">Največ 1</option>
+                            <option value="2">Največ 2</option>
+                            <option value="3">Največ 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 1.5rem;">
+                     <div class="form-group" style="grid-column: 1 / -1;">
+                        <div class="checkbox-options single-row">
+                            <label><input type="checkbox" name="service_history" value="true"> Potrjena servisna zgodovina</label>
+                            <label><input type="checkbox" name="undamaged" value="true"> Nepoškodovano vozilo</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <div class="filter-section-header">
+                <h3><i class="fas fa-star"></i> Pomembna oprema</h3>
+            </div>
+            <div class="filter-content">
+                <div class="equipment-grid">
+                    <label><input type="checkbox" name="equipment" value="Vlečna kljuka"> Vlečna kljuka</label>
+                    <label><input type="checkbox" name="equipment" value="Panoramska streha"> Panoramska streha</label>
+                    <label><input type="checkbox" name="equipment" value="LED žarometi"> LED žarometi</label>
+                    <label><input type="checkbox" name="equipment" value="Parkirni senzorji"> Parkirni senzorji</label>
+                    <label><input type="checkbox" name="equipment" value="Tempomat"> Tempomat</label>
+                    <label><input type="checkbox" name="equipment" value="Ogrevani sedeži"> Ogrevani sedeži</label>
+                    <label><input type="checkbox" name="equipment" value="Navigacija"> Navigacija</label>
+                    <label><input type="checkbox" name="equipment" value="Vzvratna kamera"> Vzvratna kamera</label>
+                    <label><input type="checkbox" name="equipment" value="Gretje volana"> Gretje volana</label>
+                    <label><input type="checkbox" name="equipment" value="Usnjeni sedeži"> Usnjeni sedeži</label>
+                </div>
+            </div>
+        </section>
+        
+        <section class="filter-section">
+            <div class="filter-section-header">
+                <h3><i class="fas fa-leaf"></i> Okoljski podatki</h3>
+            </div>
+            <div class="filter-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="euro_norm">EURO norma</label>
+                        <select id="euro_norm" name="euro_norm">
+                            <option value="">Vse</option>
+                            <option value="Euro 6">Euro 6</option>
+                            <option value="Euro 5">Euro 5</option>
+                            <option value="Euro 4">Euro 4</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="co2_emissions">Emisije CO2 do (g/km)</label>
+                        <input type="number" name="co2_emissions" placeholder="npr. 120">
+                    </div>
+                    <div class="form-group">
+                        <label for="interior_color">Barva notranjosti</label>
+                        <input type="text" name="interior_color" placeholder="npr. Črna">
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <section class="filter-section">
             <div class="filter-section-header">
