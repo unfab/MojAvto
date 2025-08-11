@@ -1,8 +1,9 @@
 import { translate } from './i18n.js';
-import { getBrands } from './dataService.js';
+// === SPREMEMBA: Uvozimo stateManager namesto dataService ===
+import { stateManager } from './stateManager.js';
 
 export async function initAdvancedSearchPage() {
-    // === FAZA 1: PREVERJANJE OBSTOJA ELEMENTOV ===
+    // === DOM ELEMENTI (ostanejo enaki) ===
     const searchForm = document.getElementById("advancedSearchForm");
     const criteriaContainer = document.getElementById("criteria-container");
     const addCriterionBtn = document.getElementById("addCriterionBtn");
@@ -10,13 +11,6 @@ export async function initAdvancedSearchPage() {
     const vehicleTypeGrid = document.querySelector(".vehicle-type-grid");
     const selectAllBodyTypesBtn = document.getElementById("selectAllBodyTypesBtn");
     const clearAllBodyTypesBtn = document.getElementById("clearAllBodyTypesBtn");
-
-    if (!searchForm || !criteriaContainer || !addCriterionBtn || !addExclusionBtn || !vehicleTypeGrid || !selectAllBodyTypesBtn || !clearAllBodyTypesBtn) {
-        console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka.");
-        return;
-    }
-
-    // === FAZA 2: NADALJEVANJE, ČE SO ELEMENTI NAJDENI ===
     const yearFromSelect = document.getElementById("year-from");
     const yearToSelect = document.getElementById("year-to");
     const fuelSelect = document.getElementById("fuel");
@@ -27,16 +21,24 @@ export async function initAdvancedSearchPage() {
     const excludeModelSelect = document.getElementById("exclude-model");
     const excludeTypeSelect = document.getElementById("exclude-type");
     const excludedItemsContainer = document.getElementById("excluded-items-container");
-    
-    const brandModelData = await getBrands();
+
+    if (!searchForm || !criteriaContainer || !addCriterionBtn || !addExclusionBtn || !vehicleTypeGrid || !selectAllBodyTypesBtn || !clearAllBodyTypesBtn) {
+        console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka.");
+        return;
+    }
+
+    // === SPREMEMBA: Podatke dobimo direktno iz stateManagerja ===
+    const brandModelData = stateManager.getBrands();
     let exclusionRules = []; 
 
     if (!brandModelData || Object.keys(brandModelData).length === 0) {
-        console.error("Podatki o znamkah niso na voljo iz dataService za napredno iskanje.");
+        console.error("Podatki o znamkah niso na voljo iz stateManagerja za napredno iskanje.");
         if(addCriterionBtn) addCriterionBtn.disabled = true;
         if(addExclusionBtn) addExclusionBtn.disabled = true;
         return;
     }
+
+    const sortedBrands = Object.keys(brandModelData).sort();
 
     function renderExclusionTags() {
         excludedItemsContainer.innerHTML = '';
@@ -79,7 +81,6 @@ export async function initAdvancedSearchPage() {
     
     function addCriterionRow() {
         if (criteriaContainer.children.length >= MAX_CRITERIA) return;
-        const sortedBrands = Object.keys(brandModelData).sort();
         const criterionRow = document.createElement('div');
         criterionRow.className = 'criterion-row';
         criterionRow.innerHTML = `
@@ -115,7 +116,7 @@ export async function initAdvancedSearchPage() {
     }
 
     function updateAddButtonState() {
-        addCriterionBtn.style.display = 'block';
+        addCriterionBtn.style.display = criteriaContainer.children.length < MAX_CRITERIA ? 'block' : 'none';
         addCriterionBtn.disabled = criteriaContainer.children.length >= MAX_CRITERIA;
     }
     
@@ -141,7 +142,7 @@ export async function initAdvancedSearchPage() {
             modelSelect.disabled = true;
             typeSelect.disabled = true;
             if (selectedMake && brandModelData[selectedMake]) {
-                Object.keys(brandModelData[selectedMake]).forEach(model => modelSelect.add(new Option(model, model)));
+                Object.keys(brandModelData[selectedMake]).sort().forEach(model => modelSelect.add(new Option(model, model)));
                 modelSelect.disabled = false;
             }
         }
@@ -151,7 +152,7 @@ export async function initAdvancedSearchPage() {
             typeSelect.innerHTML = '<option value="">Vsi tipi</option>';
             typeSelect.disabled = true;
             if (selectedModel && brandModelData[selectedMake]?.[selectedModel]) {
-                brandModelData[selectedMake][selectedModel].forEach(type => typeSelect.add(new Option(type, type)));
+                brandModelData[selectedMake][selectedModel].sort().forEach(type => typeSelect.add(new Option(type, type)));
                 typeSelect.disabled = false;
             }
         }
@@ -266,9 +267,9 @@ export async function initAdvancedSearchPage() {
         if(hybridOptionsRow) hybridOptionsRow.style.display = 'none';
     });
     
-    // Inicializacija forme
+    // --- INICIALIZACIJA STRANI ---
     addCriterionRow();
-    const sortedBrands = Object.keys(brandModelData).sort();
+    
     excludeMakeSelect.innerHTML = '<option value="">Izberi znamko...</option>';
     sortedBrands.forEach(brand => excludeMakeSelect.add(new Option(brand, brand)));
     
@@ -279,7 +280,7 @@ export async function initAdvancedSearchPage() {
         excludeModelSelect.disabled = true;
         excludeTypeSelect.disabled = true;
         if (selectedMake && brandModelData[selectedMake]) {
-            Object.keys(brandModelData[selectedMake]).forEach(model => excludeModelSelect.add(new Option(model, model)));
+            Object.keys(brandModelData[selectedMake]).sort().forEach(model => excludeModelSelect.add(new Option(model, model)));
             excludeModelSelect.disabled = false;
         }
     });
@@ -290,7 +291,7 @@ export async function initAdvancedSearchPage() {
         excludeTypeSelect.innerHTML = '<option value="">Vsi tipi</option>';
         excludeTypeSelect.disabled = true;
         if (selectedModel && brandModelData[selectedMake]?.[selectedModel]) {
-            brandModelData[selectedMake][selectedModel].forEach(type => excludeTypeSelect.add(new Option(type, type)));
+            brandModelData[selectedMake][selectedModel].sort().forEach(type => excludeTypeSelect.add(new Option(type, type)));
             excludeTypeSelect.disabled = false;
         }
     });
