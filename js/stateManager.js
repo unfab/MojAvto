@@ -1,6 +1,5 @@
 // js/stateManager.js
 
-// === NOVO: Uvozimo priceEvaluator ===
 import { evaluatePrice } from './utils/priceEvaluator.js';
 
 const state = {
@@ -9,7 +8,8 @@ const state = {
     users: [],
     loggedInUser: null,
     favorites: [],
-    compareItems: []
+    compareItems: [],
+    savedSearches: {} // NOVO: Objekt za shranjena iskanja
 };
 
 function saveStateToLocalStorage() {
@@ -18,6 +18,7 @@ function saveStateToLocalStorage() {
     localStorage.setItem('mojavto_loggedUser', JSON.stringify(state.loggedInUser));
     localStorage.setItem('mojavto_favoriteItems', JSON.stringify(state.favorites));
     localStorage.setItem('mojavto_compareItems', JSON.stringify(state.compareItems));
+    localStorage.setItem('mojavto_savedSearches', JSON.stringify(state.savedSearches)); // NOVO
 }
 
 function loadStateFromLocalStorage() {
@@ -26,6 +27,7 @@ function loadStateFromLocalStorage() {
     state.loggedInUser = JSON.parse(localStorage.getItem('mojavto_loggedUser')) || null;
     state.favorites = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
     state.compareItems = JSON.parse(localStorage.getItem('mojavto_compareItems')) || [];
+    state.savedSearches = JSON.parse(localStorage.getItem('mojavto_savedSearches')) || {}; // NOVO
 }
 
 export const stateManager = {
@@ -46,15 +48,12 @@ export const stateManager = {
                 state.listings = initialListings;
             }
 
-            // === SPREMEMBA: Po nalaganju vseh oglasov zaženemo ocenjevanje cen ===
             state.listings.forEach(listing => {
-                // Preverimo, ali ocena že obstaja, da ne računamo po nepotrebnem vsakič znova
                 if (listing.priceEvaluation === undefined) {
                     listing.priceEvaluation = evaluatePrice(listing, state.listings);
                 }
             });
             
-            // Shranimo stanje z novimi ocenami
             saveStateToLocalStorage();
 
             console.log('State Manager inicializiran, cene so ocenjene.');
@@ -98,7 +97,6 @@ export const stateManager = {
     addListing(listing) {
         listing.id = Date.now();
         listing.author = state.loggedInUser.username;
-        // Takoj izračunamo oceno tudi za nov oglas
         listing.priceEvaluation = evaluatePrice(listing, state.listings);
         state.listings.unshift(listing);
         saveStateToLocalStorage();
@@ -107,7 +105,6 @@ export const stateManager = {
     updateListing(updatedListing) {
         const index = state.listings.findIndex(l => l.id === updatedListing.id);
         if (index !== -1) {
-            // Ponovno izračunamo oceno, če se je cena spremenila
             if (state.listings[index].price !== updatedListing.price) {
                 updatedListing.priceEvaluation = evaluatePrice(updatedListing, state.listings);
             }
@@ -122,7 +119,7 @@ export const stateManager = {
     },
 
     toggleFavorite(listingId) {
-        const index = state.favorites.indexOf(String(listingId)); // Uporabimo String za konsistentnost
+        const index = state.favorites.indexOf(String(listingId));
         if (index > -1) {
             state.favorites.splice(index, 1);
         } else {
@@ -144,5 +141,37 @@ export const stateManager = {
         }
         saveStateToLocalStorage();
         return { success: true, added: index === -1 };
+    },
+
+    // === NOVE FUNKCIJE ZA SHRANJEVANJE ISKANJ ===
+    addSavedSearch(searchName, criteria) {
+        if (!state.loggedInUser) return;
+        const username = state.loggedInUser.username;
+        if (!state.savedSearches[username]) {
+            state.savedSearches[username] = [];
+        }
+        
+        const newSearch = {
+            id: Date.now(),
+            name: searchName,
+            criteria: criteria
+        };
+
+        state.savedSearches[username].unshift(newSearch);
+        saveStateToLocalStorage();
+    },
+
+    deleteSavedSearch(searchId) {
+        if (!state.loggedInUser) return;
+        const username = state.loggedInUser.username;
+        if (state.savedSearches[username]) {
+            state.savedSearches[username] = state.savedSearches[username].filter(s => s.id !== searchId);
+            saveStateToLocalStorage();
+        }
+    },
+
+    getSavedSearches() {
+        if (!state.loggedInUser) return [];
+        return state.savedSearches[state.loggedInUser.username] || [];
     }
 };

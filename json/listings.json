@@ -1,1 +1,114 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "Audi Q5 2.0 TDI Quattro S-Line, Virtual, Panorama",
+    "make": "Audi",
+    "model": "Q5",
+    "type": "2.0 TDI",
+    "year": 2021,
+    "mileage": 55000,
+    "price": 42500,
+    "fuel": "Dizel",
+    "transmission": "Avtomatski",
+    "power": 150,
+    "author": "janez_novak",
+    "date_added": "2025-08-10T10:00:00Z",
+    "location": {
+      "city": "Ljubljana",
+      "region": "Osrednjeslovenska"
+    },
+    "images": {
+      "exterior": [
+        "https://example.com/audi_q5_1.jpg",
+        "https://example.com/audi_q5_2.jpg"
+      ],
+      "interior": [
+        "https://example.com/audi_q5_int1.jpg"
+      ]
+    },
+    "condition": "Rabljeno",
+    "owners": 1,
+    "history": {
+      "service_book": true,
+      "undamaged": true
+    },
+    "equipment": [
+      "Štirikolesni pogon",
+      "Aktivni tempomat",
+      "Opozarjanje na mrtvi kot",
+      "Parkirna kamera (360°)",
+      "Digitalni števci",
+      "Panoramska streha",
+      "LED / Matrix žarometi",
+      "Vlečna kljuka",
+      "Ogrevani sedeži",
+      "Usnjeni sedeži",
+      "Apple CarPlay / Android Auto",
+      "Navigacijski sistem",
+      "Električni prtljažnik"
+    ],
+    "specs": {
+      "euro_norm": "Euro 6",
+      "co2_emissions": 145,
+      "energy_class": "B",
+      "particulate_filter": true,
+      "consumption": {
+        "combined": 5.8,
+        "city": 6.5,
+        "highway": 5.2
+      }
+    }
+  },
+  {
+    "id": 2,
+    "title": "BMW Serija 1 118i M Sport, LED, Tempomat",
+    "make": "BMW",
+    "model": "Serija 1",
+    "type": "118i",
+    "year": 2020,
+    "mileage": 78000,
+    "price": 24900,
+    "fuel": "Bencin",
+    "transmission": "Ročni",
+    "power": 103,
+    "author": "maja_horvat",
+    "date_added": "2025-08-11T14:30:00Z",
+    "location": {
+      "city": "Maribor",
+      "region": "Podravska"
+    },
+    "images": {
+      "exterior": [
+        "https://example.com/bmw_1_1.jpg",
+        "https://example.com/bmw_1_2.jpg"
+      ],
+      "interior": []
+    },
+    "condition": "Rabljeno",
+    "owners": 2,
+    "history": {
+      "service_book": true,
+      "undamaged": false
+    },
+    "equipment": [
+      "Športni paket",
+      "Parkirni senzorji",
+      "Tempomat",
+      "LED žarometi",
+      "Aluminijasta platišča",
+      "Ogrevani sedeži",
+      "Bluetooth"
+    ],
+    "specs": {
+      "euro_norm": "Euro 6",
+      "co2_emissions": 129,
+      "energy_class": "C",
+      "particulate_filter": true,
+      "consumption": {
+        "combined": 5.5,
+        "city": 6.2,
+        "highway": 4.9
+      }
+    }
+  }
+]

@@ -4,6 +4,7 @@
     <div class="tabs">
         <button class="tab-link active" data-tab="tab-listings" data-i18n-key="tab_my_listings">Moji oglasi</button>
         <button class="tab-link" data-tab="tab-favorites" data-i18n-key="tab_favorites">Priljubljeni</button>
+        <button class="tab-link" data-tab="tab-saved-searches" data-i18n-key="tab_saved_searches">Shranjena iskanja</button>
         <button class="tab-link" data-tab="tab-recent" data-i18n-key="tab_recent">Nazadnje ogledano</button>
         <button class="tab-link" data-tab="tab-edit-profile" data-i18n-key="tab_edit_profile">Uredi profil</button>
     </div>
@@ -16,6 +17,12 @@
     <div class="tab-content" id="tab-favorites">
         <div class="listings-grid" id="favorite-listings-container"></div>
         <div id="no-favorites-message" class="empty-state" data-i18n-key="no_favorites_saved">Nimate shranjenih priljubljenih oglasov.</div>
+    </div>
+
+    <div class="tab-content" id="tab-saved-searches">
+        <div id="saved-searches-container">
+            </div>
+        <div id="no-saved-searches-message" class="empty-state" data-i18n-key="no_saved_searches">Nimate še shranjenih iskanj.</div>
     </div>
     
     <div class="tab-content" id="tab-recent">

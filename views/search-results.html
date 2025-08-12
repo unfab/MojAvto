@@ -1,11 +1,16 @@
-<main>
-    <div class="search-container">
-        <h1>Rezultati iskanja</h1>
-        
-        <div id="active-filters-container" class="active-filters"></div>
-    </div>
+<main class="search-results-layout">
+    <aside class="filters-sidebar">
+        <h2>Filtri</h2>
+        <div id="filters-container">
+            </div>
+    </aside>
 
-    <div class="page-container" style="margin-top: 1rem; flex-direction: column;">
+    <div class="results-content">
+        <div class="search-container" style="max-width: none; margin: 0;">
+            <h1>Rezultati iskanja</h1>
+            <div id="active-filters-container" class="active-filters"></div>
+        </div>
+
         <div class="listings-controls">
             <div class="filter-group">
                 <label for="sortOrder">Razvrsti po:</label>
@@ -16,16 +21,17 @@
                     <option value="year_desc">Letnik (od najnovejšega)</option>
                 </select>
             </div>
+            <div class="search-actions-header">
+                <button id="save-search-btn" class="btn btn-secondary"><i class="fas fa-save"></i> Shrani iskanje</button>
+            </div>
         </div>
 
         <section id="listingsGrid" class="listings-grid"></section>
         
-        <div id="loading-spinner" style="display: none;"></div>
-
         <div id="noListingsMessage" style="display: none; text-align: center; padding: 2rem;">
             <h3>Ni najdenih oglasov, ki bi ustrezali vašim kriterijem.</h3>
         </div>
 
-        <nav id="pagination-container" class="pagination" style="justify-content: center; margin-top: 2rem;"></nav>
+        <nav id="pagination-container" class="pagination"></nav>
     </div>
 </main>

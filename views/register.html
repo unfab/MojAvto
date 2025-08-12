@@ -4,15 +4,17 @@
         <div class="form-group">
             <label for="fullname" data-i18n-key="form_fullname">Polno ime</label>
             <input type="text" id="fullname" name="fullname" required />
+            <div class="inline-error"></div>
         </div>
         <div class="form-group">
             <label for="email" data-i18n-key="form_email">Email naslov</label>
             <input type="email" id="email" name="email" required />
-            <div class="inline-error" id="email-error"></div>
+            <div class="inline-error"></div>
         </div>
         <div class="form-group">
             <label for="username" data-i18n-key="form_username">Uporabniško ime</label>
             <input type="text" id="username" name="username" required />
+            <div class="inline-error"></div>
         </div>
         <div class="form-group">
             <label for="region" data-i18n-key="form_region">Regija</label>
@@ -31,15 +33,18 @@
                 <option>Posavska</option>
                 <option>Zasavska</option>
             </select>
+            <div class="inline-error"></div>
         </div>
         <div class="form-group">
             <label for="password" data-i18n-key="form_password">Geslo</label>
             <input type="password" id="password" name="password" required minlength="8" />
             <div class="password-strength"><div id="strength-bar" class="strength-bar"></div></div>
+            <div class="inline-error"></div>
         </div>
         <div class="form-group">
             <label for="confirmPassword" data-i18n-key="form_confirm_password">Potrdi geslo</label>
             <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" />
+            <div class="inline-error"></div>
         </div>
         <div id="form-error-message" class="error-message"></div>
         <div class="form-group checkbox">
@@ -48,6 +53,7 @@
                 <span data-i18n-key="form_terms_agree">Strinjam se s</span> 
                 <a href="#/terms" target="_blank" data-i18n-key="form_terms_link">pogoji uporabe</a>
             </label>
+            <div class="inline-error"></div>
         </div>
         <button type="submit" data-i18n-key="register_button">Registriraj se</button>
     </form>

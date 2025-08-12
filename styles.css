@@ -632,3 +632,53 @@ select[multiple] option {
     opacity: 0.9;
 }
 
+/* === STILI ZA VALIDACIJO OBRAZCEV === */
+.inline-error {
+    color: var(--error-color);
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+    min-height: 1.2em; /* Prepreči "poskakovanje" elementov */
+}
+
+.form-group input.is-invalid {
+    border-color: var(--error-color);
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+/* Dodaj na konec styles.css */
+
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.title-actions {
+    display: flex;
+    gap: 1rem;
+    flex-shrink: 0; /* Prepreči, da se gumbi stisnejo */
+}
+
+.share-btn-details {
+    /* Uporabimo podobne stile kot za fav-btn-details */
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.share-btn-details:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+

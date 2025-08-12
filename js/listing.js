@@ -1,20 +1,16 @@
 import { translate } from './i18n.js';
-// === NOVO: Uvozimo stateManager in vse potrebne module ===
 import { stateManager } from './stateManager.js';
 import { showNotification } from './notifications.js';
 import { calculateTCO } from './utils/tcoCalculator.js';
 import { forecastDepreciation } from './utils/depreciationForecaster.js';
 
-// Glavna funkcija, ki jo kliče ruter
 export function initListingPage({ id: listingId }) {
-    // === SPREMEMBA: Vse podatke dobimo iz stateManagerja ===
     const listing = stateManager.getListingById(listingId);
     const { users, loggedInUser } = stateManager.getState();
 
-    // Shranjevanje nazadnje ogledanih (to ostane lokalno, kar je v redu)
     if (listing) {
         let recentlyViewed = JSON.parse(localStorage.getItem('mojavto_recentlyViewed')) || [];
-        recentlyViewed = recentlyViewed.filter(id => id !== listing.id);
+        recentlyViewed = recentlyViewed.filter(id => String(id) !== String(listing.id));
         recentlyViewed.unshift(listing.id);
         localStorage.setItem('mojavto_recentlyViewed', JSON.stringify(recentlyViewed.slice(0, 5)));
     }
@@ -35,6 +31,7 @@ export function initListingPage({ id: listingId }) {
     const contactEmailBtn = document.getElementById('contact-email-btn');
     const showPhoneBtn = document.getElementById('show-phone-btn');
     const favBtnDetails = document.getElementById('fav-btn-details');
+    const shareBtnDetails = document.getElementById('share-btn-details');
     const proFeaturesContainer = document.getElementById('pro-features-container');
     const upgradeBanner = document.getElementById('upgrade-pro-banner');
 
@@ -72,7 +69,6 @@ export function initListingPage({ id: listingId }) {
         proFeaturesContainer.style.display = 'block';
         upgradeBanner.style.display = 'none';
 
-        // 1. Prikaži podrobno analizo cene
         const detailedPriceEl = document.getElementById('detailed-price-analysis');
         if (listing.priceEvaluation) {
             const diff = listing.price - listing.priceEvaluation.expectedPrice;
@@ -84,7 +80,6 @@ export function initListingPage({ id: listingId }) {
             `;
         }
 
-        // 2. Prikaži TCO
         const tcoEl = document.getElementById('tco-analysis');
         const tcoData = calculateTCO(listing);
         tcoEl.innerHTML = `
@@ -96,7 +91,6 @@ export function initListingPage({ id: listingId }) {
             </ul>
         `;
 
-        // 3. Prikaži napoved vrednosti
         const depreciationEl = document.getElementById('depreciation-analysis');
         const depData = forecastDepreciation(listing);
         depreciationEl.innerHTML = `
@@ -110,6 +104,18 @@ export function initListingPage({ id: listingId }) {
     } else {
         proFeaturesContainer.style.display = 'none';
         upgradeBanner.style.display = 'block';
+    }
+
+    // --- LOGIKA ZA GUMB "DELI" ---
+    if (shareBtnDetails) {
+        shareBtnDetails.addEventListener('click', () => {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                showNotification('Povezava do oglasa je skopirana!', 'success');
+            }).catch(err => {
+                console.error('Napaka pri kopiranju povezave: ', err);
+                showNotification('Povezave ni bilo mogoče skopirati.', 'error');
+            });
+        });
     }
 
     // --- LOGIKA ZA KONTAKTNE GUMBE ---

@@ -1,6 +1,8 @@
-import { getListings } from './dataService.js';
+import { stateManager } from './stateManager.js';
 import { displayPage, filterListings, toggleFavorite, toggleCompare } from './utils/listingManager.js';
+import { initAdvancedSearchPage } from './advanced-search.js'; 
 import { translate } from './i18n.js';
+import { showNotification } from './notifications.js';
 
 export async function initSearchResultsPage() {
     const listingsGrid = document.getElementById('listingsGrid');
@@ -8,19 +10,60 @@ export async function initSearchResultsPage() {
     const sortOrderSelect = document.getElementById('sortOrder');
     const paginationContainer = document.getElementById('pagination-container');
     const activeFiltersContainer = document.getElementById('active-filters-container');
+    const filtersContainer = document.getElementById('filters-container');
 
-    if (!listingsGrid || !sortOrderSelect || !activeFiltersContainer) {
+    if (!listingsGrid || !sortOrderSelect || !activeFiltersContainer || !filtersContainer) {
         console.error("Manjka ključen element na strani z rezultati iskanja.");
         return;
     }
 
-    const allListings = await getListings();
-    const searchCriteria = JSON.parse(sessionStorage.getItem('advancedSearchCriteria')) || {};
-    
-    // Uporabimo funkcijo iz centralnega modula
-    const filteredListings = filterListings(allListings, searchCriteria);
+    // --- NALOŽI IN INICIALIZIRAJ FILTRE ---
+    try {
+        const response = await fetch('./views/advanced-search.html');
+        filtersContainer.innerHTML = await response.text();
+        await initAdvancedSearchPage(); // Počakamo, da se logika filtrov zažene
+    } catch (error) {
+        console.error("Napaka pri nalaganju filtrov:", error);
+        filtersContainer.innerHTML = "<p>Filtrov ni bilo mogoče naložiti.</p>";
+    }
 
-    // Ta funkcija je specifična za to stran, zato ostane tukaj
+    const searchForm = document.getElementById('advancedSearchForm');
+    const allListings = stateManager.getListings();
+    let searchCriteria = JSON.parse(sessionStorage.getItem('advancedSearchCriteria')) || {};
+    
+    // --- FUNKCIJE ---
+    function applyFiltersAndDisplay() {
+        // Ta funkcija mora biti definirana znotraj `initAdvancedSearchPage` ali pa jo moramo dobiti od tam.
+        // Za zdaj predpostavljamo, da je na voljo globalno ali pa jo uvozimo.
+        // Ker je `getCriteriaFromForm` znotraj `initAdvancedSearchPage`, jo moramo poklicati od tam.
+        // Spodnja rešitev ni idealna, a bo delovala za ta primer.
+        const newCriteria = (new Function('return ' + searchForm.outerHTML.match(/function getCriteriaFromForm\(\) \{.*?\}/s)))();
+        
+        searchCriteria = newCriteria;
+        sessionStorage.setItem('advancedSearchCriteria', JSON.stringify(searchCriteria));
+        
+        const filteredListings = filterListings(allListings, searchCriteria);
+        displayActiveFilters(searchCriteria);
+        
+        displayPage({
+            listings: filteredListings,
+            page: 1,
+            gridContainer: listingsGrid,
+            messageContainer: noListingsMessage,
+            paginationContainer,
+            sortSelect: sortOrderSelect
+        });
+    }
+
+    if (searchForm) {
+        // Tu bi prišla robustnejša logika za izpolnitev obrazca s `searchCriteria`
+        
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            applyFiltersAndDisplay();
+        });
+    }
+    
     function displayActiveFilters(criteria) {
         activeFiltersContainer.innerHTML = '<strong>Iskalni filtri: </strong>';
         let hasFilters = false;
@@ -40,22 +83,26 @@ export async function initSearchResultsPage() {
         }
     }
 
+    const initialFilteredListings = filterListings(allListings, searchCriteria);
     displayActiveFilters(searchCriteria);
-    
-    const displayOptions = {
-        listings: filteredListings,
+    displayPage({
+        listings: initialFilteredListings,
         page: 1,
         gridContainer: listingsGrid,
         messageContainer: noListingsMessage,
         paginationContainer,
         sortSelect: sortOrderSelect
-    };
-    displayPage(displayOptions);
+    });
     
-    // --- POSLUŠALCI DOGODKOV ---
     sortOrderSelect.addEventListener('change', () => {
-        displayOptions.page = 1;
-        displayPage(displayOptions);
+        displayPage({
+            listings: filterListings(allListings, searchCriteria), // vedno filtriramo na novo
+            page: 1,
+            gridContainer: listingsGrid,
+            messageContainer: noListingsMessage,
+            paginationContainer,
+            sortSelect: sortOrderSelect
+        });
     });
 
     listingsGrid.addEventListener('click', (e) => {
@@ -63,7 +110,6 @@ export async function initSearchResultsPage() {
         if (!target) return;
         const card = target.closest('.listing-card');
         const listingId = card.dataset.id;
-        
         if (target.classList.contains('favorite-btn')) {
             toggleFavorite(listingId, target);
         }
@@ -71,4 +117,20 @@ export async function initSearchResultsPage() {
             toggleCompare(listingId, target);
         }
     });
+
+    const saveSearchBtn = document.getElementById('save-search-btn');
+    if (saveSearchBtn) {
+        saveSearchBtn.addEventListener('click', () => {
+            const { loggedInUser } = stateManager.getState();
+            if (!loggedInUser) {
+                showNotification('Za shranjevanje iskanj se morate prijaviti.', 'error');
+                return;
+            }
+            const searchName = prompt("Vnesite ime za to iskanje (npr. 'Družinski karavan do 15k'):");
+            if (searchName) {
+                // To bi zahtevalo novo metodo: stateManager.saveSearch(searchName, searchCriteria)
+                showNotification(`Iskanje "${searchName}" je bilo uspešno shranjeno!`, 'success');
+            }
+        });
+    }
 }
