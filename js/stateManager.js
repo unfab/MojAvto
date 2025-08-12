@@ -1,5 +1,8 @@
 // js/stateManager.js
 
+// === NOVO: Uvozimo priceEvaluator ===
+import { evaluatePrice } from './utils/priceEvaluator.js';
+
 const state = {
     listings: [],
     brands: {},
@@ -37,15 +40,24 @@ export const stateManager = {
             const initialListings = await listingsResponse.json();
             state.brands = await brandsResponse.json();
             
-            // Naložimo stanje iz localStorage, če obstaja
             loadStateFromLocalStorage();
 
-            // Če je localStorage prazen, uporabimo začetne podatke iz JSON
             if (state.listings.length === 0) {
                 state.listings = initialListings;
             }
 
-            console.log('State Manager inicializiran.');
+            // === SPREMEMBA: Po nalaganju vseh oglasov zaženemo ocenjevanje cen ===
+            state.listings.forEach(listing => {
+                // Preverimo, ali ocena že obstaja, da ne računamo po nepotrebnem vsakič znova
+                if (listing.priceEvaluation === undefined) {
+                    listing.priceEvaluation = evaluatePrice(listing, state.listings);
+                }
+            });
+            
+            // Shranimo stanje z novimi ocenami
+            saveStateToLocalStorage();
+
+            console.log('State Manager inicializiran, cene so ocenjene.');
         } catch (error) {
             console.error("Kritična napaka v State Managerju:", error);
             throw error;
@@ -86,13 +98,19 @@ export const stateManager = {
     addListing(listing) {
         listing.id = Date.now();
         listing.author = state.loggedInUser.username;
-        state.listings.unshift(listing); // Dodamo na začetek
+        // Takoj izračunamo oceno tudi za nov oglas
+        listing.priceEvaluation = evaluatePrice(listing, state.listings);
+        state.listings.unshift(listing);
         saveStateToLocalStorage();
     },
 
     updateListing(updatedListing) {
         const index = state.listings.findIndex(l => l.id === updatedListing.id);
         if (index !== -1) {
+            // Ponovno izračunamo oceno, če se je cena spremenila
+            if (state.listings[index].price !== updatedListing.price) {
+                updatedListing.priceEvaluation = evaluatePrice(updatedListing, state.listings);
+            }
             state.listings[index] = updatedListing;
             saveStateToLocalStorage();
         }
@@ -104,22 +122,23 @@ export const stateManager = {
     },
 
     toggleFavorite(listingId) {
-        const index = state.favorites.indexOf(listingId);
+        const index = state.favorites.indexOf(String(listingId)); // Uporabimo String za konsistentnost
         if (index > -1) {
             state.favorites.splice(index, 1);
         } else {
-            state.favorites.push(listingId);
+            state.favorites.push(String(listingId));
         }
         saveStateToLocalStorage();
-        return index === -1; // Vrnemo true, če je bilo dodano
+        return index === -1;
     },
 
     toggleCompare(listingId) {
-        const index = state.compareItems.indexOf(listingId);
+        const idStr = String(listingId);
+        const index = state.compareItems.indexOf(idStr);
         if (index > -1) {
             state.compareItems.splice(index, 1);
         } else if (state.compareItems.length < 3) {
-            state.compareItems.push(listingId);
+            state.compareItems.push(idStr);
         } else {
             return { success: false, limitReached: true };
         }

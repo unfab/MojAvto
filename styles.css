@@ -554,3 +554,81 @@ select[multiple] option {
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--border-color);
 }
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* Povečal sem razmik za lepši videz */
+}
+/* === STILI ZA OCENO CENE === */
+
+/* Značka na kartici oglasa */
+.price-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Značka na strani s podrobnostmi */
+.price-badge-details {
+    margin-left: 1rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* Barve glede na oceno */
+.price-badge.very_good, .price-badge-details.very_good { background-color: #16a34a; } /* Močna zelena */
+.price-badge.good, .price-badge-details.good { background-color: #22c55e; } /* Svetlejša zelena */
+.price-badge.fair, .price-badge-details.fair { background-color: #6b7280; } /* Siva */
+.price-badge.high, .price-badge-details.high { background-color: #ef4444; } /* Rdeča */
+
+/* === STILI ZA PRO FUNKCIJE === */
+.pro-feature-card {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+.pro-feature-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--accent-blue);
+}
+.pro-feature-card p {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+.pro-feature-card ul {
+    padding-left: 20px;
+    margin-top: 0.5rem;
+}
+
+.upgrade-banner {
+    background: linear-gradient(45deg, #0052a3, #0066cc);
+    color: #fff;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+.upgrade-banner h3 {
+    margin: 0 0 0.5rem 0;
+}
+.upgrade-banner p {
+    margin: 0 0 1rem 0;
+    opacity: 0.9;
+}
+

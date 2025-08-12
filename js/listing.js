@@ -1,35 +1,17 @@
 import { translate } from './i18n.js';
-function getFavorites() {
-    const loggedUser = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
-    if (!loggedUser) return [];
-    const allFavorites = JSON.parse(localStorage.getItem("mojavto_favorites")) || {};
-    return allFavorites[loggedUser.username] || [];
-}
-
-function toggleFavorite(listingId) {
-    const loggedUser = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
-    if (!loggedUser) {
-        alert(translate('must_be_logged_in_to_favorite'));
-        return;
-    }
-    const allFavorites = JSON.parse(localStorage.getItem("mojavto_favorites")) || {};
-    let userFavorites = allFavorites[loggedUser.username] || [];
-    const itemIndex = userFavorites.indexOf(listingId);
-    if (itemIndex > -1) {
-        userFavorites.splice(itemIndex, 1);
-    } else {
-        userFavorites.push(listingId);
-    }
-    allFavorites[loggedUser.username] = userFavorites;
-    localStorage.setItem("mojavto_favorites", JSON.stringify(allFavorites));
-}
+// === NOVO: Uvozimo stateManager in vse potrebne module ===
+import { stateManager } from './stateManager.js';
+import { showNotification } from './notifications.js';
+import { calculateTCO } from './utils/tcoCalculator.js';
+import { forecastDepreciation } from './utils/depreciationForecaster.js';
 
 // Glavna funkcija, ki jo kliče ruter
-export function initListingPage(listingId) {
-    const allListings = JSON.parse(localStorage.getItem("mojavto_listings")) || [];
-    const listing = allListings.find(l => l.id == listingId);
+export function initListingPage({ id: listingId }) {
+    // === SPREMEMBA: Vse podatke dobimo iz stateManagerja ===
+    const listing = stateManager.getListingById(listingId);
+    const { users, loggedInUser } = stateManager.getState();
 
-    // Shranjevanje nazadnje ogledanih
+    // Shranjevanje nazadnje ogledanih (to ostane lokalno, kar je v redu)
     if (listing) {
         let recentlyViewed = JSON.parse(localStorage.getItem('mojavto_recentlyViewed')) || [];
         recentlyViewed = recentlyViewed.filter(id => id !== listing.id);
@@ -45,6 +27,7 @@ export function initListingPage(listingId) {
     // --- DOM ELEMENTI ---
     const titleEl = document.getElementById('listing-title');
     const priceEl = document.getElementById('price');
+    const priceEvaluationEl = document.getElementById('price-evaluation');
     const keyDetailsEl = document.getElementById('key-details');
     const descriptionEl = document.getElementById('description');
     const sellerNameEl = document.getElementById('seller-name');
@@ -52,6 +35,8 @@ export function initListingPage(listingId) {
     const contactEmailBtn = document.getElementById('contact-email-btn');
     const showPhoneBtn = document.getElementById('show-phone-btn');
     const favBtnDetails = document.getElementById('fav-btn-details');
+    const proFeaturesContainer = document.getElementById('pro-features-container');
+    const upgradeBanner = document.getElementById('upgrade-pro-banner');
 
     // --- PRIKAZ PODATKOV O OGLASU ---
     titleEl.textContent = listing.title;
@@ -60,8 +45,13 @@ export function initListingPage(listingId) {
     descriptionEl.textContent = listing.description || translate('no_description_provided');
     sellerNameEl.textContent = listing.author || translate('unknown_seller');
     
-    const allUsers = JSON.parse(localStorage.getItem('mojavto_users')) || [];
-    const seller = allUsers.find(user => user.username === listing.author);
+    if (listing.priceEvaluation && priceEvaluationEl) {
+        priceEvaluationEl.className = `price-badge-details ${listing.priceEvaluation.score}`;
+        priceEvaluationEl.textContent = listing.priceEvaluation.text;
+        priceEvaluationEl.style.display = 'inline-block';
+    }
+    
+    const seller = users.find(user => user.username === listing.author);
     sellerLocationEl.textContent = seller ? (seller.region || translate('unknown_location')) : translate('unknown_location');
     
     const details = {
@@ -77,26 +67,110 @@ export function initListingPage(listingId) {
         value ? `<div class="detail-item"><span class="label">${label}</span><span class="value">${value}</span></div>` : ''
     ).join('');
 
+    // --- LOGIKA ZA PRO FUNKCIJE ---
+    if (loggedInUser && loggedInUser.isPro) {
+        proFeaturesContainer.style.display = 'block';
+        upgradeBanner.style.display = 'none';
+
+        // 1. Prikaži podrobno analizo cene
+        const detailedPriceEl = document.getElementById('detailed-price-analysis');
+        if (listing.priceEvaluation) {
+            const diff = listing.price - listing.priceEvaluation.expectedPrice;
+            const diffText = diff > 0 ? `+${diff.toLocaleString()} €` : `${diff.toLocaleString()} €`;
+            detailedPriceEl.innerHTML = `
+                <p>Naša ocena pričakovane cene za to vozilo je <strong>${listing.priceEvaluation.expectedPrice.toLocaleString()} €</strong>.</p>
+                <p>Cena tega oglasa je <strong>${diffText}</strong> glede na pričakovanja.</p>
+                <small>Ocena temelji na primerjavi s podobnimi vozili, prilagojena za kilometre in opremo.</small>
+            `;
+        }
+
+        // 2. Prikaži TCO
+        const tcoEl = document.getElementById('tco-analysis');
+        const tcoData = calculateTCO(listing);
+        tcoEl.innerHTML = `
+            <p>Predvideni letni stroški: <strong>${tcoData.totalYearly.toLocaleString()} €</strong> (~${tcoData.totalMonthly.toLocaleString()} € / mesec)</p>
+            <ul>
+                <li>Gorivo: ~${tcoData.fuel.toLocaleString()} €</li>
+                <li>Zavarovanje: ~${tcoData.insurance.toLocaleString()} €</li>
+                <li>Servis: ~${tcoData.service.toLocaleString()} €</li>
+            </ul>
+        `;
+
+        // 3. Prikaži napoved vrednosti
+        const depreciationEl = document.getElementById('depreciation-analysis');
+        const depData = forecastDepreciation(listing);
+        depreciationEl.innerHTML = `
+            <p>Predvidena vrednost vozila v prihodnosti:</p>
+            <ul>
+                <li>Po 1 letu: ~${depData[0].toLocaleString()} €</li>
+                <li>Po 2 letih: ~${depData[1].toLocaleString()} €</li>
+                <li>Po 3 letih: ~${depData[2].toLocaleString()} €</li>
+            </ul>
+        `;
+    } else {
+        proFeaturesContainer.style.display = 'none';
+        upgradeBanner.style.display = 'block';
+    }
+
     // --- LOGIKA ZA KONTAKTNE GUMBE ---
-    contactEmailBtn.addEventListener('click', () => { /* ... ista koda kot prej ... */ });
-    if (listing.phone) { /* ... ista koda kot prej ... */ }
+    if (contactEmailBtn && seller) {
+        contactEmailBtn.addEventListener('click', () => {
+            window.location.href = `mailto:${seller.email}?subject=Zanimanje za oglas: ${listing.title}`;
+        });
+    }
+
+    if (showPhoneBtn && seller && seller.phone) {
+        showPhoneBtn.style.display = 'inline-flex';
+        showPhoneBtn.addEventListener('click', () => {
+            showPhoneBtn.innerHTML = `<i class="fas fa-phone"></i> ${seller.phone}`;
+        }, { once: true });
+    }
     
     // --- LOGIKA ZA GALERIJO ---
-    // ... vsa koda za galerijo in podobne oglase gre sem, znotraj te funkcije ...
+    const mainImage = document.getElementById('main-image');
+    const thumbnailContainer = document.getElementById('thumbnail-container');
+    const allImages = [...(listing.images?.exterior || []), ...(listing.images?.interior || [])];
+
+    if (mainImage && thumbnailContainer && allImages.length > 0) {
+        mainImage.src = allImages[0];
+        thumbnailContainer.innerHTML = '';
+        allImages.forEach((imgSrc, index) => {
+            const thumb = document.createElement('img');
+            thumb.src = imgSrc;
+            thumb.alt = `Slika ${index + 1}`;
+            thumb.className = 'thumbnail-img';
+            if (index === 0) thumb.classList.add('active');
+            thumb.addEventListener('click', () => {
+                mainImage.src = imgSrc;
+                document.querySelectorAll('.thumbnail-img').forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+            });
+            thumbnailContainer.appendChild(thumb);
+        });
+    }
     
     // --- LOGIKA ZA GUMB "PRILJUBLJENI" ---
     function updateFavoriteButtonUI() {
         if (!favBtnDetails) return;
-        const isFavorited = getFavorites().includes(listing.id);
+        const { favorites } = stateManager.getState();
+        const isFavorited = favorites.includes(String(listing.id));
+        
         favBtnDetails.classList.toggle('favorited', isFavorited);
         favBtnDetails.querySelector('i').className = isFavorited ? 'fas fa-heart' : 'far fa-heart';
         favBtnDetails.querySelector('span').textContent = isFavorited ? translate('remove_from_favorites') : translate('add_to_favorites');
     }
 
-    favBtnDetails.addEventListener('click', () => {
-        toggleFavorite(listing.id);
+    if (favBtnDetails) {
+        favBtnDetails.addEventListener('click', () => {
+            if (!loggedInUser) {
+                showNotification(translate('must_be_logged_in_to_favorite'), 'error');
+                return;
+            }
+            const added = stateManager.toggleFavorite(String(listing.id));
+            showNotification(added ? 'Dodano med priljubljene!' : 'Odstranjeno iz priljubljenih', 'info');
+            updateFavoriteButtonUI();
+        });
+        
         updateFavoriteButtonUI();
-    });
-    
-    updateFavoriteButtonUI();
+    }
 }

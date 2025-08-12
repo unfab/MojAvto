@@ -18,11 +18,40 @@
             <div class="thumbnail-container" id="thumbnail-container"></div>
         </div>
         <div class="details-panel">
-            <div class="price-tag"><h2 id="price"></h2></div>
+            <div class="price-contact-box">
+                <div class="price-line">
+                    <h2 id="price"></h2>
+                    <span id="price-evaluation" style="display: none;"></span>
+                </div>
+            </div>
+
             <h3 data-i18n-key="key_specs">Ključni podatki</h3>
             <div class="key-details" id="key-details"></div>
+
             <h3 data-i18n-key="vehicle_description">Opis vozila</h3>
             <p id="description"></p>
+            
+            <div id="pro-features-container" style="display: none;">
+                <div class="pro-feature-card">
+                    <h3><i class="fas fa-chart-line"></i> Podrobna Analiza Cene</h3>
+                    <div id="detailed-price-analysis"></div>
+                </div>
+                <div class="pro-feature-card">
+                    <h3><i class="fas fa-wallet"></i> Ocena Stroškov Lastništva</h3>
+                    <div id="tco-analysis"></div>
+                </div>
+                <div class="pro-feature-card">
+                    <h3><i class="fas fa-arrow-trend-down"></i> Napoved Vrednosti</h3>
+                    <div id="depreciation-analysis"></div>
+                </div>
+            </div>
+
+            <div id="upgrade-pro-banner" class="upgrade-banner" style="display: none;">
+                <h3><i class="fas fa-gem"></i> Odkleni PRO Analizo</h3>
+                <p>Nadgradi na PRO paket in pridobi dostop do podrobne analize cene, ocene stroškov in napovedi padca vrednosti za ta oglas.</p>
+                <button class="btn-primary">Nadgradi zdaj</button>
+            </div>
+
             <h3 data-i18n-key="seller_info">Podatki o prodajalcu</h3>
             <div class="seller-info">
                 <p><i class="fas fa-user"></i> <strong id="seller-name"></strong></p>
