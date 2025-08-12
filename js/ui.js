@@ -1,21 +1,41 @@
+import { stateManager } from './stateManager.js';
+
+/**
+ * Posodobi ikono za primerjavo v glavi (prikaže/skrije in nastavi število).
+ */
+export function updateCompareIcon() {
+    const compareLink = document.getElementById('compare-link');
+    const compareCount = document.getElementById('compare-count');
+    if (!compareLink || !compareCount) return;
+
+    const { compareItems } = stateManager.getState();
+    
+    if (compareItems && compareItems.length > 0) {
+        compareLink.style.display = 'inline-flex';
+        compareCount.textContent = compareItems.length;
+    } else {
+        compareLink.style.display = 'none';
+    }
+}
+
+/**
+ * Inicializira globalne elemente uporabniškega vmesnika, kot so stranska vrstica in temni način.
+ */
 export function initGlobalUI() {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const pageContainer = document.querySelector('.page-container');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
 
-    // Pokažemo gumb za sidebar samo, če sidebar obstaja
     if (document.getElementById('sidebar')) {
         if (sidebarToggle) sidebarToggle.style.display = 'block';
     }
 
-    // Funkcionalnost za odpiranje/zapiranje stranske vrstice
     if (sidebarToggle && pageContainer) {
         sidebarToggle.addEventListener('click', function() {
             pageContainer.classList.toggle('sidebar-collapsed');
         });
     }
 
-    // Funkcionalnost za temni/svetli način
     const applyStoredTheme = () => {
         const currentTheme = localStorage.getItem('theme');
         if (currentTheme === 'dark') {
@@ -34,4 +54,5 @@ export function initGlobalUI() {
     }
 
     applyStoredTheme();
+    updateCompareIcon(); 
 }

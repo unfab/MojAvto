@@ -682,3 +682,24 @@ select[multiple] option {
     color: var(--accent-blue);
 }
 
+/* Stili za zložljive filtre na strani z rezultati */
+.filters-accordion {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    background-color: var(--card-color);
+}
+.filters-accordion summary {
+    padding: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.filters-accordion .filters-content {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+

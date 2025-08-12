@@ -2,17 +2,18 @@
     <div class="header-left">
         <a href="#/" class="logo">Moj<span>Avto.si</span></a>
     </div>
-
     <div class="header-actions">
         <button class="sidebar-toggle-btn" id="sidebarToggle" style="display: none;">
             <i class="fas fa-bars"></i>
         </button>
-
         <button id="themeToggleBtn">
             <i class="fas fa-moon"></i>
             <i class="fas fa-sun"></i>
         </button>
-        <a href="#/profile" class="icon-link" title="Priljubljeni"><i class="far fa-star"></i></a>
+        <a href="#/compare" id="compare-link" class="icon-link" title="Primerjava" style="display: none;">
+            <i class="fas fa-balance-scale"></i>
+            <span id="compare-count" class="notification-badge">0</span>
+        </a>
         <a href="#/login" id="loginLink" class="login-btn">Prijava</a>
         <div id="userMenuContainer"></div> 
     </div>

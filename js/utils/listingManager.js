@@ -1,16 +1,14 @@
-// js/utils/listingManager.js
-
 import { createListingCard } from '../components/ListingCard.js';
 import { showNotification } from '../notifications.js';
 import { translate } from '../i18n.js';
+// === NOVO: Uvozimo stateManager in updateCompareIcon ===
+import { stateManager } from '../stateManager.js';
+import { updateCompareIcon } from '../ui.js';
 
 const ITEMS_PER_PAGE = 12;
 
 /**
  * Razvrsti oglase glede na izbrano možnost.
- * @param {Array} listings - Seznam oglasov.
- * @param {string} order - Način razvrščanja.
- * @returns {Array} - Razvrščen seznam oglasov.
  */
 function sortListings(listings, order) {
     return [...listings].sort((a, b) => {
@@ -25,10 +23,6 @@ function sortListings(listings, order) {
 
 /**
  * Ustvari in prikaže oštevilčevanje strani.
- * @param {number} totalItems - Skupno število oglasov.
- * @param {number} currentPage - Trenutna stran.
- * @param {HTMLElement} container - HTML element za oštevilčevanje.
- * @param {Function} onPageClick - Funkcija, ki se pokliče ob kliku na stran.
  */
 function renderPagination(totalItems, currentPage, container, onPageClick) {
     container.innerHTML = '';
@@ -47,7 +41,6 @@ function renderPagination(totalItems, currentPage, container, onPageClick) {
 
 /**
  * Prikaže določeno stran z oglasi.
- * @param {object} options - Objekt z nastavitvami.
  */
 export function displayPage({ listings, page, gridContainer, messageContainer, paginationContainer, sortSelect }) {
     gridContainer.innerHTML = '';
@@ -74,12 +67,8 @@ export function displayPage({ listings, page, gridContainer, messageContainer, p
     });
 }
 
-
 /**
  * Filtrira oglase glede na podane kriterije.
- * @param {Array} listings - Seznam vseh oglasov.
- * @param {object} criteria - Objekt z iskalnimi kriteriji.
- * @returns {Array} - Filtriran seznam oglasov.
  */
 export function filterListings(listings, criteria) {
     if (!criteria || Object.keys(criteria).length === 0) return listings;
@@ -145,47 +134,28 @@ export function filterListings(listings, criteria) {
 
 /**
  * Doda ali odstrani oglas iz seznama priljubljenih.
- * @param {string} id - ID oglasa.
- * @param {HTMLElement} button - Gumb, ki je bil kliknjen.
  */
 export function toggleFavorite(id, button) {
-    let favorites = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
+    const added = stateManager.toggleFavorite(id);
     const heartIcon = button.querySelector('i');
-    if (favorites.includes(id)) {
-        favorites = favorites.filter(favId => favId !== id);
-        button.classList.remove('active');
-        heartIcon.classList.remove('fas');
-        heartIcon.classList.add('far');
-        showNotification('Odstranjeno iz priljubljenih', 'info');
-    } else {
-        favorites.push(id);
-        button.classList.add('active');
-        heartIcon.classList.remove('far');
-        heartIcon.classList.add('fas');
-        showNotification('Dodano med priljubljene!');
-    }
-    localStorage.setItem('mojavto_favoriteItems', JSON.stringify(favorites));
+    button.classList.toggle('active', added);
+    heartIcon.className = added ? 'fas fa-heart' : 'far fa-heart';
+    showNotification(added ? 'Dodano med priljubljene!' : 'Odstranjeno iz priljubljenih', 'info');
 }
 
 /**
  * Doda ali odstrani oglas iz seznama za primerjavo.
- * @param {string} id - ID oglasa.
- * @param {HTMLElement} button - Gumb, ki je bil kliknjen.
  */
 export function toggleCompare(id, button) {
-    let compareItems = JSON.parse(localStorage.getItem('mojavto_compareItems')) || [];
-    if (compareItems.includes(id)) {
-        compareItems = compareItems.filter(compId => compId !== id);
-        button.classList.remove('active');
-        showNotification('Odstranjeno iz primerjave', 'info');
-    } else {
-        if (compareItems.length >= 3) {
-            showNotification('Primerjate lahko največ 3 oglase.', 'error');
-            return;
-        }
-        compareItems.push(id);
-        button.classList.add('active');
-        showNotification('Dodano v primerjavo!');
+    const result = stateManager.toggleCompare(id);
+
+    if (result.limitReached) {
+        showNotification('Primerjate lahko največ 3 oglase.', 'error');
+        return;
     }
-    localStorage.setItem('mojavto_compareItems', JSON.stringify(compareItems));
+
+    button.classList.toggle('active', result.added);
+    showNotification(result.added ? 'Dodano v primerjavo!' : 'Odstranjeno iz primerjave', 'info');
+    
+    updateCompareIcon();
 }
