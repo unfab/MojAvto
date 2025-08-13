@@ -2,7 +2,7 @@ import { translate } from './i18n.js';
 import { createCompareCard } from './components/CompareCard.js';
 import { stateManager } from './stateManager.js';
 // === NOVO: Uvozimo funkcijo za posodobitev ikone v glavi ===
-import { updateCompareIcon } from '../ui.js';
+import { updateCompareIcon } from './ui.js';
 
 export function initComparePage() {
     const comparisonGrid = document.getElementById("comparisonGrid");
