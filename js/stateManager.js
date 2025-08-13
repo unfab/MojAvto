@@ -7,9 +7,7 @@ const state = {
     brands: {},
     users: [],
     loggedInUser: null,
-    // SPREMEMBA: 'favorites' je sedaj seznam za TRENUTNO prijavljenega uporabnika.
     favorites: [], 
-    // SPREMEMBA: 'allFavorites' hrani VSE priljubljene oglase VSEH uporabnikov.
     allFavorites: {}, 
     compareItems: [],
     savedSearches: {}
@@ -20,7 +18,6 @@ function saveStateToLocalStorage() {
     localStorage.setItem('mojavto_listings', JSON.stringify(state.listings));
     localStorage.setItem('mojavto_loggedUser', JSON.stringify(state.loggedInUser));
     
-    // SPREMEMBA: Posodobimo objekt z vsemi favoriti in ga shranimo.
     if (state.loggedInUser) {
         state.allFavorites[state.loggedInUser.username] = state.favorites;
     }
@@ -35,7 +32,6 @@ function loadStateFromLocalStorage() {
     state.listings = JSON.parse(localStorage.getItem('mojavto_listings')) || [];
     state.loggedInUser = JSON.parse(localStorage.getItem('mojavto_loggedUser')) || null;
     
-    // SPREMEMBA: Naložimo VSE favorite in nato nastavimo tiste za trenutnega uporabnika.
     state.allFavorites = JSON.parse(localStorage.getItem('mojavto_favorites')) || {};
     if (state.loggedInUser) {
         state.favorites = state.allFavorites[state.loggedInUser.username] || [];
@@ -98,7 +94,6 @@ export const stateManager = {
 
     setLoggedInUser(user) {
         state.loggedInUser = user;
-        // SPREMEMBA: Ob prijavi naložimo specifične favorite za tega uporabnika.
         if (user) {
             state.favorites = state.allFavorites[user.username] || [];
         } else {
@@ -109,7 +104,6 @@ export const stateManager = {
 
     logoutUser() {
         state.loggedInUser = null;
-        // SPREMEMBA: Ob odjavi počistimo seznam aktivnih favoritov.
         state.favorites = [];
         saveStateToLocalStorage();
     },
@@ -144,7 +138,6 @@ export const stateManager = {
     },
 
     toggleFavorite(listingId) {
-        // SPREMEMBA: Dodamo preverjanje, ali je uporabnik sploh prijavljen.
         if (!state.loggedInUser) {
             console.warn("Uporabnik ni prijavljen. Shranjevanje med priljubljene ni mogoče.");
             return { success: false, reason: 'unauthenticated' };
@@ -156,7 +149,6 @@ export const stateManager = {
             state.favorites.push(String(listingId));
         }
         saveStateToLocalStorage();
-        // Vrnemo `true`, če je bil dodan.
         return { success: true, added: index === -1 }; 
     },
 
@@ -172,6 +164,12 @@ export const stateManager = {
         }
         saveStateToLocalStorage();
         return { success: true, added: index === -1 };
+    },
+
+    // === NOVO: Funkcija za brisanje VSEH elementov iz primerjave ===
+    clearCompareItems() {
+        state.compareItems = [];
+        saveStateToLocalStorage();
     },
 
     addSavedSearch(searchName, criteria) {

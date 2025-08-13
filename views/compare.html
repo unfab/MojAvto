@@ -1,8 +1,11 @@
 <main>
     <section class="comparison-section">
-        <h2 data-i18n-key="compare_h2">Primerjava izbranih vozil</h2>
+        <div class="compare-header" id="compare-header">
+            <h2 data-i18n-key="compare_h2">Primerjava izbranih vozil</h2>
+            <button id="clear-compare-btn" class="btn btn-secondary" data-i18n-key="clear_selection_btn">Počisti izbor</button>
+        </div>
         
-        <div class="global-view-controls">
+        <div class="global-view-controls" id="view-controls">
             <button class="view-btn active" data-view="exterior">Zunanjost</button>
             <button class="view-btn" data-view="interior">Notranjost</button>
         </div>

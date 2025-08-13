@@ -955,3 +955,15 @@ select[multiple] option {
     background-color: var(--accent-orange);
     transform: scale(1.1);
 }
+/* === NOVO: Stili za glavo na strani za primerjavo === */
+.compare-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.compare-header h2 {
+    margin: 0;
+}
