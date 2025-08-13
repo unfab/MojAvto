@@ -25,7 +25,9 @@ export async function initHomePage() {
         return;
     }
 
-    const { allListings, allFavorites } = stateManager.getState();
+    // === POPRAVEK: Uporabimo pravilen getter 'getListings()' namesto destrukturiranja napačnega imena ===
+    const allListings = stateManager.getListings();
+    const { allFavorites } = stateManager.getState();
     const brandModelData = stateManager.getBrands();
 
     if (!brandModelData || Object.keys(brandModelData).length === 0) {
@@ -110,23 +112,20 @@ export async function initHomePage() {
         });
     }
     
-    // === NOVO: PRIKAZ PRILJUBLJENIH OGLASOV V DRSNIKU ===
+    // === PRIKAZ PRILJUBLJENIH OGLASOV V DRSNIKU ===
     const popularSection = document.getElementById('popular-section');
     if (popularSection && allFavorites) {
         const favoriteCounts = {};
-        // Zberemo vse "všečke" vseh uporabnikov
         Object.values(allFavorites).forEach(favArray => {
             favArray.forEach(listingId => {
                 favoriteCounts[listingId] = (favoriteCounts[listingId] || 0) + 1;
             });
         });
-
         const popularListings = Object.entries(favoriteCounts)
-            .sort(([, countA], [, countB]) => countB - countA) // Razvrstimo po številu všečkov
-            .slice(0, 10) // Vzamemo top 10
+            .sort(([, countA], [, countB]) => countB - countA)
+            .slice(0, 10)
             .map(([listingId]) => allListings.find(l => String(l.id) === listingId))
             .filter(Boolean);
-            
         if (popularListings.length > 0) {
             popularSection.style.display = 'block';
             initCarousel({
@@ -138,13 +137,12 @@ export async function initHomePage() {
         }
     }
 
-    // === NOVO: PRIKAZ NOVIH OGLASOV V DRSNIKU ===
+    // === PRIKAZ NOVIH OGLASOV V DRSNIKU ===
     const newestSection = document.getElementById('newest-section');
     if (newestSection) {
-        const newestListings = [...allListings] // Ustvarimo kopijo
-            .sort((a, b) => new Date(b.date_added) - new Date(a.date_added)) // Razvrstimo po datumu
-            .slice(0, 10); // Vzamemo top 10
-
+        const newestListings = [...allListings]
+            .sort((a, b) => new Date(b.date_added) - new Date(a.date_added))
+            .slice(0, 10);
         if (newestListings.length > 0) {
             newestSection.style.display = 'block';
             initCarousel({
