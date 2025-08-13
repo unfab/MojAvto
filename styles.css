@@ -869,3 +869,89 @@ select[multiple] option {
 .carousel-btn.next {
     right: -20px;
 }
+/* datoteka: styles.css */
+
+/* ... vsa vaša obstoječa koda ostane nespremenjena ... */
+
+
+/* === NOVO: Stili za stran s primerjavo (compare.html) === */
+
+.comparison-grid {
+    display: grid;
+    /* Ustvari mrežo s stolpci, ki so široki najmanj 320px in se samodejno prilagajajo širini zaslona */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem; /* Razmik med karticami */
+    padding-top: 1.5rem;
+}
+
+.comparison-card {
+    position: relative; /* Nujno za pozicioniranje gumba za brisanje */
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: var(--card-color);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.comparison-card .comparison-content {
+    padding: 1rem;
+    flex-grow: 1; /* Vsebina se raztegne, da je noga vedno na dnu */
+    display: flex;
+    flex-direction: column;
+}
+
+.comparison-card h3 {
+    margin-top: 0;
+}
+
+.comparison-details {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    flex-grow: 1;
+}
+
+.comparison-details li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--bg-color); /* Svetlejša črta */
+}
+
+.comparison-details li .label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.comparison-details li .value {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.remove-from-compare-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(17, 24, 39, 0.6); /* Temno prosojno ozadje */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background-color 0.2s, transform 0.2s;
+    z-index: 10;
+}
+
+.remove-from-compare-btn:hover {
+    background-color: var(--accent-orange);
+    transform: scale(1.1);
+}

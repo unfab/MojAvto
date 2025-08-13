@@ -8,6 +8,8 @@ import { translate } from '../i18n.js';
 export function createCompareCard(item) {
     const card = document.createElement("div");
     card.className = "comparison-card";
+    // === SPREMEMBA: Dodan data-id za lažjo identifikacijo pri brisanju ===
+    card.dataset.id = item.id;
 
     const detailsHTML = `
         <ul class="comparison-details">
@@ -24,6 +26,8 @@ export function createCompareCard(item) {
     `;
 
     card.innerHTML = `
+        <button class="remove-from-compare-btn" title="Odstrani iz primerjave">&times;</button>
+        
         <img src="${item.images?.exterior[0] || 'https://via.placeholder.com/400x250?text=Zunanjost'}" 
              alt="${item.title}"
              data-exterior="${item.images?.exterior[0] || 'https://via.placeholder.com/400x250?text=Zunanjost'}"
@@ -32,9 +36,7 @@ export function createCompareCard(item) {
             <h3>${item.title}</h3>
             <p class="price">${item.price.toLocaleString('sl-SI')} €</p>
             ${detailsHTML}
-        </div>
-        <div class="card-map">
-            <div id="map-${item.id}" class="map-placeholder" style="width:100%; height:150px;"></div>
+            <a href="#/listing/${item.id}" class="btn btn-primary" style="text-align: center; text-decoration: none; margin-top: auto;">Odpri oglas</a>
         </div>
     `;
 
