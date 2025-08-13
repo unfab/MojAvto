@@ -1,6 +1,7 @@
 import { stateManager } from './stateManager.js';
 import { displayPage, toggleFavorite, toggleCompare, filterListings } from './utils/listingManager.js';
 import { translate } from './i18n.js';
+import { initCarousel } from './components/Carousel.js';
 
 const SLOVENIAN_REGIONS = [
     "Osrednjeslovenska", "Gorenjska", "Goriška", "Obalno-kraška",
@@ -24,7 +25,7 @@ export async function initHomePage() {
         return;
     }
 
-    const allListings = stateManager.getListings();
+    const { allListings, allFavorites } = stateManager.getState();
     const brandModelData = stateManager.getBrands();
 
     if (!brandModelData || Object.keys(brandModelData).length === 0) {
@@ -43,11 +44,9 @@ export async function initHomePage() {
         regionSelect.add(new Option(region, region));
     });
 
-    // --- ZAČETNI PRIKAZ OGLASOV ---
-    let currentFilteredListings = [...allListings];
-    
+    // --- ZAČETNI PRIKAZ GLAVNIH OGLASOV ---
     const displayOptions = {
-        listings: currentFilteredListings,
+        listings: allListings,
         page: 1,
         gridContainer: listingsGrid,
         messageContainer: noListingsMessage,
@@ -56,21 +55,7 @@ export async function initHomePage() {
     };
     displayPage(displayOptions);
 
-    // --- FUNKCIJA ZA FILTRIRANJE ---
-    function performFiltering() {
-        const formData = new FormData(searchForm);
-        const criteria = Object.fromEntries(formData.entries());
-        // Uporabimo master funkcijo za filtriranje iz listingManagerja
-        currentFilteredListings = filterListings(allListings, criteria);
-        
-        // Posodobimo prikaz
-        displayOptions.listings = currentFilteredListings;
-        displayOptions.page = 1; // Ob vsakem novem filtriranju gremo na prvo stran
-        displayPage(displayOptions);
-    }
-
-
-    // --- POSLUŠALCI DOGODKOV ---
+    // --- POSLUŠALCI DOGODKOV ZA GLAVNO VSEBINO ---
     makeSelect.addEventListener('change', function() {
         modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
         modelSelect.disabled = true;
@@ -81,18 +66,15 @@ export async function initHomePage() {
             modelSelect.disabled = false;
         }
     });
-
-    // SPREMEMBA: Gumb "submit" sedaj samo sproži filtriranje na isti strani
+    
     searchForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        performFiltering();
+        const formData = new FormData(searchForm);
+        const criteria = Object.fromEntries(formData.entries());
+        sessionStorage.setItem('advancedSearchCriteria', JSON.stringify(criteria));
+        window.location.hash = '#/search-results';
     });
     
-    // DODATNO: Dodamo poslušalce, da se filtriranje izvede takoj ob spremembi kateregakoli polja
-    searchForm.querySelectorAll('select, input').forEach(input => {
-        input.addEventListener('change', performFiltering);
-    });
-
     sortOrderSelect.addEventListener('change', () => {
         displayOptions.page = 1;
         displayPage(displayOptions);
@@ -111,4 +93,66 @@ export async function initHomePage() {
             toggleCompare(listingId, target);
         }
     });
+
+    // === PRIKAZ NAZADNJE OGLEDANIH OGLASOV V DRSNIKU ===
+    const recentlyViewedIds = JSON.parse(localStorage.getItem('mojavto_recentlyViewed')) || [];
+    const recentSection = document.getElementById('recently-viewed-section');
+    if (recentSection && recentlyViewedIds.length > 0) {
+        recentSection.style.display = 'block';
+        const recentlyViewedListings = recentlyViewedIds
+            .map(id => allListings.find(l => String(l.id) === String(id)))
+            .filter(Boolean);
+        initCarousel({
+            trackId: 'recently-viewed-container',
+            prevBtnId: 'recent-prev-btn',
+            nextBtnId: 'recent-next-btn',
+            listings: recentlyViewedListings
+        });
+    }
+    
+    // === NOVO: PRIKAZ PRILJUBLJENIH OGLASOV V DRSNIKU ===
+    const popularSection = document.getElementById('popular-section');
+    if (popularSection && allFavorites) {
+        const favoriteCounts = {};
+        // Zberemo vse "všečke" vseh uporabnikov
+        Object.values(allFavorites).forEach(favArray => {
+            favArray.forEach(listingId => {
+                favoriteCounts[listingId] = (favoriteCounts[listingId] || 0) + 1;
+            });
+        });
+
+        const popularListings = Object.entries(favoriteCounts)
+            .sort(([, countA], [, countB]) => countB - countA) // Razvrstimo po številu všečkov
+            .slice(0, 10) // Vzamemo top 10
+            .map(([listingId]) => allListings.find(l => String(l.id) === listingId))
+            .filter(Boolean);
+            
+        if (popularListings.length > 0) {
+            popularSection.style.display = 'block';
+            initCarousel({
+                trackId: 'popular-container',
+                prevBtnId: 'popular-prev-btn',
+                nextBtnId: 'popular-next-btn',
+                listings: popularListings
+            });
+        }
+    }
+
+    // === NOVO: PRIKAZ NOVIH OGLASOV V DRSNIKU ===
+    const newestSection = document.getElementById('newest-section');
+    if (newestSection) {
+        const newestListings = [...allListings] // Ustvarimo kopijo
+            .sort((a, b) => new Date(b.date_added) - new Date(a.date_added)) // Razvrstimo po datumu
+            .slice(0, 10); // Vzamemo top 10
+
+        if (newestListings.length > 0) {
+            newestSection.style.display = 'block';
+            initCarousel({
+                trackId: 'newest-container',
+                prevBtnId: 'newest-prev-btn',
+                nextBtnId: 'newest-next-btn',
+                listings: newestListings
+            });
+        }
+    }
 }

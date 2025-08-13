@@ -30,9 +30,8 @@
                 </div>
             </div>
 
-            <h3 data-i18n-key="key_specs">Ključni podatki</h3>
-            <div class="key-details" id="key-details"></div>
-
+            <div id="vehicle-specs-accordion">
+                </div>
             <h3 data-i18n-key="vehicle_description">Opis vozila</h3>
             <p id="description"></p>
             
@@ -68,8 +67,15 @@
             </div>
         </div>
     </div>
-    <section class="similar-vehicles-section">
+    <section class="carousel-section">
         <h2 data-i18n-key="similar_listings">Podobni oglasi</h2>
-        <div class="listings-grid" id="similar-vehicles-container"></div>
+        <div class="carousel-wrapper">
+            <button class="carousel-btn prev" id="similar-prev-btn" aria-label="Prejšnji oglas">&#10094;</button>
+            <div class="carousel-track-container">
+                <div class="carousel-track" id="similar-vehicles-container">
+                    </div>
+            </div>
+            <button class="carousel-btn next" id="similar-next-btn" aria-label="Naslednji oglas">&#10095;</button>
+        </div>
     </section>
 </main>

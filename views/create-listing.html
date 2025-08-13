@@ -70,9 +70,14 @@
         <input type="tel" id="phone" name="phone">
         <label for="description" data-i18n-key="vehicle_description">Opis vozila:</label>
         <textarea id="description" name="description" rows="5" required></textarea>
-        <label for="images" data-i18n-key="form_upload_images">Naloži slike (zunanjost):</label>
-        <input type="file" id="images" name="images" accept="image/*" multiple />
-        <div id="preview" class="image-preview"></div>
+
+        <label for="images-exterior" data-i18n-key="form_upload_exterior_images">Naloži slike zunanjosti:</label>
+        <input type="file" id="images-exterior" name="images-exterior" accept="image/*" multiple />
+        <div id="preview-exterior" class="image-preview"></div>
+
+        <label for="images-interior" data-i18n-key="form_upload_interior_images">Naloži slike notranjosti:</label>
+        <input type="file" id="images-interior" name="images-interior" accept="image/*" multiple />
+        <div id="preview-interior" class="image-preview"></div>
         <button type="submit" id="submitBtn" data-i18n-key="publish_listing_btn">Objavi oglas</button>
     </form>
 </main>

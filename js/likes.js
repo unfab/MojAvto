@@ -1,5 +1,9 @@
+// js/likes.js
+
 import { createListingCard } from './components/ListingCard.js';
-import { getListings } from './dataService.js';
+// SPREMEMBA: Uvozimo stateManager namesto getListings
+import { stateManager } from './stateManager.js';
+import { showNotification } from './notifications.js';
 
 export function initLikesPage() {
     const listingsGrid = document.getElementById('listingsGrid');
@@ -7,10 +11,19 @@ export function initLikesPage() {
 
     if (!listingsGrid || !noFavoritesMessage) return;
 
-    const allListings = getListings();
-    const favoriteIds = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
+    // SPREMEMBA: Podatke pridobimo iz centralnega stateManager-ja
+    const allListings = stateManager.getListings();
+    const { favorites: favoriteIds, loggedInUser } = stateManager.getState();
+
+    // Dodatno preverimo, ali je uporabnik prijavljen
+    if (!loggedInUser) {
+        noFavoritesMessage.innerHTML = '<h3>Za ogled priljubljenih oglasov se morate prijaviti.</h3>';
+        noFavoritesMessage.style.display = 'block';
+        return;
+    }
 
     if (favoriteIds.length === 0) {
+        noFavoritesMessage.innerHTML = '<h3>Nimate še nobenega všečkanega oglasa.</h3><p>Ko vam bo oglas všeč, ga boste našli tukaj.</p>';
         noFavoritesMessage.style.display = 'block';
         return;
     }
@@ -22,7 +35,6 @@ export function initLikesPage() {
         listingsGrid.appendChild(card);
     });
 
-    // Dodamo enako logiko za od-všečkanje, kot na domači strani
     listingsGrid.addEventListener('click', (e) => {
         const target = e.target.closest('.favorite-btn');
         if (!target) return;
@@ -30,17 +42,17 @@ export function initLikesPage() {
         const card = target.closest('.listing-card');
         const listingId = card.dataset.id;
         
-        // Odstrani iz všečkov
-        let favorites = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
-        favorites = favorites.filter(favId => favId !== listingId);
-        localStorage.setItem('mojavto_favoriteItems', JSON.stringify(favorites));
-        
-        // Takoj odstrani kartico iz prikaza
-        card.remove();
+        // SPREMEMBA: Uporabimo stateManager za odstranitev
+        const result = stateManager.toggleFavorite(listingId);
+        if (result.success) {
+            showNotification('Odstranjeno iz priljubljenih', 'info');
+            // Takoj odstrani kartico iz prikaza
+            card.remove();
 
-        // Če ni več všečkov, prikaži sporočilo
-        if (document.querySelectorAll('.listing-card').length === 0) {
-            noFavoritesMessage.style.display = 'block';
+            // Če ni več všečkov, prikaži sporočilo
+            if (listingsGrid.children.length === 0) {
+                noFavoritesMessage.style.display = 'block';
+            }
         }
     });
 }

@@ -1,4 +1,7 @@
 import { translate } from './i18n.js';
+import { stateManager } from './stateManager.js';
+import { showNotification } from './notifications.js';
+
 export function initCreateListingPage() {
     const urlParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
     const isEditMode = urlParams.get('edit') === 'true';
@@ -13,90 +16,210 @@ export function initCreateListingPage() {
     const yearSelect = document.getElementById("year");
     const fuelSelect = document.getElementById("fuel");
     const electricFields = document.getElementById("electric-fields");
-    const imageInput = document.getElementById("images");
-    const previewContainer = document.getElementById("preview");
+    
+    // === SPREMEMBA: Selektorji za ločena polja slik ===
+    const exteriorImageInput = document.getElementById("images-exterior");
+    const interiorImageInput = document.getElementById("images-interior");
+    const exteriorPreviewContainer = document.getElementById("preview-exterior");
+    const interiorPreviewContainer = document.getElementById("preview-interior");
 
-    const loggedUser = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
-    if (!loggedUser) {
-        alert(translate('must_be_logged_in_to_create'));
-        window.location.hash = '#/login'; // Preusmeritev v SPA
+    const { loggedInUser } = stateManager.getState();
+    if (!loggedInUser) {
+        showNotification(translate('must_be_logged_in_to_create'), 'error');
+        window.location.hash = '#/login';
         return;
     }
     
     function populateForm(listing) {
         formTitle.textContent = translate('page_title_edit_listing');
         submitBtn.textContent = translate('save_changes');
-        listingForm.title.value = listing.title;
-        listingForm.price.value = listing.price;
-        listingForm.year.value = listing.year;
-        listingForm.mileage.value = listing.mileage;
-        listingForm.power.value = listing.power;
-        listingForm.fuel.value = listing.fuel;
-        listingForm.transmission.value = listing.transmission;
-        listingForm.phone.value = listing.phone || '';
-        listingForm.description.value = listing.description;
-        listingForm.brand.value = listing.make;
         
-        listingForm.brand.dispatchEvent(new Event('change'));
+        // Polnjenje obrazca z obstoječimi podatki
+        brandSelect.value = listing.make;
+        // Počakamo, da se naložijo modeli in tipi
         setTimeout(() => {
-            listingForm.model.value = listing.model;
-            listingForm.model.dispatchEvent(new Event('change'));
+            modelSelect.value = listing.model;
             setTimeout(() => {
-                listingForm.type.value = listing.type;
+                typeSelect.value = listing.type;
             }, 100);
         }, 100);
+
+        listingForm.querySelector('#price').value = listing.price;
+        listingForm.querySelector('#year').value = listing.year;
+        listingForm.querySelector('#mileage').value = listing.mileage;
+        listingForm.querySelector('#power').value = listing.power;
+        listingForm.querySelector('#fuel').value = listing.fuel;
+        listingForm.querySelector('#transmission').value = listing.transmission;
+        listingForm.querySelector('#phone').value = listing.phone || '';
+        listingForm.querySelector('#description').value = listing.description;
+
+        // Pokažemo električna polja, če je potrebno
+        if (listing.fuel === 'Elektrika') {
+            electricFields.style.display = 'grid';
+            listingForm.querySelector('#battery').value = listing.specs?.battery || '';
+            listingForm.querySelector('#range').value = listing.specs?.range || '';
+        }
     }
 
     const currentYear = new Date().getFullYear();
-    for (let y = currentYear; y >= 1980; y--) { /* ... koda za polnjenje letnikov ... */ }
+    for (let y = currentYear; y >= 1950; y--) {
+        yearSelect.add(new Option(y, y));
+    }
 
-    fetch('./json/brands_models_global.json')
-      .then(res => res.json())
-      .then(brandModelData => {
-        Object.keys(brandModelData).sort().forEach(brand => { /* ... koda za polnjenje znamk ... */ });
-        brandSelect.addEventListener("change", function () { /* ... koda za polnjenje modelov ... */ });
-        modelSelect.addEventListener("change", function () { /* ... koda za polnjenje tipov ... */ });
-        
-        if (isEditMode && listingToEditId) {
-            const allListings = JSON.parse(localStorage.getItem("mojavto_listings")) || [];
-            const listingToEdit = allListings.find(l => l.id == listingToEditId);
-            if (listingToEdit) {
-                populateForm(listingToEdit);
-            }
+    const brandModelData = stateManager.getBrands();
+    Object.keys(brandModelData).sort().forEach(brand => {
+        brandSelect.add(new Option(brand, brand));
+    });
+
+    brandSelect.addEventListener("change", function () {
+        const selectedMake = this.value;
+        modelSelect.innerHTML = `<option value="">${translate('select_model_first')}</option>`;
+        typeSelect.innerHTML = `<option value="">${translate('select_type_first')}</option>`;
+        modelSelect.disabled = true;
+        typeSelect.disabled = true;
+        if (selectedMake && brandModelData[selectedMake]) {
+            Object.keys(brandModelData[selectedMake]).sort().forEach(model => modelSelect.add(new Option(model, model)));
+            modelSelect.disabled = false;
         }
     });
 
-    fuelSelect.addEventListener('change', () => { /* ... koda za električna polja ... */ });
-    imageInput.addEventListener("change", () => { /* ... koda za predogled slik ... */ });
+    modelSelect.addEventListener("change", function () {
+        const selectedMake = brandSelect.value;
+        const selectedModel = this.value;
+        typeSelect.innerHTML = `<option value="">${translate('select_type_first')}</option>`;
+        typeSelect.disabled = true;
+        if (selectedModel && brandModelData[selectedMake]?.[selectedModel]) {
+            brandModelData[selectedMake][selectedModel].sort().forEach(type => typeSelect.add(new Option(type, type)));
+            typeSelect.disabled = false;
+        }
+    });
+
+    if (isEditMode && listingToEditId) {
+        const listingToEdit = stateManager.getListingById(listingToEditId);
+        if (listingToEdit) {
+            populateForm(listingToEdit);
+        }
+    }
+
+    fuelSelect.addEventListener('change', () => {
+        electricFields.style.display = fuelSelect.value === 'Elektrika' ? 'grid' : 'none';
+    });
+    
+    function handleImagePreview(inputElement, previewContainer) {
+        previewContainer.innerHTML = '';
+        const files = inputElement.files;
+        if (files) {
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const imgWrapper = document.createElement('div');
+                    imgWrapper.className = 'image-preview-wrapper';
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    imgWrapper.appendChild(img);
+                    previewContainer.appendChild(imgWrapper);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+
+    exteriorImageInput.addEventListener("change", () => handleImagePreview(exteriorImageInput, exteriorPreviewContainer));
+    interiorImageInput.addEventListener("change", () => handleImagePreview(interiorImageInput, interiorPreviewContainer));
 
     listingForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         submitBtn.disabled = true;
         submitBtn.textContent = translate('saving');
 
-        const readFileAsDataURL = (file) => new Promise((resolve, reject) => { /* ... */ });
-        const imagePromises = Array.from(imageInput.files).map(readFileAsDataURL);
-        const base64Images = await Promise.all(imagePromises);
-        const allListings = JSON.parse(localStorage.getItem("mojavto_listings")) || [];
-        const formData = new FormData(listingForm);
+        const readFileAsDataURL = (file) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+
+        const exteriorImagePromises = Array.from(exteriorImageInput.files).map(readFileAsDataURL);
+        const interiorImagePromises = Array.from(interiorImageInput.files).map(readFileAsDataURL);
+
+        const [base64ExteriorImages, base64InteriorImages] = await Promise.all([
+            Promise.all(exteriorImagePromises),
+            Promise.all(interiorImagePromises)
+        ]);
         
-        if (isEditMode) {
-            const listingIndex = allListings.findIndex(l => l.id == listingToEditId);
-            if (listingIndex > -1) {
-                const updatedListing = { ...allListings[listingIndex] };
-                // ... posodobitev vseh polj ...
-                if (base64Images.length > 0) { updatedListing.images.exterior = base64Images; }
-                allListings[listingIndex] = updatedListing;
-                localStorage.setItem("mojavto_listings", JSON.stringify(allListings));
-                sessionStorage.removeItem('listingToEditId');
-                alert(translate('listing_updated_successfully'));
-                window.location.hash = '#/dashboard';
-            }
+        const formData = new FormData(listingForm);
+        const data = Object.fromEntries(formData.entries());
+
+        if (isEditMode && listingToEditId) {
+            const existingListing = stateManager.getListingById(listingToEditId);
+            const updatedListing = {
+                ...existingListing,
+                make: data.brand,
+                model: data.model,
+                type: data.type,
+                price: parseInt(data.price, 10),
+                year: parseInt(data.year, 10),
+                mileage: parseInt(data.mileage, 10),
+                power: parseInt(data.power, 10),
+                fuel: data.fuel,
+                transmission: data.transmission,
+                phone: data.phone,
+                description: data.description,
+                specs: {
+                    ...existingListing.specs,
+                    battery: data.battery ? parseInt(data.battery, 10) : undefined,
+                    range: data.range ? parseInt(data.range, 10) : undefined,
+                },
+                images: {
+                    exterior: base64ExteriorImages.length > 0 ? base64ExteriorImages : existingListing.images.exterior,
+                    interior: base64InteriorImages.length > 0 ? base64InteriorImages : existingListing.images.interior,
+                }
+            };
+            
+            stateManager.updateListing(updatedListing);
+            sessionStorage.removeItem('listingToEditId');
+            showNotification(translate('listing_updated_successfully'), 'success');
+            window.location.hash = `#/listing/${listingToEditId}`;
+
         } else {
-            const newListing = { id: Date.now(), /* ... vsa polja ... */ };
-            allListings.push(newListing);
-            localStorage.setItem("mojavto_listings", JSON.stringify(allListings));
-            alert(translate('listing_created_successfully'));
+            const newListing = {
+                id: Date.now(),
+                title: `${data.brand} ${data.model} ${data.type}`,
+                make: data.brand,
+                model: data.model,
+                type: data.type,
+                year: parseInt(data.year, 10),
+                mileage: parseInt(data.mileage, 10),
+                price: parseInt(data.price, 10),
+                fuel: data.fuel,
+                transmission: data.transmission,
+                power: parseInt(data.power, 10),
+                author: loggedInUser.username,
+                date_added: new Date().toISOString(),
+                location: {
+                    city: "Ljubljana", // Placeholder, lahko bi dobili iz uporabniškega profila
+                    region: loggedInUser.region
+                },
+                images: {
+                    exterior: base64ExteriorImages,
+                    interior: base64InteriorImages
+                },
+                description: data.description,
+                condition: "Rabljeno",
+                owners: 1,
+                history: {
+                    service_book: true,
+                    undamaged: true
+                },
+                equipment: [], // To bi zahtevalo dodaten korak za izbiro opreme
+                specs: {
+                    battery: data.battery ? parseInt(data.battery, 10) : undefined,
+                    range: data.range ? parseInt(data.range, 10) : undefined,
+                }
+            };
+            
+            stateManager.addListing(newListing);
+            showNotification(translate('listing_created_successfully'), 'success');
             window.location.hash = '#/';
         }
     });

@@ -7,27 +7,44 @@ const state = {
     brands: {},
     users: [],
     loggedInUser: null,
-    favorites: [],
+    // SPREMEMBA: 'favorites' je sedaj seznam za TRENUTNO prijavljenega uporabnika.
+    favorites: [], 
+    // SPREMEMBA: 'allFavorites' hrani VSE priljubljene oglase VSEH uporabnikov.
+    allFavorites: {}, 
     compareItems: [],
-    savedSearches: {} // NOVO: Objekt za shranjena iskanja
+    savedSearches: {}
 };
 
 function saveStateToLocalStorage() {
     localStorage.setItem('mojavto_users', JSON.stringify(state.users));
     localStorage.setItem('mojavto_listings', JSON.stringify(state.listings));
     localStorage.setItem('mojavto_loggedUser', JSON.stringify(state.loggedInUser));
-    localStorage.setItem('mojavto_favoriteItems', JSON.stringify(state.favorites));
+    
+    // SPREMEMBA: Posodobimo objekt z vsemi favoriti in ga shranimo.
+    if (state.loggedInUser) {
+        state.allFavorites[state.loggedInUser.username] = state.favorites;
+    }
+    localStorage.setItem('mojavto_favorites', JSON.stringify(state.allFavorites));
+
     localStorage.setItem('mojavto_compareItems', JSON.stringify(state.compareItems));
-    localStorage.setItem('mojavto_savedSearches', JSON.stringify(state.savedSearches)); // NOVO
+    localStorage.setItem('mojavto_savedSearches', JSON.stringify(state.savedSearches));
 }
 
 function loadStateFromLocalStorage() {
     state.users = JSON.parse(localStorage.getItem('mojavto_users')) || [];
     state.listings = JSON.parse(localStorage.getItem('mojavto_listings')) || [];
     state.loggedInUser = JSON.parse(localStorage.getItem('mojavto_loggedUser')) || null;
-    state.favorites = JSON.parse(localStorage.getItem('mojavto_favoriteItems')) || [];
+    
+    // SPREMEMBA: Naložimo VSE favorite in nato nastavimo tiste za trenutnega uporabnika.
+    state.allFavorites = JSON.parse(localStorage.getItem('mojavto_favorites')) || {};
+    if (state.loggedInUser) {
+        state.favorites = state.allFavorites[state.loggedInUser.username] || [];
+    } else {
+        state.favorites = [];
+    }
+    
     state.compareItems = JSON.parse(localStorage.getItem('mojavto_compareItems')) || [];
-    state.savedSearches = JSON.parse(localStorage.getItem('mojavto_savedSearches')) || {}; // NOVO
+    state.savedSearches = JSON.parse(localStorage.getItem('mojavto_savedSearches')) || {};
 }
 
 export const stateManager = {
@@ -81,11 +98,19 @@ export const stateManager = {
 
     setLoggedInUser(user) {
         state.loggedInUser = user;
+        // SPREMEMBA: Ob prijavi naložimo specifične favorite za tega uporabnika.
+        if (user) {
+            state.favorites = state.allFavorites[user.username] || [];
+        } else {
+            state.favorites = [];
+        }
         saveStateToLocalStorage();
     },
 
     logoutUser() {
         state.loggedInUser = null;
+        // SPREMEMBA: Ob odjavi počistimo seznam aktivnih favoritov.
+        state.favorites = [];
         saveStateToLocalStorage();
     },
 
@@ -119,6 +144,11 @@ export const stateManager = {
     },
 
     toggleFavorite(listingId) {
+        // SPREMEMBA: Dodamo preverjanje, ali je uporabnik sploh prijavljen.
+        if (!state.loggedInUser) {
+            console.warn("Uporabnik ni prijavljen. Shranjevanje med priljubljene ni mogoče.");
+            return { success: false, reason: 'unauthenticated' };
+        }
         const index = state.favorites.indexOf(String(listingId));
         if (index > -1) {
             state.favorites.splice(index, 1);
@@ -126,7 +156,8 @@ export const stateManager = {
             state.favorites.push(String(listingId));
         }
         saveStateToLocalStorage();
-        return index === -1;
+        // Vrnemo `true`, če je bil dodan.
+        return { success: true, added: index === -1 }; 
     },
 
     toggleCompare(listingId) {
@@ -143,7 +174,6 @@ export const stateManager = {
         return { success: true, added: index === -1 };
     },
 
-    // === NOVE FUNKCIJE ZA SHRANJEVANJE ISKANJ ===
     addSavedSearch(searchName, criteria) {
         if (!state.loggedInUser) return;
         const username = state.loggedInUser.username;
