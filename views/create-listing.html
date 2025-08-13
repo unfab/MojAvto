@@ -3,42 +3,42 @@
     <form id="listingForm">
         <div class="form-row">
             <div class="form-group">
-                <label for="brand" data-i18n-key="form_brand">Znamka vozila:</label>
-                <select id="brand" name="brand" required><option value="" data-i18n-key="form_select_brand">Izberi znamko</option></select>
+                <label for="listing-brand" data-i18n-key="form_brand">Znamka vozila:</label>
+                <select id="listing-brand" name="brand" required><option value="" data-i18n-key="form_select_brand">Izberi znamko</option></select>
             </div>
             <div class="form-group">
-                <label for="model" data-i18n-key="form_model">Model:</label>
-                <select id="model" name="model" required disabled><option value="" data-i18n-key="select_brand_first">Najprej izberi znamko</option></select>
+                <label for="listing-model" data-i18n-key="form_model">Model:</label>
+                <select id="listing-model" name="model" required disabled><option value="" data-i18n-key="select_brand_first">Najprej izberi znamko</option></select>
             </div>
             <div class="form-group">
-                <label for="type" data-i18n-key="form_type">Tip/različica:</label>
-                <select id="type" name="type" required disabled><option value="" data-i18n-key="select_model_first">Najprej izberi model</option></select>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label for="price" data-i18n-key="form_price">Cena (€):</label>
-                <input type="number" id="price" name="price" min="0" required>
-            </div>
-            <div class="form-group">
-                <label for="year" data-i18n-key="form_year">Letnik:</label>
-                <select id="year" name="year" required><option value="" data-i18n-key="form_select_year">Izberi letnik</option></select>
+                <label for="listing-type" data-i18n-key="form_type">Tip/različica:</label>
+                <select id="listing-type" name="type" required disabled><option value="" data-i18n-key="select_model_first">Najprej izberi model</option></select>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="mileage" data-i18n-key="form_mileage">Prevoženi kilometri:</label>
-                <input type="number" id="mileage" name="mileage" min="0" required>
+                <label for="listing-price" data-i18n-key="form_price">Cena (€):</label>
+                <input type="number" id="listing-price" name="price" min="0" required>
             </div>
             <div class="form-group">
-                <label for="power" data-i18n-key="form_power">Moč motorja (kW):</label>
-                <input type="number" id="power" name="power" min="0">
+                <label for="listing-year" data-i18n-key="form_year">Letnik:</label>
+                <select id="listing-year" name="year" required><option value="" data-i18n-key="form_select_year">Izberi letnik</option></select>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="fuel" data-i18n-key="form_fuel">Vrsta goriva:</label>
-                <select id="fuel" name="fuel" required>
+                <label for="listing-mileage" data-i18n-key="form_mileage">Prevoženi kilometri:</label>
+                <input type="number" id="listing-mileage" name="mileage" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="listing-power" data-i18n-key="form_power">Moč motorja (kW):</label>
+                <input type="number" id="listing-power" name="power" min="0">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="listing-fuel" data-i18n-key="form_fuel">Vrsta goriva:</label>
+                <select id="listing-fuel" name="fuel" required>
                     <option value="">Izberi</option>
                     <option data-i18n-key="fuel_petrol">Bencin</option>
                     <option data-i18n-key="fuel_diesel">Dizel</option>
@@ -48,8 +48,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="transmission" data-i18n-key="form_gearbox">Menjalnik:</label>
-                <select id="transmission" name="transmission" required>
+                <label for="listing-transmission" data-i18n-key="form_gearbox">Menjalnik:</label>
+                <select id="listing-transmission" name="transmission" required>
                     <option value="">Izberi</option>
                     <option data-i18n-key="gearbox_manual">Ročni</option>
                     <option data-i18n-key="gearbox_automatic">Avtomatski</option>
@@ -58,18 +58,18 @@
         </div>
         <div class="form-row" id="electric-fields" style="display: none;">
             <div class="form-group">
-                <label for="battery" data-i18n-key="form_battery">Kapaciteta baterije (kWh):</label>
-                <input type="number" id="battery" name="battery" min="0">
+                <label for="listing-battery" data-i18n-key="form_battery">Kapaciteta baterije (kWh):</label>
+                <input type="number" id="listing-battery" name="battery" min="0">
             </div>
             <div class="form-group">
-                <label for="range" data-i18n-key="form_range">Domet (km):</label>
-                <input type="number" id="range" name="range" min="0">
+                <label for="listing-range" data-i18n-key="form_range">Domet (km):</label>
+                <input type="number" id="listing-range" name="range" min="0">
             </div>
         </div>
-        <label for="phone" data-i18n-key="form_phone_number_optional">Telefonska številka (neobvezno):</label>
-        <input type="tel" id="phone" name="phone">
-        <label for="description" data-i18n-key="vehicle_description">Opis vozila:</label>
-        <textarea id="description" name="description" rows="5" required></textarea>
+        <label for="listing-phone" data-i18n-key="form_phone_number_optional">Telefonska številka (neobvezno):</label>
+        <input type="tel" id="listing-phone" name="phone" autocomplete="tel">
+        <label for="listing-description" data-i18n-key="vehicle_description">Opis vozila:</label>
+        <textarea id="listing-description" name="description" rows="5" required></textarea>
 
         <label for="images-exterior" data-i18n-key="form_upload_exterior_images">Naloži slike zunanjosti:</label>
         <input type="file" id="images-exterior" name="images-exterior" accept="image/*" multiple />
@@ -78,6 +78,6 @@
         <label for="images-interior" data-i18n-key="form_upload_interior_images">Naloži slike notranjosti:</label>
         <input type="file" id="images-interior" name="images-interior" accept="image/*" multiple />
         <div id="preview-interior" class="image-preview"></div>
-        <button type="submit" id="submitBtn" data-i18n-key="publish_listing_btn">Objavi oglas</button>
+        <button type="submit" id="submitBtn" class="btn-primary" data-i18n-key="publish_listing_btn">Objavi oglas</button>
     </form>
 </main>
