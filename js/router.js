@@ -1,6 +1,4 @@
 import { translate, setLanguage } from './i18n.js';
-
-// Uvozimo VSE "init" funkcije, ki jih ruter potrebuje.
 import { initHomePage } from './home.js';
 import { initAuthPage } from './auth.js';
 import { initListingPage } from './listing.js';
@@ -12,7 +10,6 @@ import { initContactPage } from './contact.js';
 import { initAdvancedSearchPage } from './advanced-search.js';
 import { initProfilePage } from './profile.js';
 import { initSearchResultsPage } from './search-results.js';
-// === DODANO: Uvoz za novo stran "Všečki" ===
 import { initLikesPage } from './likes.js';
 
 
@@ -29,7 +26,6 @@ const routes = {
     '/create-listing': { view: 'create-listing.html', init: initCreateListingPage },
     '/advanced-search': { view: 'advanced-search.html', init: initAdvancedSearchPage },
     '/compare': { view: 'compare.html', init: initComparePage },
-    // === DODANO: Nova pot za stran z všečki ===
     '/likes': { view: 'likes.html', init: initLikesPage },
     '/listing/:id': { view: 'listing.html', init: initListingPage },
     '/search-results': { view: 'search-results.html', init: initSearchResultsPage },
