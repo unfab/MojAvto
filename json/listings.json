@@ -13,6 +13,7 @@
     "power": 150,
     "author": "janez_novak",
     "date_added": "2025-08-10T10:00:00Z",
+    "isFeatured": true,
     "location": {
       "city": "Ljubljana",
       "region": "Osrednjeslovenska"
@@ -73,6 +74,7 @@
     "power": 103,
     "author": "maja_horvat",
     "date_added": "2025-08-11T14:30:00Z",
+    "isFeatured": false,
     "location": {
       "city": "Maribor",
       "region": "Podravska"

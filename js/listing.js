@@ -55,6 +55,31 @@ const detailCategories = {
     }
 };
 
+function createVideoEmbed(url) {
+    let videoId;
+    let embedUrl;
+
+    const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    let match = url.match(youtubeRegex);
+    if (match) {
+        videoId = match[1];
+        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    } else {
+        const vimeoRegex = /(?:https?:\/\/)?(?:www\.)?vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|)(\d+)/;
+        match = url.match(vimeoRegex);
+        if (match) {
+            videoId = match[1];
+            embedUrl = `https://player.vimeo.com/video/${videoId}`;
+        }
+    }
+
+    if (embedUrl) {
+        return `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    }
+    
+    return null;
+}
+
 export function initListingPage({ id: listingId }) {
     const listing = stateManager.getListingById(listingId);
     const { users, loggedInUser } = stateManager.getState();
@@ -71,7 +96,6 @@ export function initListingPage({ id: listingId }) {
         return;
     }
 
-    // --- DOM ELEMENTI ---
     const titleEl = document.getElementById('listing-title');
     const priceEl = document.getElementById('price');
     const priceEvaluationEl = document.getElementById('price-evaluation');
@@ -85,8 +109,8 @@ export function initListingPage({ id: listingId }) {
     const shareBtnDetails = document.getElementById('share-btn-details');
     const proFeaturesContainer = document.getElementById('pro-features-container');
     const upgradeBanner = document.getElementById('upgrade-pro-banner');
+    const videoContainer = document.getElementById('video-container');
 
-    // --- PRIKAZ PODATKOV O OGLASU ---
     titleEl.textContent = listing.title;
     document.title = `${listing.title} - MojAvto.si`;
     priceEl.textContent = `${listing.price.toLocaleString()} €`;
@@ -105,13 +129,10 @@ export function initListingPage({ id: listingId }) {
     if (accordionContainer) {
         accordionContainer.innerHTML = '';
         accordionContainer.className = 'specs-accordion';
-
         for (const categoryName in detailCategories) {
             const category = detailCategories[categoryName];
             let contentHTML = '';
-            
             const availableEquipment = category.equipment?.filter(item => listing.equipment?.includes(item)) || [];
-            
             const availableSpecs = [];
             if (category.keys) {
                 category.keys.forEach(spec => {
@@ -124,40 +145,20 @@ export function initListingPage({ id: listingId }) {
                     }
                 });
             }
-
             if (availableEquipment.length > 0 || availableSpecs.length > 0) {
-                const specsContent = availableSpecs.map(item => `
-                    <div class="spec-item">
-                        <span><strong>${item.label}:</strong> ${item.value}</span>
-                    </div>`).join('');
-
-                const equipmentContent = availableEquipment.map(item => `
-                    <div class="spec-item">
-                        <i class="fas fa-check" style="color: #22c55e;"></i>
-                        <span>${item}</span>
-                    </div>`).join('');
-                
+                const specsContent = availableSpecs.map(item => `<div class="spec-item"><span><strong>${item.label}:</strong> ${item.value}</span></div>`).join('');
+                const equipmentContent = availableEquipment.map(item => `<div class="spec-item"><i class="fas fa-check" style="color: #22c55e;"></i><span>${item}</span></div>`).join('');
                 contentHTML = `<div class="specs-grid">${specsContent}${equipmentContent}</div>`;
-
                 const detailsElement = document.createElement('details');
                 if (categoryName === "Osnovni podatki") {
                     detailsElement.open = true;
                 }
-
-                detailsElement.innerHTML = `
-                    <summary>
-                        <span><i class="${category.icon || 'fas fa-info-circle'}"></i> ${categoryName}</span>
-                    </summary>
-                    <div class="accordion-content">
-                        ${contentHTML}
-                    </div>
-                `;
+                detailsElement.innerHTML = `<summary><span><i class="${category.icon || 'fas fa-info-circle'}"></i> ${categoryName}</span></summary><div class="accordion-content">${contentHTML}</div>`;
                 accordionContainer.appendChild(detailsElement);
             }
         }
     }
 
-    // --- LOGIKA ZA PRO FUNKCIJE ---
     if (loggedInUser && loggedInUser.isPro) {
         proFeaturesContainer.style.display = 'block';
         upgradeBanner.style.display = 'none';
@@ -178,7 +179,6 @@ export function initListingPage({ id: listingId }) {
         upgradeBanner.style.display = 'block';
     }
 
-    // --- LOGIKA ZA GUMB "DELI" ---
     if (shareBtnDetails) {
         shareBtnDetails.addEventListener('click', () => {
             navigator.clipboard.writeText(window.location.href).then(() => {
@@ -190,7 +190,6 @@ export function initListingPage({ id: listingId }) {
         });
     }
 
-    // --- LOGIKA ZA KONTAKTNE GUMBE ---
     if (contactEmailBtn && seller) {
         contactEmailBtn.addEventListener('click', () => {
             window.location.href = `mailto:${seller.email}?subject=Zanimanje za oglas: ${listing.title}`;
@@ -203,7 +202,6 @@ export function initListingPage({ id: listingId }) {
         }, { once: true });
     }
     
-    // --- LOGIKA ZA GALERIJO ---
     const mainImage = document.getElementById('main-image');
     const thumbnailContainer = document.getElementById('thumbnail-container');
     const allImages = [...(listing.images?.exterior || []), ...(listing.images?.interior || [])];
@@ -225,7 +223,6 @@ export function initListingPage({ id: listingId }) {
         });
     }
     
-    // --- LOGIKA ZA GUMB "PRILJUBLJENI" ---
     function updateFavoriteButtonUI() {
         if (!favBtnDetails) return;
         const { favorites } = stateManager.getState();
@@ -248,10 +245,19 @@ export function initListingPage({ id: listingId }) {
         });
         updateFavoriteButtonUI();
     }
-
-    // --- "PAMETNI" PREDLOGI PODOBNIH OGLASOV ---
+    
+    if (videoContainer && listing.videoUrl) {
+        const iframeHTML = createVideoEmbed(listing.videoUrl);
+        if (iframeHTML) {
+            const wrapper = videoContainer.querySelector('.video-embed-wrapper');
+            if(wrapper) {
+                wrapper.innerHTML = iframeHTML;
+                videoContainer.style.display = 'block';
+            }
+        }
+    }
+    
     const allListings = stateManager.getListings();
-
     function calculateSimilarity(current, other) {
         let score = 0;
         if (current.body_type && current.body_type === other.body_type) score += 3;
@@ -261,14 +267,12 @@ export function initListingPage({ id: listingId }) {
         if (current.power && other.power && Math.abs(current.power - other.power) / current.power < 0.20) score += 1;
         return score;
     }
-
     const similarListings = allListings
         .filter(l => l.id !== listing.id)
         .map(l => ({ ...l, similarityScore: calculateSimilarity(listing, l) }))
         .filter(l => l.similarityScore > 2)
         .sort((a, b) => b.similarityScore - a.similarityScore)
         .slice(0, 10);
-
     initCarousel({
         trackId: 'similar-vehicles-container',
         prevBtnId: 'similar-prev-btn',

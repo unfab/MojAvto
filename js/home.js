@@ -1,5 +1,5 @@
 import { stateManager } from './stateManager.js';
-import { displayPage, toggleFavorite, toggleCompare, filterListings } from './utils/listingManager.js';
+import { displayPage, toggleFavorite, toggleCompare } from './utils/listingManager.js';
 import { translate } from './i18n.js';
 import { initCarousel } from './components/Carousel.js';
 
@@ -10,22 +10,30 @@ const SLOVENIAN_REGIONS = [
 ];
 
 export async function initHomePage() {
+    // --- Pridobivanje DOM elementov ---
     const searchForm = document.getElementById('homeSearchForm');
-    const makeSelect = document.getElementById('make');
-    const modelSelect = document.getElementById('model');
-    const regFromSelect = document.getElementById('reg-from');
-    const regionSelect = document.getElementById('region');
+    const makeSelect = document.getElementById('home-make');
+    const modelSelect = document.getElementById('home-model');
+    const regFromSelect = document.getElementById('home-reg-from');
+    const regionSelect = document.getElementById('home-region');
     const listingsGrid = document.getElementById('listingsGrid');
     const noListingsMessage = document.getElementById('noListingsMessage');
     const sortOrderSelect = document.getElementById('sortOrder');
     const paginationContainer = document.getElementById('pagination-container');
+
+    const quickLinkNew = document.getElementById('quick-link-new');
+    const quickLinkVerified = document.getElementById('quick-link-verified');
+    const quickLinkFamily = document.getElementById('quick-link-family');
+
+    // === NOVO: Pridobivanje vsebnika za znamke ===
+    const brandsGrid = document.querySelector('.brands-grid');
+
 
     if (!searchForm || !listingsGrid || !sortOrderSelect || !regionSelect) {
         console.error("Manjka eden od ključnih elementov na domači strani.");
         return;
     }
 
-    // === POPRAVEK: Uporabimo pravilen getter 'getListings()' namesto destrukturiranja napačnega imena ===
     const allListings = stateManager.getListings();
     const { allFavorites } = stateManager.getState();
     const brandModelData = stateManager.getBrands();
@@ -35,7 +43,6 @@ export async function initHomePage() {
         return;
     }
 
-    // --- INICIALIZACIJA STRANI (Polnjenje filtrov) ---
     const sortedBrands = Object.keys(brandModelData).sort();
     sortedBrands.forEach(brand => makeSelect.add(new Option(brand, brand)));
     const currentYear = new Date().getFullYear();
@@ -46,7 +53,6 @@ export async function initHomePage() {
         regionSelect.add(new Option(region, region));
     });
 
-    // --- ZAČETNI PRIKAZ GLAVNIH OGLASOV ---
     const displayOptions = {
         listings: allListings,
         page: 1,
@@ -57,7 +63,6 @@ export async function initHomePage() {
     };
     displayPage(displayOptions);
 
-    // --- POSLUŠALCI DOGODKOV ZA GLAVNO VSEBINO ---
     makeSelect.addEventListener('change', function() {
         modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
         modelSelect.disabled = true;
@@ -73,11 +78,12 @@ export async function initHomePage() {
         e.preventDefault();
         const formData = new FormData(searchForm);
         const criteria = Object.fromEntries(formData.entries());
-        sessionStorage.setItem('advancedSearchCriteria', JSON.stringify(criteria));
+        sessionStorage.setItem('searchCriteria', JSON.stringify(criteria));
         window.location.hash = '#/search-results';
     });
     
     sortOrderSelect.addEventListener('change', () => {
+        displayOptions.listings = allListings; 
         displayOptions.page = 1;
         displayPage(displayOptions);
     });
@@ -96,7 +102,49 @@ export async function initHomePage() {
         }
     });
 
-    // === PRIKAZ NAZADNJE OGLEDANIH OGLASOV V DRSNIKU ===
+    if (quickLinkNew) {
+        quickLinkNew.addEventListener('click', (e) => {
+            e.preventDefault();
+            const criteria = { "condition": "Novo" };
+            sessionStorage.setItem('searchCriteria', JSON.stringify(criteria));
+            window.location.hash = '#/search-results';
+        });
+    }
+
+    if (quickLinkVerified) {
+        quickLinkVerified.addEventListener('click', (e) => {
+            e.preventDefault();
+            const criteria = { "service_history": "true", "undamaged": "true" };
+            sessionStorage.setItem('searchCriteria', JSON.stringify(criteria));
+            window.location.hash = '#/search-results';
+        });
+    }
+    
+    if (quickLinkFamily) {
+        quickLinkFamily.addEventListener('click', (e) => {
+            e.preventDefault();
+            const criteria = { "body_type": ["Karavan", "Enoprostorec", "SUV"] };
+            sessionStorage.setItem('searchCriteria', JSON.stringify(criteria));
+            window.location.hash = '#/search-results';
+        });
+    }
+
+    // === NOVO: Logika za klike na kartice z znamkami ===
+    if (brandsGrid) {
+        brandsGrid.addEventListener('click', (e) => {
+            const brandCard = e.target.closest('.brand-card');
+            if (brandCard) {
+                e.preventDefault();
+                const brandName = brandCard.dataset.brand;
+                if (brandName) {
+                    const criteria = { make: brandName };
+                    sessionStorage.setItem('searchCriteria', JSON.stringify(criteria));
+                    window.location.hash = '#/search-results';
+                }
+            }
+        });
+    }
+    
     const recentlyViewedIds = JSON.parse(localStorage.getItem('mojavto_recentlyViewed')) || [];
     const recentSection = document.getElementById('recently-viewed-section');
     if (recentSection && recentlyViewedIds.length > 0) {
@@ -112,7 +160,6 @@ export async function initHomePage() {
         });
     }
     
-    // === PRIKAZ PRILJUBLJENIH OGLASOV V DRSNIKU ===
     const popularSection = document.getElementById('popular-section');
     if (popularSection && allFavorites) {
         const favoriteCounts = {};
@@ -137,7 +184,6 @@ export async function initHomePage() {
         }
     }
 
-    // === PRIKAZ NOVIH OGLASOV V DRSNIKU ===
     const newestSection = document.getElementById('newest-section');
     if (newestSection) {
         const newestListings = [...allListings]

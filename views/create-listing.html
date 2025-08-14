@@ -71,6 +71,10 @@
         <label for="listing-description" data-i18n-key="vehicle_description">Opis vozila:</label>
         <textarea id="listing-description" name="description" rows="5" required></textarea>
 
+        <div class="form-group">
+            <label for="listing-videoUrl">Povezava do YouTube/Vimeo videa (neobvezno):</label>
+            <input type="url" id="listing-videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+        </div>
         <label for="images-exterior" data-i18n-key="form_upload_exterior_images">Naloži slike zunanjosti:</label>
         <input type="file" id="images-exterior" name="images-exterior" accept="image/*" multiple />
         <div id="preview-exterior" class="image-preview"></div>
