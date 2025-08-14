@@ -92,7 +92,10 @@ export function initListingPage({ id: listingId }) {
     }
 
     if (!listing) {
-        document.querySelector('.listing-container').innerHTML = `<h1 data-i18n-key="listing_not_found">Oglas ni bil najden.</h1>`;
+        const container = document.querySelector('.listing-container');
+        if (container) {
+            container.innerHTML = `<h1 data-i18n-key="listing_not_found">Oglas ni bil najden.</h1>`;
+        }
         return;
     }
 
