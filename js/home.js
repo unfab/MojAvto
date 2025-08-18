@@ -10,7 +10,6 @@ const SLOVENIAN_REGIONS = [
 ];
 
 export async function initHomePage() {
-    // --- Pridobivanje DOM elementov ---
     const searchForm = document.getElementById('homeSearchForm');
     const makeSelect = document.getElementById('home-make');
     const modelSelect = document.getElementById('home-model');
@@ -20,17 +19,13 @@ export async function initHomePage() {
     const noListingsMessage = document.getElementById('noListingsMessage');
     const sortOrderSelect = document.getElementById('sortOrder');
     const paginationContainer = document.getElementById('pagination-container');
-
     const quickLinkNew = document.getElementById('quick-link-new');
     const quickLinkVerified = document.getElementById('quick-link-verified');
     const quickLinkFamily = document.getElementById('quick-link-family');
-
-    // === NOVO: Pridobivanje vsebnika za znamke ===
     const brandsGrid = document.querySelector('.brands-grid');
 
-
     if (!searchForm || !listingsGrid || !sortOrderSelect || !regionSelect) {
-        console.error("Manjka eden od ključnih elementov na domači strani.");
+        console.error("Missing a key element on the homepage.");
         return;
     }
 
@@ -39,7 +34,7 @@ export async function initHomePage() {
     const brandModelData = stateManager.getBrands();
 
     if (!brandModelData || Object.keys(brandModelData).length === 0) {
-        console.error("Podatki o znamkah niso na voljo iz stateManagerja.");
+        console.error("Brand data not available from stateManager.");
         return;
     }
 
@@ -64,7 +59,7 @@ export async function initHomePage() {
     displayPage(displayOptions);
 
     makeSelect.addEventListener('change', function() {
-        modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
+        modelSelect.innerHTML = '<option value="">All models</option>';
         modelSelect.disabled = true;
         if (this.value && brandModelData[this.value]) {
             Object.keys(brandModelData[this.value]).forEach(model => {
@@ -129,7 +124,6 @@ export async function initHomePage() {
         });
     }
 
-    // === NOVO: Logika za klike na kartice z znamkami ===
     if (brandsGrid) {
         brandsGrid.addEventListener('click', (e) => {
             const brandCard = e.target.closest('.brand-card');
@@ -145,6 +139,22 @@ export async function initHomePage() {
         });
     }
     
+    // Featured Listings Carousel
+    const featuredSection = document.getElementById('featured-section');
+    if (featuredSection) {
+        const featuredListings = allListings.filter(listing => listing.isFeatured === true);
+        if (featuredListings.length > 0) {
+            featuredSection.style.display = 'block';
+            initCarousel({
+                trackId: 'featured-container',
+                prevBtnId: 'featured-prev-btn',
+                nextBtnId: 'featured-next-btn',
+                listings: featuredListings
+            });
+        }
+    }
+
+    // Recently Viewed Carousel
     const recentlyViewedIds = JSON.parse(localStorage.getItem('mojavto_recentlyViewed')) || [];
     const recentSection = document.getElementById('recently-viewed-section');
     if (recentSection && recentlyViewedIds.length > 0) {
@@ -160,6 +170,7 @@ export async function initHomePage() {
         });
     }
     
+    // Popular Listings Carousel
     const popularSection = document.getElementById('popular-section');
     if (popularSection && allFavorites) {
         const favoriteCounts = {};
@@ -184,6 +195,7 @@ export async function initHomePage() {
         }
     }
 
+    // Newest Listings Carousel
     const newestSection = document.getElementById('newest-section');
     if (newestSection) {
         const newestListings = [...allListings]

@@ -131,7 +131,6 @@ export function initListingPage({ id: listingId }) {
         accordionContainer.className = 'specs-accordion';
         for (const categoryName in detailCategories) {
             const category = detailCategories[categoryName];
-            let contentHTML = '';
             const availableEquipment = category.equipment?.filter(item => listing.equipment?.includes(item)) || [];
             const availableSpecs = [];
             if (category.keys) {
@@ -148,7 +147,7 @@ export function initListingPage({ id: listingId }) {
             if (availableEquipment.length > 0 || availableSpecs.length > 0) {
                 const specsContent = availableSpecs.map(item => `<div class="spec-item"><span><strong>${item.label}:</strong> ${item.value}</span></div>`).join('');
                 const equipmentContent = availableEquipment.map(item => `<div class="spec-item"><i class="fas fa-check" style="color: #22c55e;"></i><span>${item}</span></div>`).join('');
-                contentHTML = `<div class="specs-grid">${specsContent}${equipmentContent}</div>`;
+                const contentHTML = `<div class="specs-grid">${specsContent}${equipmentContent}</div>`;
                 const detailsElement = document.createElement('details');
                 if (categoryName === "Osnovni podatki") {
                     detailsElement.open = true;
