@@ -22,6 +22,12 @@ export function initCreateListingPage() {
     const exteriorPreviewContainer = document.getElementById("preview-exterior");
     const interiorPreviewContainer = document.getElementById("preview-interior");
 
+    const financingYesRadio = document.getElementById('financing-yes');
+    const financingNoRadio = document.getElementById('financing-no');
+    const financingOptionsContainer = document.getElementById('financing-options-container');
+    const financingImageInput = document.getElementById('financing-images');
+    const financingPreview = document.getElementById('financing-preview');
+
     const { loggedInUser } = stateManager.getState();
     if (!loggedInUser) {
         showNotification(translate('must_be_logged_in_to_create'), 'error');
@@ -57,6 +63,21 @@ export function initCreateListingPage() {
             electricFields.style.display = 'grid';
             listingForm.querySelector('#listing-battery').value = listing.specs?.battery || '';
             listingForm.querySelector('#listing-range').value = listing.specs?.range || '';
+        }
+
+        if (listing.financing && listing.financing.available) {
+            financingYesRadio.checked = true;
+            financingOptionsContainer.style.display = 'block';
+            if (listing.financing.options) {
+                listing.financing.options.forEach(option => {
+                    const checkbox = document.querySelector(`input[name="financingOptions"][value="${option}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+            listingForm.querySelector('#financing-description').value = listing.financing.description || '';
+        } else {
+            financingNoRadio.checked = true;
+            financingOptionsContainer.style.display = 'none';
         }
     }
 
@@ -105,6 +126,17 @@ export function initCreateListingPage() {
         electricFields.style.display = fuelSelect.value === 'Elektrika' ? 'grid' : 'none';
     });
     
+    financingYesRadio.addEventListener('change', () => {
+        if (financingYesRadio.checked) {
+            financingOptionsContainer.style.display = 'block';
+        }
+    });
+    financingNoRadio.addEventListener('change', () => {
+        if (financingNoRadio.checked) {
+            financingOptionsContainer.style.display = 'none';
+        }
+    });
+
     function handleImagePreview(inputElement, previewContainer) {
         previewContainer.innerHTML = '';
         const files = inputElement.files;
@@ -126,6 +158,7 @@ export function initCreateListingPage() {
 
     exteriorImageInput.addEventListener("change", () => handleImagePreview(exteriorImageInput, exteriorPreviewContainer));
     interiorImageInput.addEventListener("change", () => handleImagePreview(interiorImageInput, interiorPreviewContainer));
+    financingImageInput.addEventListener("change", () => handleImagePreview(financingImageInput, financingPreview));
 
     listingForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -141,14 +174,26 @@ export function initCreateListingPage() {
 
         const exteriorImagePromises = Array.from(exteriorImageInput.files).map(readFileAsDataURL);
         const interiorImagePromises = Array.from(interiorImageInput.files).map(readFileAsDataURL);
+        const financingImagePromises = Array.from(financingImageInput.files).map(readFileAsDataURL);
 
-        const [base64ExteriorImages, base64InteriorImages] = await Promise.all([
+        const [base64ExteriorImages, base64InteriorImages, base64FinancingImages] = await Promise.all([
             Promise.all(exteriorImagePromises),
-            Promise.all(interiorImagePromises)
+            Promise.all(interiorImagePromises),
+            Promise.all(financingImagePromises)
         ]);
         
         const formData = new FormData(listingForm);
         const data = Object.fromEntries(formData.entries());
+
+        let financingData = { available: false };
+        if (data.financingAvailable === 'yes') {
+            financingData = {
+                available: true,
+                options: formData.getAll('financingOptions'),
+                description: data.financingDescription || '',
+                images: base64FinancingImages
+            };
+        }
 
         if (isEditMode && listingToEditId) {
             const existingListing = stateManager.getListingById(listingToEditId);
@@ -167,6 +212,7 @@ export function initCreateListingPage() {
                 phone: data.phone,
                 description: data.description,
                 videoUrl: data.videoUrl || '',
+                financing: financingData,
                 specs: {
                     ...existingListing.specs,
                     battery: data.battery ? parseInt(data.battery, 10) : undefined,
@@ -199,6 +245,7 @@ export function initCreateListingPage() {
                 videoUrl: data.videoUrl || '',
                 author: loggedInUser.username,
                 date_added: new Date().toISOString(),
+                financing: financingData,
                 location: {
                     city: "Ljubljana",
                     region: loggedInUser.region

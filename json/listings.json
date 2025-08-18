@@ -14,6 +14,13 @@
     "author": "janez_novak",
     "date_added": "2025-08-10T10:00:00Z",
     "isFeatured": true,
+    "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "financing": {
+      "available": true,
+      "options": ["Lizing", "Hitri kredit"],
+      "description": "Nudimo ugodno financiranje z nizkimi obrestnimi merami v sodelovanju z banko ABC. Možnost financiranja do 84 mesecev brez pologa. Za več informacij nas pokličite!",
+      "images": []
+    },
     "location": {
       "city": "Ljubljana",
       "region": "Osrednjeslovenska"
@@ -75,6 +82,10 @@
     "author": "maja_horvat",
     "date_added": "2025-08-11T14:30:00Z",
     "isFeatured": false,
+    "videoUrl": "",
+    "financing": {
+      "available": false
+    },
     "location": {
       "city": "Maribor",
       "region": "Podravska"

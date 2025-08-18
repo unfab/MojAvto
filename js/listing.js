@@ -58,7 +58,6 @@ const detailCategories = {
 function createVideoEmbed(url) {
     let videoId;
     let embedUrl;
-
     const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     let match = url.match(youtubeRegex);
     if (match) {
@@ -72,11 +71,9 @@ function createVideoEmbed(url) {
             embedUrl = `https://player.vimeo.com/video/${videoId}`;
         }
     }
-
     if (embedUrl) {
         return `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     }
-    
     return null;
 }
 
@@ -159,6 +156,29 @@ export function initListingPage({ id: listingId }) {
                 detailsElement.innerHTML = `<summary><span><i class="${category.icon || 'fas fa-info-circle'}"></i> ${categoryName}</span></summary><div class="accordion-content">${contentHTML}</div>`;
                 accordionContainer.appendChild(detailsElement);
             }
+        }
+        
+        if (listing.financing && listing.financing.available) {
+            let financingContentHTML = '<div class="specs-grid">';
+            if (listing.financing.options && listing.financing.options.length > 0) {
+                listing.financing.options.forEach(option => {
+                    financingContentHTML += `<div class="spec-item"><i class="fas fa-check-circle" style="color: #22c55e;"></i><span>${option}</span></div>`;
+                });
+            }
+            financingContentHTML += '</div>';
+            if (listing.financing.description) {
+                financingContentHTML += `<p style="margin-top: 1rem;">${listing.financing.description}</p>`;
+            }
+            if (listing.financing.images && listing.financing.images.length > 0) {
+                financingContentHTML += '<div class="financing-images-grid" style="display:flex; gap:1rem; margin-top:1rem;">';
+                listing.financing.images.forEach(imgSrc => {
+                    financingContentHTML += `<img src="${imgSrc}" alt="Financiranje" style="max-width: 150px; border-radius: 8px;">`;
+                });
+                financingContentHTML += '</div>';
+            }
+            const detailsElement = document.createElement('details');
+            detailsElement.innerHTML = `<summary><span><i class="fas fa-hand-holding-usd"></i> Možnosti financiranja</span></summary><div class="accordion-content">${financingContentHTML}</div>`;
+            accordionContainer.appendChild(detailsElement);
         }
     }
 

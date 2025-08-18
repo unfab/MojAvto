@@ -85,3 +85,55 @@
         <button type="submit" id="submitBtn" class="btn-primary" data-i18n-key="publish_listing_btn">Objavi oglas</button>
     </form>
 </main>
+
+<main class="form-container">
+    <h2 id="form-title" data-i18n-key="create_listing_h2">Ustvari nov oglas</h2>
+    <form id="listingForm">
+        <label for="listing-description" data-i18n-key="vehicle_description">Opis vozila:</label>
+        <textarea id="listing-description" name="description" rows="5" required></textarea>
+        
+        <label for="listing-videoUrl">Povezava do YouTube/Vimeo videa (neobvezno):</label>
+        <input type="url" id="listing-videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+
+        <fieldset class="form-section">
+            <legend>Možnosti financiranja</legend>
+            <div class="form-group-radio">
+                <input type="radio" id="financing-no" name="financingAvailable" value="no" checked>
+                <label for="financing-no">Ne ponujam možnosti financiranja</label>
+            </div>
+            <div class="form-group-radio">
+                <input type="radio" id="financing-yes" name="financingAvailable" value="yes">
+                <label for="financing-yes">Da, ponujam možnosti financiranja</label>
+            </div>
+
+            <div id="financing-options-container" style="display: none; margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                <label>Izberite možnosti, ki jih ponujate:</label>
+                <div class="checkbox-options">
+                    <label for="fin-opt-lizing"><input type="checkbox" id="fin-opt-lizing" name="financingOptions" value="Lizing"> Lizing</label>
+                    <label for="fin-opt-kredit"><input type="checkbox" id="fin-opt-kredit" name="financingOptions" value="Hitri kredit"> Hitri kredit</label>
+                    <label for="fin-opt-leanpay"><input type="checkbox" id="fin-opt-leanpay" name="financingOptions" value="Leanpay"> Leanpay</label>
+                    <label for="fin-opt-obroki"><input type="checkbox" id="fin-opt-obroki" name="financingOptions" value="Plačilo na obroke"> Plačilo na obroke</label>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="financing-description">Vaš opis ponudbe za financiranje:</label>
+                    <textarea id="financing-description" name="financingDescription" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="financing-images">Naložite slike za ponudbo (npr. logotipi, bannerji):</label>
+                    <input type="file" id="financing-images" name="financingImages" accept="image/*" multiple />
+                    <div id="financing-preview" class="image-preview"></div>
+                </div>
+            </div>
+        </fieldset>
+        <label for="images-exterior" data-i18n-key="form_upload_exterior_images">Naloži slike zunanjosti:</label>
+        <input type="file" id="images-exterior" name="images-exterior" accept="image/*" multiple />
+        <div id="preview-exterior" class="image-preview"></div>
+
+        <label for="images-interior" data-i18n-key="form_upload_interior_images">Naloži slike notranjosti:</label>
+        <input type="file" id="images-interior" name="images-interior" accept="image/*" multiple />
+        <div id="preview-interior" class="image-preview"></div>
+        <button type="submit" id="submitBtn" class="btn-primary" data-i18n-key="publish_listing_btn">Objavi oglas</button>
+    </form>
+</main>
