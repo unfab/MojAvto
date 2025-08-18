@@ -1182,3 +1182,39 @@ select[multiple] option {
     height: 100%;
     border: none;
 }
+/* === DODATEK ZA STYLES.CSS === */
+
+/* Stil za fieldset v obrazcu za ustvarjanje oglasa */
+.form-section {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.form-section legend {
+    padding: 0 0.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.form-group-radio {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Stil za prikaz slik v razdelku o financiranju na strani oglasa */
+.financing-images-grid {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.financing-images-grid img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 8px;
+}

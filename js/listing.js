@@ -170,9 +170,9 @@ export function initListingPage({ id: listingId }) {
                 financingContentHTML += `<p style="margin-top: 1rem;">${listing.financing.description}</p>`;
             }
             if (listing.financing.images && listing.financing.images.length > 0) {
-                financingContentHTML += '<div class="financing-images-grid" style="display:flex; gap:1rem; margin-top:1rem;">';
+                financingContentHTML += '<div class="financing-images-grid">';
                 listing.financing.images.forEach(imgSrc => {
-                    financingContentHTML += `<img src="${imgSrc}" alt="Financiranje" style="max-width: 150px; border-radius: 8px;">`;
+                    financingContentHTML += `<img src="${imgSrc}" alt="Financiranje">`;
                 });
                 financingContentHTML += '</div>';
             }
