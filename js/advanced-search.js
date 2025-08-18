@@ -35,7 +35,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
         if (!excludedItemsContainer) return;
         excludedItemsContainer.innerHTML = '';
         exclusionRules.forEach((rule, index) => {
-            const tagText = `${rule.make}${rule.model ? ' > ' + rule.model : ''}${rule.type ? ' > '.type : ''}`;
+            const tagText = `${rule.make}${rule.model ? ' > ' + rule.model : ''}${rule.type ? ' > ' + rule.type : ''}`;
             const tag = document.createElement('div');
             tag.className = 'excluded-brand-tag';
             tag.innerHTML = `<span>${tagText}</span><button type="button" class="remove-brand-btn" data-index="${index}" title="Odstrani">&times;</button>`;
@@ -151,14 +151,18 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
     }
     
     function prefillForm(criteria) {
-        if (!criteria || Object.keys(criteria).length === 0) return;
+        if (!criteria || Object.keys(criteria).length === 0) {
+            // Če ni kriterijev, samo zagotovimo eno prazno vrstico
+            criteriaContainer.innerHTML = '';
+            addCriterionRow();
+            return;
+        }
         
         for (const key in criteria) {
             const elements = searchForm.elements[key];
             if (!elements) continue;
             
             const value = criteria[key];
-            // Handle radio buttons and checkboxes
             if (elements.length && (elements[0].type === 'checkbox' || elements[0].type === 'radio')) {
                  const values = Array.isArray(value) ? value : [value];
                  elements.forEach(el => {
@@ -168,7 +172,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
                  });
             } else if (elements.tagName === 'SELECT') {
                 elements.value = value;
-            } else { // Handle single inputs
+            } else {
                  elements.value = value;
             }
         }
@@ -267,14 +271,14 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
 
     if(selectAllBodyTypesBtn) {
         selectAllBodyTypesBtn.addEventListener('click', () => {
-            vehicleTypeGrid.querySelectorAll('.vehicle-type').forEach(type => type.classList.add('active'));
+            if(vehicleTypeGrid) vehicleTypeGrid.querySelectorAll('.vehicle-type').forEach(type => type.classList.add('active'));
             updateBodyTypeButtons();
         });
     }
 
     if(clearAllBodyTypesBtn) {
         clearAllBodyTypesBtn.addEventListener('click', () => {
-            vehicleTypeGrid.querySelectorAll('.vehicle-type.active').forEach(type => type.classList.remove('active'));
+            if(vehicleTypeGrid) vehicleTypeGrid.querySelectorAll('.vehicle-type.active').forEach(type => type.classList.remove('active'));
             updateBodyTypeButtons();
         });
     }
