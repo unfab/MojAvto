@@ -1,5 +1,5 @@
 import { stateManager } from './stateManager.js';
-import { displayPage, toggleFavorite, toggleCompare } from './utils/listingManager.js';
+import { toggleFavorite, toggleCompare } from './utils/listingManager.js';
 import { translate } from './i18n.js';
 import { initCarousel } from './components/Carousel.js';
 
@@ -10,36 +10,36 @@ const SLOVENIAN_REGIONS = [
 ];
 
 export async function initHomePage() {
+    // === DOM Elementi ===
     const searchForm = document.getElementById('homeSearchForm');
     const makeSelect = document.getElementById('home-make');
     const modelSelect = document.getElementById('home-model');
     const regFromSelect = document.getElementById('home-reg-from');
     const regionSelect = document.getElementById('home-region');
-    const listingsGrid = document.getElementById('listingsGrid');
-    const noListingsMessage = document.getElementById('noListingsMessage');
-    const sortOrderSelect = document.getElementById('sortOrder');
-    const paginationContainer = document.getElementById('pagination-container');
     const quickLinkNew = document.getElementById('quick-link-new');
     const quickLinkVerified = document.getElementById('quick-link-verified');
     const quickLinkFamily = document.getElementById('quick-link-family');
     const brandsGrid = document.querySelector('.brands-grid');
 
-    if (!searchForm || !listingsGrid || !sortOrderSelect || !regionSelect) {
-        console.error("Missing a key element on the homepage.");
+    if (!searchForm || !makeSelect || !regionSelect) {
+        console.error("Manjka ključen element na domači strani (formular).");
         return;
     }
 
+    // === Podatki ===
     const allListings = stateManager.getListings();
     const { allFavorites } = stateManager.getState();
     const brandModelData = stateManager.getBrands();
 
     if (!brandModelData || Object.keys(brandModelData).length === 0) {
-        console.error("Brand data not available from stateManager.");
+        console.error("Podatki o znamkah niso na voljo v stateManagerju.");
         return;
     }
 
+    // === Polnjenje iskalnega obrazca ===
     const sortedBrands = Object.keys(brandModelData).sort();
     sortedBrands.forEach(brand => makeSelect.add(new Option(brand, brand)));
+    
     const currentYear = new Date().getFullYear();
     for (let y = currentYear; y >= 1950; y--) {
         regFromSelect.add(new Option(y, y));
@@ -48,18 +48,8 @@ export async function initHomePage() {
         regionSelect.add(new Option(region, region));
     });
 
-    const displayOptions = {
-        listings: allListings,
-        page: 1,
-        gridContainer: listingsGrid,
-        messageContainer: noListingsMessage,
-        paginationContainer,
-        sortSelect: sortOrderSelect
-    };
-    displayPage(displayOptions);
-
     makeSelect.addEventListener('change', function() {
-        modelSelect.innerHTML = '<option value="">All models</option>';
+        modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
         modelSelect.disabled = true;
         if (this.value && brandModelData[this.value]) {
             Object.keys(brandModelData[this.value]).forEach(model => {
@@ -69,32 +59,14 @@ export async function initHomePage() {
         }
     });
     
+    // === Event Listeners ===
     searchForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const formData = new FormData(searchForm);
         const criteria = Object.fromEntries(formData.entries());
+        // Shranimo kriterije in preusmerimo na stran z rezultati
         sessionStorage.setItem('searchCriteria', JSON.stringify(criteria));
         window.location.hash = '#/search-results';
-    });
-    
-    sortOrderSelect.addEventListener('change', () => {
-        displayOptions.listings = allListings; 
-        displayOptions.page = 1;
-        displayPage(displayOptions);
-    });
-
-    listingsGrid.addEventListener('click', (e) => {
-        const target = e.target.closest('.card-action-btn');
-        if (!target) return;
-        const card = target.closest('.listing-card');
-        const listingId = card.dataset.id;
-        
-        if (target.classList.contains('favorite-btn')) {
-            toggleFavorite(listingId, target);
-        }
-        if (target.classList.contains('compare-btn')) {
-            toggleCompare(listingId, target);
-        }
     });
 
     if (quickLinkNew) {
@@ -139,7 +111,9 @@ export async function initHomePage() {
         });
     }
     
-    // Featured Listings Carousel
+    // === Inicializacija vseh drsnikov (Carousel) ===
+
+    // 1. Izpostavljeni oglasi
     const featuredSection = document.getElementById('featured-section');
     if (featuredSection) {
         const featuredListings = allListings.filter(listing => listing.isFeatured === true);
@@ -154,23 +128,25 @@ export async function initHomePage() {
         }
     }
 
-    // Recently Viewed Carousel
+    // 2. Nazadnje ogledano
     const recentlyViewedIds = JSON.parse(localStorage.getItem('mojavto_recentlyViewed')) || [];
     const recentSection = document.getElementById('recently-viewed-section');
     if (recentSection && recentlyViewedIds.length > 0) {
-        recentSection.style.display = 'block';
         const recentlyViewedListings = recentlyViewedIds
             .map(id => allListings.find(l => String(l.id) === String(id)))
             .filter(Boolean);
-        initCarousel({
-            trackId: 'recently-viewed-container',
-            prevBtnId: 'recent-prev-btn',
-            nextBtnId: 'recent-next-btn',
-            listings: recentlyViewedListings
-        });
+        if (recentlyViewedListings.length > 0) {
+            recentSection.style.display = 'block';
+            initCarousel({
+                trackId: 'recently-viewed-container',
+                prevBtnId: 'recent-prev-btn',
+                nextBtnId: 'recent-next-btn',
+                listings: recentlyViewedListings
+            });
+        }
     }
     
-    // Popular Listings Carousel
+    // 3. Priljubljeno med uporabniki
     const popularSection = document.getElementById('popular-section');
     if (popularSection && allFavorites) {
         const favoriteCounts = {};
@@ -195,7 +171,7 @@ export async function initHomePage() {
         }
     }
 
-    // Newest Listings Carousel
+    // 4. Novo v ponudbi
     const newestSection = document.getElementById('newest-section');
     if (newestSection) {
         const newestListings = [...allListings]
