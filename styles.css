@@ -1322,3 +1322,89 @@ button {
     from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
+/* Dodatek za pravilen izgled fieldset/legend elementov */
+fieldset.form-group {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+fieldset.form-group legend {
+    padding: 0;
+    font-weight: 500;
+}
+/* === DODATEK: STILI PO MERI ZA CHECKBOXE IN RADIO GUMBE === */
+
+/* Skrijemo privzeti input, ker bomo ustvarili svojega */
+.checkbox-options input[type="checkbox"],
+.checkbox-options input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+
+/* Ustvarimo prostor za kljukico/krog, ki bo na začetku skrit */
+.checkbox-options input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--card-color);
+    /* Oblika kljukice */
+    transform-origin: bottom left;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.checkbox-options input[type="radio"] {
+    border-radius: 50%; /* Radio gumbi so okrogli */
+}
+
+.checkbox-options input[type="radio"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--accent-blue);
+}
+
+
+/* Ko je polje obkljukano, prikažemo kljukico/krog in spremenimo ozadje */
+.checkbox-options input[type="checkbox"]:checked {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+.checkbox-options input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+.checkbox-options input[type="radio"]:checked {
+     border-color: var(--accent-blue);
+}
+.checkbox-options input[type="radio"]:checked::before {
+    transform: scale(1);
+}
+
+/* Izboljšan fokus stil */
+.checkbox-options input[type="checkbox"]:focus,
+.checkbox-options input[type="radio"]:focus {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+}

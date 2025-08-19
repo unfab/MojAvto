@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <div class="form-row" style="margin-top: 1.5rem;">
-                     <div class="form-group" style="grid-column: 1 / -1;">
+                    <div class="form-group" style="grid-column: 1 / -1;">
                         <div class="checkbox-options single-row">
                             <label for="adv-service-history"><input type="checkbox" id="adv-service-history" name="service_history" value="true"> Potrjena servisna zgodovina</label>
                             <label for="adv-undamaged"><input type="checkbox" id="adv-undamaged" name="undamaged" value="true"> Nepoškodovano vozilo</label>
@@ -156,14 +156,14 @@
                              <label for="adv-interior-color">Barva notranjosti</label>
                              <input type="text" id="adv-interior-color" name="interior_color" placeholder="npr. Črna, Bež, Rjava...">
                         </div>
-                        <div class="form-group">
-                            <label>Material sedežev</label>
+                        <fieldset class="form-group">
+                            <legend>Material sedežev</legend>
                             <div class="checkbox-options single-row">
                                 <label for="equip-leather"><input type="checkbox" id="equip-leather" name="equipment" value="Usnjeni sedeži"> Usnje</label>
                                 <label for="equip-alcantara"><input type="checkbox" id="equip-alcantara" name="equipment" value="Alcantara sedeži"> Alcantara</label>
                                 <label for="equip-part-leather"><input type="checkbox" id="equip-part-leather" name="equipment" value="Delno usnje"> Delno usnje</label>
                             </div>
-                        </div>
+                        </fieldset>
                     </div>
                 </div>
                 <div class="equipment-category">
@@ -343,15 +343,13 @@
                         <input type="number" id="adv-battery" name="battery" placeholder="npr. 50">
                     </div>
                 </div>
-                <div class="form-row" id="hybrid-options-row" style="margin-top: 1.5rem;">
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label>Tip hibridnega pogona</label>
-                        <div class="checkbox-options" style="margin-top: 0.5rem;">
-                            <label for="adv-hybrid-phev"><input type="radio" id="adv-hybrid-phev" name="hybrid_type" value="PHEV"> Priključni hibrid (PHEV)</label>
-                            <label for="adv-hybrid-mild"><input type="radio" id="adv-hybrid-mild" name="hybrid_type" value="Mild"> Blagi hibrid (Mild)</label>
-                        </div>
+                <fieldset class="form-group" id="hybrid-options-row" style="border: none; padding: 0; margin-top: 1.5rem;">
+                    <legend>Tip hibridnega pogona</legend>
+                    <div class="checkbox-options" style="margin-top: 0.5rem;">
+                        <label for="adv-hybrid-phev"><input type="radio" id="adv-hybrid-phev" name="hybrid_type" value="PHEV"> Priključni hibrid (PHEV)</label>
+                        <label for="adv-hybrid-mild"><input type="radio" id="adv-hybrid-mild" name="hybrid_type" value="Mild"> Blagi hibrid (Mild)</label>
                     </div>
-                </div>
+                </fieldset>
             </div>
         </section>
         
