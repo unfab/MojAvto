@@ -17,6 +17,12 @@
     --accent-orange: #d9534f;
     --accent-orange-hover: #c9302c;
     --error-color: #e53e3e;
+
+    /* iOS Safe Area Insets */
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
 }
 
 body.dark-mode {
@@ -30,13 +36,25 @@ body.dark-mode {
     --input-bg: #374151;
 }
 
+/* === SPREMEMBA: Združena `body` pravila === */
 body {
     font-family: 'Inter', sans-serif;
     margin: 0;
     background-color: var(--bg-color);
     color: var(--text-primary);
     transition: background-color 0.3s ease, color 0.3s ease;
+    
+    /* Pravila za iOS in varne cone */
+    padding-top: var(--safe-area-inset-top);
+    padding-right: var(--safe-area-inset-right);
+    padding-bottom: var(--safe-area-inset-bottom);
+    padding-left: var(--safe-area-inset-left);
+
+    /* Pravila za glajenje pisave */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+/* === KONEC SPREMEMBE === */
 
 .page-container {
     display: flex;
@@ -877,7 +895,6 @@ select[multiple] option {
 /* === NOVO: Stili za stran s primerjavo (compare.html) === */
 
 .comparison-grid {
-    display: grid;
     /* Ustvari mrežo s stolpci, ki so široki najmanj 320px in se samodejno prilagajajo širini zaslona */
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem; /* Razmik med karticami */
@@ -1217,4 +1234,91 @@ select[multiple] option {
     max-width: 150px;
     height: auto;
     border-radius: 8px;
+}
+/* Stili za značko za primerjavo v stranski vrstici */
+.sidebar-nav a#compare-link {
+    justify-content: space-between;
+}
+
+.sidebar-nav .notification-badge {
+    background-color: var(--accent-orange);
+    color: white;
+    border-radius: 10px;
+    padding: 0 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    min-width: 18px;
+
+}
+/* === DODATKI ZA iOS OPTIMIZACIJO === */
+
+/* 2. Popravek stila za formularje */
+input,
+textarea,
+select,
+button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* 3. Dodatni kozmetični popravki */
+* {
+    -webkit-tap-highlight-color: transparent; /* Prepreči sivo območje ob dotiku */
+}
+/* === STILI ZA POTRDITVENI MODAL === */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(17, 24, 39, 0.6); /* Temno prosojno ozadje */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+    background-color: var(--card-color);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.modal-content p {
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }

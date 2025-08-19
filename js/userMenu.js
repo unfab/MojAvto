@@ -1,4 +1,6 @@
+// js/userMenu.js
 import { translate } from './i18n.js';
+import { showNotification } from './notifications.js'; // Dodan import
 
 export function initUserMenu() {
     const user = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
@@ -11,7 +13,6 @@ export function initUserMenu() {
     const profileLink = document.getElementById("profileLink");
     const dashboardLink = document.getElementById("dashboardLink");
 
-    // Preverimo, če elementi obstajajo, preden nadaljujemo
     if (!userMenu || !loginLink || !userDropdownBtn) return;
     
     if (user && user.fullname) {
@@ -48,8 +49,9 @@ export function initUserMenu() {
     logoutBtn?.addEventListener("click", (e) => {
         e.preventDefault();
         localStorage.removeItem("mojavto_loggedUser");
-        alert(translate('logout_successful'));
+        // === SPREMEMBA: alert() zamenjan s showNotification() ===
+        showNotification(translate('logout_successful'), 'info');
         window.location.hash = '#/login';
-        location.reload(); // Osvežimo stran za posodobitev menija
+        location.reload(); 
     });
 }

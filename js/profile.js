@@ -1,5 +1,7 @@
 import { translate } from './i18n.js';
 import { stateManager } from './stateManager.js';
+import { showModal } from './components/modal.js';
+import { showNotification } from './notifications.js';
 
 export function initProfilePage() {
     const { loggedInUser, favorites } = stateManager.getState();
@@ -40,10 +42,10 @@ export function initProfilePage() {
             card.className = 'card';
             card.innerHTML = `
                 <div class="card-image-container"><img src="${listing.images?.exterior[0] || 'https://via.placeholder.com/300x180?text=Avto'}" alt="${listing.title}" /></div>
-                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Cena: ${listing.price.toLocaleString()} €</p></div>
+                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Price: ${listing.price.toLocaleString()} €</p></div>
                 <div class="card-actions">
-                    <a href="#/create-listing?edit=true" class="btn btn-edit" data-id="${listing.id}"><i class="fas fa-pencil-alt"></i> ${translate('edit_btn') || 'Uredi'}</a>
-                    <button class="btn btn-delete" data-id="${listing.id}"><i class="fas fa-trash"></i> ${translate('delete_btn') || 'Izbriši'}</button>
+                    <a href="#/create-listing?edit=true" class="btn btn-edit" data-id="${listing.id}"><i class="fas fa-pencil-alt"></i> ${translate('edit_btn') || 'Edit'}</a>
+                    <button class="btn btn-delete" data-id="${listing.id}"><i class="fas fa-trash"></i> ${translate('delete_btn') || 'Delete'}</button>
                 </div>`;
             container.appendChild(card);
         });
@@ -53,11 +55,13 @@ export function initProfilePage() {
 
     function addDeleteListeners() {
         document.querySelectorAll('#my-listings-container .btn-delete').forEach(button => {
-            button.addEventListener('click', (e) => {
-                if (confirm(translate('confirm_delete_listing'))) {
+            button.addEventListener('click', async (e) => {
+                const confirmed = await showModal('confirm_delete_listing_title', 'confirm_delete_listing_text');
+                if (confirmed) {
                     const listingId = parseInt(e.currentTarget.dataset.id, 10);
                     stateManager.deleteListing(listingId);
-                    displayMyListings(); // Ponovno naložimo prikaz, da se odrazi sprememba
+                    showNotification(translate('listing_deleted_successfully'), 'success');
+                    displayMyListings(); // Refresh the list
                 }
             });
         });
@@ -85,7 +89,7 @@ export function initProfilePage() {
             card.className = 'card';
             card.innerHTML = `
                 <div class="card-image-container"><img src="${listing.images?.exterior[0] || 'https://via.placeholder.com/300x180?text=Avto'}" alt="${listing.title}" /></div>
-                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Cena: ${listing.price.toLocaleString()} €</p></div>`;
+                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Price: ${listing.price.toLocaleString()} €</p></div>`;
             card.addEventListener('click', () => {
                 window.location.hash = `#/listing/${listing.id}`;
             });
@@ -106,24 +110,23 @@ export function initProfilePage() {
             searchItem.className = 'saved-search-item';
             searchItem.innerHTML = `
                 <a href="#/search-results" class="search-link">${search.name}</a>
-                <button class="btn-delete-search" data-id="${search.id}" title="Izbriši iskanje">&times;</button>
+                <button class="btn-delete-search" data-id="${search.id}" title="Delete search">&times;</button>
             `;
 
             searchItem.querySelector('.search-link').addEventListener('click', () => {
                 sessionStorage.setItem('advancedSearchCriteria', JSON.stringify(search.criteria));
             });
-
-            container.appendChild(searchItem);
-        });
-
-        container.querySelectorAll('.btn-delete-search').forEach(button => {
-            button.addEventListener('click', (e) => {
-                if (confirm('Ali ste prepričani, da želite izbrisati to shranjeno iskanje?')) {
-                    const searchId = parseInt(e.currentTarget.dataset.id, 10);
-                    stateManager.deleteSavedSearch(searchId);
+            
+            searchItem.querySelector('.btn-delete-search').addEventListener('click', async () => {
+                const confirmed = await showModal('confirm_delete_search_title', 'confirm_delete_search_text');
+                if (confirmed) {
+                    stateManager.deleteSavedSearch(search.id);
+                    showNotification(translate('search_deleted_successfully'), 'success');
                     displaySavedSearches();
                 }
             });
+
+            container.appendChild(searchItem);
         });
     }
 
@@ -141,7 +144,7 @@ export function initProfilePage() {
             card.className = 'card';
             card.innerHTML = `
                 <div class="card-image-container"><img src="${listing.images?.exterior[0] || 'https://via.placeholder.com/300x180?text=Avto'}" alt="${listing.title}" /></div>
-                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Cena: ${listing.price.toLocaleString()} €</p></div>`;
+                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Price: ${listing.price.toLocaleString()} €</p></div>`;
             card.addEventListener('click', () => {
                 window.location.hash = `#/listing/${listing.id}`;
             });
@@ -149,7 +152,7 @@ export function initProfilePage() {
         });
     }
 
-    // --- UREJANJE PROFILA ---
+    // --- PROFILE EDITING ---
     const profileForm = document.getElementById('profile-edit-form');
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
@@ -161,29 +164,26 @@ export function initProfilePage() {
     userRegionInput.value = loggedInUser.region || '';
     userPhoneInput.value = loggedInUser.phone || '';
 
-    profileForm.addEventListener('submit', (e) => {
+    profileForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (confirm(translate('confirm_save_changes'))) {
-            const allUsers = JSON.parse(localStorage.getItem('mojavto_users')) || []; // Še vedno beremo direktno za posodobitev
-            const userIndex = allUsers.findIndex(user => user.username === loggedInUser.username);
-            if (userIndex > -1) {
-                allUsers[userIndex].fullname = fullnameInput.value;
-                allUsers[userIndex].email = emailInput.value;
-                allUsers[userIndex].region = userRegionInput.value;
-                allUsers[userIndex].phone = userPhoneInput.value;
-                
-                // Posodobimo localStorage in nato še stateManager
-                localStorage.setItem('mojavto_users', JSON.stringify(allUsers));
-                const updatedLoggedUser = allUsers[userIndex];
-                stateManager.setLoggedInUser(updatedLoggedUser);
-                
-                alert(translate('profile_updated_successfully'));
-                location.reload();
-            }
+        const confirmed = await showModal('confirm_save_changes_title', 'confirm_save_changes_text');
+        if (confirmed) {
+            const updatedUserData = {
+                ...loggedInUser,
+                fullname: fullnameInput.value,
+                email: emailInput.value,
+                region: userRegionInput.value,
+                phone: userPhoneInput.value,
+            };
+            
+            stateManager.updateUser(updatedUserData);
+            showNotification(translate('profile_updated_successfully'), 'success');
+            // No reload needed if UI updates reactively, but for simplicity, we'll keep it
+            location.reload(); 
         }
     });
 
-    // Začetni zagon vseh funkcij
+    // Initial render of all sections
     displayMyListings();
     displayFavoriteListings();
     displaySavedSearches();

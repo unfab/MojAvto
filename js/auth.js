@@ -1,10 +1,10 @@
 import { translate } from './i18n.js';
-// === NOVO: Uvozimo stateManager ===
 import { stateManager } from './stateManager.js';
+import { showNotification } from './notifications.js';
 
 export function initAuthPage() {
 
-    // --- LOGIKA ZA REGISTRACIJO ---
+    // --- REGISTRATION LOGIC ---
     const registerForm = document.getElementById("registerForm");
     if (registerForm) {
         const passwordInput = document.getElementById("password");
@@ -37,7 +37,6 @@ export function initAuthPage() {
                 return;
             }
 
-            // === SPREMEMBA: Uporabimo stateManager za preverjanje uporabnikov ===
             const { users } = stateManager.getState();
             const userExists = users.find(u => u.username === data.username || u.email === data.email);
             if (userExists) {
@@ -49,20 +48,19 @@ export function initAuthPage() {
                 fullname: data.fullname,
                 email: data.email,
                 username: data.username,
-                password: data.password,
+                password: data.password, // In a real app, hash this!
                 region: data.region,
                 isAdmin: false
             };
             
-            // === SPREMEMBA: Dodamo novega uporabnika preko stateManagerja ===
             stateManager.addUser(newUser);
-            alert(translate('registration_successful'));
+            showNotification(translate('registration_successful'), 'success');
             
             window.location.hash = "#/login";
         });
     }
 
-    // --- LOGIKA ZA PRIJAVO ---
+    // --- LOGIN LOGIC ---
     const loginForm = document.getElementById("loginForm");
     if (loginForm) {
         const errorMessage = document.getElementById("error-message");
@@ -73,7 +71,6 @@ export function initAuthPage() {
             const usernameOrEmail = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value;
             
-            // === SPREMEMBA: Uporabimo stateManager za iskanje uporabnika ===
             const { users } = stateManager.getState();
             const user = users.find(u => (u.username === usernameOrEmail || u.email === usernameOrEmail) && u.password === password);
 
@@ -82,9 +79,8 @@ export function initAuthPage() {
                 return;
             }
 
-            // === SPREMEMBA: Prijavimo uporabnika preko stateManagerja ===
             stateManager.setLoggedInUser(user);
-            alert(translate('login_successful'));
+            showNotification(translate('login_successful'), 'success');
 
             window.location.hash = "#/";
         });

@@ -102,5 +102,13 @@
   "saving": "Shranjevanje...",
   "contact_form_sending": "Pošiljanje sporočila...",
   "contact_form_success": "Hvala za sporočilo! Odgovorili vam bomo v najkrajšem možnem času.",
-  "error_invalid_email_format": "Vnesite veljaven email naslov."
+  "error_invalid_email_format": "Vnesite veljaven email naslov.",
+  "modal_default_title": "Potrditev",
+  "modal_confirm_btn": "Potrdi",
+  "modal_cancel_btn": "Prekliči",
+  "confirm_delete_listing_title": "Potrditev brisanja",
+  "confirm_delete_listing_text": "Ali ste prepričani, da želite trajno izbrisati ta oglas?",
+  "listing_deleted_successfully": "Oglas uspešno izbrisan.",
+  "confirm_save_changes_title": "Potrditev sprememb",
+  "confirm_save_changes_text": "Ali ste prepričani, da želite shraniti spremembe?"
 }

@@ -11,7 +11,7 @@ export function updateCompareIcon() {
     const { compareItems } = stateManager.getState();
     
     if (compareItems && compareItems.length > 0) {
-        compareLink.style.display = 'inline-flex';
+        compareLink.style.display = 'flex';
         compareCount.textContent = compareItems.length;
     } else {
         compareLink.style.display = 'none';
