@@ -1,5 +1,4 @@
 import { stateManager } from './stateManager.js';
-import { toggleFavorite, toggleCompare } from './utils/listingManager.js';
 import { translate } from './i18n.js';
 import { initCarousel } from './components/Carousel.js';
 
@@ -20,6 +19,7 @@ export async function initHomePage() {
     const quickLinkVerified = document.getElementById('quick-link-verified');
     const quickLinkFamily = document.getElementById('quick-link-family');
     const brandsGrid = document.querySelector('.brands-grid');
+    const newsGrid = document.querySelector('.news-grid');
 
     if (!searchForm || !makeSelect || !regionSelect) {
         console.error("Manjka ključen element na domači strani (formular).");
@@ -52,7 +52,7 @@ export async function initHomePage() {
         modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
         modelSelect.disabled = true;
         if (this.value && brandModelData[this.value]) {
-            Object.keys(brandModelData[this.value]).forEach(model => {
+            Object.keys(brandModelData[this.value]).sort().forEach(model => {
                 modelSelect.add(new Option(model, model));
             });
             modelSelect.disabled = false;
@@ -64,7 +64,6 @@ export async function initHomePage() {
         e.preventDefault();
         const formData = new FormData(searchForm);
         const criteria = Object.fromEntries(formData.entries());
-        // Shranimo kriterije in preusmerimo na stran z rezultati
         sessionStorage.setItem('searchCriteria', JSON.stringify(criteria));
         window.location.hash = '#/search-results';
     });
@@ -110,10 +109,39 @@ export async function initHomePage() {
             }
         });
     }
+
+    // === Dinamično nalaganje novic ===
+    if (newsGrid) {
+        const articles = stateManager.getArticles().slice(0, 3); // Prikažemo zadnje 3
+        newsGrid.innerHTML = ''; // Počistimo morebitno statično vsebino
+        if (articles.length > 0) {
+            articles.forEach(article => {
+                const articleCard = document.createElement('a');
+                articleCard.className = 'news-card';
+                articleCard.href = `#/article/${article.id}`; 
+                
+                const snippet = article.content.substring(0, 100).replace(/<[^>]*>?/gm, '');
+
+                articleCard.innerHTML = `
+                    <img src="${article.imageUrl}" alt="${article.title}">
+                    <div class="news-card-content">
+                        <h3>${article.title}</h3>
+                        <p>${snippet}...</p>
+                        <span class="read-more-btn">Preberi več <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                `;
+                newsGrid.appendChild(articleCard);
+            });
+        } else {
+            // Če ni člankov, skrijemo celotno sekcijo z novicami
+            const newsSection = newsGrid.closest('.news-section');
+            if(newsSection) {
+                newsSection.style.display = 'none';
+            }
+        }
+    }
     
     // === Inicializacija vseh drsnikov (Carousel) ===
-
-    // 1. Izpostavljeni oglasi
     const featuredSection = document.getElementById('featured-section');
     if (featuredSection) {
         const featuredListings = allListings.filter(listing => listing.isFeatured === true);
@@ -128,7 +156,6 @@ export async function initHomePage() {
         }
     }
 
-    // 2. Nazadnje ogledano
     const recentlyViewedIds = JSON.parse(localStorage.getItem('mojavto_recentlyViewed')) || [];
     const recentSection = document.getElementById('recently-viewed-section');
     if (recentSection && recentlyViewedIds.length > 0) {
@@ -146,7 +173,6 @@ export async function initHomePage() {
         }
     }
     
-    // 3. Priljubljeno med uporabniki
     const popularSection = document.getElementById('popular-section');
     if (popularSection && allFavorites) {
         const favoriteCounts = {};
@@ -171,7 +197,6 @@ export async function initHomePage() {
         }
     }
 
-    // 4. Novo v ponudbi
     const newestSection = document.getElementById('newest-section');
     if (newestSection) {
         const newestListings = [...allListings]

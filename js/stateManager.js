@@ -1,5 +1,3 @@
-// js/stateManager.js
-
 import { evaluatePrice } from './utils/priceEvaluator.js';
 
 /**
@@ -10,6 +8,7 @@ const state = {
     listings: [],
     brands: {},
     users: [],
+    articles: [],
     loggedInUser: null,
     favorites: [],      // Favorites for the currently logged-in user
     allFavorites: {},   // All favorites for all users, keyed by username
@@ -26,11 +25,11 @@ const state = {
 function saveStateToLocalStorage() {
     localStorage.setItem('mojavto_users', JSON.stringify(state.users));
     localStorage.setItem('mojavto_listings', JSON.stringify(state.listings));
+    localStorage.setItem('mojavto_articles', JSON.stringify(state.articles));
     localStorage.setItem('mojavto_loggedUser', JSON.stringify(state.loggedInUser));
     localStorage.setItem('mojavto_compareItems', JSON.stringify(state.compareItems));
     localStorage.setItem('mojavto_savedSearches', JSON.stringify(state.savedSearches));
 
-    // Ensure the logged-in user's favorites are up-to-date before saving the entire favorites object.
     if (state.loggedInUser) {
         state.allFavorites[state.loggedInUser.username] = state.favorites;
     }
@@ -44,12 +43,12 @@ function saveStateToLocalStorage() {
 function loadStateFromLocalStorage() {
     state.users = JSON.parse(localStorage.getItem('mojavto_users')) || [];
     state.listings = JSON.parse(localStorage.getItem('mojavto_listings')) || [];
+    state.articles = JSON.parse(localStorage.getItem('mojavto_articles')) || [];
     state.loggedInUser = JSON.parse(localStorage.getItem('mojavto_loggedUser')) || null;
     state.allFavorites = JSON.parse(localStorage.getItem('mojavto_favorites')) || {};
     state.compareItems = JSON.parse(localStorage.getItem('mojavto_compareItems')) || [];
     state.savedSearches = JSON.parse(localStorage.getItem('mojavto_savedSearches')) || {};
 
-    // After loading all data, set the specific favorites list for the currently logged-in user.
     if (state.loggedInUser) {
         state.favorites = state.allFavorites[state.loggedInUser.username] || [];
     } else {
@@ -59,30 +58,19 @@ function loadStateFromLocalStorage() {
 
 /**
  * Ensures that listings from localStorage are updated with any new properties from the source JSON.
- * This prevents errors when the data structure changes over time.
  * @private
- * @param {object[]} localListings - The array of listings from localStorage.
- * @param {object[]} freshListings - The array of listings from the source JSON file.
- * @returns {object[]} The updated ("hydrated") array of listings.
  */
 function hydrateListings(localListings, freshListings) {
     if (!freshListings || freshListings.length === 0) return localListings;
-
     const freshListingTemplate = freshListings[0];
-
     return localListings.map(listing => {
         const hydratedListing = { ...listing };
-
-        // Example: Add 'financing' property if it's missing.
         if (hydratedListing.financing === undefined && freshListingTemplate.financing !== undefined) {
-            hydratedListing.financing = { available: false }; // Assign a safe default value.
+            hydratedListing.financing = { available: false };
         }
-
-        // Example: Add 'priceEvaluation' if it's missing.
         if (hydratedListing.priceEvaluation === undefined) {
             hydratedListing.priceEvaluation = evaluatePrice(hydratedListing, localListings);
         }
-        
         return hydratedListing;
     });
 }
@@ -90,10 +78,6 @@ function hydrateListings(localListings, freshListings) {
 // --- Public State Manager Object ---
 
 export const stateManager = {
-    /**
-     * Initializes the state manager by fetching source data, loading from localStorage,
-     * ensuring data consistency, and saving the final state.
-     */
     async initialize() {
         try {
             const basePath = window.location.hostname.includes('github.io') ? '/MojAvto' : '';
@@ -112,64 +96,42 @@ export const stateManager = {
             loadStateFromLocalStorage();
 
             if (state.listings.length === 0) {
-                // If localStorage is empty, populate it with fresh data.
                 state.listings = initialListings;
                 state.listings.forEach(listing => {
                     listing.priceEvaluation = evaluatePrice(listing, state.listings);
                 });
             } else {
-                // If listings exist in localStorage, "hydrate" them with any new properties.
                 state.listings = hydrateListings(state.listings, initialListings);
             }
 
             saveStateToLocalStorage();
             console.log('State Manager initialized, data is ready.');
-
         } catch (error) {
             console.error("Critical error in State Manager:", error);
-            throw error; // Propagate the error to be handled by the main app entry point.
+            throw error;
         }
     },
-
-    // ... (The rest of the methods remain exactly the same as in your provided code)
     
-    /**
-     * Returns a shallow copy of the current state.
-     * @returns {object} The application state.
-     */
     getState() {
         return { ...state };
     },
 
-    /**
-     * Returns all listings.
-     * @returns {object[]}
-     */
     getListings() {
         return state.listings;
     },
 
-    /**
-     * Returns all brands and their models.
-     * @returns {object}
-     */
+    getUsers() {
+        return state.users;
+    },
+
     getBrands() {
         return state.brands;
     },
 
-    /**
-     * Finds and returns a listing by its ID.
-     * @param {string|number} id The ID of the listing.
-     * @returns {object|undefined}
-     */
     getListingById(id) {
         return state.listings.find(listing => String(listing.id) === String(id));
     },
 
-    /**
-     * Sets the currently logged-in user and updates the state.
-     * @param {object} user The user object.
-     */
     setLoggedInUser(user) {
         state.loggedInUser = user;
         if (user) {
@@ -180,28 +142,28 @@ export const stateManager = {
         saveStateToLocalStorage();
     },
 
-    /**
-     * Logs out the current user.
-     */
     logoutUser() {
         state.loggedInUser = null;
         state.favorites = [];
         saveStateToLocalStorage();
     },
 
-    /**
-     * Adds a new user to the state.
-     * @param {object} user The new user object.
-     */
     addUser(user) {
         state.users.push(user);
         saveStateToLocalStorage();
     },
+    
+    updateUser(updatedUserData) {
+        const index = state.users.findIndex(u => u.username === updatedUserData.username);
+        if (index !== -1) {
+            state.users[index] = updatedUserData;
+            if (state.loggedInUser && state.loggedInUser.username === updatedUserData.username) {
+                state.loggedInUser = updatedUserData;
+            }
+            saveStateToLocalStorage();
+        }
+    },
 
-    /**
-     * Adds a new listing to the state.
-     * @param {object} listing The new listing object.
-     */
     addListing(listing) {
         listing.id = Date.now();
         listing.author = state.loggedInUser.username;
@@ -210,14 +172,9 @@ export const stateManager = {
         saveStateToLocalStorage();
     },
 
-    /**
-     * Updates an existing listing.
-     * @param {object} updatedListing The listing object with updated data.
-     */
     updateListing(updatedListing) {
         const index = state.listings.findIndex(l => l.id === updatedListing.id);
         if (index !== -1) {
-            // Recalculate price evaluation if the price has changed.
             if (state.listings[index].price !== updatedListing.price) {
                 updatedListing.priceEvaluation = evaluatePrice(updatedListing, state.listings);
             }
@@ -226,23 +183,13 @@ export const stateManager = {
         }
     },
 
-    /**
-     * Deletes a listing by its ID.
-     * @param {string|number} listingId The ID of the listing to delete.
-     */
     deleteListing(listingId) {
         state.listings = state.listings.filter(l => l.id !== Number(listingId));
         saveStateToLocalStorage();
     },
 
-    /**
-     * Toggles a listing in the user's favorites.
-     * @param {string|number} listingId The ID of the listing.
-     * @returns {{success: boolean, added: boolean, reason?: string}}
-     */
     toggleFavorite(listingId) {
         if (!state.loggedInUser) {
-            console.warn("User not logged in. Cannot save favorites.");
             return { success: false, reason: 'unauthenticated' };
         }
         const favId = String(listingId);
@@ -259,11 +206,6 @@ export const stateManager = {
         return { success: true, added: wasAdded };
     },
 
-    /**
-     * Toggles a listing in the comparison list.
-     * @param {string|number} listingId The ID of the listing.
-     * @returns {{success: boolean, added?: boolean, limitReached?: boolean}}
-     */
     toggleCompare(listingId) {
         const idStr = String(listingId);
         const index = state.compareItems.indexOf(idStr);
@@ -281,40 +223,26 @@ export const stateManager = {
         return { success: true, added: wasAdded };
     },
 
-    /**
-     * Clears all items from the comparison list.
-     */
     clearCompareItems() {
         state.compareItems = [];
         saveStateToLocalStorage();
     },
 
-    /**
-     * Adds a saved search for the logged-in user.
-     * @param {string} searchName The name for the saved search.
-     * @param {object} criteria The search criteria object.
-     */
     addSavedSearch(searchName, criteria) {
         if (!state.loggedInUser) return;
         const username = state.loggedInUser.username;
         if (!state.savedSearches[username]) {
             state.savedSearches[username] = [];
         }
-
         const newSearch = {
             id: Date.now(),
             name: searchName,
             criteria: criteria
         };
-
         state.savedSearches[username].unshift(newSearch);
         saveStateToLocalStorage();
     },
 
-    /**
-     * Deletes a saved search by its ID.
-     * @param {string|number} searchId The ID of the saved search.
-     */
     deleteSavedSearch(searchId) {
         if (!state.loggedInUser) return;
         const username = state.loggedInUser.username;
@@ -324,12 +252,27 @@ export const stateManager = {
         }
     },
 
-    /**
-     * Retrieves saved searches for the logged-in user.
-     * @returns {object[]} An array of saved search objects.
-     */
     getSavedSearches() {
         if (!state.loggedInUser) return [];
         return state.savedSearches[state.loggedInUser.username] || [];
+    },
+
+    addArticle(article) {
+        if (!state.loggedInUser || !state.loggedInUser.isAdmin) {
+            return;
+        }
+        article.id = Date.now();
+        article.author = state.loggedInUser.fullname;
+        article.date = new Date().toISOString();
+        state.articles.unshift(article);
+        saveStateToLocalStorage();
+    },
+
+    getArticles() {
+        return [...state.articles].sort((a, b) => new Date(b.date) - new Date(a.date));
+    },
+
+    getArticleById(id) {
+        return state.articles.find(article => String(article.id) === String(id));
     }
 };

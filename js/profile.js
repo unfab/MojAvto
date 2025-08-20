@@ -66,7 +66,7 @@ export function initProfilePage() {
                     const listingId = parseInt(e.currentTarget.dataset.id, 10);
                     stateManager.deleteListing(listingId);
                     showNotification(translate('listing_deleted_successfully'), 'success');
-                    displayMyListings(); // Refresh the list
+                    displayMyListings();
                 }
             });
         });
@@ -157,14 +157,12 @@ export function initProfilePage() {
         });
     }
 
-    // --- UREJANJE PROFILA ---
     const profileForm = document.getElementById('profile-edit-form');
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
     const userRegionInput = document.getElementById('userRegion');
     const userPhoneInput = document.getElementById('userPhone');
 
-    // Polnjenje dropdowna z regijami
     userRegionInput.innerHTML = `<option value="">${translate('form_region_select')}</option>`;
     SLOVENIAN_REGIONS.forEach(region => {
         userRegionInput.add(new Option(region, region));
@@ -179,6 +177,7 @@ export function initProfilePage() {
         e.preventDefault();
         const confirmed = await showModal('confirm_save_changes_title', 'confirm_save_changes_text');
         if (confirmed) {
+            // === SPREMEMBA: Centralizirano posodabljanje podatkov ===
             const updatedUserData = {
                 ...loggedInUser,
                 fullname: fullnameInput.value,
@@ -187,7 +186,6 @@ export function initProfilePage() {
                 phone: userPhoneInput.value,
             };
             
-            // Centralizirano posodabljanje preko stateManagerja
             stateManager.updateUser(updatedUserData);
             
             showNotification(translate('profile_updated_successfully'), 'success');
@@ -195,7 +193,6 @@ export function initProfilePage() {
         }
     });
 
-    // Začetni zagon vseh funkcij za prikaz vsebine
     displayMyListings();
     displayFavoriteListings();
     displaySavedSearches();

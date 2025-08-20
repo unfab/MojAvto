@@ -1,18 +1,20 @@
 import { translate } from './i18n.js';
+import { stateManager } from './stateManager.js';
+import { showModal } from './components/modal.js';
+import { showNotification } from './notifications.js';
+
 export function initAdminPage() {
-    // --- VARNOSTNA KONTROLA ---
-    const loggedUser = JSON.parse(localStorage.getItem("mojavto_loggedUser"));
-    if (!loggedUser || !loggedUser.isAdmin) {
-        alert(translate('admin_unauthorized_access'));
-        window.location.hash = '#/'; // Preusmeritev na domačo stran
+    const { loggedInUser } = stateManager.getState();
+    if (!loggedInUser || !loggedInUser.isAdmin) {
+        showNotification(translate('admin_unauthorized_access'), 'error');
+        window.location.hash = '#/';
         return;
     }
 
-    // Pridobivanje podatkov
-    const allUsers = JSON.parse(localStorage.getItem('mojavto_users')) || [];
-    const allListings = JSON.parse(localStorage.getItem('mojavto_listings')) || [];
+    // === SPREMEMBA: Podatke dobimo iz stateManagerja ===
+    const allUsers = stateManager.getUsers();
+    const allListings = stateManager.getListings();
 
-    // --- PRIKAZ STATISTIKE ---
     document.getElementById('total-users').textContent = allUsers.length;
     document.getElementById('total-listings').textContent = allListings.length;
     if (allListings.length > 0) {
@@ -21,15 +23,15 @@ export function initAdminPage() {
         document.getElementById('avg-price').textContent = `${Math.round(avgPrice).toLocaleString()} €`;
     }
 
-    // --- PRIKAZ VSEH OGLASOV ---
     const tableBody = document.getElementById('listings-table-body');
     
     function displayAllListings() {
-        // Preverimo, ali 'tableBody' obstaja, preden nadaljujemo
         if (!tableBody) return;
-        
         tableBody.innerHTML = '';
-        const currentListings = JSON.parse(localStorage.getItem('mojavto_listings')) || [];
+        
+        // === SPREMEMBA: Vedno prikažemo trenutno stanje iz stateManagerja ===
+        const currentListings = stateManager.getListings();
+
         currentListings.forEach(listing => {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -48,12 +50,13 @@ export function initAdminPage() {
 
     function addDeleteListeners() {
         tableBody.querySelectorAll('.btn-delete').forEach(button => {
-            button.addEventListener('click', (e) => {
-                if (confirm(translate('confirm_delete_listing'))) {
+            button.addEventListener('click', async (e) => {
+                const confirmed = await showModal('confirm_delete_listing_title', 'confirm_delete_listing_text');
+                if (confirmed) {
                     const listingId = parseInt(e.currentTarget.dataset.id, 10);
-                    let listings = JSON.parse(localStorage.getItem('mojavto_listings')) || [];
-                    const updatedListings = listings.filter(l => l.id !== listingId);
-                    localStorage.setItem('mojavto_listings', JSON.stringify(updatedListings));
+                    // Brisanje poteka preko stateManagerja, kar je že bilo pravilno
+                    stateManager.deleteListing(listingId);
+                    showNotification(translate('listing_deleted_successfully'), 'success');
                     displayAllListings(); // Osveži tabelo
                 }
             });

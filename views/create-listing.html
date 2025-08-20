@@ -1,99 +1,95 @@
 <main class="form-container">
     <h2 id="form-title" data-i18n-key="create_listing_h2">Ustvari nov oglas</h2>
-    <form id="listingForm">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="listing-brand" data-i18n-key="form_brand">Znamka vozila:</label>
-                <select id="listing-brand" name="brand" required><option value="" data-i18n-key="form_select_brand">Izberi znamko</option></select>
-            </div>
-            <div class="form-group">
-                <label for="listing-model" data-i18n-key="form_model">Model:</label>
-                <select id="listing-model" name="model" required disabled><option value="" data-i18n-key="select_brand_first">Najprej izberi znamko</option></select>
-            </div>
-            <div class="form-group">
-                <label for="listing-type" data-i18n-key="form_type">Tip/različica:</label>
-                <select id="listing-type" name="type" required disabled><option value="" data-i18n-key="select_model_first">Najprej izberi model</option></select>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label for="listing-price" data-i18n-key="form_price">Cena (€):</label>
-                <input type="number" id="listing-price" name="price" min="0" required>
-            </div>
-            <div class="form-group">
-                <label for="listing-year" data-i18n-key="form_year">Letnik:</label>
-                <select id="listing-year" name="year" required><option value="" data-i18n-key="form_select_year">Izberi letnik</option></select>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label for="listing-mileage" data-i18n-key="form_mileage">Prevoženi kilometri:</label>
-                <input type="number" id="listing-mileage" name="mileage" min="0" required>
-            </div>
-            <div class="form-group">
-                <label for="listing-power" data-i18n-key="form_power">Moč motorja (kW):</label>
-                <input type="number" id="listing-power" name="power" min="0">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label for="listing-fuel" data-i18n-key="form_fuel">Vrsta goriva:</label>
-                <select id="listing-fuel" name="fuel" required>
-                    <option value="">Izberi</option>
-                    <option data-i18n-key="fuel_petrol">Bencin</option>
-                    <option data-i18n-key="fuel_diesel">Dizel</option>
-                    <option data-i18n-key="fuel_hybrid">Hibrid</option>
-                    <option data-i18n-key="fuel_electric">Elektrika</option>
-                    <option data-i18n-key="fuel_gas">Plin</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="listing-transmission" data-i18n-key="form_gearbox">Menjalnik:</label>
-                <select id="listing-transmission" name="transmission" required>
-                    <option value="">Izberi</option>
-                    <option data-i18n-key="gearbox_manual">Ročni</option>
-                    <option data-i18n-key="gearbox_automatic">Avtomatski</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-row" id="electric-fields" style="display: none;">
-            <div class="form-group">
-                <label for="listing-battery" data-i18n-key="form_battery">Kapaciteta baterije (kWh):</label>
-                <input type="number" id="listing-battery" name="battery" min="0">
-            </div>
-            <div class="form-group">
-                <label for="listing-range" data-i18n-key="form_range">Domet (km):</label>
-                <input type="number" id="listing-range" name="range" min="0">
-            </div>
-        </div>
-        <label for="listing-phone" data-i18n-key="form_phone_number_optional">Telefonska številka (neobvezno):</label>
-        <input type="tel" id="listing-phone" name="phone" autocomplete="tel">
-        <label for="listing-description" data-i18n-key="vehicle_description">Opis vozila:</label>
-        <textarea id="listing-description" name="description" rows="5" required></textarea>
-
-        <div class="form-group">
-            <label for="listing-videoUrl">Povezava do YouTube/Vimeo videa (neobvezno):</label>
-            <input type="url" id="listing-videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
-        </div>
-        <label for="images-exterior" data-i18n-key="form_upload_exterior_images">Naloži slike zunanjosti:</label>
-        <input type="file" id="images-exterior" name="images-exterior" accept="image/*" multiple />
-        <div id="preview-exterior" class="image-preview"></div>
-
-        <label for="images-interior" data-i18n-key="form_upload_interior_images">Naloži slike notranjosti:</label>
-        <input type="file" id="images-interior" name="images-interior" accept="image/*" multiple />
-        <div id="preview-interior" class="image-preview"></div>
-        <button type="submit" id="submitBtn" class="btn-primary" data-i18n-key="publish_listing_btn">Objavi oglas</button>
-    </form>
-</main>
-
-<main class="form-container">
-    <h2 id="form-title" data-i18n-key="create_listing_h2">Ustvari nov oglas</h2>
-    <form id="listingForm">
-        <label for="listing-description" data-i18n-key="vehicle_description">Opis vozila:</label>
-        <textarea id="listing-description" name="description" rows="5" required></textarea>
+    <form id="listingForm" novalidate>
         
-        <label for="listing-videoUrl">Povezava do YouTube/Vimeo videa (neobvezno):</label>
-        <input type="url" id="listing-videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+        <fieldset class="form-section">
+            <legend>Osnovni podatki o vozilu</legend>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="listing-brand" data-i18n-key="form_brand">Znamka vozila:</label>
+                    <select id="listing-brand" name="brand" required><option value="" data-i18n-key="form_select_brand">Izberi znamko</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="listing-model" data-i18n-key="form_model">Model:</label>
+                    <select id="listing-model" name="model" required disabled><option value="" data-i18n-key="select_brand_first">Najprej izberi znamko</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="listing-type" data-i18n-key="form_type">Tip/različica:</label>
+                    <select id="listing-type" name="type" disabled><option value="" data-i18n-key="select_model_first">Najprej izberi model</option></select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="listing-price" data-i18n-key="form_price">Cena (€):</label>
+                    <input type="number" id="listing-price" name="price" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="listing-year" data-i18n-key="form_year">Letnik:</label>
+                    <select id="listing-year" name="year" required><option value="" data-i18n-key="form_select_year">Izberi letnik</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="listing-mileage" data-i18n-key="form_mileage">Prevoženi kilometri:</label>
+                    <input type="number" id="listing-mileage" name="mileage" min="0" required>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend>Tehnični podatki</legend>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="listing-power" data-i18n-key="form_power">Moč motorja (kW):</label>
+                    <input type="number" id="listing-power" name="power" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="listing-fuel" data-i18n-key="form_fuel">Vrsta goriva:</label>
+                    <select id="listing-fuel" name="fuel" required>
+                        <option value="">Izberi</option>
+                        <option data-i18n-key="fuel_petrol">Bencin</option>
+                        <option data-i18n-key="fuel_diesel">Dizel</option>
+                        <option data-i18n-key="fuel_hybrid">Hibrid</option>
+                        <option data-i18n-key="fuel_electric">Elektrika</option>
+                        <option data-i18n-key="fuel_gas">Plin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="listing-transmission" data-i18n-key="form_gearbox">Menjalnik:</label>
+                    <select id="listing-transmission" name="transmission" required>
+                        <option value="">Izberi</option>
+                        <option data-i18n-key="gearbox_manual">Ročni</option>
+                        <option data-i18n-key="gearbox_automatic">Avtomatski</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row" id="electric-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="listing-battery" data-i18n-key="form_battery">Kapaciteta baterije (kWh):</label>
+                    <input type="number" id="listing-battery" name="battery" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="listing-range" data-i18n-key="form_range">Domet (km):</label>
+                    <input type="number" id="listing-range" name="range" min="0">
+                </div>
+            </div>
+        </fieldset>
+        
+        <fieldset class="form-section">
+            <legend>Oprema vozila</legend>
+            <div id="equipment-container">
+                </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend>Opis in mediji</legend>
+            <div class="form-group">
+                <label for="listing-description" data-i18n-key="vehicle_description">Opis vozila (obvezno):</label>
+                <textarea id="listing-description" name="description" rows="5" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="listing-videoUrl">Povezava do YouTube/Vimeo videa (neobvezno):</label>
+                <input type="url" id="listing-videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+        </fieldset>
 
         <fieldset class="form-section">
             <legend>Možnosti financiranja</legend>
@@ -127,13 +123,29 @@
                 </div>
             </div>
         </fieldset>
-        <label for="images-exterior" data-i18n-key="form_upload_exterior_images">Naloži slike zunanjosti:</label>
-        <input type="file" id="images-exterior" name="images-exterior" accept="image/*" multiple />
-        <div id="preview-exterior" class="image-preview"></div>
 
-        <label for="images-interior" data-i18n-key="form_upload_interior_images">Naloži slike notranjosti:</label>
-        <input type="file" id="images-interior" name="images-interior" accept="image/*" multiple />
-        <div id="preview-interior" class="image-preview"></div>
+        <fieldset class="form-section">
+            <legend>Slike vozila</legend>
+            <div class="form-group">
+                <label for="images-exterior" data-i18n-key="form_upload_exterior_images">Naloži slike zunanjosti:</label>
+                <input type="file" id="images-exterior" name="images-exterior" accept="image/*" multiple />
+                <div id="preview-exterior" class="image-preview"></div>
+            </div>
+            <div class="form-group">
+                <label for="images-interior" data-i18n-key="form_upload_interior_images">Naloži slike notranjosti:</label>
+                <input type="file" id="images-interior" name="images-interior" accept="image/*" multiple />
+                <div id="preview-interior" class="image-preview"></div>
+            </div>
+        </fieldset>
+        
+        <fieldset class="form-section">
+            <legend>Kontaktni podatki</legend>
+            <div class="form-group">
+                <label for="listing-phone" data-i18n-key="form_phone_number_optional">Telefonska številka (prikazana bo v oglasu):</label>
+                <input type="tel" id="listing-phone" name="phone" autocomplete="tel">
+            </div>
+        </fieldset>
+        
         <button type="submit" id="submitBtn" class="btn-primary" data-i18n-key="publish_listing_btn">Objavi oglas</button>
     </form>
 </main>
