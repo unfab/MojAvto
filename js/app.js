@@ -120,3 +120,15 @@ async function main() {
 
 // Run the main function after the initial HTML document has been parsed.
 document.addEventListener('DOMContentLoaded', main);
+// === REGISTRACIJA SERVICE WORKERJA ===
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('Service Worker uspešno registriran:', registration);
+            })
+            .catch(error => {
+                console.error('Registracija Service Workerja neuspešna:', error);
+            });
+    });
+}

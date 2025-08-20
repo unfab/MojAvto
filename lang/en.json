@@ -110,5 +110,10 @@
   "confirm_delete_listing_text": "Are you sure you want to permanently delete this listing?",
   "listing_deleted_successfully": "Listing deleted successfully.",
   "confirm_save_changes_title": "Confirm Changes",
-  "confirm_save_changes_text": "Are you sure you want to save the changes?"
+  "confirm_save_changes_text": "Are you sure you want to save the changes?",
+  "tab_saved_searches": "Saved Searches",
+  "no_saved_searches": "You have no saved searches yet.",
+  "confirm_delete_search_title": "Confirm Deletion",
+  "confirm_delete_search_text": "Are you sure you want to delete this saved search?",
+  "search_deleted_successfully": "Search deleted successfully."
 }

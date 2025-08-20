@@ -110,5 +110,10 @@
   "confirm_delete_listing_text": "Ali ste prepričani, da želite trajno izbrisati ta oglas?",
   "listing_deleted_successfully": "Oglas uspešno izbrisan.",
   "confirm_save_changes_title": "Potrditev sprememb",
-  "confirm_save_changes_text": "Ali ste prepričani, da želite shraniti spremembe?"
+  "confirm_save_changes_text": "Ali ste prepričani, da želite shraniti spremembe?",
+  "tab_saved_searches": "Shranjena iskanja",
+  "no_saved_searches": "Nimate še shranjenih iskanj.",
+  "confirm_delete_search_title": "Potrditev brisanja",
+  "confirm_delete_search_text": "Ali ste prepričani, da želite izbrisati to shranjeno iskanje?",
+  "search_deleted_successfully": "Iskanje uspešno izbrisano."
 }

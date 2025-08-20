@@ -6,6 +6,11 @@ import { showNotification } from './notifications.js';
 export function initProfilePage() {
     const { loggedInUser, favorites } = stateManager.getState();
     const allListings = stateManager.getListings();
+    const SLOVENIAN_REGIONS = [
+        "Osrednjeslovenska", "Gorenjska", "Goriška", "Obalno-kraška",
+        "Primorsko-notranjska", "Jugovzhodna Slovenija", "Posavska", "Zasavska",
+        "Savinjska", "Koroška", "Podravska", "Pomurska"
+    ];
 
     if (!loggedInUser) {
         window.location.hash = '#/login';
@@ -42,10 +47,10 @@ export function initProfilePage() {
             card.className = 'card';
             card.innerHTML = `
                 <div class="card-image-container"><img src="${listing.images?.exterior[0] || 'https://via.placeholder.com/300x180?text=Avto'}" alt="${listing.title}" /></div>
-                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Price: ${listing.price.toLocaleString()} €</p></div>
+                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Cena: ${listing.price.toLocaleString()} €</p></div>
                 <div class="card-actions">
-                    <a href="#/create-listing?edit=true" class="btn btn-edit" data-id="${listing.id}"><i class="fas fa-pencil-alt"></i> ${translate('edit_btn') || 'Edit'}</a>
-                    <button class="btn btn-delete" data-id="${listing.id}"><i class="fas fa-trash"></i> ${translate('delete_btn') || 'Delete'}</button>
+                    <a href="#/create-listing?edit=true" class="btn btn-edit" data-id="${listing.id}"><i class="fas fa-pencil-alt"></i> ${translate('edit_btn') || 'Uredi'}</a>
+                    <button class="btn btn-delete" data-id="${listing.id}"><i class="fas fa-trash"></i> ${translate('delete_btn') || 'Izbriši'}</button>
                 </div>`;
             container.appendChild(card);
         });
@@ -89,7 +94,7 @@ export function initProfilePage() {
             card.className = 'card';
             card.innerHTML = `
                 <div class="card-image-container"><img src="${listing.images?.exterior[0] || 'https://via.placeholder.com/300x180?text=Avto'}" alt="${listing.title}" /></div>
-                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Price: ${listing.price.toLocaleString()} €</p></div>`;
+                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Cena: ${listing.price.toLocaleString()} €</p></div>`;
             card.addEventListener('click', () => {
                 window.location.hash = `#/listing/${listing.id}`;
             });
@@ -110,11 +115,11 @@ export function initProfilePage() {
             searchItem.className = 'saved-search-item';
             searchItem.innerHTML = `
                 <a href="#/search-results" class="search-link">${search.name}</a>
-                <button class="btn-delete-search" data-id="${search.id}" title="Delete search">&times;</button>
+                <button class="btn-delete-search" data-id="${search.id}" title="Izbriši iskanje">&times;</button>
             `;
 
             searchItem.querySelector('.search-link').addEventListener('click', () => {
-                sessionStorage.setItem('advancedSearchCriteria', JSON.stringify(search.criteria));
+                sessionStorage.setItem('searchCriteria', JSON.stringify(search.criteria));
             });
             
             searchItem.querySelector('.btn-delete-search').addEventListener('click', async () => {
@@ -144,7 +149,7 @@ export function initProfilePage() {
             card.className = 'card';
             card.innerHTML = `
                 <div class="card-image-container"><img src="${listing.images?.exterior[0] || 'https://via.placeholder.com/300x180?text=Avto'}" alt="${listing.title}" /></div>
-                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Price: ${listing.price.toLocaleString()} €</p></div>`;
+                <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Cena: ${listing.price.toLocaleString()} €</p></div>`;
             card.addEventListener('click', () => {
                 window.location.hash = `#/listing/${listing.id}`;
             });
@@ -152,12 +157,18 @@ export function initProfilePage() {
         });
     }
 
-    // --- PROFILE EDITING ---
+    // --- UREJANJE PROFILA ---
     const profileForm = document.getElementById('profile-edit-form');
     const fullnameInput = document.getElementById('fullname');
     const emailInput = document.getElementById('email');
     const userRegionInput = document.getElementById('userRegion');
     const userPhoneInput = document.getElementById('userPhone');
+
+    // Polnjenje dropdowna z regijami
+    userRegionInput.innerHTML = `<option value="">${translate('form_region_select')}</option>`;
+    SLOVENIAN_REGIONS.forEach(region => {
+        userRegionInput.add(new Option(region, region));
+    });
 
     fullnameInput.value = loggedInUser.fullname;
     emailInput.value = loggedInUser.email;
@@ -176,14 +187,15 @@ export function initProfilePage() {
                 phone: userPhoneInput.value,
             };
             
+            // Centralizirano posodabljanje preko stateManagerja
             stateManager.updateUser(updatedUserData);
+            
             showNotification(translate('profile_updated_successfully'), 'success');
-            // No reload needed if UI updates reactively, but for simplicity, we'll keep it
             location.reload(); 
         }
     });
 
-    // Initial render of all sections
+    // Začetni zagon vseh funkcij za prikaz vsebine
     displayMyListings();
     displayFavoriteListings();
     displaySavedSearches();
