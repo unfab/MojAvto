@@ -44,7 +44,6 @@ async function checkSavedSearchNotifications() {
     const allListings = stateManager.getListings();
     const lastVisit = localStorage.getItem('mojavto_lastVisit');
     
-    // Set the current visit time immediately to prevent re-notifications on refresh.
     const now = new Date().toISOString();
     localStorage.setItem('mojavto_lastVisit', now);
 
@@ -82,7 +81,6 @@ async function checkSavedSearchNotifications() {
  * Main application entry point that orchestrates the initialization sequence.
  */
 async function main() {
-    // 1. Load all static UI components in parallel for faster startup.
     await Promise.all([
         loadComponent('./components/header.html', 'header-container'),
         loadComponent('./components/sidebar.html', 'sidebar-container'),
@@ -90,10 +88,8 @@ async function main() {
         loadComponent('./components/modal.html', 'modal-container')
     ]);
 
-    // 2. Initialize modal listeners now that its HTML is loaded.
     initializeModalListeners();
 
-    // 3. Initialize the State Manager to load all application data.
     try {
         await stateManager.initialize();
     } catch (error) {
@@ -101,29 +97,27 @@ async function main() {
         if (appContainer) {
             appContainer.innerHTML = "<h1>Oops! Nekaj je šlo narobe.</h1><p>Osnovnih podatkov ni bilo mogoče naložiti. Prosimo, osvežite stran.</p>";
         }
-        return; // Stop execution if data fails to load.
+        return;
     }
 
-    // 4. Set language and initialize main UI elements.
     const langFromStorage = localStorage.getItem('mojavto_lang');
     await setLanguage(langFromStorage || 'sl');
     
     initGlobalUI(); 
     initUserMenu();
 
-    // 5. Check for notifications.
     await checkSavedSearchNotifications();
 
-    // 6. Start the router now that everything is ready.
     initRouter();
 }
 
-// Run the main function after the initial HTML document has been parsed.
 document.addEventListener('DOMContentLoaded', main);
+
 // === REGISTRACIJA SERVICE WORKERJA ===
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        // === SPREMEMBA: Uporabljena relativna pot './sw.js' ===
+        navigator.serviceWorker.register('./sw.js')
             .then(registration => {
                 console.log('Service Worker uspešno registriran:', registration);
             })
