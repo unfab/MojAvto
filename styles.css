@@ -500,7 +500,7 @@ select[multiple] option {
 
 
 /* === MEDIA QUERIES === */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
     .sidebar { position: fixed; z-index: 1100; margin-left: calc(-240px - 2rem); }
     .page-container.sidebar-collapsed .sidebar { margin-left: 0; }
     .sidebar-toggle-btn { display: block !important; }
