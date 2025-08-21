@@ -3,7 +3,7 @@ const CACHE_NAME = 'mojavto-v1';
 
 // Seznam datotek, ki jih želimo shraniti v predpomnilnik za offline uporabo
 const URLS_TO_CACHE = [
-    '/',
+    '.', // === SPREMEMBA: '/' je zamenjan z '.' za pravilno delovanje na GitHub Pages ===
     'index.html',
     'styles.css',
     'manifest.json',
@@ -28,6 +28,7 @@ const URLS_TO_CACHE = [
     'views/listing.html',
     'views/profile.html',
     'views/login.html',
+    'views/create-article.html',
     // Slike (ikone)
     'slike/icons/favicon.ico',
     'slike/icons/android-chrome-192x192.png',
