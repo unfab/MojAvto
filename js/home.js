@@ -133,7 +133,7 @@ export async function initHomePage() {
                 newsGrid.appendChild(articleCard);
             });
         } else {
-            // Če ni člankov, skrijemo celotno sekcijo z novicami
+            // === IZBOLJŠAVA: Če ni člankov, skrijemo celotno sekcijo z novicami ===
             const newsSection = newsGrid.closest('.news-section');
             if(newsSection) {
                 newsSection.style.display = 'none';

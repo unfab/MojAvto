@@ -1,11 +1,18 @@
 <header>
     <div class="header-left">
-        <a href="#/" class="logo">Moj<span>Avto.si</span></a>
-    </div>
-    <div class="header-actions">
         <button class="sidebar-toggle-btn" id="sidebarToggle" style="display: none;">
             <i class="fas fa-bars"></i>
         </button>
+        <a href="#/" class="logo">Moj<span>Avto.si</span></a>
+    </div>
+
+    <div class="header-search-container">
+        <form id="headerSearchForm">
+            <input type="search" id="header-search-input" name="query" placeholder="Išči po znamki ali modelu (npr. Audi A4)...">
+            <button type="submit" class="search-submit-btn"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+    <div class="header-actions">
         <button id="themeToggleBtn">
             <i class="fas fa-moon"></i>
             <i class="fas fa-sun"></i>

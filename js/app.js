@@ -32,6 +32,31 @@ async function loadComponent(url, containerId) {
 }
 
 /**
+ * Initializes the search functionality in the header.
+ */
+function initHeaderSearch() {
+    const headerSearchForm = document.getElementById('headerSearchForm');
+    const searchInput = document.getElementById('header-search-input');
+
+    if (headerSearchForm) {
+        headerSearchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query) {
+                const criteria = { "query": query };
+                sessionStorage.setItem('searchCriteria', JSON.stringify(criteria));
+                
+                if (window.location.hash.includes('#/search-results')) {
+                    location.reload();
+                } else {
+                    window.location.hash = '#/search-results';
+                }
+            }
+        });
+    }
+}
+
+/**
  * Checks for new listings that match the user's saved searches since their last visit.
  */
 async function checkSavedSearchNotifications() {
@@ -105,6 +130,7 @@ async function main() {
     
     initGlobalUI(); 
     initUserMenu();
+    initHeaderSearch(); // <-- Dopolnjen klic manjkajoče funkcije
 
     await checkSavedSearchNotifications();
 
@@ -116,7 +142,6 @@ document.addEventListener('DOMContentLoaded', main);
 // === REGISTRACIJA SERVICE WORKERJA ===
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        // === SPREMEMBA: Uporabljena relativna pot './sw.js' ===
         navigator.serviceWorker.register('./sw.js')
             .then(registration => {
                 console.log('Service Worker uspešno registriran:', registration);

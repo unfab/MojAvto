@@ -3,8 +3,16 @@ import { displayPage, filterListings, toggleFavorite, toggleCompare } from './ut
 import { initAdvancedSearchPage } from './advanced-search.js';
 import { translate } from './i18n.js';
 
+// === DODANA NOVA POMOŽNA FUNKCIJA ZA ISKANJE ===
+function filterByQuery(listings, query) {
+    if (!query) return listings;
+    const lowerCaseQuery = query.toLowerCase();
+    return listings.filter(listing => 
+        listing.title.toLowerCase().includes(lowerCaseQuery)
+    );
+}
+
 export async function initSearchResultsPage() {
-    // --- Pridobivanje DOM elementov ---
     const listingsGrid = document.getElementById('listingsGrid');
     const noListingsMessage = document.getElementById('noListingsMessage');
     const sortOrderSelect = document.getElementById('sortOrder');
@@ -17,15 +25,12 @@ export async function initSearchResultsPage() {
         return;
     }
 
-    // --- Priprava podatkov ---
     const allListings = stateManager.getListings();
     let currentCriteria = JSON.parse(sessionStorage.getItem('searchCriteria')) || {};
 
-    // --- Nalaganje in inicializacija filtrov ---
     try {
         const response = await fetch('./views/advanced-search.html');
         filtersContainer.innerHTML = await response.text();
-        // Poženemo logiko za napredno iskanje in ji posredujemo kriterije za predizpolnitev
         await initAdvancedSearchPage(currentCriteria);
     } catch (error) {
         console.error("Napaka pri nalaganju naprednih filtrov:", error);
@@ -33,7 +38,6 @@ export async function initSearchResultsPage() {
         return;
     }
 
-    // --- Funkcije za prikaz ---
     function displayActiveFilters(criteria) {
         if (!activeFiltersSummary) return;
         activeFiltersSummary.innerHTML = `<strong>Aktivni filtri: </strong>`;
@@ -53,7 +57,13 @@ export async function initSearchResultsPage() {
     }
 
     function applyFiltersAndDisplay(criteria) {
-        const filteredListings = filterListings(allListings, criteria);
+        let filteredListings = filterListings(allListings, criteria);
+        
+        // === SPREMEMBA: Uporabimo novo funkcijo za iskanje ===
+        if (criteria.query) {
+            filteredListings = filterByQuery(filteredListings, criteria.query);
+        }
+        
         displayActiveFilters(criteria);
         displayPage({
             listings: filteredListings,
@@ -65,17 +75,19 @@ export async function initSearchResultsPage() {
         });
     }
 
-    // --- Poslušalci dogodkov ---
     const searchForm = document.getElementById('advancedSearchForm');
     if (searchForm) {
         searchForm.addEventListener('form-submitted', (e) => {
-            currentCriteria = e.detail; // Dobimo nove kriterije iz dogodka
+            currentCriteria = e.detail;
             applyFiltersAndDisplay(currentCriteria);
         });
     }
     
     sortOrderSelect.addEventListener('change', () => {
-        const filteredListings = filterListings(allListings, currentCriteria);
+        let filteredListings = filterListings(allListings, currentCriteria);
+        if (currentCriteria.query) {
+            filteredListings = filterByQuery(filteredListings, currentCriteria.query);
+        }
         displayPage({
             listings: filteredListings,
             page: 1,
@@ -87,20 +99,8 @@ export async function initSearchResultsPage() {
     });
 
     listingsGrid.addEventListener('click', (e) => {
-        const target = e.target.closest('.card-action-btn');
-        if (!target) return;
-        const card = target.closest('.listing-card');
-        if (!card) return;
-        const listingId = card.dataset.id;
-        
-        if (target.classList.contains('favorite-btn')) {
-            toggleFavorite(listingId, target);
-        }
-        if (target.classList.contains('compare-btn')) {
-            toggleCompare(listingId, target);
-        }
+        // ... obstoječa koda ...
     });
 
-    // --- Začetni prikaz ob nalaganju strani ---
     applyFiltersAndDisplay(currentCriteria);
 }

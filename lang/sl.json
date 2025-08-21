@@ -115,5 +115,8 @@
   "no_saved_searches": "Nimate še shranjenih iskanj.",
   "confirm_delete_search_title": "Potrditev brisanja",
   "confirm_delete_search_text": "Ali ste prepričani, da želite izbrisati to shranjeno iskanje?",
-  "search_deleted_successfully": "Iskanje uspešno izbrisano."
+  "search_deleted_successfully": "Iskanje uspešno izbrisano.",
+  "not_found_title": "Stran ne obstaja",
+  "not_found_text": "Žal nam je, vendar stran, ki jo iščete, ne obstaja ali je bila premaknjena.",
+  "go_to_homepage": "Pojdi na domačo stran"
 }
