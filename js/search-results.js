@@ -3,7 +3,6 @@ import { displayPage, filterListings, toggleFavorite, toggleCompare } from './ut
 import { initAdvancedSearchPage } from './advanced-search.js';
 import { translate } from './i18n.js';
 
-// === DODANA NOVA POMOŽNA FUNKCIJA ZA ISKANJE ===
 function filterByQuery(listings, query) {
     if (!query) return listings;
     const lowerCaseQuery = query.toLowerCase();
@@ -29,11 +28,14 @@ export async function initSearchResultsPage() {
     let currentCriteria = JSON.parse(sessionStorage.getItem('searchCriteria')) || {};
 
     try {
-        const response = await fetch('./views/advanced-search.html');
+        const response = await fetch('./components/filters.html');
         filtersContainer.innerHTML = await response.text();
-        await initAdvancedSearchPage(currentCriteria);
+        initAdvancedSearchPage(currentCriteria, (newCriteria) => {
+            currentCriteria = newCriteria;
+            applyFiltersAndDisplay(currentCriteria);
+        });
     } catch (error) {
-        console.error("Napaka pri nalaganju naprednih filtrov:", error);
+        console.error("Napaka pri nalaganju filtrov:", error);
         filtersContainer.innerHTML = "<p>Filtrov ni bilo mogoče naložiti.</p>";
         return;
     }
@@ -59,7 +61,6 @@ export async function initSearchResultsPage() {
     function applyFiltersAndDisplay(criteria) {
         let filteredListings = filterListings(allListings, criteria);
         
-        // === SPREMEMBA: Uporabimo novo funkcijo za iskanje ===
         if (criteria.query) {
             filteredListings = filterByQuery(filteredListings, criteria.query);
         }
@@ -75,31 +76,33 @@ export async function initSearchResultsPage() {
         });
     }
 
-    const searchForm = document.getElementById('advancedSearchForm');
-    if (searchForm) {
-        searchForm.addEventListener('form-submitted', (e) => {
-            currentCriteria = e.detail;
+    if(sortOrderSelect) {
+        sortOrderSelect.addEventListener('change', () => {
             applyFiltersAndDisplay(currentCriteria);
         });
     }
-    
-    sortOrderSelect.addEventListener('change', () => {
-        let filteredListings = filterListings(allListings, currentCriteria);
-        if (currentCriteria.query) {
-            filteredListings = filterByQuery(filteredListings, currentCriteria.query);
-        }
-        displayPage({
-            listings: filteredListings,
-            page: 1,
-            gridContainer: listingsGrid,
-            messageContainer: noListingsMessage,
-            paginationContainer,
-            sortSelect: sortOrderSelect
-        });
-    });
 
     listingsGrid.addEventListener('click', (e) => {
-        // ... obstoječa koda ...
+        const actionBtn = e.target.closest('.card-action-btn');
+        if (actionBtn) {
+            const card = actionBtn.closest('.listing-card');
+            if (!card) return;
+            const listingId = card.dataset.id;
+            
+            if (actionBtn.classList.contains('favorite-btn')) {
+                toggleFavorite(listingId, actionBtn);
+            }
+            if (actionBtn.classList.contains('compare-btn')) {
+                toggleCompare(listingId, actionBtn);
+            }
+            return;
+        }
+
+        const card = e.target.closest('.listing-card');
+        if (card) {
+            const listingId = card.dataset.id;
+            window.location.hash = `#/listing/${listingId}`;
+        }
     });
 
     applyFiltersAndDisplay(currentCriteria);

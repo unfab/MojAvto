@@ -45,11 +45,13 @@ function initHeaderSearch() {
             if (query) {
                 const criteria = { "query": query };
                 sessionStorage.setItem('searchCriteria', JSON.stringify(criteria));
-                
+                window.location.hash = '#/search-results';
+
+                // === DODANA VRSTICA ZA BRISANJE VNOSA ===
+                searchInput.value = ''; // Počistimo vnosno polje
+
                 if (window.location.hash.includes('#/search-results')) {
                     location.reload();
-                } else {
-                    window.location.hash = '#/search-results';
                 }
             }
         });
@@ -130,7 +132,7 @@ async function main() {
     
     initGlobalUI(); 
     initUserMenu();
-    initHeaderSearch(); // <-- Dopolnjen klic manjkajoče funkcije
+    initHeaderSearch();
 
     await checkSavedSearchNotifications();
 

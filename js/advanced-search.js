@@ -1,8 +1,20 @@
 import { translate } from './i18n.js';
 import { stateManager } from './stateManager.js';
 
-export async function initAdvancedSearchPage(prefillCriteria = {}) {
-    // === DOM ELEMENTI ===
+export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallback) {
+    const filtersContainer = document.getElementById('filters-container');
+    if (filtersContainer && !filtersContainer.hasChildNodes()) {
+        try {
+            const response = await fetch('./components/filters.html');
+            if (!response.ok) throw new Error('Network response was not ok');
+            filtersContainer.innerHTML = await response.text();
+        } catch (error) {
+             console.error("Napaka pri nalaganju HTML komponente za filtre:", error);
+             filtersContainer.innerHTML = "<p>Filtrov ni bilo mogoče naložiti.</p>";
+             return;
+        }
+    }
+    
     const searchForm = document.getElementById("advancedSearchForm");
     const criteriaContainer = document.getElementById("criteria-container");
     const addCriterionBtn = document.getElementById("addCriterionBtn");
@@ -20,16 +32,13 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
     const excludedItemsContainer = document.getElementById("excluded-items-container");
 
     if (!searchForm || !criteriaContainer || !addCriterionBtn) {
-        console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka.");
+        console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka v DOM-u.");
         return;
     }
 
-    // === PODATKI IN STANJE ===
     const brandModelData = stateManager.getBrands();
     let exclusionRules = prefillCriteria.exclusionRules || [];
     const sortedBrands = Object.keys(brandModelData).sort();
-
-    // === FUNKCIJE ZA UPRAVLJANJE OBRAZCA ===
 
     function renderExclusionTags() {
         if (!excludedItemsContainer) return;
@@ -53,7 +62,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
     const MAX_CRITERIA = 3;
 
     function addCriterionRow(criterion = null) {
-        if (criteriaContainer.children.length >= MAX_CRITERIA) return;
+        if (!criteriaContainer || criteriaContainer.children.length >= MAX_CRITERIA) return;
         const rowId = `criterion-row-${criteriaContainer.children.length}`;
         const criterionRow = document.createElement('div');
         criterionRow.className = 'criterion-row';
@@ -105,6 +114,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
     }
 
     function updateAddButtonState() {
+        if (!addCriterionBtn) return;
         addCriterionBtn.style.display = criteriaContainer.children.length < MAX_CRITERIA ? 'block' : 'none';
         addCriterionBtn.disabled = criteriaContainer.children.length >= MAX_CRITERIA;
     }
@@ -152,7 +162,6 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
     
     function prefillForm(criteria) {
         if (!criteria || Object.keys(criteria).length === 0) {
-            // Če ni kriterijev, samo zagotovimo eno prazno vrstico
             criteriaContainer.innerHTML = '';
             addCriterionRow();
             return;
@@ -164,16 +173,16 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
             
             const value = criteria[key];
             if (elements.length && (elements[0].type === 'checkbox' || elements[0].type === 'radio')) {
-                 const values = Array.isArray(value) ? value : [value];
-                 elements.forEach(el => {
-                     if(values.includes(el.value)) {
-                         el.checked = true;
-                     }
-                 });
+                const values = Array.isArray(value) ? value : [value];
+                elements.forEach(el => {
+                    if(values.includes(el.value)) {
+                        el.checked = true;
+                    }
+                });
             } else if (elements.tagName === 'SELECT') {
                 elements.value = value;
             } else {
-                 elements.value = value;
+                elements.value = value;
             }
         }
 
@@ -196,8 +205,6 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
         
         renderExclusionTags();
     }
-
-    // === POSLUŠALCI DOGODKOV (EVENT LISTENERS) ===
 
     if (addExclusionBtn) {
         addExclusionBtn.addEventListener('click', () => {
@@ -298,9 +305,8 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
         const searchCriteria = getCriteriaFromForm();
         sessionStorage.setItem('searchCriteria', JSON.stringify(searchCriteria));
         
-        if (window.location.hash.includes('#/search-results')) {
-            const event = new CustomEvent('form-submitted', { detail: searchCriteria });
-            searchForm.dispatchEvent(event);
+        if (typeof onSearchCallback === 'function') {
+            onSearchCallback(searchCriteria);
         } else {
             window.location.hash = '#/search-results';
         }
@@ -318,7 +324,6 @@ export async function initAdvancedSearchPage(prefillCriteria = {}) {
         if(hybridOptionsRow) hybridOptionsRow.style.display = 'none';
     });
     
-    // --- ZAČETNA INICIALIZACIJA STRANI ---
     if (excludeMakeSelect) {
         excludeMakeSelect.innerHTML = '<option value="">Izberi znamko...</option>';
         sortedBrands.forEach(brand => excludeMakeSelect.add(new Option(brand, brand)));
