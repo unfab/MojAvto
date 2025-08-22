@@ -3,22 +3,22 @@
     <form id="registerForm" novalidate>
         <div class="form-group">
             <label for="fullname" data-i18n-key="form_fullname">Polno ime</label>
-            <input type="text" id="fullname" name="fullname" required />
+            <input type="text" id="fullname" name="fullname" required autocomplete="name" />
             <div class="inline-error"></div>
         </div>
         <div class="form-group">
             <label for="email" data-i18n-key="form_email">Email naslov</label>
-            <input type="email" id="email" name="email" required />
+            <input type="email" id="email" name="email" required autocomplete="email" />
             <div class="inline-error"></div>
         </div>
         <div class="form-group">
             <label for="username" data-i18n-key="form_username">Uporabniško ime</label>
-            <input type="text" id="username" name="username" required />
+            <input type="text" id="username" name="username" required autocomplete="username" />
             <div class="inline-error"></div>
         </div>
         <div class="form-group">
             <label for="region" data-i18n-key="form_region">Regija</label>
-            <select id="region" name="region" required>
+            <select id="region" name="region" required autocomplete="country-name">
                 <option value="" data-i18n-key="form_region_select">Izberite vašo regijo</option>
                 <option>Osrednjeslovenska</option>
                 <option>Podravska</option>
@@ -37,13 +37,13 @@
         </div>
         <div class="form-group">
             <label for="password" data-i18n-key="form_password">Geslo</label>
-            <input type="password" id="password" name="password" required minlength="8" />
+            <input type="password" id="password" name="password" required minlength="8" autocomplete="new-password" />
             <div class="password-strength"><div id="strength-bar" class="strength-bar"></div></div>
             <div class="inline-error"></div>
         </div>
         <div class="form-group">
             <label for="confirmPassword" data-i18n-key="form_confirm_password">Potrdi geslo</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" />
+            <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" autocomplete="new-password" />
             <div class="inline-error"></div>
         </div>
         <div id="form-error-message" class="error-message"></div>

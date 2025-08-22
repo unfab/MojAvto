@@ -10,30 +10,32 @@ const INTERIOR_COLORS = [
     { name: 'Rdeča', value: 'rdeca', hex: '#e53e3e' }
 ];
 
-export async function initAdvancedSearchPage(containerElement, prefillCriteria = {}, onSearchCallback) {
-    if (!containerElement) {
-        console.error("Vsebnik za filtre ni bil podan.");
+export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallback) {
+    // === DOM ELEMENTI ===
+    const searchForm = document.getElementById("advancedSearchForm");
+    if (!searchForm) {
+        // Če smo na strani z rezultati, je to normalno, ker se obrazec še ni naložil.
+        // Če smo na /advanced-search, je to napaka v HTML-ju.
         return;
     }
+    
+    const criteriaContainer = searchForm.querySelector("#criteria-container");
+    const addCriterionBtn = searchForm.querySelector("#addCriterionBtn");
+    const addExclusionBtn = searchForm.querySelector("#addExclusionBtn");
+    const vehicleTypeGrid = searchForm.querySelector(".vehicle-type-grid");
+    const selectAllBodyTypesBtn = searchForm.querySelector("#selectAllBodyTypesBtn");
+    const clearAllBodyTypesBtn = searchForm.querySelector("#clearAllBodyTypesBtn");
+    const fuelSelect = searchForm.querySelector("#adv-fuel");
+    const gearboxSelect = searchForm.querySelector("#adv-gearbox");
+    const electricOptionsRow = searchForm.querySelector("#electric-options-row");
+    const hybridOptionsRow = searchForm.querySelector("#hybrid-options-row");
+    const excludeMakeSelect = searchForm.querySelector("#adv-exclude-make");
+    const excludeModelSelect = searchForm.querySelector("#adv-exclude-model");
+    const excludeTypeSelect = searchForm.querySelector("#adv-exclude-type");
+    const excludedItemsContainer = searchForm.querySelector("#excluded-items-container");
+    const colorOptionsContainer = searchForm.querySelector("#color-options-container");
 
-    const searchForm = containerElement.querySelector("#advancedSearchForm");
-    const criteriaContainer = containerElement.querySelector("#criteria-container");
-    const addCriterionBtn = containerElement.querySelector("#addCriterionBtn");
-    const addExclusionBtn = containerElement.querySelector("#addExclusionBtn");
-    const vehicleTypeGrid = containerElement.querySelector(".vehicle-type-grid");
-    const selectAllBodyTypesBtn = containerElement.querySelector("#selectAllBodyTypesBtn");
-    const clearAllBodyTypesBtn = containerElement.querySelector("#clearAllBodyTypesBtn");
-    const fuelSelect = containerElement.querySelector("#adv-fuel");
-    const gearboxSelect = containerElement.querySelector("#adv-gearbox");
-    const electricOptionsRow = containerElement.querySelector("#electric-options-row");
-    const hybridOptionsRow = containerElement.querySelector("#hybrid-options-row");
-    const excludeMakeSelect = containerElement.querySelector("#adv-exclude-make");
-    const excludeModelSelect = containerElement.querySelector("#adv-exclude-model");
-    const excludeTypeSelect = containerElement.querySelector("#adv-exclude-type");
-    const excludedItemsContainer = containerElement.querySelector("#excluded-items-container");
-    const colorOptionsContainer = containerElement.querySelector("#color-options-container");
-
-    if (!searchForm || !criteriaContainer || !addCriterionBtn) {
+    if (!criteriaContainer || !addCriterionBtn) {
         console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka v DOM-u.");
         return;
     }
@@ -146,7 +148,7 @@ export async function initAdvancedSearchPage(containerElement, prefillCriteria =
     function getCriteriaFromForm() {
         const criteria = {};
         const inclusionCriteria = [];
-        document.querySelectorAll('#criteria-container .criterion-row').forEach(row => {
+        searchForm.querySelectorAll('#criteria-container .criterion-row').forEach(row => {
             const make = row.querySelector('.make-select').value;
             const model = row.querySelector('.model-select').value;
             const type = row.querySelector('.type-select').value;
@@ -378,7 +380,7 @@ export async function initAdvancedSearchPage(containerElement, prefillCriteria =
             }
         });
     }
-
+    
     renderColorOptions();
     prefillForm(prefillCriteria);
 }
