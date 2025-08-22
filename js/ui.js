@@ -24,17 +24,35 @@ export function updateCompareIcon() {
 export function initGlobalUI() {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const pageContainer = document.querySelector('.page-container');
+    const sidebar = document.getElementById('sidebar'); // Potrebujemo referenco na sidebar
     const themeToggleBtn = document.getElementById('themeToggleBtn');
 
-    if (document.getElementById('sidebar')) {
-        if (sidebarToggle) sidebarToggle.style.display = 'block';
+    // Pokažemo gumb za odpiranje/zapiranje sidebara, če sidebar obstaja
+    if (sidebar && sidebarToggle) {
+        sidebarToggle.style.display = 'block';
     }
 
+    // Obstoječa logika za odpiranje/zapiranje s klikom na gumb
     if (sidebarToggle && pageContainer) {
-        sidebarToggle.addEventListener('click', function() {
+        sidebarToggle.addEventListener('click', function(e) {
+            e.stopPropagation(); // Preprečimo, da bi se dogodek takoj prenesel na dokument
             pageContainer.classList.toggle('sidebar-collapsed');
         });
     }
+
+    // === DODANA NOVA LOGIKA: Zapiranje sidebara ob kliku izven njega ===
+    document.addEventListener('click', (e) => {
+        // Preverimo, ali je sidebar odprt in ali klik ni bil znotraj sidebara ali na gumb za odpiranje
+        if (
+            pageContainer &&
+            sidebar &&
+            pageContainer.classList.contains('sidebar-collapsed') &&
+            !sidebar.contains(e.target) &&
+            !sidebarToggle.contains(e.target)
+        ) {
+            pageContainer.classList.remove('sidebar-collapsed');
+        }
+    });
 
     const applyStoredTheme = () => {
         const currentTheme = localStorage.getItem('theme');
