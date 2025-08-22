@@ -1,7 +1,12 @@
 /* ==================================================== */
-/* ZDRUŽENI STILI ZA CELOTNO APLIKACIJO                  */
+/* ZDRUŽENI IN PREČIŠČENI STILI ZA CELOTNO APLIKACIJO    */
+/* Vsebina je reorganizirana za boljšo preglednost.      */
 /* ==================================================== */
 
+
+/* ==================================================== */
+/* 1. OSNOVE IN GLOBALNI STILI                          */
+/* ==================================================== */
 :root {
     /* Svetla tema (privzeta) */
     --bg-color: #f0f2f5;
@@ -36,7 +41,6 @@ body.dark-mode {
     --input-bg: #374151;
 }
 
-/* === SPREMEMBA: Združena `body` pravila === */
 body {
     font-family: 'Inter', sans-serif;
     margin: 0;
@@ -50,12 +54,25 @@ body {
     padding-bottom: var(--safe-area-inset-bottom);
     padding-left: var(--safe-area-inset-left);
 
-    /* Pravila za glajenje pisave */
+    /* Pravila za glajenje pisave in optimizacijo */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
 }
-/* === KONEC SPREMEMBE === */
 
+/* Globalni popravek za vnosna polja na iOS */
+input,
+textarea,
+select,
+button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+
+/* ==================================================== */
+/* 2. GLAVNA POSTAVITEV (HEADER, SIDEBAR, MAIN)         */
+/* ==================================================== */
 .page-container {
     display: flex;
     max-width: 1600px;
@@ -64,21 +81,105 @@ body {
     gap: 1.5rem;
 }
 
-/* === GLAVA IN STRANSKA VRSTICA === */
+main {
+    flex-grow: 1; 
+    padding: 1rem; 
+    overflow-y: auto;
+}
+
+/* --- Glava (Header) --- */
 header {
     background-color: var(--header-bg);
     padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 1000;
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
 }
 
-.header-left { display: flex; align-items: center; gap: 1rem; }
+.header-left, .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+}
+
+.logo { 
+    font-size: 1.5rem; 
+    font-weight: 700; 
+    color: var(--text-primary); 
+    text-decoration: none; 
+}
+
+.logo span { 
+    color: var(--accent-blue); 
+}
+
+.login-btn { 
+    background-color: var(--accent-blue); 
+    color: #ffffff; 
+    padding: 0.5rem 1.2rem; 
+    border-radius: 6px; 
+    font-weight: 700; 
+    transition: background-color 0.2s; 
+    text-decoration: none; 
+}
+
+.login-btn:hover { 
+    background-color: var(--accent-blue-hover); 
+}
+
+/* --- Iskanje v glavi --- */
+.header-search-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    padding: 0 2rem;
+}
+
+#headerSearchForm {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+}
+
+#header-search-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 40px 0 15px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+#header-search-input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.search-submit-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 40px;
+    width: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    padding: 0;
+}
+
+/* --- Stranska vrstica (Sidebar) --- */
 .sidebar {
     width: 240px;
     flex-shrink: 0;
@@ -87,39 +188,10 @@ header {
     position: sticky;
     top: calc(70px + 1rem);
     padding: 1rem 0;
-    /* SPREMEMBA: Zamenjamo 'margin-left' z 'transform' in 'visibility' za boljšo animacijo */
-    transition: transform 0.4s ease-in-out, visibility 0.4s ease-in-out;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateX(0);
-    visibility: visible;
-    border-radius: 16px; 
-    margin: 1rem 0 1rem 1rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
-    border: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-}.sidebar-toggle-btn:hover, #themeToggleBtn:hover { color: var(--text-primary); }
-.logo { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); text-decoration: none; }
-.logo span { color: var(--accent-blue); }
-.header-actions { display: flex; align-items: center; gap: 1rem; }
-.header-actions .icon-link { font-size: 1.2rem; color: var(--text-secondary); text-decoration: none; }
-.dark-mode .fa-sun { display: none; }
-body:not(.dark-mode) .fa-moon { display: none; }
-.login-btn { background-color: var(--accent-blue); color: #ffffff; padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: 700; transition: background-color 0.2s; text-decoration: none; }
-.login-btn:hover { background-color: #2563eb; }
-
-.sidebar {
-    width: 240px;
-    flex-shrink: 0;
-    background-color: var(--card-color);
-    height: calc(100vh - 70px - 2rem);
-    position: sticky;
-    top: calc(70px + 1rem);
-    padding: 1rem 0;
-    /* SPREMEMBA: Dodana animacija za 'opacity' */
-    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
-    transform: translateX(0);
-    opacity: 1; /* Vidno stanje */
-    visibility: visible;
+    opacity: 1;
     border-radius: 16px; 
     margin: 1rem 0 1rem 1rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
@@ -127,16 +199,56 @@ body:not(.dark-mode) .fa-moon { display: none; }
     display: flex;
     flex-direction: column;
 }
+
 .page-container.sidebar-collapsed .sidebar {
-    /* SPREMEMBA: Poleg premika dodamo še polno prosojnost */
     transform: translateX(calc(-100% - 2rem));
-    opacity: 0; /* Nevidno stanje */
-    visibility: hidden; /* Popolnoma skrije element po koncu animacije */
+    opacity: 0;
+    pointer-events: none; 
 }
-.sidebar-nav { list-style: none; padding: 0; margin: 0; }
-.sidebar-nav li a { display: flex; align-items: center; padding: 0.75rem 2rem; color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: background-color 0.2s, color 0.2s; white-space: nowrap; }
-.sidebar-nav li a:hover { background-color: var(--bg-color); color: var(--text-primary); }
-.sidebar-nav li a i { width: 20px; margin-right: 1rem; text-align: center; }
+
+.sidebar-nav { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+}
+
+.sidebar-nav li a { 
+    display: flex; 
+    align-items: center; 
+    padding: 0.75rem 2rem; 
+    color: var(--text-secondary); 
+    text-decoration: none; 
+    font-weight: 500; 
+    transition: background-color 0.2s, color 0.2s; 
+    white-space: nowrap; 
+}
+
+.sidebar-nav li a:hover { 
+    background-color: var(--bg-color); 
+    color: var(--text-primary); 
+}
+
+.sidebar-nav li a i { 
+    width: 20px; 
+    margin-right: 1rem; 
+    text-align: center; 
+}
+
+.sidebar-nav a#compare-link {
+    justify-content: space-between;
+}
+
+.sidebar-nav .notification-badge {
+    background-color: var(--accent-orange);
+    color: white;
+    border-radius: 10px;
+    padding: 0 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    min-width: 18px;
+}
 
 .sidebar-footer {
     padding: 1rem 1.5rem 0.5rem 1.5rem;
@@ -147,6 +259,7 @@ body:not(.dark-mode) .fa-moon { display: none; }
     justify-content: center;
     gap: 1.5rem;
 }
+
 .sidebar-footer a {
     color: var(--text-secondary);
     text-decoration: none;
@@ -154,27 +267,40 @@ body:not(.dark-mode) .fa-moon { display: none; }
     font-weight: 500;
     transition: color 0.2s ease;
 }
+
 .sidebar-footer a:hover {
     color: var(--accent-blue);
 }
 
-/* === GLAVNA VSEBINA === */
-main {
-    flex-grow: 1; 
-    padding: 1rem; 
-    overflow-y: auto;
-}
-.search-container { max-width: 900px; margin: 0 auto; }
-.search-container h1 { font-size: 2.5rem; margin-bottom: 2rem; }
-.filter-section { background: var(--card-color); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-.filter-section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
+/* ==================================================== */
+/* 3. OBRAZCI IN GUMBI                                  */
+/* ==================================================== */
+
+/* --- Gumbi --- */
+.btn { 
+    padding: 0.75rem 1.5rem; 
+    border: none; 
+    border-radius: 8px; 
+    font-weight: 700; 
+    cursor: pointer; 
+    transition: background-color 0.2s ease; 
 }
+
+.btn-primary { 
+    background-color: var(--accent-orange); 
+    color: #ffffff; 
+}
+
+.btn-primary:hover { 
+    background-color: var(--accent-orange-hover); 
+}
+
+.btn-secondary { 
+    background-color: var(--border-color); 
+    color: var(--text-primary); 
+}
+
 .btn-link {
     background: none;
     border: none;
@@ -186,97 +312,230 @@ main {
     border-radius: 6px;
     transition: background-color 0.2s, text-decoration 0.2s;
 }
+
 .btn-link:hover {
     background-color: rgba(59, 130, 246, 0.1);
     text-decoration: underline;
 }
-.filter-section h3 { 
-    font-size: 1.5rem; 
-    padding: 0; 
-    margin: 0; 
-    border-bottom: none; 
-    display: flex; 
-    align-items: center; 
-    gap: 1rem; 
-}
-.filter-content { padding: 1.5rem; }
-.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
-.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-.form-group label { font-weight: 500; }
-.form-group input, .form-group select { width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--input-bg); color: var(--text-primary); box-sizing: border-box; }
 
-.form-group input[type="radio"],
-.form-group input[type="checkbox"] {
-    width: auto;
-    flex-shrink: 0;
+.sidebar-toggle-btn {
+    background: none; 
+    border: none; 
+    color: var(--text-secondary); 
+    font-size: 1.5rem; 
+    cursor: pointer; 
+    transition: color 0.2s ease;
 }
-.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
-.checkbox-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem 1rem; }
-.checkbox-options label { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
-.vehicle-type-grid { 
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
+
+.sidebar-toggle-btn:hover {
+    color: var(--text-primary);
 }
-.vehicle-type { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s ease; width: 120px; height: 100px; box-sizing: border-box; }
-.vehicle-type:hover { border-color: var(--accent-blue); }
-.vehicle-type.active { border-color: var(--accent-blue); background-color: rgba(59, 130, 246, 0.1); }
-.vehicle-type i { font-size: 2rem; margin-bottom: 0.75rem; color: var(--accent-blue); }
-.vehicle-type span { 
-    font-size: 0.85rem;
+
+/* Gumb za preklop teme (animiran) */
+#themeToggleBtn {
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+#themeToggleBtn:hover {
+    color: var(--text-primary);
+}
+
+#themeToggleBtn .theme-icon {
+    position: absolute;
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+#theme-icon-sun {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+}
+
+#theme-icon-moon {
+    transform: translateY(100%) rotate(-90deg);
+    opacity: 0;
+}
+
+body.dark-mode #theme-icon-sun {
+    transform: translateY(-100%) rotate(90deg);
+    opacity: 0;
+}
+
+body.dark-mode #theme-icon-moon {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+}
+
+/* --- Obrazci --- */
+.form-section {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.form-section legend {
+    padding: 0 0.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.form-row { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 1.5rem; 
+}
+
+.form-group { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.5rem; 
+}
+
+.form-group label { 
     font-weight: 500; 
 }
 
-.search-actions { display: flex; justify-content: flex-end; gap: 1rem; padding: 1.5rem; }
-.btn { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background-color 0.2s ease; }
-.btn-secondary { background-color: var(--border-color); color: var(--text-primary); }
-.btn-primary { background-color: var(--accent-orange); color: #ffffff; }
-.btn-primary:hover { background-color: var(--accent-orange-hover); }
+.form-group input, 
+.form-group select,
+.form-group textarea { 
+    width: 100%; 
+    padding: 0.75rem; 
+    border-radius: 8px; 
+    border: 1px solid var(--border-color); 
+    background-color: var(--input-bg); 
+    color: var(--text-primary); 
+    box-sizing: border-box; 
+    font-family: 'Inter', sans-serif;
+}
 
-select[multiple] {
-    height: 200px;
-    padding: 0.5rem;
-    background-color: var(--input-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
+.form-group input:focus, 
+.form-group select:focus,
+.form-group textarea:focus { 
+    outline: none; 
+    border-color: var(--accent-blue); 
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); 
 }
-select[multiple] option {
-    padding: 5px;
-}
-.field-hint {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-top: 0.5rem;
-}
-.excluded-brand-tag {
-    display: inline-flex;
+
+.form-group-radio {
+    display: flex;
     align-items: center;
     gap: 0.5rem;
-    background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 9999px;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-.remove-brand-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    color: var(--text-secondary);
-    font-size: 1rem;
-    line-height: 1;
-}
-.remove-brand-btn:hover {
-    color: var(--error-color);
-}
-#range-group, #electric-options-row, #hybrid-options-row {
-    display: none;
+    margin-bottom: 0.5rem;
 }
 
-/* === STILI ZA KOMPAKTNI ISKALNIK NA DOMAČI STRANI === */
+/* Validacija obrazcev */
+.inline-error {
+    color: var(--error-color);
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+    min-height: 1.2em;
+}
+
+.form-group input.is-invalid {
+    border-color: var(--error-color);
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+/* Stili po meri za Checkbox in Radio gumbe */
+.checkbox-options input[type="checkbox"],
+.checkbox-options input[type="radio"],
+.equipment-grid input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: var(--card-color);
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+
+.checkbox-options input[type="checkbox"]::before,
+.equipment-grid input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em white;
+    transform-origin: bottom left;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.checkbox-options input[type="radio"] {
+    border-radius: 50%;
+}
+
+.checkbox-options input[type="radio"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--accent-blue);
+}
+
+.checkbox-options input[type="checkbox"]:checked,
+.equipment-grid input[type="checkbox"]:checked {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+.checkbox-options input[type="checkbox"]:checked::before,
+.equipment-grid input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+.checkbox-options input[type="radio"]:checked {
+     border-color: var(--accent-blue);
+}
+
+.checkbox-options input[type="radio"]:checked::before {
+    transform: scale(1);
+}
+
+.checkbox-options input[type="checkbox"]:focus,
+.checkbox-options input[type="radio"]:focus,
+.equipment-grid input[type="checkbox"]:focus {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+}
+
+
+/* ==================================================== */
+/* 4. SPECIFIČNE KOMPONENTE IN POGLEDI                  */
+/* ==================================================== */
+
+/* --- Iskalnik (domača stran in napredni) --- */
+.search-container { 
+    max-width: 900px; 
+    margin: 0 auto; 
+}
+.search-container h1 { 
+    font-size: 2.5rem; 
+    margin-bottom: 2rem; 
+}
 .search-box-container {
     width: 100%;
     max-width: 1100px;
@@ -344,97 +603,42 @@ select[multiple] option {
     align-items: center;
     gap: 1rem;
 }
-.search-form .submit-btn {
-    padding: 0.75rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.search-actions { 
+    display: flex; 
+    justify-content: flex-end; 
+    gap: 1rem; 
+    padding: 1.5rem; 
 }
 
-/* === STILI ZA DINAMIČNE VRSTICE V NAPREDNEM ISKANJU === */
-.criterion-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    padding-bottom: 1.5rem;
-    margin-bottom: 1.5rem;
+/* --- Sekcije s filtri --- */
+.filter-section { 
+    background: var(--card-color); 
+    border: 1px solid var(--border-color); 
+    border-radius: 12px; 
+    margin-bottom: 2rem; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+}
+.filter-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
     border-bottom: 1px solid var(--border-color);
-    position: relative;
 }
-.criterion-row:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
+.filter-section h3 { 
+    font-size: 1.5rem; 
+    padding: 0; 
+    margin: 0; 
+    border-bottom: none; 
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
 }
-.remove-criterion-btn {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background: var(--card-color);
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1rem;
-    line-height: 26px;
-    text-align: center;
-    transition: all 0.2s ease;
-    z-index: 10;
-}
-.remove-criterion-btn:hover {
-    border-color: var(--error-color);
-    color: var(--error-color);
-    transform: scale(1.1);
-} 
-
-/* === STILI ZA LOADING SPINNER === */
-#loading-spinner {
-    display: none;
-    width: 50px;
-    height: 50px;
-    border: 5px solid var(--border-color);
-    border-top-color: var(--accent-blue);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    position: absolute;
-    top: 150px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-}
-.listings-grid {
-    position: relative;
-    min-height: 300px;
-}
-@keyframes spin {
-    to {
-        transform: translateX(-50%) rotate(360deg);
-    }
+.filter-content { 
+    padding: 1.5rem; 
 }
 
-/* === NOVI STILI ZA NAPREDNO ISKANJE (OPREMA, ITD.) === */
-.equipment-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem 1.5rem;
-}
-.equipment-grid label {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
-}
-.equipment-grid input[type="checkbox"] {
-    width: auto;
-}
-.checkbox-options.single-row {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-/* === STILI ZA OBVESTILA (NOTIFICATIONS) === */
+/* --- Komponenta za obvestila (Toast Notifications) --- */
 #notification-container {
     position: fixed;
     bottom: 20px;
@@ -504,33 +708,495 @@ select[multiple] option {
     animation: slideOut 0.45s ease forwards;
 }
 @keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 @keyframes slideOut {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+/* --- Komponenta za modalna okna --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(17, 24, 39, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+.modal-content {
+    background-color: var(--card-color);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+}
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+.modal-content p {
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+/* Modalno okno za sporočila */
+#message-modal .modal-content {
+    text-align: left;
+}
+#message-modal #message-modal-title {
+    margin-top: 0;
+}
+#message-modal p {
+    margin-bottom: 1.5rem;
+}
+#message-modal .form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* --- Komponenta za vrtiljak (Carousel) --- */
+.carousel-section {
+    width: 100%;
+    margin-top: 3rem;
+}
+.carousel-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+.carousel-wrapper {
+    position: relative;
+}
+.carousel-track-container {
+    overflow: hidden;
+}
+.carousel-track {
+    display: flex;
+    gap: 1rem;
+    transition: transform 0.3s ease-in-out;
+}
+.carousel-card {
+    flex: 0 0 280px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--card-color);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.carousel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+.carousel-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+.carousel-card-content {
+    padding: 1rem;
+}
+.carousel-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.carousel-card-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+    margin: 0;
+}
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.carousel-btn.prev { left: -20px; }
+.carousel-btn.next { right: -20px; }
+
+/* --- Stran s podrobnostmi oglasa --- */
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.title-actions {
+    display: flex;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+.share-btn-details {
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+.share-btn-details:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+/* Harmonika meni */
+.specs-accordion {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+.specs-accordion details {
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease-in-out;
+}
+.specs-accordion details[open] {
+    border-color: var(--accent-blue);
+}
+.specs-accordion details summary {
+    padding: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+.specs-accordion details summary:hover {
+    background-color: var(--bg-color);
+}
+.specs-accordion details summary::after {
+    content: '+';
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    transition: transform 0.2s ease-in-out;
+}
+.specs-accordion details[open] summary::after {
+    content: '−';
+}
+.specs-accordion .accordion-content {
+    padding: 0 1rem 1rem 1rem;
+    border-top: 1px solid var(--border-color);
+}
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem 1.5rem;
+    padding-top: 1rem;
+}
+.spec-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+}
+.spec-item i {
+    color: var(--accent-blue);
+    width: 20px;
+    text-align: center;
+}
+
+/* --- Stran s primerjavo --- */
+.comparison-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    padding-top: 1.5rem;
+}
+.comparison-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: var(--card-color);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.comparison-card .comparison-content {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.comparison-card h3 {
+    margin-top: 0;
+}
+.comparison-details {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    flex-grow: 1;
+}
+.comparison-details li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--bg-color);
+}
+.comparison-details li .label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+.comparison-details li .value {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.remove-from-compare-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(17, 24, 39, 0.6);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background-color 0.2s, transform 0.2s;
+    z-index: 10;
+}
+.remove-from-compare-btn:hover {
+    background-color: var(--accent-orange);
+    transform: scale(1.1);
+}
+.compare-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+.compare-header h2 {
+    margin: 0;
+}
+
+/* --- Ostale komponente na domači strani --- */
+.quick-links-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem auto;
+    flex-wrap: wrap;
+}
+.quick-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 1.5rem;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.quick-link-btn i {
+    color: var(--accent-blue);
+    font-size: 1.2rem;
+}
+.quick-link-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+.ad-banner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 2rem 0;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+.ad-placeholder {
+    width: 100%;
+    max-width: 728px;
+    height: 90px;
+    background-color: var(--bg-color);
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+.popular-brands-section {
+    width: 100%;
+    margin-top: 2rem;
+}
+.popular-brands-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+.brands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1rem;
+}
+.brand-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.5rem 1rem;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+.brand-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.08);
+    border-color: var(--accent-blue);
+}
+.brand-card img {
+    height: 40px;
+    max-width: 100px;
+    object-fit: contain;
+}
+.brand-card span {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.news-section {
+    width: 100%;
+    margin-top: 2rem;
+}
+.news-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+.news-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    text-decoration: none;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.2s ease-in-out;
+}
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.news-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.news-card-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.news-card-content h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+.news-card-content p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+}
+.read-more-btn {
+    margin-top: 1rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    align-self: flex-start;
+}
+.read-more-btn i {
+    margin-left: 0.25rem;
+    transition: transform 0.2s;
+}
+.news-card:hover .read-more-btn i {
+    transform: translateX(5px);
 }
 
 
-/* === MEDIA QUERIES === */
+/* ==================================================== */
+/* 5. MEDIA QUERIES (ODZIVNOST)                         */
+/* ==================================================== */
 @media (max-width: 1200px) {
-    .sidebar { position: fixed; z-index: 1100; margin-left: calc(-240px - 2rem); }
-    .page-container.sidebar-collapsed .sidebar { margin-left: 0; }
-    .sidebar-toggle-btn { display: block !important; }
+    .page-container.sidebar-collapsed .sidebar {
+        /* This rule seems to conflict with the transform-based logic. It should be handled by the transform logic. */
+        /* Let's ensure the JS adds a class for mobile view to handle this better */
+    }
 }
+
 @media (max-width: 900px) {
     .search-box.compact {
         flex-direction: column;
@@ -549,1063 +1215,16 @@ select[multiple] option {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+@media (max-width: 768px) {
+    .header-search-container {
+        display: none;
+    }
+}
+
 @media (max-width: 600px) {
     .form-grid.four-columns,
     .form-grid.three-columns {
         grid-template-columns: 1fr;
     }
-}
-/* Dodaj te stile na konec obstoječe datoteke styles.css ali na ustrezno mesto */
-
-.equipment-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 0.75rem 1.5rem;
-}
-
-.equipment-grid label {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
-    font-size: 0.9rem;
-}
-
-.equipment-grid input[type="checkbox"] {
-    width: auto;
-    flex-shrink: 0;
-}
-
-.checkbox-options.single-row {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    align-items: center;
-}
-
-/* NOVI STILI ZA KATEGORIJE OPREME */
-.equipment-category {
-    margin-bottom: 2rem;
-}
-
-.equipment-category:last-child {
-    margin-bottom: 0;
-}
-
-.equipment-category h4 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem; /* Povečal sem razmik za lepši videz */
-}
-/* === STILI ZA OCENO CENE === */
-
-/* Značka na kartici oglasa */
-.price-badge {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-}
-
-/* Značka na strani s podrobnostmi */
-.price-badge-details {
-    margin-left: 1rem;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #fff;
-}
-
-/* Barve glede na oceno */
-.price-badge.very_good, .price-badge-details.very_good { background-color: #16a34a; } /* Močna zelena */
-.price-badge.good, .price-badge-details.good { background-color: #22c55e; } /* Svetlejša zelena */
-.price-badge.fair, .price-badge-details.fair { background-color: #6b7280; } /* Siva */
-.price-badge.high, .price-badge-details.high { background-color: #ef4444; } /* Rdeča */
-
-/* === STILI ZA PRO FUNKCIJE === */
-.pro-feature-card {
-    background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-top: 2rem;
-}
-.pro-feature-card h3 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: var(--accent-blue);
-}
-.pro-feature-card p {
-    margin-bottom: 0.5rem;
-    line-height: 1.6;
-}
-.pro-feature-card ul {
-    padding-left: 20px;
-    margin-top: 0.5rem;
-}
-
-.upgrade-banner {
-    background: linear-gradient(45deg, #0052a3, #0066cc);
-    color: #fff;
-    border-radius: 12px;
-    padding: 1.5rem 2rem;
-    margin-top: 2rem;
-    text-align: center;
-}
-.upgrade-banner h3 {
-    margin: 0 0 0.5rem 0;
-}
-.upgrade-banner p {
-    margin: 0 0 1rem 0;
-    opacity: 0.9;
-}
-
-/* === STILI ZA VALIDACIJO OBRAZCEV === */
-.inline-error {
-    color: var(--error-color);
-    font-size: 0.8rem;
-    font-weight: 500;
-    margin-top: 0.25rem;
-    min-height: 1.2em; /* Prepreči "poskakovanje" elementov */
-}
-
-.form-group input.is-invalid {
-    border-color: var(--error-color);
-    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
-}
-
-/* Dodaj na konec styles.css */
-
-.title-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.title-actions {
-    display: flex;
-    gap: 1rem;
-    flex-shrink: 0; /* Prepreči, da se gumbi stisnejo */
-}
-
-.share-btn-details {
-    /* Uporabimo podobne stile kot za fav-btn-details */
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    padding: 0.6rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--text-secondary);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.2s ease;
-}
-
-.share-btn-details:hover {
-    border-color: var(--accent-blue);
-    color: var(--accent-blue);
-}
-
-/* Stili za zložljive filtre na strani z rezultati */
-.filters-accordion {
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    background-color: var(--card-color);
-}
-.filters-accordion summary {
-    padding: 1.5rem;
-    font-size: 1.2rem;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.filters-accordion .filters-content {
-    padding: 0 1.5rem 1.5rem 1.5rem;
-    border-top: 1px solid var(--border-color);
-}
-
-/* datoteka: styles.css (dodajte na konec) */
-
-/* === STILI ZA HARMONIKA MENI NA STRANI OGLASA === */
-.specs-accordion {
-    width: 100%;
-    margin-bottom: 2rem;
-}
-
-.specs-accordion details {
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
-    transition: all 0.2s ease-in-out;
-}
-
-.specs-accordion details[open] {
-    border-color: var(--accent-blue);
-}
-
-.specs-accordion details summary {
-    padding: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    list-style: none; /* Odstrani privzeto puščico */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.2s;
-}
-
-.specs-accordion details summary:hover {
-    background-color: var(--bg-color);
-}
-
-/* Ustvarimo lasten "+" in "-" znak */
-.specs-accordion details summary::after {
-    content: '+';
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--text-secondary);
-    transition: transform 0.2s ease-in-out;
-}
-
-.specs-accordion details[open] summary::after {
-    content: '−';
-    transform: rotate(180deg);
-}
-
-.specs-accordion .accordion-content {
-    padding: 0 1rem 1rem 1rem;
-    border-top: 1px solid var(--border-color);
-}
-
-/* Stili za vsebino znotraj harmonike */
-.specs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem 1.5rem;
-    padding-top: 1rem;
-}
-
-.spec-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 0.9rem;
-}
-
-.spec-item i {
-    color: var(--accent-blue);
-    width: 20px;
-    text-align: center;
-}
-/* datoteka: styles.css (dodajte na konec) */
-
-/* === STILI ZA DRSNIK (CAROUSEL) S PODOBNIMI OGLASI === */
-.carousel-section {
-    width: 100%;
-    margin-top: 3rem;
-}
-
-.carousel-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-}
-
-.carousel-wrapper {
-    position: relative;
-}
-
-.carousel-track-container {
-    overflow: hidden; /* Skrije vse, kar "štrli" izven vidnega polja */
-}
-
-.carousel-track {
-    display: flex;
-    gap: 1rem;
-    transition: transform 0.3s ease-in-out;
-}
-
-.carousel-card {
-    flex: 0 0 280px; /* Širina vsake kartice v drsniku */
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: var(--card-color);
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.carousel-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
-
-.carousel-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    display: block;
-}
-
-.carousel-card-content {
-    padding: 1rem;
-}
-
-.carousel-card-title {
-    font-size: 1rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Doda "..." če je naslov predolg */
-}
-
-.carousel-card-price {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--accent-orange);
-    margin: 0;
-}
-
-.carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--border-color);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: var(--text-primary);
-    z-index: 10;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.carousel-btn.prev {
-    left: -20px;
-}
-
-.carousel-btn.next {
-    right: -20px;
-}
-/* datoteka: styles.css */
-
-/* ... vsa vaša obstoječa koda ostane nespremenjena ... */
-
-
-/* === NOVO: Stili za stran s primerjavo (compare.html) === */
-
-.comparison-grid {
-    /* Ustvari mrežo s stolpci, ki so široki najmanj 320px in se samodejno prilagajajo širini zaslona */
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem; /* Razmik med karticami */
-    padding-top: 1.5rem;
-}
-
-.comparison-card {
-    position: relative; /* Nujno za pozicioniranje gumba za brisanje */
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    background-color: var(--card-color);
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.comparison-card .comparison-content {
-    padding: 1rem;
-    flex-grow: 1; /* Vsebina se raztegne, da je noga vedno na dnu */
-    display: flex;
-    flex-direction: column;
-}
-
-.comparison-card h3 {
-    margin-top: 0;
-}
-
-.comparison-details {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
-    flex-grow: 1;
-}
-
-.comparison-details li {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--bg-color); /* Svetlejša črta */
-}
-
-.comparison-details li .label {
-    font-weight: 500;
-    color: var(--text-secondary);
-}
-
-.comparison-details li .value {
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.remove-from-compare-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: none;
-    background-color: rgba(17, 24, 39, 0.6); /* Temno prosojno ozadje */
-    color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    transition: background-color 0.2s, transform 0.2s;
-    z-index: 10;
-}
-
-.remove-from-compare-btn:hover {
-    background-color: var(--accent-orange);
-    transform: scale(1.1);
-}
-/* === NOVO: Stili za glavo na strani za primerjavo === */
-.compare-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 1rem;
-}
-
-.compare-header h2 {
-    margin: 0;
-}
-/* === STILI ZA HITRE POVEZAVE NA DOMAČI STRANI === */
-.quick-links-container {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 2rem auto;
-    flex-wrap: wrap; /* Da se gumbi prelomijo na manjših zaslonih */
-}
-
-.quick-link-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.8rem 1.5rem;
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 50px; /* Zaobljeni gumbi */
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    text-decoration: none;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.quick-link-btn i {
-    color: var(--accent-blue);
-    font-size: 1.2rem;
-}
-
-.quick-link-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-    border-color: var(--accent-blue);
-    color: var(--accent-blue);
-}
-/* === STILI ZA OGLASNO PASICO (BANNER) === */
-.ad-banner-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin: 2rem 0; /* Razmik nad in pod pasico */
-    padding: 0 1rem;
-    box-sizing: border-box;
-}
-
-.ad-placeholder {
-    width: 100%;
-    max-width: 728px; /* Standardna širina za "leaderboard" oglas */
-    height: 90px; /* Standardna višina */
-    background-color: var(--bg-color);
-    border: 2px dashed var(--border-color);
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-/* === STILI ZA SEKCIJO PRILJUBLJENIH ZNAMK === */
-.popular-brands-section {
-    width: 100%;
-    margin-top: 2rem;
-}
-
-.popular-brands-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-.brands-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 1rem;
-}
-
-.brand-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 1.5rem 1rem;
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    text-decoration: none;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-}
-
-.brand-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.08);
-    border-color: var(--accent-blue);
-}
-
-.brand-card img {
-    height: 40px;
-    max-width: 100px;
-    object-fit: contain; /* Ohrani razmerje logotipa */
-}
-
-.brand-card span {
-    font-weight: 700;
-    color: var(--text-primary);
-}
-/* === STILI ZA SEKCIJO NOVIC IN NASVETOV === */
-.news-section {
-    width: 100%;
-    margin-top: 2rem;
-}
-
-.news-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-.news-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.news-card {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    text-decoration: none;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transition: all 0.2s ease-in-out;
-}
-
-.news-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-.news-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.news-card-content {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* Zagotovi, da se vsebina raztegne in gumb "Preberi več" ostane na dnu */
-}
-
-.news-card-content h3 {
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    font-size: 1.2rem;
-    color: var(--text-primary);
-}
-
-.news-card-content p {
-    margin: 0;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    flex-grow: 1;
-}
-
-.read-more-btn {
-    margin-top: 1rem;
-    font-weight: 700;
-    color: var(--accent-blue);
-    align-self: flex-start; /* Poravna gumb na levo */
-}
-
-.read-more-btn i {
-    margin-left: 0.25rem;
-    transition: transform 0.2s;
-}
-
-.news-card:hover .read-more-btn i {
-    transform: translateX(5px);
-}
-/* === STILI ZA PRIKAZ VIDEA NA STRANI OGLASA === */
-.video-section-container {
-    margin-top: 3rem;
-    width: 100%;
-}
-
-.video-section-container h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-}
-
-.video-embed-wrapper {
-    position: relative;
-    padding-bottom: 56.25%; /* To ustvari razmerje 16:9 */
-    height: 0;
-    overflow: hidden;
-    max-width: 100%;
-    background: #000;
-    border-radius: 12px;
-}
-
-.video-embed-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-/* === DODATEK ZA STYLES.CSS === */
-
-/* Stil za fieldset v obrazcu za ustvarjanje oglasa */
-.form-section {
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin: 2rem 0;
-}
-
-.form-section legend {
-    padding: 0 0.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.form-group-radio {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-/* Stil za prikaz slik v razdelku o financiranju na strani oglasa */
-.financing-images-grid {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-    flex-wrap: wrap;
-}
-
-.financing-images-grid img {
-    max-width: 150px;
-    height: auto;
-    border-radius: 8px;
-}
-/* Stili za značko za primerjavo v stranski vrstici */
-.sidebar-nav a#compare-link {
-    justify-content: space-between;
-}
-
-.sidebar-nav .notification-badge {
-    background-color: var(--accent-orange);
-    color: white;
-    border-radius: 10px;
-    padding: 0 6px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    line-height: 18px;
-    text-align: center;
-    min-width: 18px;
-
-}
-/* === DODATKI ZA iOS OPTIMIZACIJO === */
-
-/* 2. Popravek stila za formularje */
-input,
-textarea,
-select,
-button {
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-/* 3. Dodatni kozmetični popravki */
-* {
-    -webkit-tap-highlight-color: transparent; /* Prepreči sivo območje ob dotiku */
-}
-/* === STILI ZA POTRDITVENI MODAL === */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(17, 24, 39, 0.6); /* Temno prosojno ozadje */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 3000;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    animation: fadeIn 0.2s ease-out;
-}
-
-.modal-content {
-    background-color: var(--card-color);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    width: 100%;
-    max-width: 450px;
-    text-align: center;
-    animation: slideUp 0.3s ease-out;
-}
-
-.modal-content h3 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
-}
-
-.modal-content p {
-    margin-bottom: 2rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-}
-
-.modal-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-/* Dodatek za pravilen izgled fieldset/legend elementov */
-fieldset.form-group {
-    border: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-fieldset.form-group legend {
-    padding: 0;
-    font-weight: 500;
-}
-/* === DODATEK: STILI PO MERI ZA CHECKBOXE IN RADIO GUMBE (POPRAVLJENA VERZIJA) === */
-
-/* Skrijemo privzeti input, ker bomo ustvarili svojega.
-   Selector sedaj vključuje tako .checkbox-options kot .equipment-grid. */
-.checkbox-options input[type="checkbox"],
-.checkbox-options input[type="radio"],
-.equipment-grid input[type="checkbox"] {
-    -webkit-appearance: none;
-    appearance: none;
-    background-color: #fff;
-    margin: 0;
-    font: inherit;
-    color: currentColor;
-    width: 1.15em;
-    height: 1.15em;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    transform: translateY(-0.075em);
-    display: grid;
-    place-content: center;
-    cursor: pointer;
-    transition: all 0.1s ease-in-out;
-}
-
-/* Ustvarimo prostor za kljukico, ki bo na začetku skrita */
-.checkbox-options input[type="checkbox"]::before,
-.equipment-grid input[type="checkbox"]::before {
-    content: "";
-    width: 0.65em;
-    height: 0.65em;
-    transform: scale(0);
-    transition: 120ms transform ease-in-out;
-    box-shadow: inset 1em 1em var(--card-color);
-    /* Oblika kljukice */
-    transform-origin: bottom left;
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-}
-
-.checkbox-options input[type="radio"] {
-    border-radius: 50%; /* Radio gumbi so okrogli */
-}
-
-.checkbox-options input[type="radio"]::before {
-    content: "";
-    width: 0.65em;
-    height: 0.65em;
-    border-radius: 50%;
-    transform: scale(0);
-    transition: 120ms transform ease-in-out;
-    box-shadow: inset 1em 1em var(--accent-blue);
-}
-
-
-/* Ko je polje obkljukano, prikažemo kljukico in spremenimo ozadje */
-.checkbox-options input[type="checkbox"]:checked,
-.equipment-grid input[type="checkbox"]:checked {
-    background-color: var(--accent-blue);
-    border-color: var(--accent-blue);
-}
-.checkbox-options input[type="checkbox"]:checked::before,
-.equipment-grid input[type="checkbox"]:checked::before {
-    transform: scale(1);
-}
-
-.checkbox-options input[type="radio"]:checked {
-     border-color: var(--accent-blue);
-}
-.checkbox-options input[type="radio"]:checked::before {
-    transform: scale(1);
-}
-
-/* Izboljšan fokus stil za vse tipe */
-.checkbox-options input[type="checkbox"]:focus,
-.checkbox-options input[type="radio"]:focus,
-.equipment-grid input[type="checkbox"]:focus {
-    outline: 2px solid var(--accent-blue);
-    outline-offset: 2px;
-}
-/* === DODATEK: STILI ZA SHRANJENA ISKANJA === */
-.saved-search-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    margin-bottom: 0.75rem;
-    transition: all 0.2s ease;
-}
-
-.saved-search-item:hover {
-    border-color: var(--accent-blue);
-    background-color: var(--card-color);
-}
-
-.saved-search-item .search-link {
-    font-weight: 700;
-    color: var(--text-primary);
-    text-decoration: none;
-}
-
-.saved-search-item .search-link:hover {
-    text-decoration: underline;
-    color: var(--accent-blue);
-}
-
-.btn-delete-search {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 1.5rem;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0.25rem;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-}
-
-.btn-delete-search:hover {
-    color: var(--error-color);
-    background-color: rgba(229, 62, 62, 0.1);
-}
-/* === DODATEK: STILI ZA ISKANJE V GLAVI (HEADER) === */
-
-.header-search-container {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    padding: 0 2rem;
-}
-
-#headerSearchForm {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-}
-
-#header-search-input {
-    width: 100%;
-    height: 40px;
-    padding: 0 40px 0 15px;
-    border-radius: 20px;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-color);
-    color: var(--text-primary);
-    transition: all 0.2s ease;
-}
-
-#header-search-input:focus {
-    outline: none;
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
-
-.search-submit-btn {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 40px;
-    width: 40px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-secondary);
-    font-size: 1rem;
-    padding: 0;
-}
-
-/* Prilagoditve za mobilne naprave */
-@media (max-width: 768px) {
-    .header-search-container {
-        display: none; /* Skrijemo iskanje v glavi na manjših zaslonih */
-    }
-}
-/* === DODATEK: Izboljšani stili za stabilnost glave === */
-header {
-    display: grid;
-    grid-template-columns: auto 1fr auto; /* Levo, Sredina (raztegljivo), Desno */
-    gap: 1.5rem;
-    align-items: center;
-}
-
-.header-left, .header-actions {
-    flex-shrink: 0; /* Preprečimo, da se skrčita */
-}
-/* === DODATEK: Stili za izbirnik barv notranjosti === */
-.color-options {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-}
-.color-option {
-    position: relative;
-    cursor: pointer;
-}
-.color-option input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-.color-option .color-swatch {
-    display: block;
-    width: 28px;
-    height: 28px;
-    background-color: var(--swatch-color);
-    border-radius: 50%;
-    border: 2px solid var(--border-color);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.color-option input[type="radio"]:checked + .color-swatch {
-    transform: scale(1.1);
-    box-shadow: 0 0 0 2px var(--card-color), 0 0 0 4px var(--accent-blue);
-}
-/* ... vsa obstoječa koda ... */
-
-/* === DODATEK: STILI ZA MODALNO OKNO ZA SPOROČILA === */
-#message-modal .modal-content {
-    text-align: left;
-}
-
-#message-modal #message-modal-title {
-    margin-top: 0;
-}
-
-#message-modal p {
-    margin-bottom: 1.5rem;
-}
-
-#message-modal .form-group {
-    margin-bottom: 1.5rem;
-}
-
-#message-modal textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background-color: var(--input-bg);
-    color: var(--text-primary);
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-    resize: vertical;
 }
