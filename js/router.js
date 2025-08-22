@@ -107,5 +107,9 @@ function handleRouting() {
 export function initRouter() {
     window.addEventListener('hashchange', handleRouting);
     // Počakamo, da se naloži vsa začetna vsebina, preden prvič poženemo usmerjevalnik
-    window.addEventListener('load', handleRouting, { once: true });
+    // === SPREMEMBA: Zamenjamo 'load' z 'DOMContentLoaded' za hitrejše delovanje ===
+    document.addEventListener('DOMContentLoaded', handleRouting, { once: true });
+
+    // === DODANO: Poslušamo na naš ročno sprožen dogodek iz app.js ===
+    window.addEventListener('hashchange', handleRouting);
 }

@@ -45,19 +45,30 @@ function initHeaderSearch() {
             if (query) {
                 const criteria = { "query": query };
                 sessionStorage.setItem('searchCriteria', JSON.stringify(criteria));
-                window.location.hash = '#/search-results';
+                
+                // === SPREMEMBA: Preverimo, ali smo že na strani z rezultati ===
+                if (window.location.hash === '#/search-results') {
+                    // Če smo, ročno sprožimo ponovno nalaganje vsebine,
+                    // ker se dogodek 'hashchange' ne bo sprožil.
+                    // To bo ponovno zagnalo logiko v search-results.js.
+                    window.dispatchEvent(new HashChangeEvent('hashchange'));
+                } else {
+                    // Če nismo, samo spremenimo hash in pustimo, 
+                    // da router opravi svoje delo.
+                    window.location.hash = '#/search-results';
+                }
 
-                // === DODANA VRSTICA ZA BRISANJE VNOSA ===
-                searchInput.value = ''; // Počistimo vnosno polje
+                searchInput.value = '';
 
+                /* === ODSTRANJENO ===
                 if (window.location.hash.includes('#/search-results')) {
                     location.reload();
                 }
+                */
             }
         });
     }
 }
-
 /**
  * Checks for new listings that match the user's saved searches since their last visit.
  */
