@@ -11,8 +11,13 @@ import { initAdvancedSearchPage } from './advanced-search.js';
 import { initProfilePage } from './profile.js';
 import { initSearchResultsPage } from './search-results.js';
 import { initLikesPage } from './likes.js';
-import { initCreateArticlePage } from './create-article.js'; // Dodan import za članke
-// Dodajte še initArticlePage, ko bo ustvarjen
+import { initCreateArticlePage } from './create-article.js';
+import { initUpgradeProPage } from './upgrade-pro.js';
+import { initGarageFormPage } from './garage.js';
+// =======================================================
+// NOVO: Uvozimo logiko za javno stran Garaže
+// =======================================================
+import { initPublicGaragePage } from './garage-public.js';
 
 const routes = {
     '/': { view: 'home.html', init: initHomePage },
@@ -24,14 +29,21 @@ const routes = {
     '/profile': { view: 'profile.html', init: initProfilePage },
     '/dashboard': { view: 'dashboard.html', init: initDashboardPage },
     '/admin': { view: 'admin.html', init: initAdminPage },
-    '/admin/create-article': { view: 'create-article.html', init: initCreateArticlePage }, // Dodana pot
+    '/admin/create-article': { view: 'create-article.html', init: initCreateArticlePage },
     '/create-listing': { view: 'create-listing.html', init: initCreateListingPage },
     '/advanced-search': { view: 'advanced-search.html', init: initAdvancedSearchPage },
     '/compare': { view: 'compare.html', init: initComparePage },
     '/likes': { view: 'likes.html', init: initLikesPage },
+    '/upgrade-pro': { view: 'upgrade-pro.html', init: initUpgradeProPage },
+    '/garage/add': { view: 'garage-form.html', init: initGarageFormPage },
+    // =======================================================
+    // NOVO: Dodane poti za urejanje in javni ogled Garaže
+    // =======================================================
+    '/garage/edit/:vehicleId': { view: 'garage-form.html', init: initGarageFormPage },
+    '/garage/:username': { view: 'garage-public.html', init: initPublicGaragePage },
+    
     '/listing/:id': { view: 'listing.html', init: initListingPage },
     '/search-results': { view: 'search-results.html', init: initSearchResultsPage },
-    // === SPREMEMBA: Ločimo 404 preusmeritev od "not found" strani ===
     '/not-found': { view: 'not-found.html' },
     '/404': { view: '404.html' }
 };
@@ -57,7 +69,6 @@ async function loadView(routeObject, params = {}) {
 
     } catch (error) {
         console.error("Napaka pri nalaganju pogleda:", error);
-        // === SPREMEMBA: Boljše obravnavanje napak - prikažemo uporabniku prijazno stran ===
         const responseNotFound = await fetch('./views/not-found.html');
         appContainer.innerHTML = await responseNotFound.text();
         await setLanguage(localStorage.getItem('mojavto_lang') || 'sl');
@@ -71,7 +82,6 @@ function handleRouting() {
 
     let match = null;
 
-    // Najprej preverimo dinamične poti (npr. /listing/:id)
     for (const routePath in routes) {
         const routeParts = routePath.split('/');
         if (routeParts.length === pathParts.length) {
@@ -91,7 +101,6 @@ function handleRouting() {
         }
     }
     
-    // Če dinamična pot ni najdena, preverimo še statične
     if (!match && routes[cleanPath]) {
         match = { routeObject: routes[cleanPath], params: {} };
     }
@@ -99,17 +108,12 @@ function handleRouting() {
     if (match) {
         loadView(match.routeObject, match.params);
     } else {
-        // === SPREMEMBA: "Wildcard" pot sedaj kaže na uporabniku prijazno stran ===
         loadView(routes['/not-found']);
     }
 }
 
 export function initRouter() {
     window.addEventListener('hashchange', handleRouting);
-    // Počakamo, da se naloži vsa začetna vsebina, preden prvič poženemo usmerjevalnik
-    // === SPREMEMBA: Zamenjamo 'load' z 'DOMContentLoaded' za hitrejše delovanje ===
     document.addEventListener('DOMContentLoaded', handleRouting, { once: true });
-
-    // === DODANO: Poslušamo na naš ročno sprožen dogodek iz app.js ===
     window.addEventListener('hashchange', handleRouting);
 }

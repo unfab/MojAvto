@@ -1,0 +1,53 @@
+<main class="form-container">
+    <h2 id="garage-form-title">Dodaj novo vozilo v Garažo</h2>
+    <p>Delite svoje vozilo s skupnostjo MojAvto.si!</p>
+
+    <form id="garage-form" novalidate>
+        
+        <fieldset class="form-section">
+            <legend>Osnovni podatki o vozilu</legend>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="garage-brand">Znamka vozila:</label>
+                    <select id="garage-brand" name="brand" required><option value="">Izberi znamko</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="garage-model">Model:</label>
+                    <select id="garage-model" name="model" required disabled><option value="">Najprej izberi znamko</option></select>
+                </div>
+                <div class="form-group">
+                    <label for="garage-year">Letnik:</label>
+                    <select id="garage-year" name="year" required><option value="">Izberi letnik</option></select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="garage-nickname">Vzdevek vozila (neobvezno):</label>
+                    <input type="text" id="garage-nickname" name="nickname" placeholder="Npr. 'Moja rdeča strela'">
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend>Opis in zgodba vozila</legend>
+            <div class="form-group">
+                <label for="garage-description">Opis (predelave, zgodovina, zanimivosti...):</label>
+                <textarea id="garage-description" name="description" rows="8" required></textarea>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend>Fotografije</legend>
+            <div class="form-group">
+                <label for="garage-images">Naloži slike vozila (prva bo naslovna):</label>
+                <input type="file" id="garage-images" name="images" accept="image/*" multiple />
+                <div class="field-hint">Simulacija: V tej fazi se slike ne bodo zares naložile.</div>
+            </div>
+        </fieldset>
+        
+        <div class="search-actions">
+            <a href="#/profile" class="btn btn-secondary">Prekliči</a>
+            <button type="submit" id="submit-garage-btn" class="btn-primary">Shrani vozilo v Garažo</button>
+        </div>
+    </form>
+</main>

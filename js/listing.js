@@ -97,6 +97,7 @@ export function initListingPage({ id: listingId }) {
         return;
     }
 
+    // --- Združena definicija DOM elementov za boljšo preglednost ---
     const titleEl = document.getElementById('listing-title');
     const priceEl = document.getElementById('price');
     const priceEvaluationEl = document.getElementById('price-evaluation');
@@ -108,25 +109,22 @@ export function initListingPage({ id: listingId }) {
     const showPhoneBtn = document.getElementById('show-phone-btn');
     const favBtnDetails = document.getElementById('fav-btn-details');
     const shareBtnDetails = document.getElementById('share-btn-details');
-    const proFeaturesContainer = document.getElementById('pro-features-container');
-    const upgradeBanner = document.getElementById('upgrade-pro-banner');
     const videoContainer = document.getElementById('video-container');
-    
-    // ====================================================
-    // NOVO: Elementi za modalno okno za sporočila
-    // ====================================================
+    const proFeaturesContainer = document.getElementById('pro-features-container');
+    const unlockAnalysisBanner = document.getElementById('unlock-analysis-banner');
+    const unlockAnalysisBtn = document.getElementById('unlock-analysis-btn');
     const messageModal = document.getElementById('message-modal');
     const messageModalTitle = document.getElementById('message-modal-listing-title');
     const messageForm = document.getElementById('message-form');
     const messageTextarea = document.getElementById('message-textarea');
     const messageCancelBtn = document.getElementById('message-cancel-btn');
-    // ====================================================
+    const financePartnerBtn = document.getElementById('finance-partner-btn');
+    const insurancePartnerBtn = document.getElementById('insurance-partner-btn');
 
     titleEl.textContent = listing.title;
     document.title = `${listing.title} - MojAvto.si`;
     priceEl.textContent = `${listing.price.toLocaleString()} €`;
     descriptionEl.textContent = listing.description || translate('no_description_provided');
-    sellerNameEl.textContent = listing.author || translate('unknown_seller');
     
     if (listing.priceEvaluation && priceEvaluationEl) {
         priceEvaluationEl.className = `price-badge-details ${listing.priceEvaluation.score}`;
@@ -135,6 +133,15 @@ export function initListingPage({ id: listingId }) {
     }
     
     const seller = users.find(user => user.username === listing.author);
+    
+    // =======================================================
+    // SPREMEMBA: Ime prodajalca je sedaj povezava na Garažo
+    // =======================================================
+    if (seller) {
+        sellerNameEl.innerHTML = `<a href="#/garage/${seller.username}" title="Oglej si Garažo uporabnika">${seller.fullname || listing.author}</a>`;
+    } else {
+        sellerNameEl.textContent = listing.author || translate('unknown_seller');
+    }
     sellerLocationEl.textContent = seller ? (seller.region || translate('unknown_location')) : translate('unknown_location');
     
     if (accordionContainer) {
@@ -192,24 +199,53 @@ export function initListingPage({ id: listingId }) {
         }
     }
 
-    if (loggedInUser && loggedInUser.isPro) {
-        proFeaturesContainer.style.display = 'block';
-        upgradeBanner.style.display = 'none';
-        const detailedPriceEl = document.getElementById('detailed-price-analysis');
-        if (listing.priceEvaluation) {
-            const diff = listing.price - listing.priceEvaluation.expectedPrice;
-            const diffText = diff > 0 ? `+${diff.toLocaleString()} €` : `${diff.toLocaleString()} €`;
-            detailedPriceEl.innerHTML = `<p>Naša ocena pričakovane cene za to vozilo je <strong>${listing.priceEvaluation.expectedPrice.toLocaleString()} €</strong>.</p><p>Cena tega oglasa je <strong>${diffText}</strong> glede na pričakovanja.</p><small>Ocena temelji na primerjavi s podobnimi vozili, prilagojena za kilometre in opremo.</small>`;
+    if (loggedInUser) {
+        const hasUnlocked = stateManager.hasUserUnlockedAnalysis(loggedInUser.username, listingId);
+
+        if (loggedInUser.isPro || hasUnlocked) {
+            proFeaturesContainer.style.display = 'block';
+            unlockAnalysisBanner.style.display = 'none';
+            
+            const detailedPriceEl = document.getElementById('detailed-price-analysis');
+            if (listing.priceEvaluation) {
+                const diff = listing.price - listing.priceEvaluation.expectedPrice;
+                const diffText = diff > 0 ? `+${diff.toLocaleString()} €` : `${diff.toLocaleString()} €`;
+                detailedPriceEl.innerHTML = `<p>Naša ocena pričakovane cene za to vozilo je <strong>${listing.priceEvaluation.expectedPrice.toLocaleString()} €</strong>.</p><p>Cena tega oglasa je <strong>${diffText}</strong> glede na pričakovanja.</p><small>Ocena temelji na primerjavi s podobnimi vozili, prilagojena za kilometre in opremo.</small>`;
+            }
+            const tcoEl = document.getElementById('tco-analysis');
+            const tcoData = calculateTCO(listing);
+            tcoEl.innerHTML = `<p>Predvideni letni stroški: <strong>${tcoData.totalYearly.toLocaleString()} €</strong> (~${tcoData.totalMonthly.toLocaleString()} € / mesec)</p><ul><li>Gorivo: ~${tcoData.fuel.toLocaleString()} €</li><li>Zavarovanje: ~${tcoData.insurance.toLocaleString()} €</li><li>Servis: ~${tcoData.service.toLocaleString()} €</li></ul>`;
+            const depreciationEl = document.getElementById('depreciation-analysis');
+            const depData = forecastDepreciation(listing);
+            depreciationEl.innerHTML = `<p>Predvidena vrednost vozila v prihodnosti:</p><ul><li>Po 1 letu: ~${depData[0].toLocaleString()} €</li><li>Po 2 letih: ~${depData[1].toLocaleString()} €</li><li>Po 3 letih: ~${depData[2].toLocaleString()} €</li></ul>`;
+
+        } else {
+            proFeaturesContainer.style.display = 'none';
+            unlockAnalysisBanner.style.display = 'block';
         }
-        const tcoEl = document.getElementById('tco-analysis');
-        const tcoData = calculateTCO(listing);
-        tcoEl.innerHTML = `<p>Predvideni letni stroški: <strong>${tcoData.totalYearly.toLocaleString()} €</strong> (~${tcoData.totalMonthly.toLocaleString()} € / mesec)</p><ul><li>Gorivo: ~${tcoData.fuel.toLocaleString()} €</li><li>Zavarovanje: ~${tcoData.insurance.toLocaleString()} €</li><li>Servis: ~${tcoData.service.toLocaleString()} €</li></ul>`;
-        const depreciationEl = document.getElementById('depreciation-analysis');
-        const depData = forecastDepreciation(listing);
-        depreciationEl.innerHTML = `<p>Predvidena vrednost vozila v prihodnosti:</p><ul><li>Po 1 letu: ~${depData[0].toLocaleString()} €</li><li>Po 2 letih: ~${depData[1].toLocaleString()} €</li><li>Po 3 letih: ~${depData[2].toLocaleString()} €</li></ul>`;
+
+        if (unlockAnalysisBtn) {
+            unlockAnalysisBtn.addEventListener('click', async () => {
+                const confirmed = await showModal(
+                    'Potrditev nakupa analize',
+                    'Želite odkleniti podrobno analizo za ta oglas za 0.99€? (To je simulacija)'
+                );
+                if (confirmed) {
+                    stateManager.unlockAnalysisForUser(loggedInUser.username, listingId);
+                    showNotification('Analiza je bila uspešno odklenjena!', 'success');
+                    initListingPage({ id: listingId });
+                }
+            });
+        }
     } else {
         proFeaturesContainer.style.display = 'none';
-        upgradeBanner.style.display = 'block';
+        unlockAnalysisBanner.style.display = 'block';
+        if (unlockAnalysisBtn) {
+            unlockAnalysisBtn.addEventListener('click', () => {
+                showNotification('Za to dejanje morate biti prijavljeni.', 'error');
+                window.location.hash = '#/login';
+            });
+        }
     }
 
     if (shareBtnDetails) {
@@ -223,32 +259,23 @@ export function initListingPage({ id: listingId }) {
         });
     }
 
-    // ====================================================
-    // SPREMEMBA: Logika za gumb "Kontaktiraj prodajalca"
-    // ====================================================
     if (contactEmailBtn && seller) {
         contactEmailBtn.addEventListener('click', () => {
-            // Preverimo, ali je uporabnik prijavljen
             if (!loggedInUser) {
                 showNotification('Za pošiljanje sporočil morate biti prijavljeni.', 'error');
                 window.location.hash = '#/login';
                 return;
             }
-            // Preprečimo pošiljanje sporočila samemu sebi
             if (loggedInUser.username === seller.username) {
                 showNotification('Ne morete poslati sporočila samemu sebi.', 'info');
                 return;
             }
             
-            // Pripravimo in prikažemo modalno okno
             if(messageModalTitle) messageModalTitle.textContent = listing.title;
             if(messageModal) messageModal.style.display = 'flex';
         });
     }
      
-    // ====================================================
-    // NOVO: Logika za pošiljanje in preklic sporočila
-    // ====================================================
     if (messageForm) {
         messageForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -262,7 +289,6 @@ export function initListingPage({ id: listingId }) {
                     content: messageContent
                 };
                 
-                // Začasna rešitev: Kličemo stateManager. Kasneje bo to API klic.
                 stateManager.addMessage(newMessage);
                 
                 showNotification('Sporočilo uspešno poslano!', 'success');
@@ -280,7 +306,6 @@ export function initListingPage({ id: listingId }) {
             messageForm.reset();
         });
     }
-    // ====================================================
 
     if (showPhoneBtn && seller && seller.phone) {
         showPhoneBtn.style.display = 'inline-flex';
@@ -289,6 +314,30 @@ export function initListingPage({ id: listingId }) {
         }, { once: true });
     }
     
+    if (financePartnerBtn) {
+        financePartnerBtn.addEventListener('click', async () => {
+            const confirmed = await showModal(
+                'Informativni izračun financiranja',
+                'Za pripravo informativnega izračuna vas bomo preusmerili na stran našega partnerja. Nadaljujem? (To je simulacija, preusmeritev se ne bo zgodila).'
+            );
+            if (confirmed) {
+                showNotification('Preusmerjanje na stran partnerja...', 'info');
+            }
+        });
+    }
+
+    if (insurancePartnerBtn) {
+        insurancePartnerBtn.addEventListener('click', async () => {
+             const confirmed = await showModal(
+                'Pridobite ponudbo zavarovanja',
+                'Za pripravo ponudbe vas bomo preusmerili na stran našega partnerja. Nadaljujem? (To je simulacija, preusmeritev se ne bo zgodila).'
+            );
+            if (confirmed) {
+                showNotification('Preusmerjanje na stran partnerja...', 'info');
+            }
+        });
+    }
+
     const mainImage = document.getElementById('main-image');
     const thumbnailContainer = document.getElementById('thumbnail-container');
     const allImages = [...(listing.images?.exterior || []), ...(listing.images?.interior || [])];

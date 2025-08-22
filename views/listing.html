@@ -28,10 +28,18 @@
                     <h2 id="price"></h2>
                     <span id="price-evaluation" style="display: none;"></span>
                 </div>
-            </div>
+                <div class="partner-services">
+                    <button id="finance-partner-btn" class="btn-partner">
+                        <i class="fas fa-calculator"></i> Informativni izračun financiranja
+                    </button>
+                    <button id="insurance-partner-btn" class="btn-partner">
+                        <i class="fas fa-shield-alt"></i> Pridobi ponudbo zavarovanja
+                    </button>
+                </div>
+                </div>
 
             <div id="vehicle-specs-accordion">
-                </div>
+            </div>
             
             <h3 data-i18n-key="vehicle_description">Opis vozila</h3>
             <p id="description"></p>
@@ -51,10 +59,10 @@
                 </div>
             </div>
 
-            <div id="upgrade-pro-banner" class="upgrade-banner" style="display: none;">
-                <h3><i class="fas fa-gem"></i> Odkleni PRO Analizo</h3>
-                <p>Nadgradi na PRO paket in pridobi dostop do podrobne analize cene, ocene stroškov in napovedi padca vrednosti za ta oglas.</p>
-                <button class="btn-primary">Nadgradi zdaj</button>
+            <div id="unlock-analysis-banner" class="unlock-banner" style="display: none;">
+                <h3><i class="fas fa-lock"></i> Odkleni Podrobno Analizo Cene</h3>
+                <p>Za samo <strong>0.99€</strong> pridobite takojšen dostop do podrobne analize cene, ocene stroškov lastništva in napovedi padca vrednosti za ta oglas.</p>
+                <button id="unlock-analysis-btn" class="btn-primary">Odkleni za 0.99€ (Simulacija)</button>
             </div>
 
             <h3 data-i18n-key="seller_info">Podatki o prodajalcu</h3>
@@ -72,7 +80,7 @@
     <div class="video-section-container" id="video-container" style="display: none;">
         <h2 data-i18n-key="video_presentation">Video predstavitev</h2>
         <div class="video-embed-wrapper">
-            </div>
+        </div>
     </div>
 
     <section class="carousel-section">
@@ -103,4 +111,4 @@
             </form>
         </div>
     </div>
-    </main>
+</main>

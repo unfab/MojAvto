@@ -1,0 +1,75 @@
+<main class="form-container" style="max-width: 800px; margin: 2rem auto;">
+    <div class="page-header" style="text-align: center; margin-bottom: 2rem;">
+        <h1><i class="fas fa-gem" style="color: var(--accent-blue);"></i> Postanite PRO Uporabnik!</h1>
+        <p>Odklenite napredne funkcije in povečajte svojo vidnost na MojAvto.si!</p>
+    </div>
+
+    <div class="pro-benefits-grid">
+        <div class="pro-benefit-card">
+            <h4><i class="fas fa-camera"></i> Več Fotografij</h4>
+            <p>Naložite do <strong>30 fotografij</strong> na oglas namesto standardnih 10 in predstavite svoje vozilo v najboljši luči.</p>
+        </div>
+        <div class="pro-benefit-card">
+            <h4><i class="fas fa-check-circle"></i> PRO Značka</h4>
+            <p>Pridobite posebno značko "PRO prodajalec" na svojem profilu in oglasih, kar poveča zaupanje kupcev.</p>
+        </div>
+        <div class="pro-benefit-card">
+            <h4><i class="fas fa-chart-line"></i> Analiza Oglasov</h4>
+            <p>Dostopajte do podrobne analize cene, stroškov lastništva in napovedi padca vrednosti za vsa vozila na portalu.</p>
+        </div>
+    </div>
+
+    <div class="pro-pricing-box">
+        <h2>Izberite Svoj Paket</h2>
+        <p>Ena cena, vse prednosti. Brez skritih stroškov.</p>
+        <div class="price">10 €<span>/mesec</span></div>
+        <button id="upgrade-pro-btn" class="btn btn-primary btn-large">Nadgradi Zdaj (Simulacija)</button>
+        <small id="upgrade-feedback" style="display: none; margin-top: 1rem; color: #16a34a;"></small>
+    </div>
+</main>
+
+<style>
+    .pro-benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .pro-benefit-card {
+        background-color: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+    }
+    .pro-benefit-card h4 {
+        margin-top: 0;
+        color: var(--accent-blue);
+    }
+    .pro-benefit-card i {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    .pro-pricing-box {
+        background-color: var(--card-color);
+        border: 2px solid var(--accent-blue);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 102, 204, 0.1);
+    }
+    .pro-pricing-box .price {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 1rem 0;
+    }
+    .pro-pricing-box .price span {
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--text-secondary);
+    }
+    .btn-large {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+</style>

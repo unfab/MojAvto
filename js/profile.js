@@ -4,6 +4,7 @@ import { showModal } from './components/modal.js';
 import { showNotification } from './notifications.js';
 
 export function initProfilePage() {
+    const proStatusContainer = document.getElementById('pro-status-container');
     const { loggedInUser, favorites } = stateManager.getState();
     const allListings = stateManager.getListings();
     const SLOVENIAN_REGIONS = [
@@ -45,17 +46,30 @@ export function initProfilePage() {
         userListings.forEach(listing => {
             const card = document.createElement('article');
             card.className = 'card';
+            const isFeatured = listing.featuredUntil && new Date(listing.featuredUntil) > new Date();
+            let featureHTML = '';
+            
+            if (isFeatured) {
+                const expiryDate = new Date(listing.featuredUntil);
+                featureHTML = `<div class="card-featured-badge">Izpostavljen do ${expiryDate.toLocaleDateString('sl-SI')}</div>`;
+            } else {
+                featureHTML = `<button class="btn btn-feature" data-id="${listing.id}"><i class="fas fa-star"></i> Izpostavi (2.99€)</button>`;
+            }
+
             card.innerHTML = `
+                ${isFeatured ? '<div class="card-featured-overlay"></div>' : ''}
                 <div class="card-image-container"><img src="${listing.images?.exterior[0] || 'https://via.placeholder.com/300x180?text=Avto'}" alt="${listing.title}" /></div>
                 <div class="card-body"><h3 class="card-title">${listing.title}</h3><p class="card-details">${translate('spec_year')}: ${listing.year} | Cena: ${listing.price.toLocaleString()} €</p></div>
                 <div class="card-actions">
                     <a href="#/create-listing?edit=true" class="btn btn-edit" data-id="${listing.id}"><i class="fas fa-pencil-alt"></i> ${translate('edit_btn') || 'Uredi'}</a>
-                    <button class="btn btn-delete" data-id="${listing.id}"><i class="fas fa-trash"></i> ${translate('delete_btn') || 'Izbriši'}</button>
+                    <button class="btn btn-delete" data-id="${listing.id}"><i class="fas fa-trash"></i> ${translate('delete_btn') || 'Izbriši'}></button>
+                    ${featureHTML}
                 </div>`;
             container.appendChild(card);
         });
         addDeleteListeners();
         addEditListeners();
+        addFeatureListeners();
     }
 
     function addDeleteListeners() {
@@ -77,6 +91,76 @@ export function initProfilePage() {
             button.addEventListener('click', (e) => {
                 const listingId = e.currentTarget.dataset.id;
                 sessionStorage.setItem('listingToEditId', listingId);
+            });
+        });
+    }
+
+    function addFeatureListeners() {
+        document.querySelectorAll('#my-listings-container .btn-feature').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                const listingId = e.currentTarget.dataset.id;
+                const confirmed = await showModal(
+                    'Potrditev izpostavitve', 
+                    'Ali ste prepričani, da želite izpostaviti ta oglas za 7 dni za ceno 2.99€? (To je simulacija)'
+                );
+                if (confirmed) {
+                    stateManager.featureListing(listingId, 7);
+                    showNotification('Oglas je bil uspešno izpostavljen!', 'success');
+                    displayMyListings();
+                }
+            });
+        });
+    }
+
+    function displayGarageVehicles() {
+        const container = document.getElementById('garage-container');
+        const message = document.getElementById('no-garage-vehicles-message');
+        const garageVehicles = stateManager.getGarageVehicles(loggedInUser.username);
+
+        container.innerHTML = '';
+        message.style.display = garageVehicles.length === 0 ? 'block' : 'none';
+
+        garageVehicles.forEach(vehicle => {
+            const card = document.createElement('article');
+            card.className = 'card garage-card';
+            card.innerHTML = `
+                <div class="card-image-container">
+                    <img src="${vehicle.images[0] || 'https://via.placeholder.com/300x180?text=Avto'}" alt="${vehicle.nickname}" />
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">${vehicle.nickname}</h3>
+                    <p class="card-details">${vehicle.brand} ${vehicle.model} (${vehicle.year})</p>
+                </div>
+                <div class="card-actions">
+                    <a href="#/garage/edit/${vehicle.id}" class="btn btn-edit"><i class="fas fa-pencil-alt"></i> Uredi</a>
+                    <button class="btn btn-delete-garage" data-id="${vehicle.id}"><i class="fas fa-trash"></i> Izbriši</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+        
+        // =======================================================
+        // NOVO: Aktiviramo poslušalce za urejanje in brisanje
+        // =======================================================
+        addGarageDeleteListeners();
+    }
+
+    // =======================================================
+    // NOVO: Funkcija za poslušanje na gumb za brisanje iz garaže
+    // =======================================================
+    function addGarageDeleteListeners() {
+        document.querySelectorAll('#garage-container .btn-delete-garage').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                const vehicleId = e.currentTarget.dataset.id;
+                const confirmed = await showModal(
+                    'Potrditev brisanja vozila', 
+                    'Ali ste prepričani, da želite trajno odstraniti to vozilo iz vaše Garaže?'
+                );
+                if (confirmed) {
+                    stateManager.deleteVehicleFromGarage(loggedInUser.username, vehicleId);
+                    showNotification('Vozilo je bilo uspešno odstranjeno iz Garaže!', 'success');
+                    displayGarageVehicles(); // Ponovno izrišemo Garažo
+                }
             });
         });
     }
@@ -135,6 +219,25 @@ export function initProfilePage() {
         });
     }
 
+    function displayProStatus() {
+        if (!proStatusContainer) return;
+        
+        if (loggedInUser.isPro) {
+            proStatusContainer.classList.add('is-pro');
+            proStatusContainer.innerHTML = `
+                <h4><i class="fas fa-gem"></i> Imate PRO račun</h4>
+                <p>Uživajte v vseh prednostih, ki vam jih prinaša PRO status!</p>
+            `;
+        } else {
+            proStatusContainer.classList.add('is-not-pro');
+            proStatusContainer.innerHTML = `
+                <h4>Odklenite svoj polni potencial!</h4>
+                <p>Nadgradite na PRO račun in pridobite dostop do ekskluzivnih funkcij.</p>
+                <a href="#/upgrade-pro" class="btn btn-primary" style="margin-top: 1rem;">Nadgradi na PRO</a>
+            `;
+        }
+    }
+
     function displayRecentlyViewed() {
         const container = document.getElementById('recent-listings-container');
         const message = document.getElementById('no-recent-message');
@@ -177,7 +280,6 @@ export function initProfilePage() {
         e.preventDefault();
         const confirmed = await showModal('confirm_save_changes_title', 'confirm_save_changes_text');
         if (confirmed) {
-            // === SPREMEMBA: Centralizirano posodabljanje podatkov ===
             const updatedUserData = {
                 ...loggedInUser,
                 fullname: fullnameInput.value,
@@ -194,7 +296,9 @@ export function initProfilePage() {
     });
 
     displayMyListings();
+    displayGarageVehicles();
     displayFavoriteListings();
     displaySavedSearches();
     displayRecentlyViewed();
+    displayProStatus();
 }

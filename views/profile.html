@@ -3,6 +3,7 @@
     
     <div class="tabs">
         <button class="tab-link active" data-tab="tab-listings" data-i18n-key="tab_my_listings">Moji oglasi</button>
+        <button class="tab-link" data-tab="tab-garage">Moja Garaža</button>
         <button class="tab-link" data-tab="tab-favorites" data-i18n-key="tab_favorites">Priljubljeni</button>
         <button class="tab-link" data-tab="tab-saved-searches" data-i18n-key="tab_saved_searches">Shranjena iskanja</button>
         <button class="tab-link" data-tab="tab-recent" data-i18n-key="tab_recent">Nazadnje ogledano</button>
@@ -14,6 +15,22 @@
         <div id="no-listings-message" class="empty-state" data-i18n-key="no_listings_posted">Nimate objavljenih oglasov.</div>
     </div>
 
+    <div class="tab-content" id="tab-garage">
+        <div class="garage-header">
+            <h2>Vozila v vaši Garaži</h2>
+            <a href="#/garage/add" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Dodaj vozilo
+            </a>
+        </div>
+        <div class="listings-grid" id="garage-container">
+            </div>
+        <div id="no-garage-vehicles-message" class="empty-state" style="display: none;">
+             <h3>Vaša garaža je prazna.</h3>
+             <p>Dodajte svoje vozilo in delite svojo strast z ostalimi navdušenci!</p>
+             <a href="#/garage/add" class="btn btn-primary" style="margin-top: 1rem;">Dodaj prvo vozilo</a>
+        </div>
+    </div>
+    
     <div class="tab-content" id="tab-favorites">
         <div class="listings-grid" id="favorite-listings-container"></div>
         <div id="no-favorites-message" class="empty-state" data-i18n-key="no_favorites_saved">Nimate shranjenih priljubljenih oglasov.</div>
@@ -31,6 +48,10 @@
     </div>
 
     <div class="tab-content" id="tab-edit-profile">
+        
+        <div id="pro-status-container" class="pro-status-container">
+        </div>
+        
         <form id="profile-edit-form" class="profile-form">
             <h3 data-i18n-key="edit_personal_details">Uredi osebne podatke</h3>
             <div class="form-group">
@@ -44,7 +65,7 @@
             <div class="form-group">
                 <label for="userRegion" data-i18n-key="form_region">Regija</label>
                 <select id="userRegion" name="userRegion" required>
-                     </select>
+                </select>
             </div>
             <div class="form-group">
                 <label for="userPhone" data-i18n-key="form_phone_number">Telefonska številka</label>
