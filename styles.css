@@ -1512,3 +1512,44 @@ fieldset.form-group legend {
         display: none; /* Skrijemo iskanje v glavi na manjših zaslonih */
     }
 }
+/* === DODATEK: Izboljšani stili za stabilnost glave === */
+header {
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* Levo, Sredina (raztegljivo), Desno */
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.header-left, .header-actions {
+    flex-shrink: 0; /* Preprečimo, da se skrčita */
+}
+/* === DODATEK: Stili za izbirnik barv notranjosti === */
+.color-options {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.color-option {
+    position: relative;
+    cursor: pointer;
+}
+.color-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.color-option .color-swatch {
+    display: block;
+    width: 28px;
+    height: 28px;
+    background-color: var(--swatch-color);
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.color-option input[type="radio"]:checked + .color-swatch {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 2px var(--card-color), 0 0 0 4px var(--accent-blue);
+}

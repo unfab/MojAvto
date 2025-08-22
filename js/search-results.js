@@ -30,7 +30,8 @@ export async function initSearchResultsPage() {
     try {
         const response = await fetch('./components/filters.html');
         filtersContainer.innerHTML = await response.text();
-        initAdvancedSearchPage(currentCriteria, (newCriteria) => {
+        // === SPREMEMBA: Podamo "filtersContainer" kot prvi argument ===
+        initAdvancedSearchPage(filtersContainer, currentCriteria, (newCriteria) => {
             currentCriteria = newCriteria;
             applyFiltersAndDisplay(currentCriteria);
         });

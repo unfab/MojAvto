@@ -1,35 +1,37 @@
 import { translate } from './i18n.js';
 import { stateManager } from './stateManager.js';
 
-export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallback) {
-    const filtersContainer = document.getElementById('filters-container');
-    if (filtersContainer && !filtersContainer.hasChildNodes()) {
-        try {
-            const response = await fetch('./components/filters.html');
-            if (!response.ok) throw new Error('Network response was not ok');
-            filtersContainer.innerHTML = await response.text();
-        } catch (error) {
-             console.error("Napaka pri nalaganju HTML komponente za filtre:", error);
-             filtersContainer.innerHTML = "<p>Filtrov ni bilo mogoče naložiti.</p>";
-             return;
-        }
+const INTERIOR_COLORS = [
+    { name: 'Črna', value: 'crna', hex: '#2d3748' },
+    { name: 'Siva', value: 'siva', hex: '#a0aec0' },
+    { name: 'Bež', value: 'bez', hex: '#f6e05e' },
+    { name: 'Rjava', value: 'rjava', hex: '#975a16' },
+    { name: 'Bela', value: 'bela', hex: '#ffffff' },
+    { name: 'Rdeča', value: 'rdeca', hex: '#e53e3e' }
+];
+
+export async function initAdvancedSearchPage(containerElement, prefillCriteria = {}, onSearchCallback) {
+    if (!containerElement) {
+        console.error("Vsebnik za filtre ni bil podan.");
+        return;
     }
-    
-    const searchForm = document.getElementById("advancedSearchForm");
-    const criteriaContainer = document.getElementById("criteria-container");
-    const addCriterionBtn = document.getElementById("addCriterionBtn");
-    const addExclusionBtn = document.getElementById("addExclusionBtn");
-    const vehicleTypeGrid = document.querySelector(".vehicle-type-grid");
-    const selectAllBodyTypesBtn = document.getElementById("selectAllBodyTypesBtn");
-    const clearAllBodyTypesBtn = document.getElementById("clearAllBodyTypesBtn");
-    const fuelSelect = document.getElementById("adv-fuel");
-    const gearboxSelect = document.getElementById("adv-gearbox");
-    const electricOptionsRow = document.getElementById("electric-options-row");
-    const hybridOptionsRow = document.getElementById("hybrid-options-row");
-    const excludeMakeSelect = document.getElementById("adv-exclude-make");
-    const excludeModelSelect = document.getElementById("adv-exclude-model");
-    const excludeTypeSelect = document.getElementById("adv-exclude-type");
-    const excludedItemsContainer = document.getElementById("excluded-items-container");
+
+    const searchForm = containerElement.querySelector("#advancedSearchForm");
+    const criteriaContainer = containerElement.querySelector("#criteria-container");
+    const addCriterionBtn = containerElement.querySelector("#addCriterionBtn");
+    const addExclusionBtn = containerElement.querySelector("#addExclusionBtn");
+    const vehicleTypeGrid = containerElement.querySelector(".vehicle-type-grid");
+    const selectAllBodyTypesBtn = containerElement.querySelector("#selectAllBodyTypesBtn");
+    const clearAllBodyTypesBtn = containerElement.querySelector("#clearAllBodyTypesBtn");
+    const fuelSelect = containerElement.querySelector("#adv-fuel");
+    const gearboxSelect = containerElement.querySelector("#adv-gearbox");
+    const electricOptionsRow = containerElement.querySelector("#electric-options-row");
+    const hybridOptionsRow = containerElement.querySelector("#hybrid-options-row");
+    const excludeMakeSelect = containerElement.querySelector("#adv-exclude-make");
+    const excludeModelSelect = containerElement.querySelector("#adv-exclude-model");
+    const excludeTypeSelect = containerElement.querySelector("#adv-exclude-type");
+    const excludedItemsContainer = containerElement.querySelector("#excluded-items-container");
+    const colorOptionsContainer = containerElement.querySelector("#color-options-container");
 
     if (!searchForm || !criteriaContainer || !addCriterionBtn) {
         console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka v DOM-u.");
@@ -39,6 +41,20 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
     const brandModelData = stateManager.getBrands();
     let exclusionRules = prefillCriteria.exclusionRules || [];
     const sortedBrands = Object.keys(brandModelData).sort();
+
+    function renderColorOptions() {
+        if (!colorOptionsContainer) return;
+        let html = '';
+        INTERIOR_COLORS.forEach(color => {
+            html += `
+                <label class="color-option" for="color-${color.value}" title="${color.name}">
+                    <input type="radio" id="color-${color.value}" name="interior_color" value="${color.value}">
+                    <span class="color-swatch" style="--swatch-color: ${color.hex};"></span>
+                </label>
+            `;
+        });
+        colorOptionsContainer.innerHTML = html;
+    }
 
     function renderExclusionTags() {
         if (!excludedItemsContainer) return;
@@ -363,5 +379,6 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
         });
     }
 
+    renderColorOptions();
     prefillForm(prefillCriteria);
 }
