@@ -4,6 +4,7 @@ import { showNotification } from './notifications.js';
 import { calculateTCO } from './utils/tcoCalculator.js';
 import { forecastDepreciation } from './utils/depreciationForecaster.js';
 import { initCarousel } from './components/Carousel.js';
+import { showModal } from './components/modal.js';
 
 const detailCategories = {
     "Osnovni podatki": {
@@ -110,6 +111,16 @@ export function initListingPage({ id: listingId }) {
     const proFeaturesContainer = document.getElementById('pro-features-container');
     const upgradeBanner = document.getElementById('upgrade-pro-banner');
     const videoContainer = document.getElementById('video-container');
+    
+    // ====================================================
+    // NOVO: Elementi za modalno okno za sporočila
+    // ====================================================
+    const messageModal = document.getElementById('message-modal');
+    const messageModalTitle = document.getElementById('message-modal-listing-title');
+    const messageForm = document.getElementById('message-form');
+    const messageTextarea = document.getElementById('message-textarea');
+    const messageCancelBtn = document.getElementById('message-cancel-btn');
+    // ====================================================
 
     titleEl.textContent = listing.title;
     document.title = `${listing.title} - MojAvto.si`;
@@ -212,11 +223,65 @@ export function initListingPage({ id: listingId }) {
         });
     }
 
+    // ====================================================
+    // SPREMEMBA: Logika za gumb "Kontaktiraj prodajalca"
+    // ====================================================
     if (contactEmailBtn && seller) {
         contactEmailBtn.addEventListener('click', () => {
-            window.location.href = `mailto:${seller.email}?subject=Zanimanje za oglas: ${listing.title}`;
+            // Preverimo, ali je uporabnik prijavljen
+            if (!loggedInUser) {
+                showNotification('Za pošiljanje sporočil morate biti prijavljeni.', 'error');
+                window.location.hash = '#/login';
+                return;
+            }
+            // Preprečimo pošiljanje sporočila samemu sebi
+            if (loggedInUser.username === seller.username) {
+                showNotification('Ne morete poslati sporočila samemu sebi.', 'info');
+                return;
+            }
+            
+            // Pripravimo in prikažemo modalno okno
+            if(messageModalTitle) messageModalTitle.textContent = listing.title;
+            if(messageModal) messageModal.style.display = 'flex';
         });
     }
+     
+    // ====================================================
+    // NOVO: Logika za pošiljanje in preklic sporočila
+    // ====================================================
+    if (messageForm) {
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const messageContent = messageTextarea.value.trim();
+            if (messageContent) {
+                const newMessage = {
+                    sender: loggedInUser.username,
+                    recipient: seller.username,
+                    listingId: listing.id,
+                    listingTitle: listing.title,
+                    content: messageContent
+                };
+                
+                // Začasna rešitev: Kličemo stateManager. Kasneje bo to API klic.
+                stateManager.addMessage(newMessage);
+                
+                showNotification('Sporočilo uspešno poslano!', 'success');
+                messageModal.style.display = 'none';
+                messageForm.reset();
+            } else {
+                showNotification('Vsebina sporočila ne sme biti prazna.', 'error');
+            }
+        });
+    }
+    
+    if (messageCancelBtn) {
+        messageCancelBtn.addEventListener('click', () => {
+            messageModal.style.display = 'none';
+            messageForm.reset();
+        });
+    }
+    // ====================================================
+
     if (showPhoneBtn && seller && seller.phone) {
         showPhoneBtn.style.display = 'inline-flex';
         showPhoneBtn.addEventListener('click', () => {

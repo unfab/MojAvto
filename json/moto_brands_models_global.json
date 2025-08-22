@@ -1,0 +1,2396 @@
+{
+  "AJP": {
+    "PR7": [
+      "PR7 Adventure"
+    ],
+    "PR5": [
+      "PR5",
+      "Extreme"
+    ],
+    "PR4": [
+      "PR4",
+      "Enduro",
+      "Supermoto"
+    ],
+    "PR3": [
+      "PR3",
+      "Enduro",
+      "Supermoto"
+    ]
+  },
+  "Aprilia": {
+    "RSV4": [
+      "RSV4 Factory",
+      "RSV4 RR"
+    ],
+    "RS 660": [
+      "RS 660",
+      "Extrema"
+    ],
+    "Tuono V4": [
+      "Tuono V4 Factory",
+      "Tuono V4"
+    ],
+    "Tuono 660": [
+      "Tuono 660",
+      "Factory"
+    ],
+    "Tuareg 660": [
+      "Tuareg 660"
+    ],
+    "Caponord": [
+      "Caponord 1200",
+      "Rally"
+    ],
+    "Dorsoduro": [
+      "Dorsoduro 750",
+      "Dorsoduro 900",
+      "Dorsoduro 1200"
+    ],
+    "Shiver": [
+      "Shiver 750",
+      "Shiver 900"
+    ],
+    "Mana 850": [
+      "Mana 850 GT"
+    ],
+    "RS 250": [
+      "RS 250"
+    ],
+    "RS 125": [
+      "RS 125",
+      "RS4 125"
+    ],
+    "SR": [
+      "SR 50",
+      "SR GT 125",
+      "SR GT 200"
+    ],
+    "SXR": [
+      "SXR 50"
+    ]
+  },
+  "Arch Motorcycle": {
+    "KRGT-1": [
+      "KRGT-1"
+    ],
+    "1s": [
+      "1s"
+    ],
+    "Method 143": [
+      "Method 143"
+    ]
+  },
+  "Ariel": {
+    "Ace": [
+      "Ace",
+      "Ace R"
+    ],
+    "Square Four": [
+      "Square Four"
+    ]
+  },
+  "Benelli": {
+    "Leoncino": [
+      "Leoncino 800",
+      "Leoncino 500",
+      "Leoncino 250",
+      "Trail"
+    ],
+    "TRK": [
+      "TRK 702",
+      "TRK 702 X",
+      "TRK 502",
+      "TRK 502 X",
+      "TRK 251"
+    ],
+    "Imperiale": [
+      "Imperiale 400"
+    ],
+    "752 S": [
+      "752 S"
+    ],
+    "502 C": [
+      "502 C"
+    ],
+    "302 S": [
+      "302 S"
+    ],
+    "TNT": [
+      "TNT 125",
+      "TNT 899",
+      "TNT 1130"
+    ],
+    "Tornado": [
+      "Tornado Tre 900",
+      "Tornado Tre 1130"
+    ]
+  },
+  "Beta": {
+    "RR": [
+      "RR 125",
+      "RR 200",
+      "RR 250",
+      "RR 300",
+      "RR 350",
+      "RR 390",
+      "RR 430",
+      "RR 480",
+      "Racing"
+    ],
+    "Xtrainer": [
+      "Xtrainer"
+    ],
+    "Alp": [
+      "Alp 200",
+      "Alp 4.0",
+      "Alp X"
+    ],
+    "Evo": [
+      "Evo 80",
+      "Evo 125",
+      "Evo 250",
+      "Evo 300",
+      "Factory"
+    ]
+  },
+  "Bimota": {
+    "Tesi H2": [
+      "Tesi H2"
+    ],
+    "KB4": [
+      "KB4",
+      "RC"
+    ],
+    "DB8": [
+      "DB8 Italia",
+      "Oronero"
+    ],
+    "DB7": [
+      "DB7"
+    ],
+    "V Due": [
+      "V Due 500"
+    ],
+    "DB": [
+      "DB4",
+      "DB5",
+      "DB6 Delirio"
+    ],
+    "SB": [
+      "SB6R",
+      "SB8R"
+    ],
+    "YB": [
+      "YB11"
+    ],
+    "Tesi": [
+      "Tesi 3D"
+    ]
+  },
+  "BMW": {
+    "S 1000 RR": [
+      "S 1000 RR",
+      "M 1000 RR",
+      "M Competition"
+    ],
+    "S 1000 R": [
+      "S 1000 R",
+      "M 1000 R"
+    ],
+    "S 1000 XR": [
+      "S 1000 XR",
+      "M 1000 XR"
+    ],
+    "R 1300 GS": [
+      "R 1300 GS",
+      "Trophy",
+      "Triple Black",
+      "Option 719 Tramuntana"
+    ],
+    "R 1250 GS": [
+      "R 1250 GS",
+      "Adventure",
+      "Rallye"
+    ],
+    "R 1250 RT": [
+      "R 1250 RT"
+    ],
+    "R 1250 R": [
+      "R 1250 R"
+    ],
+    "R 1250 RS": [
+      "R 1250 RS"
+    ],
+    "R 18": [
+      "R 18",
+      "Classic",
+      "B",
+      "Transcontinental",
+      "Roctane"
+    ],
+    "R nineT": [
+      "R nineT",
+      "Pure",
+      "Scrambler",
+      "Urban G/S"
+    ],
+    "F 900 R": [
+      "F 900 R"
+    ],
+    "F 900 GS": [
+      "F 900 GS",
+      "Adventure"
+    ],
+    "F 900 XR": [
+      "F 900 XR"
+    ],
+    "F 800 GS": [
+      "F 800 GS"
+    ],
+    "G 310 GS": [
+      "G 310 GS"
+    ],
+    "G 310 R": [
+      "G 310 R"
+    ],
+    "K 1600": [
+      "K 1600 GT",
+      "K 1600 GTL",
+      "K 1600 B",
+      "Grand America"
+    ],
+    "CE 04": [
+      "CE 04"
+    ],
+    "CE 02": [
+      "CE 02"
+    ],
+    "C 400": [
+      "C 400 X",
+      "C 400 GT"
+    ],
+    "Historic": [
+      "R32",
+      "R80 G/S",
+      "R90S",
+      "K1",
+      "K100"
+    ],
+    "R 12": [
+      "R 12",
+      "R 12 nineT"
+    ],
+    "HP": [
+      "HP4",
+      "HP2 Enduro",
+      "HP2 Megamoto",
+      "HP2 Sport"
+    ],
+    "S 1000": [
+      "HP4 Race"
+    ],
+    "GS Historic": [
+      "R1150GS Adventure",
+      "R1200GS Adventure",
+      "R80G/S Paris-Dakar"
+    ],
+    "Classics": [
+      "R69S",
+      "R100RS",
+      "R75/5",
+      "K75",
+      "K1100RS",
+      "R1100S",
+      "R1200S",
+      "G 450 X",
+      "F650 Funduro",
+      "C1"
+    ]
+  },
+  "Brough Superior": {
+    "SS100": [
+      "SS100"
+    ],
+    "Lawrence": [
+      "Lawrence"
+    ],
+    "Pendine": [
+      "Pendine Sand Racer"
+    ]
+  },
+  "BSA": {
+    "Gold Star": [
+      "Gold Star",
+      "DBD34"
+    ],
+    "A65": [
+      "A65 Lightning",
+      "A65 Spitfire"
+    ],
+    "Rocket 3": [
+      "Rocket 3"
+    ],
+    "Bantam": [
+      "Bantam"
+    ]
+  },
+  "Buell": {
+    "Lightning": [
+      "XB12S",
+      "XB9S"
+    ],
+    "Firebolt": [
+      "XB12R",
+      "XB9R"
+    ],
+    "Ulysses": [
+      "XB12X"
+    ],
+    "1125R": [
+      "1125R"
+    ],
+    "1125CR": [
+      "1125CR"
+    ],
+    "Hammerhead": [
+      "Hammerhead 1190"
+    ],
+    "Super Cruiser": [
+      "Super Cruiser 1190"
+    ]
+  },
+  "Cagiva": {
+    "Mito": [
+      "Mito 125",
+      "EV"
+    ],
+    "Elefant": [
+      "Elefant 750",
+      "Elefant 900"
+    ],
+    "Raptor": [
+      "Raptor 125",
+      "Raptor 650",
+      "Raptor 1000"
+    ],
+    "Navigator": [
+      "Navigator 1000"
+    ],
+    "Gran Canyon": [
+      "Gran Canyon 900"
+    ],
+    "Elefant (historic)": [
+      "Elefant 750 Lucky Explorer",
+      "Elefant 900 IE"
+    ],
+    "V-Raptor": [
+      "V-Raptor 650",
+      "V-Raptor 1000"
+    ]
+  },
+  "Can-Am": {
+    "Spyder": [
+      "Spyder F3",
+      "Spyder RT"
+    ],
+    "Ryker": [
+      "Ryker",
+      "Ryker Sport",
+      "Ryker Rally"
+    ]
+  },
+  "CFMoto": {
+    "800MT": [
+      "800MT Sport",
+      "800MT Touring"
+    ],
+    "650MT": [
+      "650MT"
+    ],
+    "700CL-X": [
+      "700CL-X Heritage",
+      "700CL-X Sport",
+      "700CL-X Adventure"
+    ],
+    "800NK": [
+      "800NK"
+    ],
+    "450SR": [
+      "450SR",
+      "450SS"
+    ],
+    "Papio": [
+      "Papio"
+    ]
+  },
+  "CZ": {
+    "175": [
+      "175"
+    ],
+    "250": [
+      "250 Enduro",
+      "250 Twin"
+    ],
+    "380": [
+      "380"
+    ]
+  },
+  "Ducati": {
+    "Panigale": [
+      "Panigale V4",
+      "V4 S",
+      "V4 R",
+      "Superleggera V4",
+      "Panigale V2"
+    ],
+    "Streetfighter": [
+      "Streetfighter V4",
+      "V4 S",
+      "V4 SP2",
+      "Streetfighter V2"
+    ],
+    "Monster": [
+      "Monster",
+      "Monster+",
+      "SP",
+      "1200",
+      "821",
+      "797",
+      "S4R"
+    ],
+    "Multistrada": [
+      "Multistrada V4",
+      "V4 S",
+      "V4 Pikes Peak",
+      "V4 Rally",
+      "Multistrada V2"
+    ],
+    "Diavel": [
+      "Diavel V4",
+      "Diavel 1260",
+      "XDiavel"
+    ],
+    "DesertX": [
+      "DesertX",
+      "Rally"
+    ],
+    "Hypermotard": [
+      "Hypermotard 950",
+      "RVE",
+      "SP",
+      "698 Mono"
+    ],
+    "Scrambler": [
+      "Icon",
+      "Full Throttle",
+      "Nightshift",
+      "1100",
+      "Desert Sled"
+    ],
+    "SuperSport": [
+      "SuperSport 950",
+      "950 S"
+    ],
+    "Historic": [
+      "916",
+      "999",
+      "748",
+      "851",
+      "Darmah",
+      "750 GT",
+      "Paul Smart 1000 LE"
+    ],
+    "Superleggera": [
+      "1199 Superleggera",
+      "1299 Superleggera",
+      "Superleggera V4"
+    ],
+    "Desmosedici": [
+      "Desmosedici RR"
+    ],
+    "Panigale Specials": [
+      "Panigale V4 SP2",
+      "Panigale V4 R",
+      "Panigale V4 Lamborghini"
+    ],
+    "Diavel Limited": [
+      "Diavel for Bentley"
+    ],
+    "Historic+": [
+      "998R",
+      "916 SPS",
+      "888 SP5",
+      "900SS",
+      "MH900e",
+      "SportClassic Sport 1000"
+    ],
+    "RS/Trofeo": [
+      "RS 660 Trofeo (Aprilia note)",
+      "Panigale V2 Bayliss 1st Championship 20th Anniversary"
+    ]
+  },
+  "Energica": {
+    "Ego": [
+      "Ego",
+      "Ego+"
+    ],
+    "Eva Ribelle": [
+      "Eva Ribelle"
+    ],
+    "EsseEsse9": [
+      "EsseEsse9",
+      "EsseEsse9+"
+    ],
+    "Experia": [
+      "Experia Green Tourer"
+    ]
+  },
+  "Fantic": {
+    "Caballero": [
+      "Caballero 125",
+      "Caballero 500",
+      "Scrambler",
+      "Flat Track",
+      "Rally"
+    ],
+    "XEF": [
+      "XEF 125",
+      "XEF 250",
+      "XEF 450"
+    ],
+    "XXF": [
+      "XXF 125",
+      "XXF 250",
+      "XXF 450"
+    ]
+  },
+  "GasGas": {
+    "EC": [
+      "EC 250",
+      "EC 300",
+      "EC 250F",
+      "EC 350F"
+    ],
+    "MC": [
+      "MC 125",
+      "MC 250",
+      "MC 250F",
+      "MC 450F"
+    ],
+    "ES 700": [
+      "ES 700"
+    ],
+    "SM 700": [
+      "SM 700"
+    ]
+  },
+  "Gilera": {
+    "Runner": [
+      "Runner 50",
+      "Runner 125",
+      "Runner 180"
+    ],
+    "Fuoco": [
+      "Fuoco 500"
+    ],
+    "Nexus": [
+      "Nexus 500"
+    ],
+    "GP800": [
+      "GP800"
+    ],
+    "Nordwest": [
+      "Nordwest 600"
+    ],
+    "Saturno": [
+      "Saturno 500"
+    ]
+  },
+  "Harley-Davidson": {
+    "Sportster": [
+      "Iron 883",
+      "Forty-Eight",
+      "Sportster S",
+      "Nightster"
+    ],
+    "Softail": [
+      "Street Bob",
+      "Fat Boy",
+      "Heritage Classic",
+      "Low Rider S",
+      "Breakout",
+      "Fat Bob"
+    ],
+    "Touring": [
+      "Road King",
+      "Street Glide",
+      "Road Glide",
+      "Electra Glide",
+      "Ultra Limited"
+    ],
+    "CVO": [
+      "CVO Street Glide",
+      "CVO Road Glide",
+      "CVO Limited"
+    ],
+    "Pan America": [
+      "Pan America 1250",
+      "1250 Special"
+    ],
+    "Trike": [
+      "Freewheeler",
+      "Tri Glide Ultra"
+    ],
+    "LiveWire": [
+      "LiveWire ONE"
+    ],
+    "Historic": [
+      "Knucklehead",
+      "Panhead",
+      "Shovelhead",
+      "Dyna Wide Glide",
+      "V-Rod"
+    ],
+    "XR": [
+      "XR1200",
+      "XR1200X"
+    ],
+    "Softail (historic)": [
+      "Softail Slim",
+      "Softail Deluxe"
+    ],
+    "VRSC": [
+      "V-Rod",
+      "Night Rod Special",
+      "Muscle"
+    ],
+    "Street": [
+      "Street 750",
+      "Street 500"
+    ],
+    "X (Asia)": [
+      "X350",
+      "X500"
+    ],
+    "CVO (more)": [
+      "CVO Road Glide ST"
+    ],
+    "LiveWire (new)": [
+      "S2 Mulholland"
+    ]
+  },
+  "Horex": {
+    "VR6": [
+      "VR6 Classic",
+      "VR6 Raw",
+      "VR6 Café Racer"
+    ]
+  },
+  "Husqvarna": {
+    "Norden": [
+      "Norden 901",
+      "Expedition"
+    ],
+    "Svartpilen": [
+      "Svartpilen 125",
+      "Svartpilen 401",
+      "Svartpilen 701"
+    ],
+    "Vitpilen": [
+      "Vitpilen 401",
+      "Vitpilen 701"
+    ],
+    "701 Enduro": [
+      "701 Enduro",
+      "LR"
+    ],
+    "701 Supermoto": [
+      "701 Supermoto"
+    ],
+    "TE": [
+      "TE 150",
+      "TE 250",
+      "TE 300"
+    ],
+    "FE": [
+      "FE 250",
+      "FE 350",
+      "FE 450",
+      "FE 501"
+    ],
+    "EE": [
+      "EE 5"
+    ],
+    "SM": [
+      "SM 610",
+      "SM 630"
+    ],
+    "Historic": [
+      "Silverpilen"
+    ]
+  },
+  "Hyosung": {
+    "GT250R": [
+      "GT250R"
+    ],
+    "GT650R": [
+      "GT650R"
+    ],
+    "Aquila": [
+      "Aquila GV125",
+      "Aquila GV250",
+      "Aquila GV650"
+    ]
+  },
+  "Indian Motorcycle": {
+    "Scout": [
+      "Scout Bobber",
+      "Scout Rogue",
+      "Scout Sixty"
+    ],
+    "Chief": [
+      "Chief Dark Horse",
+      "Chief Bobber",
+      "Super Chief"
+    ],
+    "FTR": [
+      "FTR",
+      "FTR Sport",
+      "FTR R Carbon",
+      "FTR Rally"
+    ],
+    "Challenger": [
+      "Challenger Dark Horse",
+      "Challenger Limited"
+    ],
+    "Chieftain": [
+      "Chieftain",
+      "Chieftain Dark Horse"
+    ],
+    "Roadmaster": [
+      "Roadmaster",
+      "Roadmaster Limited",
+      "Dark Horse"
+    ],
+    "Pursuit": [
+      "Pursuit Limited",
+      "Dark Horse"
+    ],
+    "Springfield": [
+      "Springfield",
+      "Dark Horse"
+    ],
+    "Scout (2024+)": [
+      "Scout Bobber",
+      "Scout Classic",
+      "Super Scout",
+      "Sport Scout",
+      "101 Scout"
+    ],
+    "Vintage": [
+      "Chief Vintage",
+      "Chief Classic"
+    ],
+    "Historic": [
+      "Indian Four",
+      "Scout (1920s)"
+    ]
+  },
+  "Jawa": {
+    "350": [
+      "350",
+      "Typ 634"
+    ],
+    "500 OHC": [
+      "500 OHC"
+    ],
+    "Pérák": [
+      "Pérák"
+    ],
+    "Forty Two": [
+      "Forty Two"
+    ],
+    "Classic": [
+      "Classic"
+    ]
+  },
+  "Kawasaki": {
+    "Ninja": [
+      "Ninja H2",
+      "H2R",
+      "Ninja ZX-10R",
+      "ZX-6R",
+      "Ninja 650",
+      "Ninja 400",
+      "Ninja 125",
+      "Ninja e-1"
+    ],
+    "Z": [
+      "Z H2",
+      "Z1000",
+      "Z900",
+      "Z650",
+      "Z400",
+      "Z125",
+      "Z e-1"
+    ],
+    "Versys": [
+      "Versys 1000",
+      "Versys 650",
+      "Versys-X 300"
+    ],
+    "Vulcan": [
+      "Vulcan S",
+      "Vulcan 900 Classic",
+      "Vulcan 1700 Voyager"
+    ],
+    "W": [
+      "W800",
+      "W800 Cafe"
+    ],
+    "Eliminator": [
+      "Eliminator 500"
+    ],
+    "KLX": [
+      "KLX300",
+      "KLX230",
+      "KLX110"
+    ],
+    "KX": [
+      "KX450",
+      "KX250"
+    ],
+    "Concours": [
+      "Concours 14",
+      "GTR 1400"
+    ],
+    "Historic": [
+      "Z1 900",
+      "GPZ900R",
+      "Mach III",
+      "Mach IV"
+    ],
+    "Ninja (more)": [
+      "Ninja ZX-4RR",
+      "Ninja ZX-25R",
+      "ZX-12R",
+      "ZX-9R",
+      "ZX-7R"
+    ],
+    "Z (retro)": [
+      "Z900RS",
+      "Z650RS",
+      "Zephyr 750",
+      "Zephyr 1100"
+    ],
+    "KLR": [
+      "KLR650"
+    ],
+    "GPZ": [
+      "GPZ750",
+      "GPZ1100"
+    ],
+    "Historic+": [
+      "Z1300",
+      "Voyager XII"
+    ]
+  },
+  "KTM": {
+    "1390 Super Duke": [
+      "1390 Super Duke R",
+      "Evo",
+      "GT"
+    ],
+    "1290 Super Adventure": [
+      "1290 Super Adventure S",
+      "R"
+    ],
+    "890 Adventure": [
+      "890 Adventure",
+      "R",
+      "Rally"
+    ],
+    "890 Duke": [
+      "890 Duke R",
+      "GP"
+    ],
+    "990 Duke": [
+      "990 Duke"
+    ],
+    "790 Adventure": [
+      "790 Adventure"
+    ],
+    "790 Duke": [
+      "790 Duke"
+    ],
+    "390 Adventure": [
+      "390 Adventure"
+    ],
+    "390 Duke": [
+      "390 Duke"
+    ],
+    "250 Duke": [
+      "250 Duke"
+    ],
+    "125 Duke": [
+      "125 Duke"
+    ],
+    "RC 390": [
+      "RC 390",
+      "RC 200",
+      "RC 125"
+    ],
+    "EXC": [
+      "150 EXC",
+      "250 EXC",
+      "300 EXC",
+      "250 EXC-F",
+      "350 EXC-F",
+      "450 EXC-F",
+      "500 EXC-F",
+      "Six Days"
+    ],
+    "SX": [
+      "125 SX",
+      "250 SX",
+      "250 SX-F",
+      "350 SX-F",
+      "450 SX-F"
+    ],
+    "Freeride": [
+      "Freeride E-XC"
+    ],
+    "690 Enduro R": [
+      "690 Enduro R"
+    ],
+    "690 SMC R": [
+      "690 SMC R"
+    ],
+    "Adventure (historic)": [
+      "1190 Adventure",
+      "990 Adventure",
+      "950 Adventure",
+      "640 Adventure"
+    ],
+    "RC8": [
+      "1190 RC8",
+      "RC8 R"
+    ],
+    "Duke (historic)": [
+      "690 Duke",
+      "990 Super Duke R (Gen1)"
+    ],
+    "Rally": [
+      "450 Rally Replica"
+    ]
+  },
+  "Kymco": {
+    "AK550": [
+      "AK550"
+    ],
+    "Xciting": [
+      "Xciting 400i"
+    ],
+    "Downtown": [
+      "Downtown 350i"
+    ],
+    "Agility": [
+      "Agility 50",
+      "Agility 125"
+    ],
+    "People S": [
+      "People S 125",
+      "People S 300"
+    ],
+    "Like": [
+      "Like 125",
+      "Like 150"
+    ]
+  },
+  "Lambretta": {
+    "V-Special": [
+      "V50",
+      "V125",
+      "V200"
+    ]
+  },
+  "Laverda": {
+    "Jota": [
+      "Jota 1000"
+    ],
+    "750": [
+      "750 SF",
+      "750 SFC"
+    ],
+    "3C": [
+      "3C"
+    ]
+  },
+  "LiveWire": {
+    "One": [
+      "One"
+    ],
+    "S2 Del Mar": [
+      "S2 Del Mar"
+    ]
+  },
+  "Matchless": {
+    "G80": [
+      "G80"
+    ],
+    "Silver Hawk": [
+      "Silver Hawk"
+    ]
+  },
+  "Montesa": {
+    "Cota": [
+      "Cota 4RT",
+      "301RR",
+      "315R",
+      "4RT 260",
+      "4RT 301RR",
+      "4Ride"
+    ],
+    "Impala": [
+      "Impala"
+    ]
+  },
+  "Moto Guzzi": {
+    "V7": [
+      "V7 Stone",
+      "V7 Special",
+      "V7 Stone Corsa"
+    ],
+    "V9": [
+      "V9 Bobber",
+      "V9 Roamer"
+    ],
+    "V85 TT": [
+      "V85 TT",
+      "Travel"
+    ],
+    "V100 Mandello": [
+      "V100 Mandello",
+      "S"
+    ],
+    "California": [
+      "California 1400",
+      "Touring",
+      "Custom"
+    ],
+    "Audace": [
+      "Audace"
+    ],
+    "Eldorado": [
+      "Eldorado"
+    ],
+    "Griso": [
+      "Griso 8V"
+    ],
+    "Stelvio": [
+      "Stelvio"
+    ],
+    "Le Mans": [
+      "Le Mans 850"
+    ],
+    "Modern Classics": [
+      "V7 Racer",
+      "V11 Sport",
+      "V11 Le Mans"
+    ],
+    "Sport": [
+      "Daytona 1000",
+      "Daytona 1100",
+      "MGS-01 Corsa"
+    ],
+    "Touring": [
+      "Norge 1200 GT",
+      "Breva 1100",
+      "Breva 1200"
+    ],
+    "Bagger": [
+      "MGX-21 Flying Fortress"
+    ]
+  },
+  "Moto Morini": {
+    "X-Cape": [
+      "X-Cape 650"
+    ],
+    "Seiemmezzo": [
+      "Seiemmezzo SCR",
+      "Seiemmezzo STR"
+    ],
+    "Corsaro": [
+      "Corsaro 1200"
+    ],
+    "Calibro": [
+      "Calibro 650"
+    ]
+  },
+  "MV Agusta": {
+    "F4": [
+      "F4",
+      "RR",
+      "RC"
+    ],
+    "F3": [
+      "F3",
+      "RR",
+      "Rosso"
+    ],
+    "Brutale": [
+      "Brutale 1000",
+      "RR",
+      "RS",
+      "Brutale 800",
+      "Rosso"
+    ],
+    "Dragster": [
+      "Dragster 800",
+      "RR",
+      "SCS",
+      "RC"
+    ],
+    "Turismo Veloce": [
+      "Turismo Veloce 800",
+      "Lusso",
+      "SCS"
+    ],
+    "Superveloce": [
+      "Superveloce 800",
+      "S"
+    ],
+    "Rush": [
+      "Rush 1000"
+    ],
+    "F4 Special": [
+      "F4 Claudio",
+      "F4 RC"
+    ],
+    "F3 Special": [
+      "F3 RC"
+    ],
+    "Superveloce Special": [
+      "Superveloce Ago",
+      "Serie Oro"
+    ],
+    "Brutale Special": [
+      "Serie Oro (Brutale 1000)"
+    ]
+  },
+  "Norton": {
+    "Commando": [
+      "Commando 961 SP",
+      "961 CR"
+    ],
+    "V4": [
+      "V4SV",
+      "V4CR"
+    ],
+    "Manx": [
+      "Manx"
+    ],
+    "Dominator": [
+      "Dominator"
+    ]
+  },
+  "NSU": {
+    "Max": [
+      "Supermax"
+    ],
+    "Fox": [
+      "Fox"
+    ],
+    "Quickly": [
+      "Quickly"
+    ]
+  },
+  "Peugeot": {
+    "Metropolis": [
+      "Metropolis 400"
+    ],
+    "Pulsion": [
+      "Pulsion 125"
+    ],
+    "Tweet": [
+      "Tweet 50",
+      "Tweet 125"
+    ],
+    "Django": [
+      "Django 125"
+    ],
+    "Kisbee": [
+      "Kisbee 50",
+      "Kisbee 125"
+    ],
+    "Speedfight": [
+      "Speedfight 4 50"
+    ],
+    "Citystar": [
+      "Citystar 125"
+    ]
+  },
+  "Piaggio": {
+    "Beverly": [
+      "Beverly 300",
+      "Beverly 400"
+    ],
+    "MP3": [
+      "MP3 300",
+      "MP3 400",
+      "MP3 530"
+    ],
+    "Medley": [
+      "Medley 125",
+      "Medley 150"
+    ],
+    "Liberty": [
+      "Liberty 50",
+      "Liberty 125"
+    ],
+    "1": [
+      "1",
+      "1 Active"
+    ],
+    "Typhoon": [
+      "Typhoon 50",
+      "Typhoon 125"
+    ],
+    "Zip": [
+      "Zip 50",
+      "Zip 125"
+    ],
+    "Fly": [
+      "Fly 125"
+    ]
+  },
+  "Royal Enfield": {
+    "Classic 350": [
+      "Classic 350"
+    ],
+    "Meteor 350": [
+      "Meteor 350"
+    ],
+    "Hunter 350": [
+      "Hunter 350"
+    ],
+    "Bullet 350": [
+      "Bullet 350"
+    ],
+    "Himalayan": [
+      "Himalayan 411",
+      "Himalayan 450"
+    ],
+    "Interceptor 650": [
+      "Interceptor 650"
+    ],
+    "Continental GT 650": [
+      "Continental GT 650"
+    ],
+    "Super Meteor 650": [
+      "Super Meteor 650"
+    ]
+  },
+  "Sherco": {
+    "SE": [
+      "SE 125",
+      "SE 250",
+      "SE 300",
+      "Factory"
+    ],
+    "SEF": [
+      "SEF 250",
+      "SEF 300",
+      "SEF 450",
+      "SEF 500",
+      "Factory"
+    ],
+    "STR": [
+      "STR 125",
+      "STR 250",
+      "STR 300",
+      "Factory"
+    ]
+  },
+  "Suzuki": {
+    "Hayabusa": [
+      "Hayabusa (GSX1300R)"
+    ],
+    "GSX-R": [
+      "GSX-R1000",
+      "GSX-R750",
+      "GSX-R600",
+      "GSX-R125",
+      "GSX-R1000R",
+      "GSX-R1100",
+      "RGV250"
+    ],
+    "GSX-S": [
+      "GSX-S1000",
+      "GSX-S1000GT",
+      "GSX-S950",
+      "GSX-S125"
+    ],
+    "Katana": [
+      "Katana",
+      "Katana 1000 (2019+)"
+    ],
+    "V-Strom": [
+      "V-Strom 1050",
+      "DE",
+      "V-Strom 800",
+      "DE",
+      "V-Strom 650",
+      "XT"
+    ],
+    "SV650": [
+      "SV650",
+      "SV650X"
+    ],
+    "GSX-8S": [
+      "GSX-8S",
+      "GSX-8R"
+    ],
+    "Boulevard": [
+      "Boulevard M109R",
+      "C50"
+    ],
+    "Intruder": [
+      "Intruder"
+    ],
+    "DR-Z": [
+      "DR-Z400S",
+      "DR-Z400SM"
+    ],
+    "DR650": [
+      "DR650S"
+    ],
+    "RM-Z": [
+      "RM-Z450",
+      "RM-Z250"
+    ],
+    "Burgman": [
+      "Burgman 650",
+      "Burgman 400",
+      "Burgman 125"
+    ],
+    "Address": [
+      "Address 125"
+    ],
+    "Historic": [
+      "GT750",
+      "RG500 Gamma",
+      "Bandit 1200",
+      "GS1000S"
+    ],
+    "TL": [
+      "TL1000S",
+      "TL1000R"
+    ],
+    "SV": [
+      "SV1000"
+    ],
+    "B-King": [
+      "GSX1300BK B-King"
+    ],
+    "GSX": [
+      "GSX1400"
+    ],
+    "Bandit": [
+      "Bandit 600",
+      "Bandit 650",
+      "Bandit 1250"
+    ],
+    "V-Strom Historic": [
+      "DL1000 V-Strom (1st gen)"
+    ],
+    "DR Big": [
+      "DR800S (Dr. Big)"
+    ],
+    "Special": [
+      "RE5 Rotary",
+      "RG250 Gamma",
+      "GT380"
+    ]
+  },
+  "SWM": {
+    "Superdual": [
+      "Superdual T",
+      "Superdual X"
+    ],
+    "Six Days": [
+      "Six Days 440"
+    ],
+    "Gran Milano": [
+      "Gran Milano"
+    ]
+  },
+  "Sym": {
+    "Maxsym": [
+      "Maxsym TL 508",
+      "Maxsym 400"
+    ],
+    "Cruisym": [
+      "Cruisym Alpha 300"
+    ],
+    "Jet X": [
+      "Jet X 125"
+    ],
+    "Symphony": [
+      "Symphony 125",
+      "Symphony 200"
+    ],
+    "Fiddle": [
+      "Fiddle 125"
+    ],
+    "Orbit": [
+      "Orbit III 125"
+    ]
+  },
+  "Triumph": {
+    "Speed Triple": [
+      "Speed Triple 1200 RS",
+      "1200 RR"
+    ],
+    "Street Triple": [
+      "Street Triple 765 R",
+      "RS",
+      "Moto2 Edition"
+    ],
+    "Rocket 3": [
+      "Rocket 3 R",
+      "GT",
+      "TFC"
+    ],
+    "Bonneville": [
+      "Bonneville T120",
+      "T100",
+      "Bobber",
+      "Speedmaster"
+    ],
+    "Thruxton": [
+      "Thruxton RS",
+      "Final Edition"
+    ],
+    "Scrambler": [
+      "Scrambler 1200 XE",
+      "XC",
+      "Scrambler 900"
+    ],
+    "Speed": [
+      "Speed 400"
+    ],
+    "Scrambler 400 X": [
+      "Scrambler 400 X"
+    ],
+    "Tiger": [
+      "Tiger 1200 GT",
+      "Rally",
+      "Tiger 900 GT",
+      "Rally",
+      "Tiger 850 Sport",
+      "Tiger Sport 660"
+    ],
+    "Trident": [
+      "Trident 660"
+    ],
+    "Daytona": [
+      "Daytona 660",
+      "Daytona 675R"
+    ],
+    "Historic": [
+      "Trident T160",
+      "Hurricane X75",
+      "TT Special"
+    ],
+    "Speed Twin": [
+      "Speed Twin 1200",
+      "Speed Twin 900 (ex Street Twin)"
+    ],
+    "Special Editions": [
+      "Bonneville Gold Line Editions",
+      "Bud Ekins Edition",
+      "Thruxton TFC",
+      "Rocket 3 R Black",
+      "Rocket 3 GT Triple Black"
+    ],
+    "Sport Tourers": [
+      "Sprint ST",
+      "Sprint RS",
+      "Trophy 1200"
+    ]
+  },
+  "Ural": {
+    "Gear Up": [
+      "Gear Up"
+    ],
+    "CT": [
+      "CT"
+    ],
+    "Special": [
+      "Gear Up Expedition",
+      "Gear Up Sportsman"
+    ]
+  },
+  "Vespa": {
+    "GTS": [
+      "GTS 125",
+      "GTS 300",
+      "Super",
+      "Super Sport"
+    ],
+    "Primavera": [
+      "Primavera 50",
+      "Primavera 125",
+      "S"
+    ],
+    "Sprint": [
+      "Sprint 50",
+      "Sprint 125",
+      "S"
+    ],
+    "Elettrica": [
+      "Elettrica"
+    ],
+    "946": [
+      "946"
+    ],
+    "GTV": [
+      "GTV 300"
+    ],
+    "Special": [
+      "Sei Giorni 300",
+      "946 RED",
+      "Primavera Disney Mickey Edition"
+    ]
+  },
+  "Vincent": {
+    "Black Shadow": [
+      "Black Shadow"
+    ],
+    "Rapide": [
+      "Rapide"
+    ],
+    "Black Lightning": [
+      "Black Lightning"
+    ]
+  },
+  "Voge": {
+    "500DS": [
+      "500DSX"
+    ],
+    "300AC": [
+      "300ACX"
+    ],
+    "900DSX": [
+      "900DSX"
+    ]
+  },
+  "Yamaha": {
+    "YZF-R": [
+      "YZF-R1",
+      "R1M",
+      "YZF-R7",
+      "YZF-R6",
+      "YZF-R3",
+      "YZF-R125"
+    ],
+    "MT": [
+      "MT-10",
+      "SP",
+      "MT-09",
+      "SP",
+      "MT-07",
+      "MT-03",
+      "MT-125"
+    ],
+    "XSR": [
+      "XSR900",
+      "GP",
+      "XSR700",
+      "XSR125"
+    ],
+    "Ténéré": [
+      "Ténéré 700",
+      "World Raid",
+      "Extreme"
+    ],
+    "Tracer": [
+      "Tracer 9",
+      "GT+",
+      "Tracer 7",
+      "GT"
+    ],
+    "Super Ténéré": [
+      "Super Ténéré 1200ES"
+    ],
+    "Bolt": [
+      "Bolt R-Spec"
+    ],
+    "VMAX": [
+      "VMAX"
+    ],
+    "FJR1300": [
+      "FJR1300AE",
+      "ES"
+    ],
+    "Niken": [
+      "Niken GT"
+    ],
+    "TMAX": [
+      "TMAX Tech MAX"
+    ],
+    "XMAX": [
+      "XMAX 300",
+      "XMAX 125"
+    ],
+    "NMAX": [
+      "NMAX 125"
+    ],
+    "WR": [
+      "WR450F",
+      "WR250F"
+    ],
+    "YZ": [
+      "YZ450F",
+      "YZ250F",
+      "YZ125"
+    ],
+    "Historic": [
+      "RD350LC",
+      "XS650",
+      "XT500",
+      "SR500"
+    ],
+    "FZ/Fazer": [
+      "FZ1",
+      "FZ8",
+      "FZ6",
+      "Fazer 600",
+      "FZ1 Fazer"
+    ],
+    "TDM": [
+      "TDM 850",
+      "TDM 900"
+    ],
+    "XJR": [
+      "XJR1300",
+      "XJR1300 Racer"
+    ],
+    "SR": [
+      "SR400",
+      "SR500"
+    ],
+    "Two-Stroke Legends": [
+      "TZR250",
+      "RZ350",
+      "RZV500R",
+      "RD500LC"
+    ],
+    "Star (Cruisers)": [
+      "XV1900 Roadliner/Stratoliner",
+      "XV1700 Road Star",
+      "V Star 1300",
+      "V Star 1100",
+      "Raider 1900"
+    ],
+    "Special Editions": [
+      "R1 60th Anniversary",
+      "R6 Race (track)"
+    ]
+  },
+  "Zero Motorcycles": {
+    "SR/S": [
+      "SR/S"
+    ],
+    "SR/F": [
+      "SR/F"
+    ],
+    "SR": [
+      "SR"
+    ],
+    "DSR/X": [
+      "DSR/X"
+    ],
+    "DS": [
+      "DS"
+    ],
+    "FX": [
+      "FX"
+    ],
+    "FXE": [
+      "FXE"
+    ],
+    "D/S": [
+      "D",
+      "DS",
+      "DSR",
+      "DSR/X"
+    ],
+    "S/SR": [
+      "S",
+      "SR",
+      "SR/F",
+      "SR/S"
+    ]
+  },
+  "Zündapp": {
+    "KS 601": [
+      "KS 601"
+    ],
+    "Bella": [
+      "Bella Scooter"
+    ]
+  },
+  "Honda": {
+    "CBR": [
+      "CBR1000RR-R Fireblade",
+      "SP",
+      "CBR600RR",
+      "CBR650R",
+      "CBR500R",
+      "CBR300R"
+    ],
+    "CB": [
+      "CB1000R Neo Sports Café",
+      "CB750 Hornet",
+      "CB650R",
+      "CB500F",
+      "CB300R",
+      "CB1300 Super Four",
+      "Historic: CB750 Four",
+      "CBX1000"
+    ],
+    "Africa Twin": [
+      "CRF1100L Africa Twin",
+      "Adventure Sports"
+    ],
+    "CRF": [
+      "CRF450R",
+      "CRF250R",
+      "CRF150R",
+      "CRF450L",
+      "CRF300L",
+      "CRF300 Rally",
+      "CRF450RX",
+      "CRF250RX"
+    ],
+    "Gold Wing": [
+      "Gold Wing Tour",
+      "Gold Wing DCT"
+    ],
+    "NC": [
+      "NC750X",
+      "NC700X"
+    ],
+    "Rebel": [
+      "Rebel 1100",
+      "Rebel 500",
+      "Rebel 300"
+    ],
+    "X-ADV": [
+      "X-ADV 750"
+    ],
+    "ADV": [
+      "ADV350",
+      "ADV160"
+    ],
+    "Forza": [
+      "Forza 750",
+      "Forza 350",
+      "Forza 125"
+    ],
+    "SH": [
+      "SH350i",
+      "SH150i",
+      "SH125i"
+    ],
+    "PCX": [
+      "PCX125",
+      "PCX160"
+    ],
+    "Super Cub": [
+      "C125 Super Cub",
+      "Historic: C100 (1958)",
+      "CT125 Hunter Cub",
+      "ST125 Dax"
+    ],
+    "Monkey/Grom": [
+      "Monkey 125",
+      "MSX125 Grom"
+    ],
+    "VFR/RC": [
+      "VFR800F",
+      "VFR1200F",
+      "RC213V-S",
+      "RC30 (VFR750R)",
+      "RC45 (RVF750)",
+      "RVF400",
+      "RC51 (VTR1000 SP1/SP2)"
+    ],
+    "Historic": [
+      "Dream D-Type",
+      "CB1100",
+      "Hornet 600",
+      "CBF1000",
+      "FMX650",
+      "Transalp XL750",
+      "XL650V Transalp",
+      "XRV750 Africa Twin"
+    ]
+  },
+  "Yezdi": {
+    "Roadster": [
+      "Roadster"
+    ],
+    "Scrambler": [
+      "Scrambler"
+    ],
+    "Adventure": [
+      "Adventure"
+    ]
+  },
+  "Hero MotoCorp": {
+    "Commuter": [
+      "Splendor",
+      "HF Deluxe",
+      "Passion Pro",
+      "Glamour",
+      "Super Splendor"
+    ],
+    "Xpulse": [
+      "Xpulse 200 4V",
+      "Xpulse 200T 4V"
+    ],
+    "Karizma": [
+      "Karizma XMR 210"
+    ]
+  },
+  "Bajaj": {
+    "Pulsar": [
+      "Pulsar NS200",
+      "Pulsar RS200",
+      "Pulsar N250",
+      "Pulsar F250"
+    ],
+    "Dominar": [
+      "Dominar 400"
+    ],
+    "Avenger": [
+      "Avenger 160",
+      "Avenger 220"
+    ],
+    "Commuter": [
+      "CT100",
+      "Platina 110"
+    ]
+  },
+  "TVS": {
+    "Apache": [
+      "Apache RR310",
+      "Apache RTR 200 4V",
+      "Apache RTR 160 4V"
+    ],
+    "Ronin": [
+      "Ronin 225"
+    ],
+    "Scooters": [
+      "Ntorq 125",
+      "Jupiter 125"
+    ],
+    "Electric": [
+      "iQube"
+    ]
+  },
+  "Mahindra": {
+    "Mojo": [
+      "Mojo 300"
+    ],
+    "Gusto": [
+      "Gusto 125"
+    ]
+  },
+  "Italjet": {
+    "Dragster": [
+      "Dragster 125",
+      "Dragster 200"
+    ]
+  },
+  "Malaguti": {
+    "Madison": [
+      "Madison 300"
+    ],
+    "Drakon": [
+      "Drakon 125"
+    ]
+  },
+  "Derbi": {
+    "GPR": [
+      "GPR 50",
+      "GPR 125"
+    ],
+    "Senda": [
+      "Senda DRD 50",
+      "Senda DRD 125"
+    ]
+  },
+  "Rieju": {
+    "MR": [
+      "MR 300 Pro",
+      "MR Ranger 300"
+    ],
+    "MRT": [
+      "MRT 50",
+      "MRT 125"
+    ]
+  },
+  "Bultaco": {
+    "Sherpa T": [
+      "Sherpa T 350"
+    ],
+    "Metralla": [
+      "Metralla Mk2"
+    ]
+  },
+  "OSSA": {
+    "Pluma": [
+      "Pluma 250"
+    ],
+    "MAR": [
+      "Mick Andrews Replica 250"
+    ]
+  },
+  "TM Racing": {
+    "EN": [
+      "EN 250 Fi",
+      "EN 300 Fi",
+      "EN 450 Fi"
+    ],
+    "SMR": [
+      "SMR 300",
+      "SMR 450"
+    ],
+    "MX": [
+      "MX 125",
+      "MX 250",
+      "MX 300",
+      "MX 450"
+    ]
+  },
+  "TRS Motorcycles": {
+    "ONE": [
+      "ONE R 250",
+      "ONE RR 300"
+    ],
+    "RR": [
+      "RR 300"
+    ],
+    "XTrack": [
+      "XTrack 250"
+    ]
+  },
+  "Vertigo": {
+    "Combat": [
+      "Combat 250",
+      "Combat 300"
+    ],
+    "Nitro": [
+      "Nitro 300"
+    ]
+  },
+  "Scorpa": {
+    "SC": [
+      "SC 250",
+      "SC Factory 300"
+    ]
+  },
+  "Oset": {
+    "Electric Trials": [
+      "OSET 12.5",
+      "OSET 16.0",
+      "OSET 20.0"
+    ]
+  },
+  "CCM": {
+    "Spitfire": [
+      "Spitfire",
+      "Bobber",
+      "Foggy Edition",
+      "Six"
+    ],
+    "GP": [
+      "GP450 Adventure"
+    ]
+  },
+  "Hesketh": {
+    "24": [
+      "24"
+    ]
+  },
+  "Langen": {
+    "Two Stroke": [
+      "Two Stroke 250"
+    ],
+    "Lightspeed": [
+      "Lightspeed V-Twin"
+    ]
+  },
+  "Vyrus": {
+    "984": [
+      "C3 2V 984"
+    ],
+    "986": [
+      "M2 986"
+    ]
+  },
+  "Curtiss (ex-Confederate)": {
+    "Hellcat": [
+      "Hellcat"
+    ],
+    "Wraith": [
+      "Wraith"
+    ]
+  },
+  "Ecosse": {
+    "Heretic": [
+      "Heretic"
+    ],
+    "Titanium XX": [
+      "Titanium XX"
+    ]
+  },
+  "Motus": {
+    "MST": [
+      "MST",
+      "MSTR"
+    ]
+  },
+  "EBR": {
+    "1190": [
+      "1190RX",
+      "1190SX",
+      "Black Lightning"
+    ]
+  },
+  "Victory": {
+    "Cruisers": [
+      "Vegas",
+      "Hammer",
+      "Gunner",
+      "Judge"
+    ],
+    "Touring": [
+      "Cross Country",
+      "Cross Roads",
+      "Vision",
+      "Magnum",
+      "Octane"
+    ]
+  },
+  "Lightning Motorcycles": {
+    "LS-218": [
+      "LS-218"
+    ],
+    "Strike": [
+      "Strike Carbon"
+    ]
+  },
+  "Damon": {
+    "Hypersport": [
+      "Hypersport HS",
+      "Hypersport Premier"
+    ]
+  },
+  "Verge": {
+    "TS": [
+      "TS",
+      "TS Pro",
+      "TS Ultra"
+    ]
+  },
+  "Voxan": {
+    "Wattman": [
+      "Wattman"
+    ]
+  },
+  "Cake": {
+    "Kalk": [
+      "Kalk OR",
+      "Kalk&",
+      "Kalk INK"
+    ],
+    "Ösa": [
+      "Ösa+"
+    ]
+  },
+  "Stark Future": {
+    "Varg": [
+      "Varg"
+    ]
+  },
+  "QJMotor": {
+    "SRK": [
+      "SRK 700",
+      "SRK 400"
+    ],
+    "SRT": [
+      "SRT 800",
+      "SRT 700"
+    ],
+    "SRV": [
+      "SRV 550"
+    ]
+  },
+  "Zontes": {
+    "350": [
+      "350T",
+      "350R",
+      "350X",
+      "GK350"
+    ],
+    "310": [
+      "310T",
+      "310R",
+      "310X"
+    ]
+  },
+  "Kove": {
+    "Rally": [
+      "450 Rally",
+      "450 Rally Pro"
+    ],
+    "Sport": [
+      "321RR",
+      "400RR"
+    ]
+  },
+  "Zongshen Cyclone": {
+    "RX": [
+      "RX401",
+      "RX3S",
+      "RX4"
+    ],
+    "RE": [
+      "RE3"
+    ]
+  },
+  "Loncin": {
+    "GP": [
+      "GP300"
+    ],
+    "CR": [
+      "CR9 (Voge relation)"
+    ]
+  },
+  "Lifan": {
+    "KPR": [
+      "KPR200"
+    ],
+    "KPT": [
+      "KPT 400"
+    ]
+  },
+  "Haojue": {
+    "DR": [
+      "DR300"
+    ]
+  },
+  "Keeway": {
+    "K-Light": [
+      "K-Light 125",
+      "K-Light 250"
+    ],
+    "RKF": [
+      "RKF 125"
+    ],
+    "RK": [
+      "RK V125C"
+    ]
+  },
+  "MBP": {
+    "C": [
+      "C1002V"
+    ],
+    "M": [
+      "M502N"
+    ]
+  },
+  "Benda": {
+    "LFC": [
+      "LFC700"
+    ],
+    "LFS": [
+      "LFS700"
+    ]
+  },
+  "Daelim": {
+    "Daystar": [
+      "Daystar 125"
+    ],
+    "Roadsport": [
+      "Roadsport 125"
+    ]
+  },
+  "NIU": {
+    "NQi": [
+      "NQi GTS"
+    ],
+    "MQi": [
+      "MQi GT Evo"
+    ],
+    "UQi": [
+      "UQi GT"
+    ],
+    "F": [
+      "F400"
+    ]
+  },
+  "Gogoro": {
+    "S": [
+      "S2",
+      "Supersport"
+    ],
+    "Series": [
+      "2 Series",
+      "Viva"
+    ]
+  },
+  "Vmoto Soco": {
+    "TC": [
+      "TC Max"
+    ],
+    "TS": [
+      "TSx",
+      "TS Street Hunter"
+    ],
+    "CPx": [
+      "CPx"
+    ]
+  },
+  "Horwin": {
+    "CR": [
+      "CR6",
+      "CR6 Pro"
+    ],
+    "EK": [
+      "EK1",
+      "EK3"
+    ],
+    "SK": [
+      "SK3"
+    ],
+    "Senmenti": [
+      "Senmenti 0"
+    ]
+  },
+  "AJS": {
+    "Cadwell": [
+      "Cadwell 125"
+    ],
+    "Historic": [
+      "Model 7R (Boy Racer)"
+    ]
+  },
+  "Velocette": {
+    "Venom": [
+      "Venom"
+    ],
+    "Thruxton": [
+      "Thruxton (1965)"
+    ]
+  },
+  "Sunbeam": {
+    "S7": [
+      "S7"
+    ],
+    "S8": [
+      "S8"
+    ]
+  },
+  "MZ": {
+    "ETZ": [
+      "ETZ 250",
+      "ETZ 251"
+    ],
+    "TS": [
+      "TS 150"
+    ],
+    "Skorpion": [
+      "Skorpion 660"
+    ]
+  },
+  "DKW": {
+    "RT": [
+      "RT 125"
+    ]
+  },
+  "Simson": {
+    "S": [
+      "S51"
+    ],
+    "SR": [
+      "SR50"
+    ]
+  },
+  "FB Mondial": {
+    "HPS": [
+      "HPS 125",
+      "HPS 300"
+    ],
+    "Pagani 1948": [
+      "Pagani 125",
+      "Pagani 300"
+    ],
+    "SMX": [
+      "SMX 125 Motard",
+      "SMX 125 Enduro"
+    ]
+  },
+  "Brixton Motorcycles": {
+    "Crossfire": [
+      "Crossfire 500",
+      "Crossfire 500 X"
+    ],
+    "Cromwell": [
+      "Cromwell 1200",
+      "Cromwell 250"
+    ],
+    "Felsberg": [
+      "Felsberg 125"
+    ]
+  },
+  "Mash": {
+    "X-Ride": [
+      "X-Ride 650 Classic"
+    ],
+    "Seventy": [
+      "Seventy 125"
+    ],
+    "Dirt Track": [
+      "Dirt Track 650"
+    ]
+  },
+  "UM Motorcycles": {
+    "Renegade": [
+      "Renegade Commando",
+      "Renegade Sport S"
+    ]
+  },
+  "Dnepr": {
+    "MT": [
+      "MT-11",
+      "MT-16"
+    ]
+  },
+  "IZH": {
+    "Planeta": [
+      "Planeta 3",
+      "Planeta 5"
+    ],
+    "Jupiter": [
+      "Jupiter 3",
+      "Jupiter 5"
+    ]
+  }
+}

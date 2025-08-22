@@ -86,4 +86,21 @@
             <button class="carousel-btn next" id="similar-next-btn" aria-label="Naslednji oglas">&#10095;</button>
         </div>
     </section>
-</main>
+
+    <div id="message-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3 id="message-modal-title">Pošlji sporočilo prodajalcu</h3>
+            <p>Oglas: <strong id="message-modal-listing-title"></strong></p>
+            <form id="message-form">
+                <div class="form-group">
+                    <label for="message-textarea">Vaše sporočilo:</label>
+                    <textarea id="message-textarea" rows="6" required placeholder="Vpišite vaše vprašanje..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button id="message-cancel-btn" type="button" class="btn btn-secondary">Prekliči</button>
+                    <button id="message-send-btn" type="submit" class="btn btn-primary">Pošlji</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </main>
