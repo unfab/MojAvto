@@ -115,7 +115,11 @@ body:not(.dark-mode) .fa-moon { display: none; }
     position: sticky;
     top: calc(70px + 1rem);
     padding: 1rem 0;
-    transition: margin-left 0.3s ease-in-out, background-color 0.3s ease;
+    /* SPREMEMBA: Dodana animacija za 'opacity' */
+    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateX(0);
+    opacity: 1; /* Vidno stanje */
+    visibility: visible;
     border-radius: 16px; 
     margin: 1rem 0 1rem 1rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
@@ -124,9 +128,10 @@ body:not(.dark-mode) .fa-moon { display: none; }
     flex-direction: column;
 }
 .page-container.sidebar-collapsed .sidebar {
-    /* SPREMEMBA: Sidebar premaknemo popolnoma iz zaslona in ga skrijemo */
-    transform: translateX(calc(-100% - 2rem)); /* Premik za polno širino + dodaten razmik */
-    visibility: hidden; /* Popolnoma skrije element in prepreči interakcije */
+    /* SPREMEMBA: Poleg premika dodamo še polno prosojnost */
+    transform: translateX(calc(-100% - 2rem));
+    opacity: 0; /* Nevidno stanje */
+    visibility: hidden; /* Popolnoma skrije element po koncu animacije */
 }
 .sidebar-nav { list-style: none; padding: 0; margin: 0; }
 .sidebar-nav li a { display: flex; align-items: center; padding: 0.75rem 2rem; color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: background-color 0.2s, color 0.2s; white-space: nowrap; }
