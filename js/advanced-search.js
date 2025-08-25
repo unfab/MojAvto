@@ -11,11 +11,31 @@ const INTERIOR_COLORS = [
 ];
 
 export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallback) {
-    // === DOM ELEMENTI ===
+    // =================================================================
+    // NOVO: Logika za nalaganje vmesnika s filtri
+    // Ta del bo zagotovil, da se filtri vedno prikažejo.
+    // =================================================================
+    const filtersContainer = document.getElementById('advanced-filters-container');
+    if (!filtersContainer) {
+        console.error("Container #advanced-filters-container not found on advanced search page.");
+        return;
+    }
+
+    try {
+        // Naložimo HTML vsebino filtrov iz komponente
+        const response = await fetch('./components/filters.html');
+        if (!response.ok) throw new Error('filters.html component not found');
+        filtersContainer.innerHTML = await response.text();
+    } catch (error) {
+        console.error("Error loading filters component:", error);
+        filtersContainer.innerHTML = "<p>Napaka pri nalaganju filtrov. Prosimo, poskusite znova.</p>";
+        return;
+    }
+    // =================================================================
+
+    // --- DOM ELEMENTI ---
     const searchForm = document.getElementById("advancedSearchForm");
     if (!searchForm) {
-        // Če smo na strani z rezultati, je to normalno, ker se obrazec še ni naložil.
-        // Če smo na /advanced-search, je to napaka v HTML-ju.
         return;
     }
     
