@@ -81,11 +81,10 @@ button {
     gap: 1.5rem;
 }
 
-main {
-    flex-grow: 1; 
-    padding: 1rem; 
-    overflow-y: auto;
-}
+ main {
+        /* Glavna vsebina naj zavzame celotno širino, ko je sidebar skrit */
+        width: 100%;
+    }
 
 /* --- Glava (Header) --- */
 header {
@@ -201,10 +200,12 @@ header {
 }
 
 .page-container.sidebar-collapsed .sidebar {
-    transform: translateX(calc(-100% - 2rem));
-    opacity: 0;
-    pointer-events: none; 
-}
+        /* Stanje, ko je sidebar zaprt (skrit levo) */
+        transform: translateX(-100%);
+        opacity: 0;
+        pointer-events: none; 
+    }
+
 
 .sidebar-nav { 
     list-style: none; 
@@ -323,6 +324,7 @@ header {
     border: none; 
     color: var(--text-secondary); 
     font-size: 1.5rem; 
+    display: block !important;
     cursor: pointer; 
     transition: color 0.2s ease;
 }
@@ -1191,12 +1193,20 @@ body.dark-mode #theme-icon-moon {
 /* 5. MEDIA QUERIES (ODZIVNOST)                         */
 /* ==================================================== */
 @media (max-width: 1200px) {
-    .page-container.sidebar-collapsed .sidebar {
-        /* This rule seems to conflict with the transform-based logic. It should be handled by the transform logic. */
-        /* Let's ensure the JS adds a class for mobile view to handle this better */
+    .sidebar {
+        /* Na manjših zaslonih sidebar postane plavajoč element */
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        margin: 0;
+        border-radius: 0;
+        z-index: 1200; /* Postavimo ga nad vso vsebino */
+        /* Animacija ostane enaka */
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 }
-
 @media (max-width: 900px) {
     .search-box.compact {
         flex-direction: column;

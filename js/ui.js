@@ -38,25 +38,17 @@ export function initGlobalUI() {
         });
     }
 
-    // ====================================================
-    // POPRAVLJENA LOGIKA ZA ZAPIRANJE SIDEBAR-JA
-    // ====================================================
     document.addEventListener('click', (e) => {
         if (
             pageContainer &&
             sidebar &&
-            // POGOJ 1: Preverimo, ali je sidebar ODPRT (nima class 'sidebar-collapsed')
             !pageContainer.classList.contains('sidebar-collapsed') &&
-            // POGOJ 2: Preverimo, da klik ni bil znotraj sidebar-ja
             !sidebar.contains(e.target) &&
-            // POGOJ 3: Preverimo, da klik ni bil na gumb za odpiranje/zapiranje
             !sidebarToggle.contains(e.target)
         ) {
-            // AKCIJA: Zapremo sidebar z dodajanjem classa
             pageContainer.classList.add('sidebar-collapsed');
         }
     });
-    // ====================================================
 
     const applyStoredTheme = () => {
         const currentTheme = localStorage.getItem('theme');
@@ -74,6 +66,18 @@ export function initGlobalUI() {
             localStorage.setItem('theme', theme);
         });
     }
+
+    // =======================================================
+    // NOVO: Zagotovimo, da je na mobilnih napravah sidebar privzeto zaprt
+    // =======================================================
+    const setInitialSidebarState = () => {
+        if (window.innerWidth <= 1200) {
+            pageContainer.classList.add('sidebar-collapsed');
+        }
+    };
+
+    setInitialSidebarState();
+    // =======================================================
 
     applyStoredTheme();
     updateCompareIcon(); 
