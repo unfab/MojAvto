@@ -12,30 +12,30 @@ const INTERIOR_COLORS = [
 
 export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallback) {
     // =================================================================
-    // NOVO: Logika za nalaganje vmesnika s filtri
-    // Ta del bo zagotovil, da se filtri vedno prikažejo.
+    // KLJUČNI POPRAVEK: Logika za nalaganje vmesnika s filtri
+    // Ta del zagotovi, da se vsebina iz 'filters.html' naloži v stran.
     // =================================================================
     const filtersContainer = document.getElementById('advanced-filters-container');
     if (!filtersContainer) {
-        console.error("Container #advanced-filters-container not found on advanced search page.");
+        console.error("Kontejner #advanced-filters-container ni bil najden na strani za napredno iskanje.");
         return;
     }
 
     try {
-        // Naložimo HTML vsebino filtrov iz komponente
         const response = await fetch('./components/filters.html');
-        if (!response.ok) throw new Error('filters.html component not found');
+        if (!response.ok) throw new Error('Komponenta filters.html ni bila najdena');
         filtersContainer.innerHTML = await response.text();
     } catch (error) {
-        console.error("Error loading filters component:", error);
-        filtersContainer.innerHTML = "<p>Napaka pri nalaganju filtrov. Prosimo, poskusite znova.</p>";
+        console.error("Napaka pri nalaganju komponente s filtri:", error);
+        filtersContainer.innerHTML = "<p>Napaka pri nalaganju filtrov. Prosimo, osvežite stran.</p>";
         return;
     }
     // =================================================================
 
-    // --- DOM ELEMENTI ---
+    // --- DOM Elementi (sedaj zagotovo obstajajo) ---
     const searchForm = document.getElementById("advancedSearchForm");
     if (!searchForm) {
+        console.error("Obrazec #advancedSearchForm ni bil najden znotraj naložene komponente.");
         return;
     }
     
