@@ -1,0 +1,72 @@
+/* ==================================================== */
+/* KOMPONENTA: Vrtiljak (Carousel)                      */
+/* ==================================================== */
+
+.carousel-section {
+    width: 100%;
+    margin-top: 3rem;
+}
+
+.carousel-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.carousel-wrapper {
+    position: relative;
+}
+
+.carousel-track-container {
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 1rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.carousel-card {
+    flex: 0 0 280px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.carousel-card .carousel-card-content {
+    padding: 1rem;
+}
+
+.carousel-card .carousel-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.carousel-card .carousel-card-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+    margin: 0;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.carousel-btn.prev { left: -20px; }
+.carousel-btn.next { right: -20px; }

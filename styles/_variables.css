@@ -1,0 +1,36 @@
+/* ==================================================== */
+/* 1. SPREMENLJIVKE IN TEME                             */
+/* ==================================================== */
+:root {
+    /* Svetla tema (privzeta) */
+    --bg-color: #f0f2f5;
+    --card-color: #ffffff;
+    --border-color: #e5e7eb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --header-bg: #ffffff;
+    --input-bg: #ffffff;
+    
+    --accent-blue: #0066cc;
+    --accent-blue-hover: #0052a3;
+    --accent-orange: #d9534f;
+    --accent-orange-hover: #c9302c;
+    --error-color: #e53e3e;
+
+    /* iOS Safe Area Insets */
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+}
+
+body.dark-mode {
+    /* Temna tema */
+    --bg-color: #111827;
+    --card-color: #1f2937;
+    --border-color: #374151;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --header-bg: #1f2937;
+    --input-bg: #374151;
+}

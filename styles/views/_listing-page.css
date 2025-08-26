@@ -1,0 +1,206 @@
+/* ==================================================== */
+/* POGLED: Stran s podrobnostmi oglasa                  */
+/* ==================================================== */
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.title-actions {
+    display: flex;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.share-btn-details {
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.share-btn-details:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+.specs-accordion {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.specs-accordion details {
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.specs-accordion details[open] {
+    border-color: var(--accent-blue);
+}
+
+.specs-accordion details summary {
+    padding: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.specs-accordion details summary:hover {
+    background-color: var(--bg-color);
+}
+
+.specs-accordion details summary::after {
+    content: '+';
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    transition: transform 0.2s ease-in-out;
+}
+
+.specs-accordion details[open] summary::after {
+    content: '−';
+}
+
+.specs-accordion .accordion-content {
+    padding: 0 1rem 1rem 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem 1.5rem;
+    padding-top: 1rem;
+}
+
+.spec-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.spec-item i {
+    color: var(--accent-blue);
+    width: 20px;
+    text-align: center;
+}
+
+.video-section-container {
+    margin-top: 3rem;
+    width: 100%;
+}
+
+.video-section-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.video-embed-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    border-radius: 12px;
+}
+
+.video-embed-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.price-badge-details {
+    margin-left: 1rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.pro-feature-card {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.pro-feature-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--accent-blue);
+}
+
+.upgrade-banner, .unlock-banner {
+    background: linear-gradient(45deg, #0052a3, #0066cc);
+    color: #fff;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.upgrade-banner h3, .unlock-banner h3 {
+    margin: 0 0 0.5rem 0;
+}
+
+.partner-services {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.btn-partner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-partner:hover {
+    background-color: var(--card-color);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+.btn-partner i {
+    width: 20px;
+}

@@ -1,0 +1,34 @@
+/* ==================================================== */
+/* GLAVNA CSS DATOTEKA - Uvaža vse ostale dele          */
+/* ==================================================== */
+
+/* 1. SPREMENLJIVKE IN TEME - vedno prve */
+@import url('_variables.css');
+
+/* 2. OSNOVNI STILI IN RESETI */
+@import url('base.css');
+
+/* 3. OSNOVNA POSTAVITEV STRANI */
+@import url('_layout.css');
+
+/* ==================================================== */
+/* 4. KOMPONENTE                                        */
+/* ==================================================== */
+@import url('components/_header.css');
+@import url('components/_sidebar.css');
+@import url('components/_buttons.css');
+@import url('components/_forms.css');
+@import url('components/_search-box.css');
+@import url('components/_home-components.css');
+@import url('components/_card.css');
+@import url('components/_carousel.css');
+@import url('components/_modal.css');
+@import url('components/_notification.css');
+
+/* ==================================================== */
+/* 5. STILI ZA POSAMEZNE POGLEDE (VIEWS)                */
+/* ==================================================== */
+@import url('views/_advanced-search.css');
+@import url('views/_compare-page.css');
+@import url('views/_listing-page.css');
+@import url('views/_profile-page.css');
