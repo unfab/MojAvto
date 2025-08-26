@@ -86,8 +86,7 @@ main {
     flex-grow: 1; 
     padding: 1rem; 
     overflow-y: auto;
-    /* Dodamo min-width, da preprečimo prekomerno stiskanje vsebine v flex-boxu */
-    min-width: 0;
+    min-width: 0; /* Prepreči prekomerno stiskanje vsebine v flex-boxu */
 }
 
 /* --- Glava (Header) --- */
@@ -351,25 +350,31 @@ header {
     cursor: pointer;
     transition: color 0.2s ease;
 }
+
 #themeToggleBtn:hover {
     color: var(--text-primary);
 }
+
 #themeToggleBtn .theme-icon {
     position: absolute;
     transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
 }
+
 #theme-icon-sun {
     transform: translateY(0) rotate(0deg);
     opacity: 1;
 }
+
 #theme-icon-moon {
     transform: translateY(100%) rotate(-90deg);
     opacity: 0;
 }
+
 body.dark-mode #theme-icon-sun {
     transform: translateY(-100%) rotate(90deg);
     opacity: 0;
 }
+
 body.dark-mode #theme-icon-moon {
     transform: translateY(0) rotate(0deg);
     opacity: 1;
@@ -382,24 +387,29 @@ body.dark-mode #theme-icon-moon {
     padding: 1.5rem;
     margin: 2rem 0;
 }
+
 .form-section legend {
     padding: 0 0.5rem;
     font-weight: 700;
     color: var(--text-primary);
 }
+
 .form-row { 
     display: grid; 
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
     gap: 1.5rem; 
 }
+
 .form-group { 
     display: flex; 
     flex-direction: column; 
     gap: 0.5rem; 
 }
+
 .form-group label { 
     font-weight: 500; 
 }
+
 .form-group input, 
 .form-group select,
 .form-group textarea { 
@@ -411,6 +421,7 @@ body.dark-mode #theme-icon-moon {
     color: var(--text-primary); 
     box-sizing: border-box; 
 }
+
 .form-group input:focus, 
 .form-group select:focus,
 .form-group textarea:focus { 
@@ -418,12 +429,14 @@ body.dark-mode #theme-icon-moon {
     border-color: var(--accent-blue); 
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); 
 }
+
 .form-group-radio {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
 }
+
 .inline-error {
     color: var(--error-color);
     font-size: 0.8rem;
@@ -431,6 +444,7 @@ body.dark-mode #theme-icon-moon {
     margin-top: 0.25rem;
     min-height: 1.2em;
 }
+
 .form-group input.is-invalid {
     border-color: var(--error-color);
     box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
@@ -442,12 +456,14 @@ body.dark-mode #theme-icon-moon {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
     gap: 0.5rem 1rem; 
 }
+
 .checkbox-options label { 
     display: flex; 
     align-items: center; 
     gap: 0.75rem; 
     cursor: pointer; 
 }
+
 .checkbox-options input[type="checkbox"],
 .checkbox-options input[type="radio"],
 .equipment-grid input[type="checkbox"],
@@ -469,6 +485,7 @@ body.dark-mode #theme-icon-moon {
     cursor: pointer;
     transition: all 0.1s ease-in-out;
 }
+
 .checkbox-options input[type="checkbox"]::before,
 .equipment-grid input[type="checkbox"]::before {
     content: "";
@@ -480,9 +497,11 @@ body.dark-mode #theme-icon-moon {
     transform-origin: bottom left;
     clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
+
 .checkbox-options input[type="radio"] {
     border-radius: 50%;
 }
+
 .checkbox-options input[type="radio"]::before {
     content: "";
     width: 0.65em;
@@ -492,21 +511,26 @@ body.dark-mode #theme-icon-moon {
     transition: 120ms transform ease-in-out;
     box-shadow: inset 1em 1em var(--accent-blue);
 }
+
 .checkbox-options input[type="checkbox"]:checked,
 .equipment-grid input[type="checkbox"]:checked {
     background-color: var(--accent-blue);
     border-color: var(--accent-blue);
 }
+
 .checkbox-options input[type="checkbox"]:checked::before,
 .equipment-grid input[type="checkbox"]:checked::before {
     transform: scale(1);
 }
+
 .checkbox-options input[type="radio"]:checked {
      border-color: var(--accent-blue);
 }
+
 .checkbox-options input[type="radio"]:checked::before {
     transform: scale(1);
 }
+
 .checkbox-options input[type="checkbox"]:focus,
 .checkbox-options input[type="radio"]:focus,
 .equipment-grid input[type="checkbox"]:focus {
@@ -562,6 +586,23 @@ body.dark-mode #theme-icon-moon {
 }
 .search-form {
     flex-grow: 1;
+}
+.form-grid {
+    display: grid;
+    gap: 1rem;
+}
+.form-grid.four-columns {
+    grid-template-columns: repeat(4, 1fr);
+}
+.form-grid.three-columns {
+    grid-template-columns: repeat(3, 1fr);
+}
+.search-box.compact .form-group label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    text-align: left;
+    font-weight: normal;
 }
 .search-form .form-actions {
     margin-top: 1.5rem;
@@ -856,7 +897,6 @@ body.dark-mode #theme-icon-moon {
     border-color: var(--accent-blue);
     color: var(--accent-blue);
 }
-/* Harmonika meni */
 .specs-accordion {
     width: 100%;
     margin-bottom: 2rem;
@@ -918,11 +958,247 @@ body.dark-mode #theme-icon-moon {
 
 /* --- Stran s primerjavo --- */
 .comparison-grid {
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
     padding-top: 1.5rem;
 }
-/* ... etc ... (preostali stili za komponente, ki so že bili definirani) */
+.comparison-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: var(--card-color);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.comparison-card .comparison-content {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.comparison-card h3 {
+    margin-top: 0;
+}
+.comparison-details {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    flex-grow: 1;
+}
+.comparison-details li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--bg-color);
+}
+.comparison-details li .label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+.comparison-details li .value {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.remove-from-compare-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(17, 24, 39, 0.6);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background-color 0.2s, transform 0.2s;
+    z-index: 10;
+}
+.remove-from-compare-btn:hover {
+    background-color: var(--accent-orange);
+    transform: scale(1.1);
+}
+.compare-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+.compare-header h2 {
+    margin: 0;
+}
+
+/* --- Domača stran - specifični stili --- */
+.quick-links-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem auto;
+    flex-wrap: wrap;
+}
+.quick-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 1.5rem;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.quick-link-btn i {
+    color: var(--accent-blue);
+    font-size: 1.2rem;
+}
+.quick-link-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+.ad-banner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 2rem 0;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+.ad-placeholder {
+    width: 100%;
+    max-width: 728px;
+    height: 90px;
+    background-color: var(--bg-color);
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+.popular-brands-section {
+    width: 100%;
+    margin-top: 2rem;
+}
+.popular-brands-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+.brands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1rem;
+}
+.brand-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.5rem 1rem;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+.brand-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.08);
+    border-color: var(--accent-blue);
+}
+.brand-card img {
+    height: 40px;
+    max-width: 100px;
+    object-fit: contain;
+}
+.brand-card span {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.news-section {
+    width: 100%;
+    margin-top: 2rem;
+}
+.news-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+.news-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    text-decoration: none;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.2s ease-in-out;
+}
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.news-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.news-card-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.news-card-content h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+.news-card-content p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+}
+.read-more-btn {
+    margin-top: 1rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    align-self: flex-start;
+}
+.read-more-btn i {
+    margin-left: 0.25rem;
+    transition: transform 0.2s;
+}
+.news-card:hover .read-more-btn i {
+    transform: translateX(5px);
+}
 
 /* --- Stili za Garažo --- */
 .garage-header {
@@ -964,6 +1240,54 @@ body.dark-mode #theme-icon-moon {
     text-decoration: underline;
 }
 
+/* --- Stili za PRO in Partnerske storitve --- */
+.pro-status-container {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+.pro-status-container.is-pro {
+    border-left: 5px solid #16a34a;
+    text-align: left;
+}
+.pro-status-container.is-not-pro {
+    border-left: 5px solid var(--accent-blue);
+}
+.partner-services {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.btn-partner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-partner:hover {
+    background-color: var(--card-color);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+.btn-partner i {
+    width: 20px;
+}
+
+
 /* ==================================================== */
 /* 5. MEDIA QUERIES (ODZIVNOST)                         */
 /* ==================================================== */
@@ -980,7 +1304,6 @@ body.dark-mode #theme-icon-moon {
         margin: 0;
         border-radius: 0;
         border-right: 1px solid var(--border-color);
-        z-index: 1200;
     }
     main {
         width: 100%;
