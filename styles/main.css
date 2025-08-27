@@ -13,6 +13,7 @@
 
 /* ==================================================== */
 /* 4. KOMPONENTE                                        */
+/* Uporabljene so eksplicitne relativne poti (./)       */
 /* ==================================================== */
 @import url('./components/_header.css');
 @import url('./components/_sidebar.css');
@@ -27,6 +28,7 @@
 
 /* ==================================================== */
 /* 5. STILI ZA POSAMEZNE POGLEDE (VIEWS)                */
+/* Uporabljene so eksplicitne relativne poti (./)       */
 /* ==================================================== */
 @import url('./views/_advanced-search.css');
 @import url('./views/_compare-page.css');
