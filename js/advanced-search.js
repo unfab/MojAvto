@@ -13,7 +13,7 @@ const INTERIOR_COLORS = [
 export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallback) {
     // =================================================================
     // KLJUČNI POPRAVEK: Logika za nalaganje vmesnika s filtri
-    // Ta del zagotovi, da se vsebina iz 'filters.html' naloži v stran.
+    // Ta del bo zagotovil, da se filtri vedno prikažejo, preden se zažene ostala koda.
     // =================================================================
     const filtersContainer = document.getElementById('advanced-filters-container');
     if (!filtersContainer) {
@@ -32,7 +32,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
     }
     // =================================================================
 
-    // --- DOM Elementi (sedaj zagotovo obstajajo) ---
+    // --- DOM Elementi (sedaj zagotovo obstajajo na strani) ---
     const searchForm = document.getElementById("advancedSearchForm");
     if (!searchForm) {
         console.error("Obrazec #advancedSearchForm ni bil najden znotraj naložene komponente.");
@@ -384,8 +384,8 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
             excludeTypeSelect.innerHTML = '<option value="">Vsi tipi</option>';
             excludeTypeSelect.disabled = true;
             if (selectedModel && brandModelData[selectedMake]?.[selectedModel]) {
-                brandModelData[selectedMake][selectedModel].sort().forEach(type => excludeTypeSelect.add(new Option(type, type)));
-                excludeTypeSelect.disabled = false;
+                brandModelData[selectedMake][selectedModel].sort().forEach(type => typeSelect.add(new Option(type, type)));
+                typeSelect.disabled = false;
             }
         });
     }

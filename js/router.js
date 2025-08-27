@@ -14,9 +14,6 @@ import { initLikesPage } from './likes.js';
 import { initCreateArticlePage } from './create-article.js';
 import { initUpgradeProPage } from './upgrade-pro.js';
 import { initGarageFormPage } from './garage.js';
-// =======================================================
-// NOVO: Uvozimo logiko za javno stran Garaže
-// =======================================================
 import { initPublicGaragePage } from './garage-public.js';
 
 const routes = {
@@ -36,17 +33,15 @@ const routes = {
     '/likes': { view: 'likes.html', init: initLikesPage },
     '/upgrade-pro': { view: 'upgrade-pro.html', init: initUpgradeProPage },
     '/garage/add': { view: 'garage-form.html', init: initGarageFormPage },
-    // =======================================================
-    // NOVO: Dodane poti za urejanje in javni ogled Garaže
-    // =======================================================
     '/garage/edit/:vehicleId': { view: 'garage-form.html', init: initGarageFormPage },
     '/garage/:username': { view: 'garage-public.html', init: initPublicGaragePage },
-    
     '/listing/:id': { view: 'listing.html', init: initListingPage },
     '/search-results': { view: 'search-results.html', init: initSearchResultsPage },
     '/not-found': { view: 'not-found.html' },
     '/404': { view: '404.html' }
 };
+
+// ... preostanek datoteke router.js ostane nespremenjen ...
 
 async function loadView(routeObject, params = {}) {
     const appContainer = document.getElementById('app-container');
