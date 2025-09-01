@@ -11,31 +11,8 @@ const INTERIOR_COLORS = [
 ];
 
 export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallback) {
-    // =================================================================
-    // KLJUČNI POPRAVEK: Logika za nalaganje vmesnika s filtri
-    // Ta del bo zagotovil, da se filtri vedno prikažejo, preden se zažene ostala koda.
-    // =================================================================
-    const filtersContainer = document.getElementById('advanced-filters-container');
-    if (!filtersContainer) {
-        console.error("Kontejner #advanced-filters-container ni bil najden na strani za napredno iskanje.");
-        return;
-    }
-
-    try {
-        const response = await fetch('./components/filters.html');
-        if (!response.ok) throw new Error('Komponenta filters.html ni bila najdena');
-        filtersContainer.innerHTML = await response.text();
-    } catch (error) {
-        console.error("Napaka pri nalaganju komponente s filtri:", error);
-        filtersContainer.innerHTML = "<p>Napaka pri nalaganju filtrov. Prosimo, osvežite stran.</p>";
-        return;
-    }
-    // =================================================================
-
-    // --- DOM Elementi (sedaj zagotovo obstajajo na strani) ---
     const searchForm = document.getElementById("advancedSearchForm");
     if (!searchForm) {
-        console.error("Obrazec #advancedSearchForm ni bil najden znotraj naložene komponente.");
         return;
     }
     
@@ -331,11 +308,14 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
     if (fuelSelect) {
         fuelSelect.addEventListener('change', () => {
             const isElectric = fuelSelect.value === 'Elektrika';
+            const isHybrid = fuelSelect.value === 'Hibrid';
             if (gearboxSelect) gearboxSelect.disabled = isElectric;
             if (isElectric && gearboxSelect) gearboxSelect.value = 'Avtomatski';
             if (electricOptionsRow) electricOptionsRow.style.display = isElectric ? 'grid' : 'none';
-            if (hybridOptionsRow) hybridOptionsRow.style.display = fuelSelect.value === 'Hibrid' ? 'grid' : 'none';
+            if (hybridOptionsRow) hybridOptionsRow.style.display = isHybrid ? 'grid' : 'none';
         });
+        // Sprožimo dogodek ob nalaganju, da se stanje pravilno nastavi
+        fuelSelect.dispatchEvent(new Event('change'));
     }
 
     searchForm.addEventListener("submit", (e) => {
@@ -350,7 +330,10 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
         }
     });
 
-    searchForm.addEventListener('reset', () => {
+    searchForm.addEventListener('reset', (e) => {
+        e.preventDefault(); // Preprečimo privzeto obnašanje
+        searchForm.reset(); // Ročno ponastavimo vrednosti obrazca
+        
         exclusionRules = [];
         renderExclusionTags();
         criteriaContainer.innerHTML = '';
@@ -358,8 +341,11 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
         if(vehicleTypeGrid) vehicleTypeGrid.querySelectorAll('.vehicle-type.active').forEach(el => el.classList.remove('active'));
         updateBodyTypeButtons();
         if(gearboxSelect) gearboxSelect.disabled = false;
-        if(electricOptionsRow) electricOptionsRow.style.display = 'none';
-        if(hybridOptionsRow) hybridOptionsRow.style.display = 'none';
+        
+        // Ponovno sprožimo dogodek za gorivo, da se polja pravilno skrijejo
+        if (fuelSelect) {
+            fuelSelect.dispatchEvent(new Event('change'));
+        }
     });
     
     if (excludeMakeSelect) {
@@ -384,8 +370,8 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
             excludeTypeSelect.innerHTML = '<option value="">Vsi tipi</option>';
             excludeTypeSelect.disabled = true;
             if (selectedModel && brandModelData[selectedMake]?.[selectedModel]) {
-                brandModelData[selectedMake][selectedModel].sort().forEach(type => typeSelect.add(new Option(type, type)));
-                typeSelect.disabled = false;
+                brandModelData[selectedMake][selectedModel].sort().forEach(type => excludeTypeSelect.add(new Option(type, type)));
+                excludeTypeSelect.disabled = false;
             }
         });
     }

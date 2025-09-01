@@ -1,6 +1,5 @@
 /* ==================================================== */
 /* ZDRUŽENI, POPRAVLJENI IN CELOVITI STILI              */
-/* VKLJUČNO Z VSEMI KOMPONENTAMI IN POPRAVKI            */
 /* ==================================================== */
 
 
@@ -259,10 +258,7 @@ header {
 /* ==================================================== */
 /* 3. OBRAZCI, GUMBI IN OSTALE KOMPONENTE               */
 /* ==================================================== */
-/* Tu so združeni vsi stili iz mape /components         */
-/* ==================================================== */
 
-/* --- Gumbi --- */
 .btn { 
     padding: 0.75rem 1.5rem; 
     border: none; 
@@ -358,8 +354,6 @@ body.dark-mode #theme-icon-moon {
     transform: translateY(0) rotate(0deg);
     opacity: 1;
 }
-
-/* --- Obrazci --- */
 .form-section {
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -487,8 +481,14 @@ body.dark-mode #theme-icon-moon {
     outline: 2px solid var(--accent-blue);
     outline-offset: 2px;
 }
-
-/* --- Iskalnik na domači strani --- */
+.search-container { 
+    max-width: 900px; 
+    margin: 0 auto; 
+}
+.search-container h1 { 
+    font-size: 2.5rem; 
+    margin-bottom: 2rem; 
+}
 .search-box-container {
     width: 100%;
     max-width: 1100px;
@@ -539,6 +539,12 @@ body.dark-mode #theme-icon-moon {
     align-items: center;
     gap: 1rem;
 }
+.search-actions { 
+    display: flex; 
+    justify-content: flex-end; 
+    gap: 1rem; 
+    padding-top: 1.5rem; 
+}
 .form-grid {
     display: grid;
     gap: 1rem;
@@ -556,383 +562,6 @@ body.dark-mode #theme-icon-moon {
     text-align: left;
     font-weight: normal;
 }
-
-/* --- Komponente domače strani --- */
-.quick-links-container {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 2rem auto;
-    flex-wrap: wrap;
-}
-.quick-link-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.8rem 1.5rem;
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    text-decoration: none;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-.quick-link-btn i {
-    color: var(--accent-blue);
-    font-size: 1.2rem;
-}
-.quick-link-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-    border-color: var(--accent-blue);
-    color: var(--accent-blue);
-}
-.ad-banner-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin: 2rem 0;
-    padding: 0 1rem;
-    box-sizing: border-box;
-}
-.ad-placeholder {
-    width: 100%;
-    max-width: 728px;
-    height: 90px;
-    background-color: var(--bg-color);
-    border: 2px dashed var(--border-color);
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-.popular-brands-section {
-    width: 100%;
-    margin-top: 2rem;
-}
-.popular-brands-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-.brands-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 1rem;
-}
-.news-section {
-    width: 100%;
-    margin-top: 2rem;
-}
-.news-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-.news-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-/* --- Kartice (Cards) --- */
-.card, .listing-card, .brand-card, .news-card, .carousel-card, .comparison-card {
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-    text-decoration: none;
-}
-.card:hover, .listing-card:hover, .brand-card:hover, .news-card:hover, .carousel-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-}
-.card-image-container {
-    position: relative;
-}
-.card-image-container img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    display: block;
-}
-.card-body {
-    padding: 1rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-.card-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem 0;
-    color: var(--text-primary);
-}
-.card-details {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin: 0;
-}
-.card-price {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--accent-orange);
-    margin-top: auto;
-    padding-top: 0.5rem;
-}
-.card-actions {
-    padding: 1rem;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
-.price-badge {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-}
-.price-badge.very_good { background-color: #16a34a; }
-.price-badge.good { background-color: #22c55e; }
-.price-badge.fair { background-color: #6b7280; }
-.price-badge.high { background-color: #ef4444; }
-.brand-card {
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 1.5rem 1rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-}
-.brand-card img {
-    height: 40px;
-    max-width: 100px;
-    object-fit: contain;
-}
-.brand-card span {
-    font-weight: 700;
-    color: var(--text-primary);
-}
-.news-card-content {
-    padding: 1.5rem;
-}
-.news-card-content h3 {
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    font-size: 1.2rem;
-    color: var(--text-primary);
-}
-.news-card-content p {
-    margin: 0;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    flex-grow: 1;
-}
-.read-more-btn {
-    margin-top: 1rem;
-    font-weight: 700;
-    color: var(--accent-blue);
-    align-self: flex-start;
-}
-.read-more-btn i {
-    margin-left: 0.25rem;
-    transition: transform 0.2s;
-}
-.news-card:hover .read-more-btn i {
-    transform: translateX(5px);
-}
-
-/* --- Vrtiljak (Carousel) --- */
-.carousel-section {
-    width: 100%;
-    margin-top: 3rem;
-}
-.carousel-section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-}
-.carousel-wrapper {
-    position: relative;
-}
-.carousel-track-container {
-    overflow: hidden;
-}
-.carousel-track {
-    display: flex;
-    gap: 1rem;
-    transition: transform 0.3s ease-in-out;
-}
-.carousel-card {
-    flex: 0 0 280px;
-}
-.carousel-card-content {
-    padding: 1rem;
-}
-.carousel-card-title {
-    font-size: 1rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.carousel-card-price {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--accent-orange);
-    margin: 0;
-}
-.carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--border-color);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: var(--text-primary);
-    z-index: 10;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-.carousel-btn.prev { left: -20px; }
-.carousel-btn.next { right: -20px; }
-
-/* --- Modalna Okna --- */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(17, 24, 39, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 3000;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    animation: fadeIn 0.2s ease-out;
-}
-.modal-content {
-    background-color: var(--card-color);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    width: 100%;
-    max-width: 450px;
-    text-align: center;
-    animation: slideUp 0.3s ease-out;
-}
-.modal-content h3 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
-}
-.modal-content p {
-    margin-bottom: 2rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-}
-.modal-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-#message-modal .modal-content { text-align: left; }
-#message-modal #message-modal-title { margin-top: 0; }
-#message-modal p { margin-bottom: 1.5rem; }
-#message-modal .form-group { margin-bottom: 1.5rem; }
-
-/* --- Obvestila (Notifications) --- */
-#notification-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 2000;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-end;
-    pointer-events: none;
-}
-.notification-toast {
-    min-width: 240px;
-    max-width: 380px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    background: var(--card-color);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 6px 18px rgba(16,24,40,0.08);
-    font-size: 14px;
-    color: var(--text-primary);
-    animation: slideIn 0.35s cubic-bezier(.2,.8,.2,1);
-    pointer-events: auto;
-    position: relative;
-    overflow: hidden;
-}
-.notification-toast i {
-    font-size: 18px;
-    min-width: 22px;
-    text-align: center;
-}
-.notification-toast span { flex: 1 1 auto; }
-.notification-toast.success i { color: var(--accent-blue); }
-.notification-toast.info i { color: var(--text-secondary); }
-.notification-toast.error i { color: var(--error-color); }
-.notification-close {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    color: #6b7280;
-    transition: background 0.12s ease, color 0.12s ease;
-    padding: 0;
-}
-.notification-close:hover {
-    background: rgba(0,0,0,0.04);
-    color: #111827;
-}
-.notification-toast:hover { transform: translateX(-2px); }
-.notification-toast.fade-out { animation: slideOut 0.45s ease forwards; }
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-@keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-
-/* ==================================================== */
-/* 4. STILI ZA POSAMEZNE POGLEDE (VIEWS)                */
-/* ==================================================== */
-
-/* --- Pogled: Napredno iskanje --- */
 .filter-section { 
     background: var(--card-color); 
     border: 1px solid var(--border-color); 
@@ -1062,26 +691,176 @@ body.dark-mode #theme-icon-moon {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     align-items: center;
 }
-
-/* --- Pogled: Primerjava --- */
-.comparison-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
-    padding-top: 1.5rem;
+.listings-grid {
+    position: relative;
+    min-height: 300px;
 }
-.compare-header {
+#notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2000;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 1rem;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    pointer-events: none;
 }
-.compare-header h2 {
+.notification-toast {
+    min-width: 240px;
+    max-width: 380px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--card-color);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 6px 18px rgba(16,24,40,0.08);
+    font-size: 14px;
+    color: var(--text-primary);
+    animation: slideIn 0.35s cubic-bezier(.2,.8,.2,1);
+    pointer-events: auto;
+    position: relative;
+    overflow: hidden;
+}
+.notification-toast i {
+    font-size: 18px;
+    min-width: 22px;
+    text-align: center;
+}
+.notification-toast span { flex: 1 1 auto; }
+.notification-toast.success i { color: var(--accent-blue); }
+.notification-toast.info i { color: var(--text-secondary); }
+.notification-toast.error i { color: var(--error-color); }
+.notification-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    transition: background 0.12s ease, color 0.12s ease;
+    padding: 0;
+}
+.notification-close:hover {
+    background: rgba(0,0,0,0.04);
+    color: #111827;
+}
+.notification-toast:hover { transform: translateX(-2px); }
+.notification-toast.fade-out { animation: slideOut 0.45s ease forwards; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(17, 24, 39, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+.modal-content {
+    background-color: var(--card-color);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+}
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+.modal-content p {
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+#message-modal .modal-content { text-align: left; }
+#message-modal #message-modal-title { margin-top: 0; }
+#message-modal p { margin-bottom: 1.5rem; }
+#message-modal .form-group { margin-bottom: 1.5rem; }
+.carousel-section {
+    width: 100%;
+    margin-top: 3rem;
+}
+.carousel-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+.carousel-wrapper {
+    position: relative;
+}
+.carousel-track-container {
+    overflow: hidden;
+}
+.carousel-track {
+    display: flex;
+    gap: 1rem;
+    transition: transform 0.3s ease-in-out;
+}
+.carousel-card {
+    flex: 0 0 280px;
+}
+.carousel-card-content {
+    padding: 1rem;
+}
+.carousel-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.carousel-card-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-orange);
     margin: 0;
 }
-
-/* --- Pogled: Podrobnosti oglasa --- */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.carousel-btn.prev { left: -20px; }
+.carousel-btn.next { right: -20px; }
 .title-container {
     display: flex;
     justify-content: space-between;
@@ -1169,6 +948,104 @@ body.dark-mode #theme-icon-moon {
     width: 20px;
     text-align: center;
 }
+.comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    padding-top: 1.5rem;
+}
+.compare-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+.compare-header h2 {
+    margin: 0;
+}
+.quick-links-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem auto;
+    flex-wrap: wrap;
+}
+.quick-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 1.5rem;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.quick-link-btn i {
+    color: var(--accent-blue);
+    font-size: 1.2rem;
+}
+.quick-link-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+.ad-banner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 2rem 0;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+.ad-placeholder {
+    width: 100%;
+    max-width: 728px;
+    height: 90px;
+    background-color: var(--bg-color);
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+.popular-brands-section {
+    width: 100%;
+    margin-top: 2rem;
+}
+.popular-brands-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+.brands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1rem;
+}
+.news-section {
+    width: 100%;
+    margin-top: 2rem;
+}
+.news-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
 .video-section-container {
     margin-top: 3rem;
     width: 100%;
@@ -1194,8 +1071,29 @@ body.dark-mode #theme-icon-moon {
     height: 100%;
     border: none;
 }
-
-/* --- Pogled: Profil in Garaža --- */
+.financing-images-grid {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+.financing-images-grid img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 8px;
+}
+fieldset.form-group {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+fieldset.form-group legend {
+    padding: 0;
+    font-weight: 500;
+}
 .pro-status-container {
     background-color: var(--bg-color);
     border: 1px solid var(--border-color);
@@ -1279,7 +1177,6 @@ body.dark-mode #theme-icon-moon {
     color: var(--accent-blue);
     text-decoration: underline;
 }
-
 
 /* ==================================================== */
 /* 5. MEDIA QUERIES (ODZIVNOST)                         */
