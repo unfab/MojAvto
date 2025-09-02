@@ -11,8 +11,11 @@ const INTERIOR_COLORS = [
 ];
 
 export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallback) {
+    console.log('Initializing advanced search page...'); // Dodan logging
+
     const searchForm = document.getElementById("advancedSearchForm");
     if (!searchForm) {
+        console.error("Advanced search form not found in DOM"); // Dodan logging
         return;
     }
     
@@ -32,17 +35,42 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
     const excludedItemsContainer = searchForm.querySelector("#excluded-items-container");
     const colorOptionsContainer = searchForm.querySelector("#color-options-container");
 
+    // Dodano debugiranje za vse DOM elemente
+    console.log('Found DOM elements:', {
+        criteriaContainer: !!criteriaContainer,
+        addCriterionBtn: !!addCriterionBtn,
+        addExclusionBtn: !!addExclusionBtn,
+        vehicleTypeGrid: !!vehicleTypeGrid,
+        selectAllBodyTypesBtn: !!selectAllBodyTypesBtn,
+        clearAllBodyTypesBtn: !!clearAllBodyTypesBtn,
+        fuelSelect: !!fuelSelect,
+        gearboxSelect: !!gearboxSelect,
+        electricOptionsRow: !!electricOptionsRow,
+        hybridOptionsRow: !!hybridOptionsRow,
+        excludeMakeSelect: !!excludeMakeSelect,
+        excludeModelSelect: !!excludeModelSelect,
+        excludeTypeSelect: !!excludeTypeSelect,
+        excludedItemsContainer: !!excludedItemsContainer,
+        colorOptionsContainer: !!colorOptionsContainer
+    });
+
     if (!criteriaContainer || !addCriterionBtn) {
         console.error("Napaka pri inicializaciji: Eden ali več ključnih elementov za napredno iskanje manjka v DOM-u.");
         return;
     }
 
     const brandModelData = stateManager.getBrands();
+    console.log('Loaded brand data:', Object.keys(brandModelData).length, 'brands'); // Dodan logging
+    
     let exclusionRules = prefillCriteria.exclusionRules || [];
     const sortedBrands = Object.keys(brandModelData).sort();
 
     function renderColorOptions() {
-        if (!colorOptionsContainer) return;
+        console.log('Rendering color options...'); // Dodan logging
+        if (!colorOptionsContainer) {
+            console.error('Color options container not found!'); // Dodan logging
+            return;
+        }
         let html = '';
         INTERIOR_COLORS.forEach(color => {
             html += `
@@ -53,10 +81,15 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
             `;
         });
         colorOptionsContainer.innerHTML = html;
+        console.log('Color options rendered successfully'); // Dodan logging
     }
 
     function renderExclusionTags() {
-        if (!excludedItemsContainer) return;
+        console.log('Rendering exclusion tags...'); // Dodan logging
+        if (!excludedItemsContainer) {
+            console.error('Excluded items container not found!'); // Dodan logging
+            return;
+        }
         excludedItemsContainer.innerHTML = '';
         exclusionRules.forEach((rule, index) => {
             const tagText = `${rule.make}${rule.model ? ' > ' + rule.model : ''}${rule.type ? ' > ' + rule.type : ''}`;
@@ -65,9 +98,12 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
             tag.innerHTML = `<span>${tagText}</span><button type="button" class="remove-brand-btn" data-index="${index}" title="Odstrani">&times;</button>`;
             excludedItemsContainer.appendChild(tag);
         });
+        console.log('Exclusion tags rendered:', exclusionRules.length, 'rules'); // Dodan logging
+
         document.querySelectorAll('.remove-brand-btn').forEach(button => {
             button.addEventListener('click', (e) => {
                 const indexToRemove = parseInt(e.currentTarget.dataset.index, 10);
+                console.log('Removing exclusion rule at index:', indexToRemove); // Dodan logging
                 exclusionRules.splice(indexToRemove, 1);
                 renderExclusionTags();
             });
@@ -77,7 +113,16 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
     const MAX_CRITERIA = 3;
 
     function addCriterionRow(criterion = null) {
-        if (!criteriaContainer || criteriaContainer.children.length >= MAX_CRITERIA) return;
+        console.log('Adding criterion row:', criterion); // Dodan logging
+        if (!criteriaContainer || criteriaContainer.children.length >= MAX_CRITERIA) {
+            console.warn('Cannot add more criteria rows:', {
+                containerExists: !!criteriaContainer,
+                currentCount: criteriaContainer?.children.length,
+                maxAllowed: MAX_CRITERIA
+            });
+            return;
+        }
+
         const rowId = `criterion-row-${criteriaContainer.children.length}`;
         const criterionRow = document.createElement('div');
         criterionRow.className = 'criterion-row';
@@ -102,6 +147,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
                     <option value="">Najprej izberite model</option>
                 </select>
             </div>`;
+
         if (criteriaContainer.children.length > 0) {
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
@@ -109,10 +155,13 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
             removeBtn.innerHTML = '&times;';
             criterionRow.appendChild(removeBtn);
         }
+
         criteriaContainer.appendChild(criterionRow);
         updateAddButtonState();
+        console.log('Criterion row added successfully:', rowId); // Dodan logging
 
         if (criterion) {
+            console.log('Prefilling criterion:', criterion); // Dodan logging
             const makeSelect = criterionRow.querySelector('.make-select');
             makeSelect.value = criterion.make || '';
             makeSelect.dispatchEvent(new Event('change'));
@@ -130,21 +179,29 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
 
     function updateAddButtonState() {
         if (!addCriterionBtn) return;
-        addCriterionBtn.style.display = criteriaContainer.children.length < MAX_CRITERIA ? 'block' : 'none';
-        addCriterionBtn.disabled = criteriaContainer.children.length >= MAX_CRITERIA;
+        const currentCount = criteriaContainer.children.length;
+        console.log('Updating add button state:', { currentCount, maxAllowed: MAX_CRITERIA }); // Dodan logging
+        addCriterionBtn.style.display = currentCount < MAX_CRITERIA ? 'block' : 'none';
+        addCriterionBtn.disabled = currentCount >= MAX_CRITERIA;
     }
 
     function updateBodyTypeButtons() {
         if (!vehicleTypeGrid) return;
         const activeTypes = vehicleTypeGrid.querySelectorAll('.vehicle-type.active');
         const hasSelection = activeTypes.length > 0;
+        console.log('Updating body type buttons:', { 
+            activeTypesCount: activeTypes.length,
+            hasSelection 
+        }); // Dodan logging
         if (clearAllBodyTypesBtn) clearAllBodyTypesBtn.style.display = hasSelection ? 'inline-block' : 'none';
         if (selectAllBodyTypesBtn) selectAllBodyTypesBtn.style.display = hasSelection ? 'none' : 'inline-block';
     }
 
     function getCriteriaFromForm() {
+        console.log('Getting criteria from form...'); // Dodan logging
         const criteria = {};
         const inclusionCriteria = [];
+
         searchForm.querySelectorAll('#criteria-container .criterion-row').forEach(row => {
             const make = row.querySelector('.make-select').value;
             const model = row.querySelector('.model-select').value;
@@ -156,6 +213,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
                 inclusionCriteria.push(criterion);
             }
         });
+
         if (inclusionCriteria.length > 0) criteria.inclusionCriteria = inclusionCriteria;
         
         if (vehicleTypeGrid) {
@@ -171,11 +229,15 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
                 criteria[key] = allValues.length > 1 ? allValues : allValues[0];
             }
         }
+
         if (exclusionRules.length > 0) criteria.exclusionRules = exclusionRules;
+        
+        console.log('Collected form criteria:', criteria); // Dodan logging
         return criteria;
     }
     
     function prefillForm(criteria) {
+        console.log('Prefilling form with criteria:', criteria); // Dodan logging
         if (!criteria || Object.keys(criteria).length === 0) {
             criteriaContainer.innerHTML = '';
             addCriterionRow();
@@ -219,10 +281,13 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
         }
         
         renderExclusionTags();
+        console.log('Form prefilled successfully'); // Dodan logging
     }
 
+    // Event Listeners
     if (addExclusionBtn) {
         addExclusionBtn.addEventListener('click', () => {
+            console.log('Adding exclusion rule...'); // Dodan logging
             const make = excludeMakeSelect.value;
             const model = excludeModelSelect.value;
             const type = excludeTypeSelect.value;
@@ -232,6 +297,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
             if (type) newRule.type = type;
             if (!exclusionRules.some(rule => JSON.stringify(rule) === JSON.stringify(newRule))) {
                 exclusionRules.push(newRule);
+                console.log('New exclusion rule added:', newRule); // Dodan logging
                 renderExclusionTags();
             }
             excludeMakeSelect.value = "";
@@ -246,11 +312,19 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
         const target = e.target;
         const row = target.closest('.criterion-row');
         if (!row) return;
+
+        console.log('Criterion row changed:', { 
+            targetClass: target.className,
+            rowId: row.id
+        }); // Dodan logging
+
         const makeSelect = row.querySelector('.make-select');
         const modelSelect = row.querySelector('.model-select');
         const typeSelect = row.querySelector('.type-select');
+
         if (target.classList.contains('make-select')) {
             const selectedMake = target.value;
+            console.log('Make selected:', selectedMake); // Dodan logging
             modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
             typeSelect.innerHTML = '<option value="">Vsi tipi</option>';
             modelSelect.disabled = true;
@@ -260,9 +334,11 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
                 modelSelect.disabled = false;
             }
         }
+
         if (target.classList.contains('model-select')) {
             const selectedMake = makeSelect.value;
             const selectedModel = target.value;
+            console.log('Model selected:', { make: selectedMake, model: selectedModel }); // Dodan logging
             typeSelect.innerHTML = '<option value="">Vsi tipi</option>';
             typeSelect.disabled = true;
             if (selectedModel && brandModelData[selectedMake]?.[selectedModel]) {
@@ -274,17 +350,22 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
 
     criteriaContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('remove-criterion-btn')) {
+            console.log('Removing criterion row'); // Dodan logging
             e.target.closest('.criterion-row').remove();
             updateAddButtonState();
         }
     });
 
-    addCriterionBtn.addEventListener('click', () => addCriterionRow(null));
+    addCriterionBtn.addEventListener('click', () => {
+        console.log('Add criterion button clicked'); // Dodan logging
+        addCriterionRow(null);
+    });
 
     if (vehicleTypeGrid) {
         vehicleTypeGrid.addEventListener('click', (e) => {
             const targetType = e.target.closest('.vehicle-type');
             if (targetType) {
+                console.log('Vehicle type clicked:', targetType.dataset.type); // Dodan logging
                 targetType.classList.toggle('active');
                 updateBodyTypeButtons();
             }
@@ -293,6 +374,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
 
     if(selectAllBodyTypesBtn) {
         selectAllBodyTypesBtn.addEventListener('click', () => {
+            console.log('Selecting all body types'); // Dodan logging
             if(vehicleTypeGrid) vehicleTypeGrid.querySelectorAll('.vehicle-type').forEach(type => type.classList.add('active'));
             updateBodyTypeButtons();
         });
@@ -300,6 +382,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
 
     if(clearAllBodyTypesBtn) {
         clearAllBodyTypesBtn.addEventListener('click', () => {
+            console.log('Clearing all body types'); // Dodan logging
             if(vehicleTypeGrid) vehicleTypeGrid.querySelectorAll('.vehicle-type.active').forEach(type => type.classList.remove('active'));
             updateBodyTypeButtons();
         });
@@ -309,6 +392,8 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
         fuelSelect.addEventListener('change', () => {
             const isElectric = fuelSelect.value === 'Elektrika';
             const isHybrid = fuelSelect.value === 'Hibrid';
+            console.log('Fuel type changed:', { isElectric, isHybrid }); // Dodan logging
+            
             if (gearboxSelect) gearboxSelect.disabled = isElectric;
             if (isElectric && gearboxSelect) gearboxSelect.value = 'Avtomatski';
             if (electricOptionsRow) electricOptionsRow.style.display = isElectric ? 'grid' : 'none';
@@ -319,7 +404,10 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
 
     searchForm.addEventListener("submit", (e) => {
         e.preventDefault();
+        console.log('Form submitted'); // Dodan logging
         const searchCriteria = getCriteriaFromForm();
+        console.log('Search criteria:', searchCriteria); // Dodan logging
+        
         sessionStorage.setItem('searchCriteria', JSON.stringify(searchCriteria));
         
         if (typeof onSearchCallback === 'function') {
@@ -331,6 +419,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
 
     searchForm.addEventListener('reset', (e) => {
         e.preventDefault();
+        console.log('Resetting form'); // Dodan logging
         searchForm.reset();
         
         exclusionRules = [];
@@ -352,6 +441,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
         
         excludeMakeSelect.addEventListener("change", function() {
             const selectedMake = this.value;
+            console.log('Exclude make selected:', selectedMake); // Dodan logging
             excludeModelSelect.innerHTML = '<option value="">Vsi modeli</option>';
             excludeTypeSelect.innerHTML = '<option value="">Vsi tipi</option>';
             excludeModelSelect.disabled = true;
@@ -365,6 +455,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
         excludeModelSelect.addEventListener("change", function() {
             const selectedMake = excludeMakeSelect.value;
             const selectedModel = this.value;
+            console.log('Exclude model selected:', { make: selectedMake, model: selectedModel }); // Dodan logging
             excludeTypeSelect.innerHTML = '<option value="">Vsi tipi</option>';
             excludeTypeSelect.disabled = true;
             if (selectedModel && brandModelData[selectedMake]?.[selectedModel]) {
@@ -377,6 +468,7 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
     const yearSelects = document.querySelectorAll('select[name="yearFrom"], select[name="yearTo"]');
     if (yearSelects.length > 0) {
         const currentYear = new Date().getFullYear();
+        console.log('Initializing year selects:', { currentYear }); // Dodan logging
         yearSelects.forEach(select => {
             select.innerHTML = '<option value="">Vse</option>';
             for (let y = currentYear; y >= 1900; y--) {
@@ -385,6 +477,8 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
         });
     }
     
+    console.log('Setting up initial state...'); // Dodan logging
     renderColorOptions();
     prefillForm(prefillCriteria);
+    console.log('Advanced search page initialized successfully'); // Dodan logging
 }

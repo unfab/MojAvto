@@ -130,11 +130,11 @@ function checkUnreadMessages() {
  */
 async function main() {
     await Promise.all([
-        loadComponent('./components/header.html', 'header-container'),
-        loadComponent('./components/sidebar.html', 'sidebar-container'),
-        loadComponent('./components/footer.html', 'footer-container'),
-        loadComponent('./components/modal.html', 'modal-container')
-    ]);
+    loadComponent('./components/header.html', 'header-container'),
+    loadComponent('./components/sidebar.html', 'sidebar'), // popravljen ID
+    loadComponent('./components/footer.html', 'footer-container'),
+    loadComponent('./components/modal.html', 'modal-container')
+]);
 
     initializeModalListeners();
 
