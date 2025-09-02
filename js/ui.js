@@ -38,18 +38,11 @@ export function initGlobalUI() {
         });
     }
 
-    document.addEventListener('click', (e) => {
-        if (
-            pageContainer &&
-            sidebar &&
-            !pageContainer.classList.contains('sidebar-collapsed') &&
-            !sidebar.contains(e.target) &&
-            !sidebarToggle.contains(e.target)
-        ) {
-            pageContainer.classList.add('sidebar-collapsed');
-        }
-    });
-
+    // ===================================================================
+    // POPRAVEK: Celoten 'document.addEventListener' je odstranjen,
+    // da se prepreči zapiranje ob kliku izven stranske vrstice.
+    // ===================================================================
+    
     const applyStoredTheme = () => {
         const currentTheme = localStorage.getItem('theme');
         if (currentTheme === 'dark') {
@@ -67,9 +60,6 @@ export function initGlobalUI() {
         });
     }
 
-    // =======================================================
-    // NOVO: Zagotovimo, da je na mobilnih napravah sidebar privzeto zaprt
-    // =======================================================
     const setInitialSidebarState = () => {
         if (window.innerWidth <= 1200) {
             pageContainer.classList.add('sidebar-collapsed');
@@ -77,8 +67,6 @@ export function initGlobalUI() {
     };
 
     setInitialSidebarState();
-    // =======================================================
-
     applyStoredTheme();
     updateCompareIcon(); 
 }

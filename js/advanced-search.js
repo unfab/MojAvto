@@ -314,7 +314,6 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
             if (electricOptionsRow) electricOptionsRow.style.display = isElectric ? 'grid' : 'none';
             if (hybridOptionsRow) hybridOptionsRow.style.display = isHybrid ? 'grid' : 'none';
         });
-        // Sprožimo dogodek ob nalaganju, da se stanje pravilno nastavi
         fuelSelect.dispatchEvent(new Event('change'));
     }
 
@@ -331,8 +330,8 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
     });
 
     searchForm.addEventListener('reset', (e) => {
-        e.preventDefault(); // Preprečimo privzeto obnašanje
-        searchForm.reset(); // Ročno ponastavimo vrednosti obrazca
+        e.preventDefault();
+        searchForm.reset();
         
         exclusionRules = [];
         renderExclusionTags();
@@ -342,7 +341,6 @@ export async function initAdvancedSearchPage(prefillCriteria = {}, onSearchCallb
         updateBodyTypeButtons();
         if(gearboxSelect) gearboxSelect.disabled = false;
         
-        // Ponovno sprožimo dogodek za gorivo, da se polja pravilno skrijejo
         if (fuelSelect) {
             fuelSelect.dispatchEvent(new Event('change'));
         }

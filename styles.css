@@ -256,7 +256,7 @@ header {
 
 
 /* ==================================================== */
-/* 3. OBRAZCI, GUMBI IN OSTALE KOMPONENTE               */
+/* 3. OBRAZCI IN GUMBI                                  */
 /* ==================================================== */
 
 .btn { 
@@ -1240,4 +1240,8 @@ fieldset.form-group legend {
     .form-grid.three-columns {
         grid-template-columns: 1fr;
     }
+}
+/* === DODATEK: Stili za specifične skupine v obrazcih === */
+.fieldset-group {
+    grid-column: span 1; /* S tem omejimo, da fieldset zavzame samo en stolpec */
 }
