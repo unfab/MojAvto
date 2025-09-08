@@ -74,13 +74,13 @@ button {
     display: flex;
     max-width: 1600px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 1.5rem 1rem;
     gap: 1.5rem;
 }
 
 main {
     flex-grow: 1; 
-    padding: 1rem; 
+    padding: 0; 
     overflow-y: auto;
     min-width: 0;
 }
@@ -97,6 +97,8 @@ header {
     grid-template-columns: auto 1fr auto;
     gap: 1.5rem;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .header-left, .header-actions {
@@ -127,7 +129,7 @@ header {
 #headerSearchForm {
     position: relative;
     width: 100%;
-    max-width: 700px;
+    max-width: 1050px;
 }
 
 #header-search-input {
@@ -165,21 +167,21 @@ header {
     width: 240px;
     flex-shrink: 0;
     background-color: var(--card-color);
-    height: calc(100vh - 70px - 2rem);
+    height: calc(100vh - 70px);
     position: sticky;
-    top: calc(70px + 1rem);
+    top: 70px;
     padding: 1rem 0;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
                 opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateX(0);
     opacity: 1;
     border-radius: 16px; 
-    margin: 1rem 0 1rem 1rem;
+    margin: 0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
     border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    z-index: 1100;
+    z-index: 900;
 }
 
 .page-container.sidebar-collapsed .sidebar {
@@ -418,6 +420,17 @@ body.dark-mode #theme-icon-moon {
     gap: 0.75rem; 
     cursor: pointer; 
 }
+/* SPREMEMBA: Dodano pravilo za .form-group.checkbox label */
+.form-group.checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer; 
+    font-weight: normal;
+}
+
+/* SPREMEMBA: združeno pravilo za vse custom checkboxe */
+.form-group.checkbox input[type="checkbox"],
 .checkbox-options input[type="checkbox"],
 .checkbox-options input[type="radio"],
 .equipment-grid input[type="checkbox"] {
@@ -437,6 +450,8 @@ body.dark-mode #theme-icon-moon {
     cursor: pointer;
     transition: all 0.1s ease-in-out;
 }
+/* SPREMEMBA: združeno pravilo za vse custom checkboxe */
+.form-group.checkbox input[type="checkbox"]::before,
 .checkbox-options input[type="checkbox"]::before,
 .equipment-grid input[type="checkbox"]::before {
     content: "";
@@ -460,11 +475,15 @@ body.dark-mode #theme-icon-moon {
     transition: 120ms transform ease-in-out;
     box-shadow: inset 1em 1em var(--accent-blue);
 }
+/* SPREMEMBA: združeno pravilo za vse custom checkboxe */
+.form-group.checkbox input[type="checkbox"]:checked,
 .checkbox-options input[type="checkbox"]:checked,
 .equipment-grid input[type="checkbox"]:checked {
     background-color: var(--accent-blue);
     border-color: var(--accent-blue);
 }
+/* SPREMEMBA: združeno pravilo za vse custom checkboxe */
+.form-group.checkbox input[type="checkbox"]:checked::before,
 .checkbox-options input[type="checkbox"]:checked::before,
 .equipment-grid input[type="checkbox"]:checked::before {
     transform: scale(1);
@@ -475,6 +494,8 @@ body.dark-mode #theme-icon-moon {
 .checkbox-options input[type="radio"]:checked::before {
     transform: scale(1);
 }
+/* SPREMEMBA: združeno pravilo za vse custom checkboxe */
+.form-group.checkbox input[type="checkbox"]:focus,
 .checkbox-options input[type="checkbox"]:focus,
 .checkbox-options input[type="radio"]:focus,
 .equipment-grid input[type="checkbox"]:focus {
@@ -1244,4 +1265,128 @@ fieldset.form-group legend {
 /* === DODATEK: Stili za specifične skupine v obrazcih === */
 .fieldset-group {
     grid-column: span 1; /* S tem omejimo, da fieldset zavzame samo en stolpec */
+}
+
+.color-options {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.color-option {
+    position: relative;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+}
+.color-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+.color-swatch {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--swatch-color);
+    border: 2px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.color-option:hover .color-swatch {
+    transform: scale(1.1);
+}
+.color-option input[type="radio"]:checked + .color-swatch {
+    box-shadow: 0 0 0 3px var(--bg-color), 0 0 0 5px var(--accent-blue);
+}
+.color-swatch[style="--swatch-color: #ffffff;"] {
+    border-color: #d1d5db; /* Zagotovi vidnost bele barve */
+}
+
+.lang-switcher {
+    position: relative;
+}
+.lang-switcher-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
+}
+.lang-switcher-btn:hover {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+}
+.lang-switcher-btn i {
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+}
+.lang-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    z-index: 1100;
+    overflow: hidden;
+    min-width: 120px;
+}
+.lang-dropdown.show {
+    display: block;
+}
+.lang-dropdown.show + .lang-switcher-btn i {
+    transform: rotate(180deg);
+}
+.lang-dropdown a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+.lang-dropdown a:hover {
+    background-color: var(--bg-color);
+}
+
+.sidebar-nav li .submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0.5rem 1rem; /* Zamik od levega roba */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+.sidebar-nav li.open > .submenu {
+    max-height: 500px; /* Dovolj velika vrednost */
+}
+.sidebar-nav li .submenu a {
+    padding: 0.6rem 2rem;
+    font-size: 0.9rem;
+}
+.sidebar-nav li .submenu a i {
+    font-size: 0.8rem; /* Manjše ikone v podmeniju */
+}
+#profile-menu-toggle {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.submenu-arrow {
+    transition: transform 0.3s ease-in-out;
+    font-size: 0.8rem;
+}
+.sidebar-nav li.open > a .submenu-arrow {
+    transform: rotate(180deg);
 }

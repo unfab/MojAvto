@@ -1,8 +1,4 @@
 <div class="search-container">
-    <h2>Poišči svoj naslednji sanjski avto</h2>
-    <div id="advanced-filters-container"></div>
-</div>
-<div class="search-container">
     <h1>Napredno iskanje</h1>
 
     <form id="advancedSearchForm" novalidate>
@@ -156,11 +152,12 @@
                         <label for="equip-webasto"><input type="checkbox" id="equip-webasto" name="equipment" value="Webasto"> Webasto / Gretje mirujočega vozila</label>
                     </div>
                      <div class="form-row" style="margin-top: 1.5rem;">
-                        <div class="form-group">
-                             <label for="adv-interior-color">Barva notranjosti</label>
-                             <input type="text" id="adv-interior-color" name="interior_color" placeholder="npr. Črna, Bež, Rjava...">
-                        </div>
                         <fieldset class="form-group">
+                            <legend>Barva notranjosti</legend>
+                            <div id="color-options-container" class="color-options">
+                                </div>
+                        </fieldset>
+                        <fieldset class="form-group fieldset-group">
                             <legend>Material sedežev</legend>
                             <div class="checkbox-options single-row">
                                 <label for="equip-leather"><input type="checkbox" id="equip-leather" name="equipment" value="Usnjeni sedeži"> Usnje</label>

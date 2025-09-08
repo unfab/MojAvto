@@ -8,6 +8,8 @@ import { stateManager } from './stateManager.js';
 import { showNotification } from './notifications.js';
 import { filterListings } from './utils/listingManager.js';
 import { initializeModalListeners } from './components/modal.js';
+// SPREMEMBA: Uvozimo novo logiko za sidebar
+import { initSidebar } from './sidebar.js';
 
 /**
  * Asynchronously loads an HTML component's content into a specified container.
@@ -61,6 +63,43 @@ function initHeaderSearch() {
 }
 
 /**
+ * Initializes the language switcher functionality.
+ */
+function initLangSwitcher() {
+    const langBtn = document.getElementById('lang-switcher-btn');
+    const langDropdown = document.getElementById('lang-switcher-dropdown');
+    const currentLangSpan = document.getElementById('current-lang');
+
+    if (!langBtn || !langDropdown || !currentLangSpan) return;
+
+    // Set initial language display (SI/EN)
+    const currentLang = localStorage.getItem('mojavto_lang') || 'sl';
+    currentLangSpan.textContent = currentLang.toUpperCase();
+
+    langBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langDropdown.classList.toggle('show');
+    });
+
+    langDropdown.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const target = e.target.closest('a[data-lang]');
+        if (target) {
+            const lang = target.dataset.lang;
+            await setLanguage(lang);
+            location.reload(); // Reload the page to apply the new language
+        }
+    });
+
+    // Close the dropdown when clicking outside of it
+    document.addEventListener('click', () => {
+        if (langDropdown.classList.contains('show')) {
+            langDropdown.classList.remove('show');
+        }
+    });
+}
+
+/**
  * Checks for new listings that match the user's saved searches since their last visit.
  */
 async function checkSavedSearchNotifications() {
@@ -106,7 +145,6 @@ async function checkSavedSearchNotifications() {
     }
 }
 
-// === NOVO: Funkcija za preverjanje neprebranih sporočil ===
 function checkUnreadMessages() {
     const { loggedInUser } = stateManager.getState();
     if (!loggedInUser) return;
@@ -115,10 +153,8 @@ function checkUnreadMessages() {
     
     if (unreadMessages.length > 0) {
         const message = `Imate ${unreadMessages.length} novih sporočil! Oglejte si jih v svojem profilu.`;
-        // Opomba: Trenutno še ni strani za ogled sporočil, zato je to samo obvestilo.
         showNotification(message, 'success', 8000);
         
-        // Označimo jih kot prebrane, da se obvestilo ne prikaže vsakič znova
         const unreadIds = unreadMessages.map(msg => msg.id);
         stateManager.markMessagesAsRead(unreadIds);
     }
@@ -130,11 +166,11 @@ function checkUnreadMessages() {
  */
 async function main() {
     await Promise.all([
-    loadComponent('./components/header.html', 'header-container'),
-    loadComponent('./components/sidebar.html', 'sidebar'), // popravljen ID
-    loadComponent('./components/footer.html', 'footer-container'),
-    loadComponent('./components/modal.html', 'modal-container')
-]);
+        loadComponent('./components/header.html', 'header-container'),
+        loadComponent('./components/sidebar.html', 'sidebar'),
+        loadComponent('./components/footer.html', 'footer-container'),
+        loadComponent('./components/modal.html', 'modal-container')
+    ]);
 
     initializeModalListeners();
 
@@ -154,8 +190,9 @@ async function main() {
     initGlobalUI(); 
     initUserMenu();
     initHeaderSearch();
+    initLangSwitcher();
+    initSidebar(); // SPREMEMBA: Kličemo novo funkcijo za sidebar
 
-    // === NOVO: Klic novih funkcij po inicializaciji stateManager-ja ===
     await checkSavedSearchNotifications();
     checkUnreadMessages();
 
@@ -164,7 +201,7 @@ async function main() {
 
 document.addEventListener('DOMContentLoaded', main);
 
-// === REGISTRACIJA SERVICE WORKERJA ===
+/* SPREMEMBA: Začasno onemogočimo Service Worker za lažji razvoj
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
@@ -176,3 +213,4 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+*/

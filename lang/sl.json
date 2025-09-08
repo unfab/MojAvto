@@ -17,6 +17,7 @@
   "nav_contact": "Kontakt",
   "nav_faq": "Pomoč (FAQ)",
   "nav_about": "O nas",
+  "nav_garage": "Moja Garaža",
   "login": "Prijava",
   "logout": "Odjava",
   "my_account": "Moj račun",
@@ -118,5 +119,7 @@
   "search_deleted_successfully": "Iskanje uspešno izbrisano.",
   "not_found_title": "Stran ne obstaja",
   "not_found_text": "Žal nam je, vendar stran, ki jo iščete, ne obstaja ali je bila premaknjena.",
-  "go_to_homepage": "Pojdi na domačo stran"
+  "go_to_homepage": "Pojdi na domačo stran",
+  "lang_slovene": "Slovenščina",
+  "lang_english": "Angleščina"
 }

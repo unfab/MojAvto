@@ -17,6 +17,7 @@
   "nav_contact": "Contact",
   "nav_faq": "Help (FAQ)",
   "nav_about": "About Us",
+  "nav_garage": "My Garage",
   "login": "Login",
   "spec_battery": "Battery",
   "spec_range": "Range",
@@ -118,5 +119,7 @@
   "search_deleted_successfully": "Search deleted successfully.",
   "not_found_title": "Page Not Found",
   "not_found_text": "We're sorry, but the page you are looking for does not exist or has been moved.",
-  "go_to_homepage": "Go to Homepage"
+  "go_to_homepage": "Go to Homepage",
+  "lang_slovene": "Slovenian",
+  "lang_english": "English"
 }

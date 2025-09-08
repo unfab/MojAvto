@@ -1,7 +1,16 @@
 <ul class="sidebar-nav">
-    <li><a href="#/" data-i18n-key="nav_home"><i class="fas fa-home"></i><span>Domov</span></a></li>
-    <li><a href="#/advanced-search" data-i18n-key="nav_advanced_search"><i class="fas fa-search"></i><span>Napredno iskanje</span></a></li>
-    
+    <li>
+        <a href="#/" data-i18n-key="nav_home">
+            <i class="fas fa-home"></i>
+            <span>Domov</span>
+        </a>
+    </li>
+    <li>
+        <a href="#/advanced-search" data-i18n-key="nav_advanced_search">
+            <i class="fas fa-search"></i>
+            <span>Napredno iskanje</span>
+        </a>
+    </li>
     <li>
         <a href="#/compare" id="compare-link" style="display: none;">
             <i class="fas fa-balance-scale"></i>
@@ -9,6 +18,24 @@
             <span id="compare-count" class="notification-badge">0</span>
         </a>
     </li>
-    <li><a href="#/likes" data-i18n-key="nav_likes"><i class="fas fa-heart"></i><span>Všečki</span></a></li>
-    <li><a href="#/profile" data-i18n-key="nav_profile"><i class="fas fa-user"></i><span>Moj oglasi / Profil</span></a></li>
+
+    <li id="public-likes-link">
+        <a href="#/likes" data-i18n-key="nav_likes">
+            <i class="fas fa-heart"></i>
+            <span>Všečki</span>
+        </a>
+    </li>
+
+    <li id="user-menu-section" style="display: none;">
+        <a href="#" id="profile-menu-toggle">
+            <i class="fas fa-user"></i>
+            <span>Moj profil</span>
+            <i class="fas fa-chevron-down submenu-arrow"></i>
+        </a>
+        <ul id="profile-submenu" class="submenu">
+            <li><a href="#/profile" data-i18n-key="tab_my_listings"><i class="fas fa-list-ul"></i> Moji oglasi</a></li>
+            <li><a href="#/profile" data-i18n-key="nav_garage"><i class="fas fa-warehouse"></i> Moja Garaža</a></li>
+            <li><a href="#/likes" data-i18n-key="nav_likes"><i class="fas fa-heart"></i> Moji všečki</a></li>
+        </ul>
+    </li>
 </ul>
