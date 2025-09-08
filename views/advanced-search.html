@@ -1,5 +1,365 @@
 <div class="search-container">
-    <h1>Poišči svoj naslednji sanjski avto</h1>
-    <div id="advanced-filters-container">
+    <h2>Poišči svoj naslednji sanjski avto</h2>
+    <div id="advanced-filters-container"></div>
+</div>
+<div class="search-container">
+    <h1>Napredno iskanje</h1>
+
+    <form id="advancedSearchForm" novalidate>
+        <section class="filter-section">
+            <div class="filter-section-header">
+                <h3><i class="fas fa-car"></i>Osnovni podatki</h3>
+            </div>
+            <div class="filter-content">
+                <div id="criteria-container"></div>
+                <div style="margin-top: 1rem;">
+                     <button type="button" id="addCriterionBtn" class="btn btn-secondary">+ Dodaj kriterij</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <div class="filter-section-header">
+                <h3><i class="fas fa-car-alt"></i> Tip karoserije</h3>
+                <div class="header-actions">
+                    <button type="button" id="selectAllBodyTypesBtn" class="btn-link">Izberi vse</button>
+                    <button type="button" id="clearAllBodyTypesBtn" class="btn-link" style="display: none;">Počisti izbor</button>
+                </div>
+            </div>
+            <div class="filter-content">
+                <div class="vehicle-type-grid">
+                    <div class="vehicle-type" data-type="Limuzina"><i class="fas fa-car-side"></i><span>Limuzina</span></div>
+                    <div class="vehicle-type" data-type="Karavan"><i class="fas fa-car-side"></i><span>Karavan</span></div>
+                    <div class="vehicle-type" data-type="Kombilimuzina"><i class="fas fa-car"></i><span>Kombilimuzina</span></div>
+                    <div class="vehicle-type" data-type="SUV"><i class="fas fa-car-alt"></i><span>SUV</span></div>
+                    <div class="vehicle-type" data-type="Enoprostorec"><i class="fas fa-van-shuttle"></i><span>Enoprostorec</span></div>
+                    <div class="vehicle-type" data-type="Coupe"><i class="fas fa-car-side"></i><span>Coupe</span></div>
+                    <div class="vehicle-type" data-type="Cabrio"><i class="fas fa-car-side"></i><span>Cabrio</span></div>
+                    <div class="vehicle-type" data-type="Pick-up"><i class="fas fa-truck-pickup"></i><span>Pick-up</span></div>
+                    <div class="vehicle-type" data-type="Mestni avto"><i class="fas fa-car"></i><span>Mestni avto</span></div>
+                    <div class="vehicle-type" data-type="Terensko vozilo"><i class="fas fa-truck-monster"></i><span>Terensko vozilo</span></div>
+                    <div class="vehicle-type" data-type="Kombi/Dostavnik"><i class="fas fa-truck"></i><span>Kombi/Dostavnik</span></div>
+                    <div class="vehicle-type" data-type="Ostalo"><i class="fas fa-ellipsis"></i><span>Ostalo</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+             <div class="filter-section-header">
+                <h3><i class="fas fa-ban"></i>Izključi vozila</h3>
+            </div>
+            <div class="filter-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adv-exclude-make">Znamka</label>
+                        <select id="adv-exclude-make" name="exclude-make"><option value="">Izberi znamko...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-exclude-model">Model (opcijsko)</label>
+                        <select id="adv-exclude-model" name="exclude-model" disabled><option value="">Vsi modeli</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-exclude-type">Tip (opcijsko)</label>
+                        <select id="adv-exclude-type" name="exclude-type" disabled><option value="">Vsi tipi</option></select>
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <button type="button" id="addExclusionBtn" class="btn btn-secondary">Dodaj</button>
+                </div>
+                <div id="excluded-items-container" style="margin-top: 1.5rem;"></div>
+            </div>
+        </section>
+        
+        <section class="filter-section">
+            <div class="filter-section-header">
+                <h3><i class="fas fa-history"></i> Stanje in zgodovina vozila</h3>
+            </div>
+            <div class="filter-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adv-condition">Stanje vozila</label>
+                        <select id="adv-condition" name="condition">
+                            <option value="">Vse</option>
+                            <option value="Novo">Novo</option>
+                            <option value="Jahreswagen">"Jahreswagen" (do 1 leta)</option>
+                            <option value="Rabljeno">Rabljeno</option>
+                            <option value="Oldtimer">Klasično vozilo ("Oldtimer")</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-owners">Število prejšnjih lastnikov</label>
+                        <select id="adv-owners" name="owners">
+                            <option value="">Neomejeno</option>
+                            <option value="1">Največ 1</option>
+                            <option value="2">Največ 2</option>
+                            <option value="3">Največ 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 1.5rem;">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <div class="checkbox-options single-row">
+                            <label for="adv-service-history"><input type="checkbox" id="adv-service-history" name="service_history" value="true"> Potrjena servisna zgodovina</label>
+                            <label for="adv-undamaged"><input type="checkbox" id="adv-undamaged" name="undamaged" value="true"> Nepoškodovano vozilo</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <div class="filter-section-header">
+                <h3><i class="fas fa-star"></i> Oprema vozila</h3>
+            </div>
+            <div class="filter-content">
+                <div class="equipment-category">
+                    <h4><i class="fas fa-shield-alt"></i> Varnost</h4>
+                    <div class="equipment-grid">
+                        <label for="equip-alarm"><input type="checkbox" id="equip-alarm" name="equipment" value="Alarmna naprava"> Alarmna naprava</label>
+                        <label for="equip-tpms"><input type="checkbox" id="equip-tpms" name="equipment" value="Nadzor zračnega tlaka (TPMS)"> Nadzor zračnega tlaka (TPMS)</label>
+                        <label for="equip-isofix"><input type="checkbox" id="equip-isofix" name="equipment" value="ISOFIX pritrdišča"> ISOFIX pritrdišča</label>
+                        <label for="equip-foglights"><input type="checkbox" id="equip-foglights" name="equipment" value="Meglenke"> Meglenke</label>
+                        <label for="equip-ecall"><input type="checkbox" id="equip-ecall" name="equipment" value="Sistem za klic v sili (eCall)"> Sistem za klic v sili (eCall)</label>
+                        <label for="equip-aircurtains"><input type="checkbox" id="equip-aircurtains" name="equipment" value="Zračne zavese"> Zračne zavese</label>
+                    </div>
+                </div>
+                <div class="equipment-category">
+                    <h4><i class="fas fa-robot"></i> Asistenčni sistemi</h4>
+                    <div class="equipment-grid">
+                        <label for="equip-acc"><input type="checkbox" id="equip-acc" name="equipment" value="Aktivni tempomat"> Aktivni tempomat (ACC)</label>
+                        <label for="equip-lane-assist"><input type="checkbox" id="equip-lane-assist" name="equipment" value="Sistem za ohranjanje voznega pasu"> Ohranjanje voznega pasu</label>
+                        <label for="equip-blind-spot"><input type="checkbox" id="equip-blind-spot" name="equipment" value="Opozarjanje na mrtvi kot"> Opozarjanje na mrtvi kot</label>
+                        <label for="equip-auto-brake"><input type="checkbox" id="equip-auto-brake" name="equipment" value="Samodejno zaviranje v sili"> Samodejno zaviranje v sili</label>
+                        <label for="equip-sign-rec"><input type="checkbox" id="equip-sign-rec" name="equipment" value="Prepoznavanje prometnih znakov"> Prepoznavanje znakov</label>
+                        <label for="equip-pdc"><input type="checkbox" id="equip-pdc" name="equipment" value="Parkirni senzorji"> Parkirni senzorji</label>
+                        <label for="equip-cam360"><input type="checkbox" id="equip-cam360" name="equipment" value="Parkirna kamera (360°)"> Parkirna kamera (360°)</label>
+                        <label for="equip-auto-park"><input type="checkbox" id="equip-auto-park" name="equipment" value="Sistem za samodejno parkiranje"> Samodejno parkiranje</label>
+                        <label for="equip-hud"><input type="checkbox" id="equip-hud" name="equipment" value="Head-up zaslon"> Head-up zaslon</label>
+                        <label for="equip-night-vision"><input type="checkbox" id="equip-night-vision" name="equipment" value="Night Vision"> Night Vision / Nočni vid</label>
+                    </div>
+                </div>
+                <div class="equipment-category">
+                    <h4><i class="fas fa-couch"></i> Udobje & Notranjost</h4>
+                    <div class="equipment-grid">
+                        <label for="equip-auto-ac"><input type="checkbox" id="equip-auto-ac" name="equipment" value="Avtomatska klimatska naprava"> Avtomatska klima (večconska)</label>
+                        <label for="equip-heated-seats"><input type="checkbox" id="equip-heated-seats" name="equipment" value="Ogrevani sedeži"> Ogrevani sedeži</label>
+                        <label for="equip-vent-seats"><input type="checkbox" id="equip-vent-seats" name="equipment" value="Prezračevani/hlajeni sedeži"> Prezračevani/hlajeni sedeži</label>
+                        <label for="equip-massage-seats"><input type="checkbox" id="equip-massage-seats" name="equipment" value="Masažni sedeži"> Masažni sedeži</label>
+                        <label for="equip-heated-wheel"><input type="checkbox" id="equip-heated-wheel" name="equipment" value="Gretje volana"> Gretje volana</label>
+                        <label for="equip-electric-seats"><input type="checkbox" id="equip-electric-seats" name="equipment" value="Električni sedeži s spominom"> Električni sedeži s spominom</label>
+                        <label for="equip-keyless"><input type="checkbox" id="equip-keyless" name="equipment" value="Keyless Go"> Keyless Go (brezstični vstop)</label>
+                        <label for="equip-ambient"><input type="checkbox" id="equip-ambient" name="equipment" value="Ambientalna osvetlitev"> Ambientalna osvetlitev</label>
+                        <label for="equip-rain-sensor"><input type="checkbox" id="equip-rain-sensor" name="equipment" value="Senzor za dež"> Senzor za dež</label>
+                        <label for="equip-folding-mirrors"><input type="checkbox" id="equip-folding-mirrors" name="equipment" value="Električno poklopna ogledala"> El. poklopna ogledala</label>
+                        <label for="equip-digi-dash"><input type="checkbox" id="equip-digi-dash" name="equipment" value="Digitalni števci"> Digitalni števci</label>
+                        <label for="equip-cooled-box"><input type="checkbox" id="equip-cooled-box" name="equipment" value="Hlajen predal"> Hlajen predal</label>
+                        <label for="equip-webasto"><input type="checkbox" id="equip-webasto" name="equipment" value="Webasto"> Webasto / Gretje mirujočega vozila</label>
+                    </div>
+                     <div class="form-row" style="margin-top: 1.5rem;">
+                        <div class="form-group">
+                             <label for="adv-interior-color">Barva notranjosti</label>
+                             <input type="text" id="adv-interior-color" name="interior_color" placeholder="npr. Črna, Bež, Rjava...">
+                        </div>
+                        <fieldset class="form-group">
+                            <legend>Material sedežev</legend>
+                            <div class="checkbox-options single-row">
+                                <label for="equip-leather"><input type="checkbox" id="equip-leather" name="equipment" value="Usnjeni sedeži"> Usnje</label>
+                                <label for="equip-alcantara"><input type="checkbox" id="equip-alcantara" name="equipment" value="Alcantara sedeži"> Alcantara</label>
+                                <label for="equip-part-leather"><input type="checkbox" id="equip-part-leather" name="equipment" value="Delno usnje"> Delno usnje</label>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="equipment-category">
+                    <h4><i class="fas fa-car-battery"></i> Videz & Zunanjost</h4>
+                    <div class="equipment-grid">
+                        <label for="equip-led"><input type="checkbox" id="equip-led" name="equipment" value="LED / Matrix žarometi"> LED / Matrix / Laser žarometi</label>
+                        <label for="equip-alloys"><input type="checkbox" id="equip-alloys" name="equipment" value="Aluminijasta platišča"> Aluminijasta platišča</label>
+                        <label for="equip-tow-hitch"><input type="checkbox" id="equip-tow-hitch" name="equipment" value="Vlečna kljuka"> Vlečna kljuka</label>
+                        <label for="equip-pano"><input type="checkbox" id="equip-pano" name="equipment" value="Panoramska streha"> Panoramska streha</label>
+                        <label for="equip-sport-pack"><input type="checkbox" id="equip-sport-pack" name="equipment" value="Športni paket"> Športni paket zunanjosti</label>
+                        <label for="equip-tinted-glass"><input type="checkbox" id="equip-tinted-glass" name="equipment" value="Zatemnjena stekla"> Zatemnjena stekla</label>
+                        <label for="equip-roof-rails"><input type="checkbox" id="equip-roof-rails" name="equipment" value="Strešne sani"> Strešne sani</label>
+                        <label for="equip-elec-trunk"><input type="checkbox" id="equip-elec-trunk" name="equipment" value="Električni prtljažnik"> El. odpiranje prtljažnika</label>
+                        <label for="equip-heated-glass"><input type="checkbox" id="equip-heated-glass" name="equipment" value="Ogrevano prednje steklo"> Ogrevano prednje steklo</label>
+                    </div>
+                </div>
+                <div class="equipment-category">
+                    <h4><i class="fas fa-satellite-dish"></i> Multimedija & Povezljivost</h4>
+                    <div class="equipment-grid">
+                         <label for="equip-navi"><input type="checkbox" id="equip-navi" name="equipment" value="Navigacijski sistem"> Navigacijski sistem</label>
+                         <label for="equip-carplay"><input type="checkbox" id="equip-carplay" name="equipment" value="Apple CarPlay / Android Auto"> Apple CarPlay / Android Auto</label>
+                         <label for="equip-bluetooth"><input type="checkbox" id="equip-bluetooth" name="equipment" value="Bluetooth"> Bluetooth prostoročno</label>
+                         <label for="equip-dab"><input type="checkbox" id="equip-dab" name="equipment" value="Digitalni radio (DAB+)"> Digitalni radio (DAB+)</label>
+                         <label for="equip-wireless-charge"><input type="checkbox" id="equip-wireless-charge" name="equipment" value="Brezžično polnjenje telefona"> Brezžično polnjenje</label>
+                         <label for="equip-premium-sound"><input type="checkbox" id="equip-premium-sound" name="equipment" value="Premium ozvočenje"> Premium ozvočenje</label>
+                         <label for="equip-gesture"><input type="checkbox" id="equip-gesture" name="equipment" value="Upravljanje z gestami"> Upravljanje z gestami</label>
+                         <label for="equip-wifi"><input type="checkbox" id="equip-wifi" name="equipment" value="Wi-Fi Hotspot"> Wi-Fi Hotspot</label>
+                    </div>
+                </div>
+                <div class="equipment-category">
+                    <h4><i class="fas fa-cogs"></i> Podvozje & Pogon</h4>
+                    <div class="equipment-grid">
+                        <label for="equip-sport-susp"><input type="checkbox" id="equip-sport-susp" name="equipment" value="Športno podvozje"> Športno podvozje</label>
+                        <label for="equip-air-susp"><input type="checkbox" id="equip-air-susp" name="equipment" value="Zračno vzmetenje"> Zračno vzmetenje</label>
+                        <label for="equip-4x4"><input type="checkbox" id="equip-4x4" name="equipment" value="Štirikolesni pogon"> Štirikolesni pogon (4x4)</label>
+                        <label for="equip-diff-lock"><input type="checkbox" id="equip-diff-lock" name="equipment" value="Zapora diferenciala"> Zapora diferenciala</label>
+                        <label for="equip-adaptive-susp"><input type="checkbox" id="equip-adaptive-susp" name="equipment" value="Prilagodljivo vzmetenje"> Prilagodljivo vzmetenje</label>
+                        <label for="equip-4-wheel-steer"><input type="checkbox" id="equip-4-wheel-steer" name="equipment" value="Štirikolesno krmiljenje"> Štirikolesno krmiljenje</label>
+                    </div>
+                </div>
+                <div class="equipment-category">
+                    <h4><i class="fas fa-people-carry"></i> Praktičnost & Posebnosti</h4>
+                    <div class="equipment-grid">
+                        <label for="equip-7-seats"><input type="checkbox" id="equip-7-seats" name="equipment" value="Tretja vrsta sedežev (7 sedežev)"> Tretja vrsta sedežev (7)</label>
+                        <label for="equip-sliding-door"><input type="checkbox" id="equip-sliding-door" name="equipment" value="Drsna vrata"> Drsna vrata</label>
+                        <label for="equip-split-bench"><input type="checkbox" id="equip-split-bench" name="equipment" value="Deljiva zadnja klop"> Deljiva zadnja klop</label>
+                        <label for="equip-camper"><input type="checkbox" id="equip-camper" name="equipment" value="Avtodom predelava"> Avtodom predelava</label>
+                        <label for="equip-disabled"><input type="checkbox" id="equip-disabled" name="equipment" value="Vozilo za invalide"> Vozilo za invalide</label>
+                        <label for="equip-n1"><input type="checkbox" id="equip-n1" name="equipment" value="Tovorno vozilo (N1)"> Tovorno vozilo (N1)</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <div class="filter-section-header">
+                <h3><i class="fas fa-leaf"></i> Okoljski in ekonomski podatki</h3>
+            </div>
+            <div class="filter-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adv-euro-norm">EURO norma (minimalno)</label>
+                        <select id="adv-euro-norm" name="euro_norm">
+                            <option value="">Vse</option>
+                            <option value="Euro 6">Euro 6</option>
+                            <option value="Euro 5">Euro 5</option>
+                            <option value="Euro 4">Euro 4</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-energy-class">Energijski razred (minimalno)</label>
+                        <select id="adv-energy-class" name="energy_class">
+                            <option value="">Vsi</option>
+                            <option value="A+">A+</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-co2">Emisije CO2 do (g/km)</label>
+                        <input type="number" id="adv-co2" name="co2_emissions" placeholder="npr. 120">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 1.5rem;">
+                    <div class="form-group">
+                        <label for="adv-cons-comb">Kombinirana poraba do (l/100km)</label>
+                        <input type="number" id="adv-cons-comb" step="0.1" name="consumption_combined" placeholder="npr. 5.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-cons-city">Mestna poraba do (l/100km)</label>
+                        <input type="number" id="adv-cons-city" step="0.1" name="consumption_city" placeholder="npr. 6.8">
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-cons-hwy">Izvenmestna poraba do (l/100km)</label>
+                        <input type="number" id="adv-cons-hwy" step="0.1" name="consumption_highway" placeholder="npr. 4.5">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 1.5rem;">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <div class="checkbox-options single-row">
+                            <label for="adv-dpf"><input type="checkbox" id="adv-dpf" name="particulate_filter" value="true"> Vgrajen filter trdih delcev (DPF/GPF)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <div class="filter-section-header">
+                <h3><i class="fas fa-sliders-h"></i>Cena, letnik in kilometri</h3>
+            </div>
+            <div class="filter-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adv-price-from">Cena od (€)</label>
+                        <input type="number" id="adv-price-from" name="priceFrom" placeholder="npr. 5000">
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-price-to">Cena do (€)</label>
+                        <input type="number" id="adv-price-to" name="priceTo" placeholder="npr. 15000">
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-year-from">1. registracija od</label>
+                        <select id="adv-year-from" name="yearFrom"><option value="">Vse</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-year-to">1. registracija do</label>
+                        <select id="adv-year-to" name="yearTo"><option value="">Vse</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-mileage-from">Kilometri od</label>
+                        <input type="number" id="adv-mileage-from" name="mileageFrom" placeholder="npr. 50000">
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-mileage-to">Kilometri do</label>
+                        <input type="number" id="adv-mileage-to" name="mileageTo" placeholder="npr. 150000">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+             <div class="filter-section-header">
+                <h3><i class="fas fa-cogs"></i>Tehnični podatki in gorivo</h3>
+            </div>
+            <div class="filter-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adv-fuel">Vrsta goriva</label>
+                        <select id="adv-fuel" name="fuel">
+                            <option value="">Vse</option>
+                            <option value="Bencin">Bencin</option>
+                            <option value="Dizel">Dizel</option>
+                            <option value="Elektrika">Elektrika</option>
+                            <option value="Hibrid">Hibrid</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-gearbox">Menjalnik</label>
+                        <select id="adv-gearbox" name="gearbox">
+                            <option value="">Vse</option>
+                            <option>Ročni</option>
+                            <option>Avtomatski</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" id="electric-options-row" style="margin-top: 1.5rem;">
+                    <div class="form-group">
+                        <label for="adv-range">Minimalni domet (km)</label>
+                        <input type="number" id="adv-range" name="range" placeholder="npr. 300">
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-battery">Min. kapaciteta baterije (kWh)</label>
+                        <input type="number" id="adv-battery" name="battery" placeholder="npr. 50">
+                    </div>
+                </div>
+                <fieldset class="form-group" id="hybrid-options-row" style="border: none; padding: 0; margin-top: 1.5rem;">
+                    <legend>Tip hibridnega pogona</legend>
+                    <div class="checkbox-options" style="margin-top: 0.5rem;">
+                        <label for="adv-hybrid-phev"><input type="radio" id="adv-hybrid-phev" name="hybrid_type" value="PHEV"> Priključni hibrid (PHEV)</label>
+                        <label for="adv-hybrid-mild"><input type="radio" id="adv-hybrid-mild" name="hybrid_type" value="Mild"> Blagi hibrid (Mild)</label>
+                    </div>
+                </fieldset>
+            </div>
+        </section>
+        
+        <div class="search-actions">
+            <button class="btn btn-secondary" type="reset">Ponastavi</button>
+            <button class="btn btn-primary" type="submit">Prikaži rezultate</button>
         </div>
+    </form>
 </div>
