@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderListings(listings) {
         listingsContainer.innerHTML = "";
         noListingsMessage.style.display = listings.length === 0 ? "block" : "none";
-        
+
         const startIndex = (currentPage - 1) * listingsPerPage;
         const endIndex = startIndex + listingsPerPage;
         const paginatedListings = listings.slice(startIndex, endIndex);
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.stopPropagation();
                 toggleFavorite(listing.id);
             });
-            
+
             listingsContainer.appendChild(card);
         });
         updateCompareUI();
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
             paginationContainer.appendChild(pageButton);
         }
     }
-    
+
     function handleFilterChange() {
         currentPage = 1;
         const simpleFilters = getSimpleFilterValues();
@@ -142,6 +142,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (criteria.fuel) filtered = filtered.filter(l => l.fuel === criteria.fuel);
         if (criteria.gearbox) filtered = filtered.filter(l => l.transmission === criteria.gearbox);
         if (criteria.region) filtered = filtered.filter(l => l.region === criteria.region);
+        if (criteria.seatMaterial) filtered = filtered.filter(l => l.seatMaterial === criteria.seatMaterial);
+
+        // Filter za hibrid tipe
+        if (criteria.hybridTypes && criteria.hybridTypes.length > 0) {
+            filtered = filtered.filter(l => {
+                return l.hybridType && criteria.hybridTypes.includes(l.hybridType);
+            });
+        }
+
         return filtered;
     }
 
@@ -248,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         currentFilteredListings = allListings;
     }
-    
+
     displayPage(currentFilteredListings);
     updateCompareUI();
     updateFavoritesUI();

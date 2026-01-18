@@ -90,6 +90,30 @@
                                     <option value="Savinjska">Savinjska</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="seat-material" data-i18n-key="form_seat_material">Material sedežev</label>
+                                <select id="seat-material" name="seatMaterial">
+                                    <option value="" data-i18n-key="all_materials">Vse</option>
+                                    <option value="Blago">Blago</option>
+                                    <option value="Umetno usnje">Umetno usnje</option>
+                                    <option value="Prava usnja">Prava usnja</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row" id="hybrid-options" style="display: none;">
+                            <div class="form-group">
+                                <label style="font-weight: 500; margin-bottom: 0.5rem;">Tip hibrida</label>
+                                <div class="checkbox-options">
+                                    <label>
+                                        <input type="checkbox" id="phfv" name="hybridType" value="PHFV">
+                                        <span>PHFV (Plug-in Hybrid)</span>
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="mild-hybrid" name="hybridType" value="Mild Hybrid">
+                                        <span>Mild Hybrid</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>

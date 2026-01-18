@@ -3,20 +3,27 @@
     <form id="listingForm">
         <div class="form-group">
             <label for="title" data-i18n-key="form_listing_title">Naslov oglasa:</label>
-            <input type="text" id="title" name="title" required data-i18n-key="form_listing_title_placeholder" data-i18n-target="placeholder">
+            <input type="text" id="title" name="title" required data-i18n-key="form_listing_title_placeholder"
+                data-i18n-target="placeholder">
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label for="brand" data-i18n-key="form_brand">Znamka vozila:</label>
-                <select id="brand" name="brand" required><option value="" data-i18n-key="form_select_brand">Izberi znamko</option></select>
+                <select id="brand" name="brand" required>
+                    <option value="" data-i18n-key="form_select_brand">Izberi znamko</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="model" data-i18n-key="form_model">Model:</label>
-                <select id="model" name="model" required disabled><option value="" data-i18n-key="select_brand_first">Najprej izberi znamko</option></select>
+                <select id="model" name="model" required disabled>
+                    <option value="" data-i18n-key="select_brand_first">Najprej izberi znamko</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="type" data-i18n-key="form_type">Tip/različica:</label>
-                <select id="type" name="type" required disabled><option value="" data-i18n-key="select_model_first">Najprej izberi model</option></select>
+                <select id="type" name="type" required disabled>
+                    <option value="" data-i18n-key="select_model_first">Najprej izberi model</option>
+                </select>
             </div>
         </div>
         <div class="form-row">
@@ -26,7 +33,9 @@
             </div>
             <div class="form-group">
                 <label for="year" data-i18n-key="form_year">Letnik:</label>
-                <select id="year" name="year" required><option value="" data-i18n-key="form_select_year">Izberi letnik</option></select>
+                <select id="year" name="year" required>
+                    <option value="" data-i18n-key="form_select_year">Izberi letnik</option>
+                </select>
             </div>
         </div>
         <div class="form-row">
@@ -68,6 +77,28 @@
             <div class="form-group">
                 <label for="range" data-i18n-key="form_range">Domet (km):</label>
                 <input type="number" id="range" name="range" min="0">
+            </div>
+        </div>
+        <div class="form-row" id="hybrid-fields" style="display: none;">
+            <div class="form-group">
+                <label for="hybrid-type" data-i18n-key="form_hybrid_type">Tip hibrida:</label>
+                <select id="hybrid-type" name="hybridType">
+                    <option value="">Izberi</option>
+                    <option value="PHFV">PHFV (Plug-in Hybrid)</option>
+                    <option value="Mild Hybrid">Mild Hybrid</option>
+                    <option value="Full Hybrid">Full Hybrid</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="seat-material" data-i18n-key="form_seat_material">Material sedežev:</label>
+                <select id="seat-material" name="seatMaterial" required>
+                    <option value="">Izberi</option>
+                    <option value="Blago">Blago</option>
+                    <option value="Umetno usnje">Umetno usnje</option>
+                    <option value="Prava usnja">Prava usnja</option>
+                </select>
             </div>
         </div>
         <label for="phone" data-i18n-key="form_phone_number_optional">Telefonska številka (neobvezno):</label>
