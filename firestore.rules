@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Users ─────────────────────────────────────────────────────────────────
+    match /users/{userId} {
+      // Anyone can read public user profiles
+      allow read: if true;
+      // Only the user themselves can write their own doc
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ── Listings ──────────────────────────────────────────────────────────────
+    match /listings/{listingId} {
+      // Public read
+      allow read: if true;
+      // Authenticated users can create
+      allow create: if request.auth != null
+        && request.resource.data.authorId == request.auth.uid;
+      // Only author can update or delete
+      allow update, delete: if request.auth != null
+        && resource.data.authorId == request.auth.uid;
+    }
+
+    // ── Garages (virtual garage per user) ────────────────────────────────────
+    match /garages/{userId}/cars/{carId} {
+      // Public read if isPublic == true, otherwise only owner
+      allow read: if resource.data.isPublic == true
+        || (request.auth != null && request.auth.uid == userId);
+      // Only owner can write
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ── Reviews ───────────────────────────────────────────────────────────────
+    match /reviews/{reviewId} {
+      allow read: if true;
+      // Authenticated, not reviewing yourself
+      allow create: if request.auth != null
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.sellerId != request.auth.uid;
+      // Author can update their own review
+      allow update: if request.auth != null
+        && resource.data.authorId == request.auth.uid;
+      allow delete: if request.auth != null
+        && resource.data.authorId == request.auth.uid;
+    }
+
+    // ── Saved Searches ────────────────────────────────────────────────────────
+    match /savedSearches/{searchId} {
+      // Only the owner can read/write
+      allow read, write: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+    }
+
+    // ── Deny everything else ──────────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

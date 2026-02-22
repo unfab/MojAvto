@@ -1,0 +1,22 @@
+{
+  "name": "mojavto",
+  "version": "1.0.0",
+  "description": "Slovenian car marketplace",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "firebase": "^11.0.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unfab/MojAvto.git"
+  },
+  "license": "ISC"
+}

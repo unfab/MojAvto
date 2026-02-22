@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="sl">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MojAvto.si</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/auth.css" />
-    <link rel="stylesheet" href="css/listing.css" />
-    </head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MojAvto.si — Slovenian car marketplace. Buy, sell and showcase your car." />
+  <title>MojAvto.si — Prodaja in nakup avtomobilov</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <!-- Global CSS -->
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/auth.css" />
+
+</head>
+
 <body>
-    <div id="header"></div>
+  <!-- Header injected by header.js -->
+  <div id="header"></div>
 
-    <main id="app-container"></main>
+  <!-- SPA view container -->
+  <main id="app-container"></main>
 
-    <div id="footer"></div>
+  <!-- Footer injected by footer.js -->
+  <div id="footer"></div>
 
-    <script src="js/i18n.js"></script>
-    <script src="js/router.js" type="module"></script>
+  <!-- App entry point (Vite uses this) -->
+  <script type="module" src="/main.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,2 @@
+﻿Need to install the following packages:
+vite@7.3.1

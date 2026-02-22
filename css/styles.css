@@ -14,97 +14,269 @@ body {
   /* Če nočeš horizontalnega centriranja, ne dodajaj align-items */
 }
 
-/* Header */
+/* ── Header ──────────────────────────────────────────────────────────────── */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #ffffff;
-  padding: 12px 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  position: relative;
-  z-index: 10;
+  padding: 0 24px;
+  height: 64px;
+  box-shadow: 0 1px 0 #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
+/* Logo */
 .logo a {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.4rem;
+  font-weight: 800;
   text-decoration: none;
   color: #111827;
+  letter-spacing: -0.5px;
 }
 
-nav {
+.logo-dot {
+  color: #f97316;
+}
+
+/* Nav */
+nav#navLinks {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
 }
 
-nav a {
+nav#navLinks a {
   text-decoration: none;
   color: #374151;
   font-weight: 500;
-  transition: color 0.2s ease-in-out;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
 }
 
-nav a:hover {
-  color: #1f2937;
+nav#navLinks a:hover {
+  background: #f3f4f6;
+  color: #111827;
 }
 
-/* User menu dropdown */
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: #f97316;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #ea6c10;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #374151;
+  border: 1.5px solid #d1d5db;
+}
+
+.btn-outline:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btn-sm {
+  padding: 7px 14px;
+  font-size: 0.875rem;
+}
+
+.btn-md {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+}
+
+/* User menu */
 #userMenu {
   position: relative;
   display: inline-block;
 }
 
-#userDropdown {
+.user-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.2s;
+}
+
+.user-menu-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.dropdown-menu {
   display: none;
   position: absolute;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  padding: 8px;
-  margin-top: 5px;
   right: 0;
-  min-width: 160px;
+  top: calc(100% + 6px);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 6px;
+  min-width: 180px;
   z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+  animation: dropdownIn 0.15s ease;
 }
 
-#userDropdown a {
+.dropdown-menu.open {
   display: block;
-  padding: 8px 12px;
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
   text-decoration: none;
-  color: #111827;
-  border-radius: 4px;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.15s;
 }
 
-#userDropdown a:hover {
-  background-color: #f3f4f6;
+.dropdown-menu a:hover {
+  background: #f3f4f6;
 }
 
-/* Burger menu (mobilna navigacija) */
+.dropdown-divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 4px 0;
+}
+
+.dropdown-logout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ef4444;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.dropdown-logout:hover {
+  background: #fef2f2;
+}
+
+/* Burger */
 .burger {
   display: none;
-  font-size: 24px;
   background: none;
   border: none;
+  font-size: 1.3rem;
   cursor: pointer;
+  color: #374151;
+  padding: 6px;
 }
 
 @media (max-width: 768px) {
   .burger {
-    display: inline-block;
+    display: block;
   }
 
-  #navLinks {
+  header {
+    position: sticky;
+    top: 0;
+  }
+
+  nav#navLinks {
     display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
     flex-direction: column;
-    gap: 10px;
+    align-items: stretch;
+    padding: 12px;
+    gap: 4px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   }
 
-  #navLinks.open {
+  nav#navLinks.open {
     display: flex;
   }
+
+  nav#navLinks a {
+    padding: 10px 14px;
+  }
 }
+
 
 /* Main container in vsebina */
 main {
@@ -123,7 +295,7 @@ main {
   background: #fff;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 25px;
   justify-content: center;
 }
@@ -161,7 +333,7 @@ main {
 .card {
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -220,8 +392,9 @@ main {
   height: auto;
   object-fit: cover;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
 .image-gallery {
   position: relative;
   max-width: 600px;
@@ -279,6 +452,7 @@ main {
 .thumbnails img.active {
   border-color: #3b82f6;
 }
+
 /* ... obstoječi stili ... */
 
 /* Stil za gumb za primerjavo na kartici */
@@ -319,7 +493,8 @@ main {
 }
 
 .compare-btn.selected {
-  background-color: #f97316; /* Oranžna barva iz vašega primera */
+  background-color: #f97316;
+  /* Oranžna barva iz vašega primera */
   color: white;
   border-color: #f97316;
 }
@@ -334,120 +509,128 @@ main {
   background-color: #f3f4f6;
   transition: background-color 0.2s;
 }
+
 #compareLink:hover {
-    background-color: #e5e7eb;
+  background-color: #e5e7eb;
 }
+
 /* ... obstoječi stili ... */
 
 /* Stili za paginacijo */
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2rem;
 }
 
 .pagination button {
-    background-color: #fff;
-    border: 1px solid #e5e7eb;
-    color: #374151;
-    font-weight: 500;
-    cursor: pointer;
-    border-radius: 6px;
-    min-width: 40px;
-    height: 40px;
-    padding: 0.5rem;
-    transition: all 0.2s ease-in-out;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0.5rem;
+  transition: all 0.2s ease-in-out;
 }
 
 .pagination button:hover {
-    background-color: #f3f4f6;
-    border-color: #d1d5db;
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
 }
 
 .pagination button.active {
-    background-color: #f97316; /* Uporabimo oranžno barvo za poudarek */
-    border-color: #f97316;
-    color: #fff;
-    font-weight: bold;
+  background-color: #f97316;
+  /* Uporabimo oranžno barvo za poudarek */
+  border-color: #f97316;
+  color: #fff;
+  font-weight: bold;
 }
 
 .pagination button:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
+
 /* ... obstoječi stili ... */
 
 /* Stil za gumb za priljubljene na kartici */
 .fav-btn {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    color: #333;
-    transition: all 0.2s ease-in-out;
-    backdrop-filter: blur(2px);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #333;
+  transition: all 0.2s ease-in-out;
+  backdrop-filter: blur(2px);
 }
 
 .fav-btn:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .fav-btn.favorited {
-    color: #ef4444; /* Rdeča barva za všečkan oglas */
+  color: #ef4444;
+  /* Rdeča barva za všečkan oglas */
 }
+
 /* ... obstoječi stili ... */
 
 /* Stili za nogo strani (Footer) */
 footer {
-    background-color: #1f2937; /* Temnejša barva za kontrast */
-    color: #e5e7eb;
-    padding: 2rem 1rem;
-    margin-top: auto; /* Potisne nogo na dno, če je vsebina kratka */
+  background-color: #1f2937;
+  /* Temnejša barva za kontrast */
+  color: #e5e7eb;
+  padding: 2rem 1rem;
+  margin-top: auto;
+  /* Potisne nogo na dno, če je vsebina kratka */
 }
 
 .footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
 }
 
 .footer-links a {
-    color: #d1d5db;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
+  color: #d1d5db;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
 }
 
 .footer-links a:hover {
-    color: #ffffff;
-    text-decoration: underline;
+  color: #ffffff;
+  text-decoration: underline;
 }
 
 .footer-copyright {
-    font-size: 0.9rem;
-    color: #9ca3af;
-    border-top: 1px solid #374151;
-    padding-top: 1.5rem;
-    margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+  border-top: 1px solid #374151;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
 }
