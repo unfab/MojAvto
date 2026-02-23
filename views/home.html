@@ -1,0 +1,205 @@
+<div class="home-container">
+    <div class="home-header">
+        <h1>Naj tvoj naslednji avto najde tebe</h1>
+        <p>Poiščite najboljše zase na največjem slovenskem portalu za vozila.</p>
+    </div>
+
+    <div class="quick-links-container">
+        <a href="#/search-results" class="quick-link-btn" id="quick-link-new">
+            <i class="fas fa-star"></i>
+            <span>Novi avtomobili</span>
+        </a>
+        <a href="#/search-results" class="quick-link-btn" id="quick-link-verified">
+            <i class="fas fa-check-circle"></i>
+            <span>Preverjena vozila</span>
+        </a>
+        <a href="#/search-results" class="quick-link-btn" id="quick-link-family">
+            <i class="fas fa-users"></i>
+            <span>Družinski avtomobili</span>
+        </a>
+    </div>
+
+    <div class="search-box-container">
+        <form id="homeSearchForm" class="search-box compact">
+            <div class="vehicle-tabs">
+                <button type="button" class="tab-btn active" title="Avtomobili"><i class="fas fa-car-side"></i></button>
+                <button type="button" class="tab-btn" title="Motorji"><i class="fas fa-motorcycle"></i></button>
+                <button type="button" class="tab-btn" title="Gospodarska vozila"><i class="fas fa-truck"></i></button>
+            </div>
+            <div class="search-form">
+                <div class="form-grid four-columns">
+                    <div class="form-group">
+                        <label for="home-make">Znamka</label>
+                        <select id="home-make" name="make"><option value="">Vse znamke</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="home-model">Model</label>
+                        <select id="home-model" name="model" disabled><option value="">Vsi modeli</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="home-reg-from">1. registracija od</label>
+                        <select id="home-reg-from" name="yearFrom"><option value="">Vse</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="home-price-to">Cena do</label>
+                        <input type="number" id="home-price-to" name="priceTo" placeholder="Neomejena">
+                    </div>
+                </div>
+                <div class="form-grid three-columns" style="margin-top: 1rem;">
+                    <div class="form-group">
+                        <label for="home-fuel-type">Tip goriva</label>
+                        <select id="home-fuel-type" name="fuel">
+                            <option value="">Vse</option>
+                            <option>Bencin</option>
+                            <option>Dizel</option>
+                            <option>Elektrika</option>
+                            <option>Hibrid</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="home-mileage-to">Kilometri do</label>
+                        <input type="number" id="home-mileage-to" name="mileageTo" placeholder="Neomejeno">
+                    </div>
+                    <div class="form-group">
+                        <label for="home-region">Regija Slovenije</label>
+                        <select id="home-region" name="region"><option value="">Celotna Slovenija</option></select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <a href="#/advanced-search" class="more-filters-btn">Napredno iskanje</a>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-search"></i> Poišči ponudbe
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="ad-banner-container">
+    <div class="ad-placeholder">
+        <span>Prostor za oglas (728px x 90px)</span>
+    </div>
+</div>
+
+<div class="page-container" style="margin-top: 2rem; flex-direction: column;">
+    <section id="featured-section" class="carousel-section" style="display: none;">
+        <h2 data-i18n-key="featured_title">Oglasi v izpostavi</h2>
+        <div class="carousel-wrapper">
+            <button class="carousel-btn prev" id="featured-prev-btn" aria-label="Prejšnji oglas">&#10094;</button>
+            <div class="carousel-track-container">
+                <div class="carousel-track" id="featured-container">
+                </div>
+            </div>
+            <button class="carousel-btn next" id="featured-next-btn" aria-label="Naslednji oglas">&#10095;</button>
+        </div>
+    </section>
+</div>
+
+<div class="page-container" style="margin-top: 2rem; flex-direction: column;">
+    <section class="popular-brands-section">
+        <h2 data-i18n-key="popular_brands_title">Priljubljene znamke</h2>
+        <div class="brands-grid">
+            <a href="#/search-results" class="brand-card" data-brand="Volkswagen">
+                <img src="slike/icons/favicon-32x32.png" alt="Volkswagen logo">
+                <span>Volkswagen</span>
+            </a>
+            <a href="#/search-results" class="brand-card" data-brand="BMW">
+                <img src="slike/icons/favicon-32x32.png" alt="BMW logo">
+                <span>BMW</span>
+            </a>
+            <a href="#/search-results" class="brand-card" data-brand="Audi">
+                <img src="slike/icons/favicon-32x32.png" alt="Audi logo">
+                <span>Audi</span>
+            </a>
+            <a href="#/search-results" class="brand-card" data-brand="Škoda">
+                <img src="slike/icons/favicon-32x32.png" alt="Škoda logo">
+                <span>Škoda</span>
+            </a>
+            <a href="#/search-results" class="brand-card" data-brand="Renault">
+                <img src="slike/icons/favicon-32x32.png" alt="Renault logo">
+                <span>Renault</span>
+            </a>
+            <a href="#/search-results" class="brand-card" data-brand="Mercedes-Benz">
+                <img src="slike/icons/favicon-32x32.png" alt="Mercedes-Benz logo">
+                <span>Mercedes-Benz</span>
+            </a>
+        </div>
+    </section>
+</div>
+
+<div class="page-container" style="margin-top: 2rem; flex-direction: column;">
+    <section id="recently-viewed-section" class="carousel-section" style="display: none;">
+        <h2 data-i18n-key="recently_viewed_title">Nazadnje ogledano</h2>
+        <div class="carousel-wrapper">
+            <button class="carousel-btn prev" id="recent-prev-btn" aria-label="Prejšnji oglas">&#10094;</button>
+            <div class="carousel-track-container">
+                <div class="carousel-track" id="recently-viewed-container">
+                </div>
+            </div>
+            <button class="carousel-btn next" id="recent-next-btn" aria-label="Naslednji oglas">&#10095;</button>
+        </div>
+    </section>
+</div>
+
+<div class="page-container" style="margin-top: 2rem; flex-direction: column;">
+    <section id="popular-section" class="carousel-section" style="display: none;">
+        <h2 data-i18n-key="popular_title">Priljubljeno med uporabniki</h2>
+        <div class="carousel-wrapper">
+            <button class="carousel-btn prev" id="popular-prev-btn" aria-label="Prejšnji oglas">&#10094;</button>
+            <div class="carousel-track-container">
+                <div class="carousel-track" id="popular-container">
+                </div>
+            </div>
+            <button class="carousel-btn next" id="popular-next-btn" aria-label="Naslednji oglas">&#10095;</button>
+        </div>
+    </section>
+</div>
+
+<div class="page-container" style="margin-top: 2rem; flex-direction: column;">
+    <section id="newest-section" class="carousel-section" style="display: none;">
+        <h2 data-i18n-key="newest_title">Novo v ponudbi</h2>
+        <div class="carousel-wrapper">
+            <button class="carousel-btn prev" id="newest-prev-btn" aria-label="Prejšnji oglas">&#10094;</button>
+            <div class="carousel-track-container">
+                <div class="carousel-track" id="newest-container">
+                </div>
+            </div>
+            <button class="carousel-btn next" id="newest-next-btn" aria-label="Naslednji oglas">&#10095;</button>
+        </div>
+    </section>
+</div>
+
+<div class="page-container" style="margin-top: 2rem; flex-direction: column;">
+    <section class="news-section">
+        <h2 data-i18n-key="news_title">Novice in nasveti</h2>
+        <div class="news-grid">
+            <a href="#/blog/kako-izbrati-druzinski-avto" class="news-card">
+                <img src="slike/icons/favicon-32x32.png" alt="Družinski avto">
+                <div class="page-container" style="margin-top: 2rem; flex-direction: column;">
+                    <section class="news-section">
+                        <h2 data-i18n-key="news_title">Novice in nasveti</h2>
+                        <div class="news-grid">
+                            </div>
+                    </section>
+                </div>
+            </a>
+            <a href="#/blog/test-novi-elektricni-suv" class="news-card">
+                <img src="slike/icons/favicon-32x32.png" alt="Električni SUV">
+                <div class="news-card-content">
+                    <h3>Test: Novi električni SUV</h3>
+                    <p>Preizkusili smo najnovejši električni SUV na trgu. Preverite, kako se obnese v resničnem svetu.</p>
+                    <span class="read-more-btn">Preberi več <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+            <a href="#/blog/5-nasvetov-za-vzdrzevanje" class="news-card">
+                <img src="slike/icons/favicon-32x32.png" alt="Vzdrževanje avtomobila">
+                <div class="news-card-content">
+                    <h3>5 nasvetov za vzdrževanje pozimi</h3>
+                    <p>S preprostimi koraki poskrbite, da bo vaše vozilo varno in zanesljivo preživelo zimske razmere.</p>
+                    <span class="read-more-btn">Preberi več <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+        </div>
+    </section>
+</div>
