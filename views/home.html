@@ -1,43 +1,56 @@
 <div class="home-container">
-    <div class="home-header">
-        <h1>Naj tvoj naslednji avto najde tebe</h1>
-        <p>Poiščite najboljše zase na največjem slovenskem portalu za vozila.</p>
+    <div class="glass-hero">
+        <h1 class="hero-title">
+            Naj tvoj naslednji avto <br/>
+            <span class="text-gradient">najde tebe</span>
+        </h1>
+        <p class="hero-subtitle">Poiščite najboljše zase na največjem slovenskem portalu za vozila.</p>
     </div>
 
-    <div class="quick-links-container">
+    <div class="home-tabs-container">
+        <div class="glass-card rounded-pill tabs-glass">
+             <button type="button" class="tab-btn active" title="Avtomobili"><i data-lucide="car"></i> <span class="hidden-md">Avtomobili</span></button>
+             <button type="button" class="tab-btn" title="Motorji"><i data-lucide="bike"></i> <span class="hidden-md">Motorji</span></button>
+             <button type="button" class="tab-btn" title="Gospodarska vozila"><i data-lucide="truck"></i> <span class="hidden-md">Gospodarska</span></button>
+        </div>
+    </div>
+
+    <!-- Quick Links (could be styled better or hidden, keeping for now) -->
+    <div class="quick-links-container" style="display:none;">
         <a href="#/search-results" class="quick-link-btn" id="quick-link-new">
             <i class="fas fa-star"></i>
             <span>Novi avtomobili</span>
         </a>
-        <a href="#/search-results" class="quick-link-btn" id="quick-link-verified">
-            <i class="fas fa-check-circle"></i>
-            <span>Preverjena vozila</span>
-        </a>
-        <a href="#/search-results" class="quick-link-btn" id="quick-link-family">
-            <i class="fas fa-users"></i>
-            <span>Družinski avtomobili</span>
-        </a>
     </div>
 
     <div class="search-box-container">
-        <form id="homeSearchForm" class="search-box compact">
-            <div class="vehicle-tabs">
-                <button type="button" class="tab-btn active" title="Avtomobili"><i class="fas fa-car-side"></i></button>
-                <button type="button" class="tab-btn" title="Motorji"><i class="fas fa-motorcycle"></i></button>
-                <button type="button" class="tab-btn" title="Gospodarska vozila"><i class="fas fa-truck"></i></button>
-            </div>
+        <form id="homeSearchForm" class="search-box compact glass-card">
+            <div class="vehicle-tabs" style="display:none;"></div>
             <div class="search-form">
-                <div class="form-grid four-columns">
+                <div class="form-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
                     <div class="form-group">
                         <label for="home-make">Znamka</label>
                         <select id="home-make" name="make"><option value="">Vse znamke</option></select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="group-home-model">
                         <label for="home-model">Model</label>
                         <select id="home-model" name="model" disabled><option value="">Vsi modeli</option></select>
                     </div>
+                    <div class="form-group" id="group-home-bodyType">
+                        <label for="home-bodyType">Karoserija</label>
+                        <select id="home-bodyType" name="bodyType">
+                            <option value="">Vse oblike</option>
+                            <option value="Limuzina">Limuzina</option>
+                            <option value="Kombilimuzina">Kombilimuzina / Hatchback</option>
+                            <option value="Karavan">Karavan</option>
+                            <option value="Terensko">Terensko vozilo / SUV</option>
+                            <option value="Enoprostorec">Enoprostorec</option>
+                            <option value="Kabriolet">Kabriolet</option>
+                            <option value="Coupe">Coupe</option>
+                        </select>
+                    </div>
                     <div class="form-group">
-                        <label for="home-reg-from">1. registracija od</label>
+                        <label for="home-reg-from">1. reg. od</label>
                         <select id="home-reg-from" name="yearFrom"><option value="">Vse</option></select>
                     </div>
                     <div class="form-group">
@@ -101,27 +114,27 @@
         <h2 data-i18n-key="popular_brands_title">Priljubljene znamke</h2>
         <div class="brands-grid">
             <a href="#/search-results" class="brand-card" data-brand="Volkswagen">
-                <img src="slike/icons/favicon-32x32.png" alt="Volkswagen logo">
+                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
                 <span>Volkswagen</span>
             </a>
             <a href="#/search-results" class="brand-card" data-brand="BMW">
-                <img src="slike/icons/favicon-32x32.png" alt="BMW logo">
+                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
                 <span>BMW</span>
             </a>
             <a href="#/search-results" class="brand-card" data-brand="Audi">
-                <img src="slike/icons/favicon-32x32.png" alt="Audi logo">
+                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
                 <span>Audi</span>
             </a>
             <a href="#/search-results" class="brand-card" data-brand="Škoda">
-                <img src="slike/icons/favicon-32x32.png" alt="Škoda logo">
+                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
                 <span>Škoda</span>
             </a>
             <a href="#/search-results" class="brand-card" data-brand="Renault">
-                <img src="slike/icons/favicon-32x32.png" alt="Renault logo">
+                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
                 <span>Renault</span>
             </a>
             <a href="#/search-results" class="brand-card" data-brand="Mercedes-Benz">
-                <img src="slike/icons/favicon-32x32.png" alt="Mercedes-Benz logo">
+                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
                 <span>Mercedes-Benz</span>
             </a>
         </div>
@@ -175,29 +188,33 @@
         <h2 data-i18n-key="news_title">Novice in nasveti</h2>
         <div class="news-grid">
             <a href="#/blog/kako-izbrati-druzinski-avto" class="news-card">
-                <img src="slike/icons/favicon-32x32.png" alt="Družinski avto">
-                <div class="page-container" style="margin-top: 2rem; flex-direction: column;">
-                    <section class="news-section">
-                        <h2 data-i18n-key="news_title">Novice in nasveti</h2>
-                        <div class="news-grid">
-                            </div>
-                    </section>
+                <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #e0e7ff, #c7d2fe); display:flex; align-items:center; justify-content:center;">
+                    <i data-lucide="users" style="color:#6366f1; width:64px; height:64px;"></i>
+                </div>
+                <div class="news-card-content">
+                    <h3>Kako izbrati popoln družinski avto?</h3>
+                    <p>Preverite naš vodnik za nakup družinskega vozila, ki bo izpolnil vse vaše potrebe in zagotovil varnost vaših najdražjih.</p>
+                    <span class="read-more-btn">Preberi več <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></span>
                 </div>
             </a>
             <a href="#/blog/test-novi-elektricni-suv" class="news-card">
-                <img src="slike/icons/favicon-32x32.png" alt="Električni SUV">
+                <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); display:flex; align-items:center; justify-content:center;">
+                    <i data-lucide="battery-charging" style="color:#10b981; width:64px; height:64px;"></i>
+                </div>
                 <div class="news-card-content">
                     <h3>Test: Novi električni SUV</h3>
                     <p>Preizkusili smo najnovejši električni SUV na trgu. Preverite, kako se obnese v resničnem svetu.</p>
-                    <span class="read-more-btn">Preberi več <i class="fas fa-arrow-right"></i></span>
+                    <span class="read-more-btn">Preberi več <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></span>
                 </div>
             </a>
             <a href="#/blog/5-nasvetov-za-vzdrzevanje" class="news-card">
-                <img src="slike/icons/favicon-32x32.png" alt="Vzdrževanje avtomobila">
+                <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #fef3c7, #fde68a); display:flex; align-items:center; justify-content:center;">
+                    <i data-lucide="wrench" style="color:#f59e0b; width:64px; height:64px;"></i>
+                </div>
                 <div class="news-card-content">
                     <h3>5 nasvetov za vzdrževanje pozimi</h3>
                     <p>S preprostimi koraki poskrbite, da bo vaše vozilo varno in zanesljivo preživelo zimske razmere.</p>
-                    <span class="read-more-btn">Preberi več <i class="fas fa-arrow-right"></i></span>
+                    <span class="read-more-btn">Preberi več <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></span>
                 </div>
             </a>
         </div>

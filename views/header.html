@@ -1,27 +1,45 @@
-<header>
-  <div class="header-container">
-    <div class="logo"><a href="index.html">MojAvto.si</a></div>
-    <button id="burgerBtn" class="burger">☰</button>
-    <nav id="navLinks">
-      <a href="index.html" data-i18n-key="nav_home">Domov</a>
-      <a href="advanced-search.html" data-i18n-key="nav_advanced_search">Napredno iskanje</a>
-      <a href="about.html" data-i18n-key="nav_about">O nas</a>
-      <a href="contact.html" data-i18n-key="nav_contact">Kontakt</a>
-      <a href="faq.html" data-i18n-key="nav_faq">Pomoč (FAQ)</a>
-      <div class="lang-switcher">
-          <a href="?lang=sl" data-lang="sl">SL</a> | <a href="?lang=en" data-lang="en">EN</a>
+<div class="sticky-nav">
+  <div class="nav-container">
+    <div class="glass-card rounded-pill nav-inner">
+      <!-- Logo -->
+      <a href="/#/" class="logo-text">
+        MojAvto<span class="logo-accent">.si</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="desktop-links">
+        <a href="#/advanced-search" class="nav-pill" data-i18n-key="nav_advanced_search">Napredno iskanje</a>
+        <a href="#/about" class="nav-pill" data-i18n-key="nav_about">O nas</a>
+        <a href="#/contact" class="nav-pill" data-i18n-key="nav_contact">Kontakt</a>
+        <a href="#/faq" class="nav-pill" data-i18n-key="nav_faq">Pomoč</a>
+        <a href="#/compare" id="compareLink" class="nav-pill">
+          <i data-lucide="scale"></i> <span data-i18n-key="nav_compare">Primerjava</span>
+        </a>
       </div>
-      <span id="userMenu" style="display:none;">
-        <button id="userDropdownBtn" data-i18n-key="my_account">Moj račun ▼</button>
-        <div id="userDropdown">
-          <a href="profile.html" id="profileLink" data-i18n-key="my_profile">Moj profil</a>
-          <a href="dashboard.html" id="dashboardLink" style="display: none;" data-i18n-key="dashboard_link">Dashboard</a>
-          <a href="create_listing.html" data-i18n-key="create_listing">Ustvari oglas</a>
-          <a href="admin.html" id="adminLink" style="display: none;" data-i18n-key="administration">Administracija</a>
-          <a href="#" id="logoutBtn" data-i18n-key="logout">Odjava</a>
+
+      <!-- Auth and Language -->
+      <div class="nav-actions">
+        <!-- Language Switcher -->
+        <div class="lang-switcher text-sm font-medium">
+          <a href="?lang=sl" data-lang="sl">SL</a> | <a href="?lang=en" data-lang="en">EN</a>
         </div>
-      </span>
-      <a href="login.html" id="loginLink" data-i18n-key="login">Prijava</a>
-    </nav>
+        
+        <span id="userMenu" style="display:none;" class="relative">
+          <button id="userDropdownBtn" class="pill-btn secondary user-btn">
+            <i data-lucide="user"></i><span data-i18n-key="my_account">Moj račun</span>
+          </button>
+          <div id="userDropdown" class="glass-dropdown">
+            <a href="#/profile" id="profileLink" data-i18n-key="my_profile">Moj profil</a>
+            <a href="#/dashboard" id="dashboardLink" style="display: none;" data-i18n-key="dashboard_link">Dashboard</a>
+            <a href="#/create-listing" data-i18n-key="create_listing">Ustvari oglas</a>
+            <a href="#/admin" id="adminLink" style="display: none;" data-i18n-key="administration">Administracija</a>
+            <a href="#" id="logoutBtn" data-i18n-key="logout">Odjava</a>
+          </div>
+        </span>
+        <a href="#/login" id="loginLink" class="nav-login"><i data-lucide="user"></i> Prijava</a>
+        <a href="#/register" class="pill-btn primary btn-sm">Registracija</a>
+        <button id="burgerBtn" class="burger-btn hidden-md"><i data-lucide="menu"></i></button>
+      </div>
+    </div>
   </div>
-</header>
+</div>

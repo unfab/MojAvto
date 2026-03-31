@@ -1,63 +1,145 @@
-<div class="search-container" style="max-width:1200px; margin:2rem auto; padding:0 1rem;">
-    <h1>Napredno iskanje</h1>
-    <form id="advancedSearchForm">
-        <section class="filter-section">
-            <h3><i class="fas fa-car"></i> Osnovni podatki</h3>
+<div class="search-container" style="max-width:1000px; margin:3rem auto; padding:0 1rem;">
+    <h1 class="hero-title text-center" style="font-size: 2.5rem; margin-bottom: 2rem;">Napredno <span class="text-gradient">iskanje</span></h1>
+    
+    <!-- Vehicle Type Segmented Control -->
+    <div class="glass-tabs" style="display:flex; justify-content:center; gap:0.5rem; margin-bottom:2rem; background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); padding:0.5rem; border-radius:99px; width:fit-content; margin-inline:auto;">
+        <button type="button" class="tab-btn active" title="Avtomobili" style="padding:0.75rem 1.5rem; border-radius:99px; border:none; background:white; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:0.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.05); transition:all 0.2s;"><i data-lucide="car"></i> Avtomobili</button>
+        <button type="button" class="tab-btn" title="Motorji" style="padding:0.75rem 1.5rem; border-radius:99px; border:none; background:transparent; color:#6b7280; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:0.5rem; transition:all 0.2s;"><i data-lucide="bike"></i> Motorji</button>
+        <button type="button" class="tab-btn" title="Gospodarska vozila" style="padding:0.75rem 1.5rem; border-radius:99px; border:none; background:transparent; color:#6b7280; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:0.5rem; transition:all 0.2s;"><i data-lucide="truck"></i> Gospodarska</button>
+    </div>
+
+    <form id="advancedSearchForm" class="glass-card" style="padding: 2.5rem; border-radius: 1.5rem;">
+        
+        <section class="filter-section" style="margin-bottom: 2.5rem;">
+            <h3 style="margin-bottom: 1.5rem; color: var(--color-primary-start); font-size: 1.25rem; font-weight:600;"><i data-lucide="car-front"></i> Osnovni podatki</h3>
             <div class="filter-content">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="make">Znamka</label>
-                        <select id="make" name="make">
+                <!-- 3-Tier Hierarchy (Make -> Model -> Variant) -->
+                <div class="form-row" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom:2rem;">
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="make" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Znamka</label>
+                        <select id="make" name="make" class="glass-select" style="padding: 0.85rem; border-radius: 0.75rem; border: 1px solid #d1d5db; background: rgba(255,255,255,0.7); outline:none; font-size:1rem; cursor:pointer;">
                             <option value="">Vse znamke</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="model">Model</label>
-                        <select id="model" name="model" disabled>
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="model" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Model</label>
+                        <select id="model" name="model" disabled class="glass-select" style="padding: 0.85rem; border-radius: 0.75rem; border: 1px solid #d1d5db; background: rgba(255,255,255,0.7); outline:none; font-size:1rem; cursor:pointer;">
                             <option value="">Vsi modeli</option>
                         </select>
                     </div>
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="variant" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Različica</label>
+                        <select id="variant" name="variant" disabled class="glass-select" style="padding: 0.85rem; border-radius: 0.75rem; border: 1px solid #d1d5db; background: rgba(255,255,255,0.7); outline:none; font-size:1rem; cursor:pointer;">
+                            <option value="">Vse različice</option>
+                        </select>
+                    </div>
                 </div>
+
+                <!-- Visual Body Type Selection -->
+                <div class="form-group" id="group-bodyType">
+                    <label style="font-weight: 600; font-size: 0.875rem; color:#374151; margin-bottom: 1rem; display:block;">Karoserija</label>
+                    <input type="hidden" name="bodyType" id="bodyTypeHidden" value="">
+                    
+                    <!-- Cars Body Types -->
+                    <div class="body-type-grid" id="grid-cars" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1rem;">
+                        <button type="button" class="body-type-card" data-value="Limuzina">
+                            <i data-lucide="car-front"></i><span>Limuzina</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Kombilimuzina">
+                            <i data-lucide="car"></i><span>Kombi&shy;limuzina</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Karavan">
+                            <i class="fas fa-truck-pickup" style="font-size:24px; color:#4b5563;"></i><span>Karavan</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Terensko">
+                            <i class="fas fa-car-side" style="font-size:24px; color:#4b5563;"></i><span>SUV / Terensko</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Enoprostorec">
+                            <i class="fas fa-shuttle-van" style="font-size:24px; color:#4b5563;"></i><span>Van</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Kabriolet">
+                            <i data-lucide="wind"></i><span>Kabriolet</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Coupe">
+                            <i class="fas fa-car" style="font-size:24px; color:#4b5563;"></i><span>Coupe</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Motorbikes Body Types -->
+                    <div class="body-type-grid" id="grid-motorbikes" style="display:none; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1rem;">
+                        <button type="button" class="body-type-card" data-value="Sport">
+                            <i class="fas fa-motorcycle" style="font-size:24px; color:#4b5563;"></i><span>Športni</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Naked">
+                            <i class="fas fa-motorcycle" style="font-size:24px; color:#4b5563;"></i><span>Naked</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Chopper">
+                            <i class="fas fa-motorcycle" style="font-size:24px; color:#4b5563;"></i><span>Chopper</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Enduro">
+                            <i class="fas fa-motorcycle" style="font-size:24px; color:#4b5563;"></i><span>Enduro</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Scooter">
+                            <i class="fas fa-motorcycle" style="font-size:24px; color:#4b5563;"></i><span>Skuter</span>
+                        </button>
+                    </div>
+
+                    <!-- Commercial Body Types -->
+                    <div class="body-type-grid" id="grid-commercial" style="display:none; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1rem;">
+                        <button type="button" class="body-type-card" data-value="Kombi">
+                            <i class="fas fa-shuttle-van" style="font-size:24px; color:#4b5563;"></i><span>Kombi</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Tovornjak">
+                            <i class="fas fa-truck" style="font-size:24px; color:#4b5563;"></i><span>Tovornjak</span>
+                        </button>
+                        <button type="button" class="body-type-card" data-value="Pick-up">
+                            <i class="fas fa-truck-pickup" style="font-size:24px; color:#4b5563;"></i><span>Pick-up</span>
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </section>
-        <section class="filter-section">
-            <h3><i class="fas fa-sliders-h"></i> Cena, letnik, kilometri</h3>
+
+        <section class="filter-section" style="margin-bottom: 2.5rem;">
+            <h3 style="margin-bottom: 1.5rem; color: var(--color-primary-start); font-size: 1.25rem; font-weight:600;"><i data-lucide="sliders-horizontal"></i> Cena, letnik, prevoženi km</h3>
             <div class="filter-content">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Cena od (€)</label>
-                        <input type="number" name="priceFrom" placeholder="Od">
+                <div class="form-row" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem;">
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label style="font-weight: 600; font-size: 0.875rem; color:#374151;">Cena od (€)</label>
+                        <input type="number" name="priceFrom" placeholder="Od" class="glass-select" style="padding: 0.85rem; border-radius: 0.75rem; border: 1px solid #d1d5db; background: rgba(255,255,255,0.7); outline:none; font-size:1rem;">
                     </div>
-                    <div class="form-group">
-                        <label>Cena do (€)</label>
-                        <input type="number" name="priceTo" placeholder="Do">
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label style="font-weight: 600; font-size: 0.875rem; color:#374151;">Cena do (€)</label>
+                        <input type="number" name="priceTo" placeholder="Do" class="glass-select" style="padding: 0.85rem; border-radius: 0.75rem; border: 1px solid #d1d5db; background: rgba(255,255,255,0.7); outline:none; font-size:1rem;">
                     </div>
-                    <div class="form-group">
-                        <label for="year-from">Letnik od</label>
-                        <select id="year-from" name="yearFrom">
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="year-from" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Letnik od</label>
+                        <select id="year-from" name="yearFrom" class="glass-select" style="padding: 0.85rem; border-radius: 0.75rem; border: 1px solid #d1d5db; background: rgba(255,255,255,0.7); outline:none; font-size:1rem;">
                             <option value="">Vse</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="year-to">Letnik do</label>
-                        <select id="year-to" name="yearTo">
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="year-to" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Letnik do</label>
+                        <select id="year-to" name="yearTo" class="glass-select" style="padding: 0.85rem; border-radius: 0.75rem; border: 1px solid #d1d5db; background: rgba(255,255,255,0.7); outline:none; font-size:1rem;">
                             <option value="">Vse</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="mileage-to">Prevoženi km do</label>
-                        <input type="number" id="mileage-to" name="mileageTo" placeholder="Neomejeno">
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="mileage-to" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Prevoženi km do</label>
+                        <input type="number" id="mileage-to" name="mileageTo" placeholder="Neomejeno" class="glass-select" style="padding: 0.85rem; border-radius: 0.75rem; border: 1px solid #d1d5db; background: rgba(255,255,255,0.7); outline:none; font-size:1rem;">
                     </div>
                 </div>
             </div>
         </section>
-        <section class="filter-section">
-            <h3><i class="fas fa-cogs"></i> Tehnični podatki</h3>
+
+        <section class="filter-section" style="margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1.5rem; color: var(--color-primary-start); font-size: 1.25rem; font-weight:600;"><i data-lucide="settings"></i> Tehnični podatki</h3>
             <div class="filter-content">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="fuel">Vrsta goriva</label>
-                        <select id="fuel" name="fuel">
+                <div class="form-row" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="fuel" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Vrsta goriva</label>
+                        <select id="fuel" name="fuel" class="glass-select" style="padding: 0.85rem; border-radius: 0.75rem; border: 1px solid #d1d5db; background: rgba(255,255,255,0.7); outline:none; font-size:1rem;">
                             <option value="">Vse</option>
                             <option value="Bencin">Bencin</option>
                             <option value="Dizel">Dizel</option>
@@ -66,9 +148,9 @@
                             <option value="Plin">Plin</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="transmission">Menjalnik</label>
-                        <select id="transmission" name="transmission">
+                    <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="transmission" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Menjalnik</label>
+                        <select id="transmission" name="transmission" class="glass-select" style="padding: 0.85rem; border-radius: 0.75rem; border: 1px solid #d1d5db; background: rgba(255,255,255,0.7); outline:none; font-size:1rem;">
                             <option value="">Vse</option>
                             <option value="Ročni">Ročni</option>
                             <option value="Avtomatski">Avtomatski</option>
@@ -78,9 +160,9 @@
             </div>
         </section>
 
-        <div class="search-actions" style="margin-top:20px; text-align:right;">
-            <button type="reset" class="btn btn-secondary" style="margin-right:10px;">Ponastavi filtre</button>
-            <button type="submit" class="btn btn-primary" id="searchBtn">Prikaži rezultate</button>
+        <div class="search-actions" style="margin-top:2rem; display:flex; justify-content: flex-end; gap: 1rem; border-top:1px solid rgba(0,0,0,0.05); padding-top:1.5rem;">
+            <button type="reset" class="pill-btn secondary" style="padding:0.75rem 2rem;">Ponastavi filtre</button>
+            <button type="submit" class="pill-btn primary" id="searchBtn" style="padding:0.75rem 3rem; font-size:1.1rem; font-weight:bold;">Prikaži rezultate</button>
         </div>
     </form>
 </div>

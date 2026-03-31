@@ -20,6 +20,10 @@ export async function initHomePage() {
     } catch (err) {
         console.error("Error loading home page listings:", err);
     }
+
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
 }
 
 function renderListingsSection(containerId, sectionId, listings, hideIfEmpty = false) {
@@ -146,4 +150,25 @@ function setupSearchForm() {
             window.location.hash = '/iskanje';
         });
     }
+
+    // Connect Tab Buttons
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const title = btn.getAttribute('title');
+            const bodyTypeGroup = document.getElementById('group-home-bodyType');
+            
+            if (bodyTypeGroup) {
+                if (title === 'Motorji' || title === 'Gospodarska vozila') {
+                    bodyTypeGroup.style.display = 'none';
+                    if (document.getElementById('home-bodyType')) document.getElementById('home-bodyType').value = "";
+                } else {
+                    bodyTypeGroup.style.display = 'flex';
+                }
+            }
+        });
+    });
 }

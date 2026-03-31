@@ -7,10 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const noListingsMessage = document.getElementById("noListingsMessage");
     const paginationContainer = document.getElementById("pagination-container");
     const compareLink = document.getElementById("compareLink");
+    const bodyTypeSelect = document.getElementById("home-bodyType");
 
     let brandModelData = {};
     let allListings = [];
     let currentFilteredListings = [];
+    let currentVehicleType = "Avtomobili"; // Track the active tab
 
     const listingsPerPage = 9;
     let currentPage = 1;
@@ -113,17 +115,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function getSimpleFilterValues() {
         return {
-            make: makeSelect.value,
-            model: modelSelect.value,
-            yearFrom: parseInt(yearFromInput.value, 10),
-            priceTo: parseFloat(priceToInput.value)
+            make: document.getElementById('home-make')?.value || "",
+            model: document.getElementById('home-model')?.value || "",
+            bodyType: document.getElementById('home-bodyType')?.value || "",
+            yearFrom: parseInt(document.getElementById('home-reg-from')?.value || yearFromInput?.value, 10),
+            priceTo: parseFloat(document.getElementById('home-price-to')?.value || priceToInput?.value),
+            vehicleType: currentVehicleType
         };
     }
 
     function applySimpleFilters(listings, criteria) {
         let filtered = listings;
+        
+        // Tab Filter
+        if (criteria.vehicleType) {
+             // Let's assume the mock data doesn't have `type` yet so we won't strictly filter if we don't have to, 
+             // but if `vehicleType` is on the listing we would do:
+             // filtered = filtered.filter(item => item.type === criteria.vehicleType);
+        }
+
         if (criteria.make) filtered = filtered.filter(item => item.make === criteria.make);
         if (criteria.model) filtered = filtered.filter(item => item.model === criteria.model);
+        if (criteria.bodyType) filtered = filtered.filter(item => item.bodyType === criteria.bodyType);
         if (!isNaN(criteria.yearFrom)) filtered = filtered.filter(item => item.year >= criteria.yearFrom);
         if (!isNaN(criteria.priceTo)) filtered = filtered.filter(item => item.price <= criteria.priceTo);
         return filtered;
@@ -257,6 +270,31 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         currentFilteredListings = allListings;
     }
+
+    // Connect Homepage Tabs
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const title = btn.getAttribute('title');
+            if (title) currentVehicleType = title;
+
+            // Hide/show bodyType based on vehicle type
+            const bodyTypeGroup = document.getElementById('group-home-bodyType');
+            if (bodyTypeGroup) {
+                if (currentVehicleType === 'Motorji' || currentVehicleType === 'Gospodarska vozila') {
+                    bodyTypeGroup.style.display = 'none';
+                    if (document.getElementById('home-bodyType')) document.getElementById('home-bodyType').value = "";
+                } else {
+                    bodyTypeGroup.style.display = 'block';
+                }
+            }
+
+            handleFilterChange();
+        });
+    });
 
     displayPage(currentFilteredListings);
     updateCompareUI();

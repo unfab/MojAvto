@@ -46,7 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const footerPlaceholder = document.getElementById("footer");
 
     if (headerPlaceholder) {
-        fetch("header.html")
+        // Fetch views/header.html since the file is in the views directory
+        fetch("views/header.html")
+          .then(res => {
+            if (!res.ok) return fetch("header.html"); // Fallback if url is relative to views
+            return res;
+          })
           .then(res => res.text())
           .then(async data => {
             headerPlaceholder.innerHTML = data;
@@ -54,6 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const userMenuScript = document.createElement('script');
             userMenuScript.src = 'js/userMenu.js';
             document.body.appendChild(userMenuScript);
+            
+            if (window.lucide) {
+              window.lucide.createIcons();
+            }
           });
     }
 

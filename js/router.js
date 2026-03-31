@@ -11,6 +11,11 @@ async function loadView(view) {
             await setLanguage(localStorage.getItem('mojavto_lang') || 'sl');
         }
         
+        // Render lucide icons if library is available
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+
         // Zaženemo specifično skripto za ta pogled, če obstaja
         if (view === 'home') {
             initHomePage(); // Predpostavimo, da je logika iz main.js v tej funkciji
