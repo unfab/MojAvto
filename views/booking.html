@@ -1,0 +1,71 @@
+<!-- Booking Wizard — MojAvto.si -->
+<link rel="stylesheet" href="/css/booking.css" />
+
+<div class="booking-page">
+
+    <!-- Back navigation -->
+    <a class="booking-back" id="bookingBack" href="#/zemljevid">
+        <i data-lucide="arrow-left"></i>
+        <span id="bookingBackLabel">Nazaj na zemljevid</span>
+    </a>
+
+    <!-- Business context card (populated by JS) -->
+    <div class="booking-biz-context" id="bookingBizContext">
+        <!-- Populated dynamically -->
+    </div>
+
+    <!-- Step progress indicator (populated by JS) -->
+    <div class="booking-progress" id="bookingProgress">
+        <div class="booking-progress-track" id="bookingProgressTrack">
+            <!-- Step pills injected by JS -->
+        </div>
+    </div>
+
+    <!-- Main layout: wizard + price panel -->
+    <div class="booking-layout">
+
+        <!-- Wizard content area — JS swaps innerHTML on each step -->
+        <div class="booking-wizard" id="bookingWizard">
+            <!-- Step content rendered here by booking.js -->
+        </div>
+
+        <!-- Sticky price summary panel -->
+        <aside class="booking-summary" id="bookingSummary">
+            <div class="booking-summary-inner">
+                <div class="booking-summary-title">
+                    <i data-lucide="receipt"></i>
+                    Povzetek cene
+                </div>
+                <div class="booking-summary-empty" id="bookingSummaryEmpty">
+                    Izberite storitve za prikaz cene.
+                </div>
+                <div class="booking-summary-lines" id="bookingSummaryLines">
+                    <!-- Line items injected by JS -->
+                </div>
+                <div class="booking-summary-divider" id="bookingSummaryDivider" style="display:none;"></div>
+                <div class="booking-summary-total" id="bookingSummaryTotal" style="display:none;">
+                    <!-- Total injected by JS -->
+                </div>
+                <div class="booking-summary-quote" id="bookingSummaryQuote" style="display:none;">
+                    <i data-lucide="info" style="width:12px;height:12px;"></i>
+                    Nekatere storitve so po ogledu
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="booking-nav" id="bookingNav">
+        <button class="booking-btn-secondary" id="wizardBack" style="display:none;">
+            <i data-lucide="chevron-left"></i>
+            Nazaj
+        </button>
+        <div class="booking-nav-spacer"></div>
+        <button class="booking-btn-primary" id="wizardNext">
+            Naprej
+            <i data-lucide="chevron-right"></i>
+        </button>
+    </div>
+
+</div>

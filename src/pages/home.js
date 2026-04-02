@@ -122,6 +122,23 @@ function setupSearchForm() {
                 brandSelect.appendChild(option);
             });
 
+            // Initialize custom selects after options are added
+            import('../utils/customSelect.js').then(m => {
+                m.createCustomSelect(brandSelect);
+                m.createCustomSelect(modelSelect);
+                m.createCustomSelect(yearSelect);
+                
+                // Also fuel and mileage if they are on home page
+                const fuelSelect = document.getElementById("home-fuel-type");
+                if (fuelSelect) m.createCustomSelect(fuelSelect);
+                
+                const mileageSelect = document.getElementById("home-mileage-to");
+                if (mileageSelect) m.createCustomSelect(mileageSelect);
+
+                const priceSelect = document.getElementById("home-price-to");
+                if (priceSelect) m.createCustomSelect(priceSelect);
+            });
+
             brandSelect.addEventListener("change", function () {
                 const selectedMake = brandSelect.value;
                 modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
@@ -147,7 +164,7 @@ function setupSearchForm() {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             // In Phase 2 this should ideally navigate to advanced-search with query params
-            window.location.hash = '/iskanje';
+            window.location.hash = '/oglasi';
         });
     }
 
@@ -164,7 +181,8 @@ function setupSearchForm() {
             if (bodyTypeGroup) {
                 if (title === 'Motorji' || title === 'Gospodarska vozila') {
                     bodyTypeGroup.style.display = 'none';
-                    if (document.getElementById('home-bodyType')) document.getElementById('home-bodyType').value = "";
+                    const btSelect = document.getElementById('home-bodyType');
+                    if (btSelect) btSelect.value = "";
                 } else {
                     bodyTypeGroup.style.display = 'flex';
                 }

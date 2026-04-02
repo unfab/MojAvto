@@ -7,14 +7,19 @@ import { initRegisterPage } from './auth/register.js';
 // Lazy imports — only loaded when needed
 const pageModules = {
     home: () => import('./pages/home.js').then(m => m.initHomePage()),
+    oglasi: () => import('./pages/oglasi.js').then(m => m.initOglasiPage()),
     'advanced-search': () => import('./pages/advanced-search.js').then(m => m.initAdvancedSearchPage()),
     listing: () => import('./pages/listing.js').then(m => m.initListingPage()),
     'create-listing': () => import('./pages/create-listing.js').then(m => m.initCreateListingPage()),
     dashboard: () => import('./pages/dashboard.js').then(m => m.initDashboardPage()),
     profile: () => import('./pages/profile.js').then(m => m.initProfilePage()),
     compare: () => import('./pages/compare.js').then(m => m.initComparePage()),
+    evaluate: () => import('./pages/evaluate.js').then(m => m.initEvaluatePage()),
     login: () => initLoginPage(),
     register: () => initRegisterPage(),
+    map: () => import('./pages/map.js').then(m => m.initMapPage()),
+    'business-profile': () => import('./pages/business-profile.js').then(m => m.initBusinessProfilePage()),
+    booking: () => import('./pages/booking.js').then(m => m.initBookingPage()),
 };
 
 document.addEventListener('routeChanged', (e) => {

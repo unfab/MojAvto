@@ -1,0 +1,60 @@
+<div class="search-container" style="max-width:800px; margin:3rem auto; padding:0 1rem;">
+    <h1 class="hero-title text-center" style="font-size: 2.5rem; margin-bottom: 1rem;">Oceni vrednost <span class="text-gradient">mojega avta</span></h1>
+    <p class="text-center" style="color: #6b7280; margin-bottom: 2rem; font-size: 1.1rem;">Vnesite osnovne podatke vašega vozila in ugotovite njegovo trenutno tržno vrednost glede na podobna vozila na naši platformi.</p>
+
+    <!-- Evaluation Form -->
+    <form id="evaluationForm" class="glass-card" style="padding: 2.5rem; border-radius: 2.5rem; margin-bottom: 2rem;">
+        <div class="form-row" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom:2rem;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label for="eval-make" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Znamka</label>
+                <select id="eval-make" name="make" class="glass-select" required>
+                    <option value="">Izberite znamko</option>
+                </select>
+            </div>
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label for="eval-model" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Model</label>
+                <select id="eval-model" name="model" class="glass-select" disabled required>
+                    <option value="">Izberite model</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom:2rem;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label for="eval-year" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Letnik</label>
+                <select id="eval-year" name="year" class="glass-select" required>
+                    <option value="">Izberite letnik</option>
+                </select>
+            </div>
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label for="eval-mileage" style="font-weight: 600; font-size: 0.875rem; color:#374151;">Prevoženi kilometri (približno)</label>
+                <div class="pill-input-wrapper">
+                    <input type="number" id="eval-mileage" name="mileage" class="pill-input" placeholder="npr. 150000" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-actions" style="margin-top:2rem; display:flex; justify-content: center;">
+            <button type="submit" class="search-submit-btn pill-btn primary" id="evalBtn" style="padding: 0 4rem; max-width: 400px;">
+                <i data-lucide="calculator"></i>
+                <span id="eval-btn-text">Izračunaj vrednost</span>
+            </button>
+        </div>
+    </form>
+
+    <!-- Evaluation Results -->
+    <div id="evaluation-results" style="display: none; animation: slideDown 0.3s ease-out;">
+        <div class="glass-card text-center" style="padding: 3rem 2rem; border-radius: 2.5rem; background: linear-gradient(135deg, rgba(234, 88, 12, 0.05), rgba(79, 70, 229, 0.05)); border: 2px solid rgba(234, 88, 12, 0.2);">
+            <h2 style="font-size: 1.5rem; color: #374151; margin-bottom: 0.5rem;">Ocenjena tržna vrednost:</h2>
+            <div id="est-price-container" style="font-size: 3.5rem; font-weight: 800; color: var(--color-primary-start); margin-bottom: 1rem; text-shadow: 0 2px 10px rgba(234,88,12,0.2);">
+                -- €
+            </div>
+            <p id="est-details" style="color: #6b7280; font-size: 1rem; margin-bottom: 2rem;">Na podlagi primerjave <span id="est-count" style="font-weight:bold;">0</span> podobnih vozil (+/- 2 leti).</p>
+            
+            <h3 style="font-size: 1.25rem; font-weight: 600; color: #374151; margin-bottom: 1rem; text-align: left;">Podobna vozila na portalu:</h3>
+            <div class="listings-grid" id="comp-results-container" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:1rem; text-align: left;">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+</div>

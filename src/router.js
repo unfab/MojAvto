@@ -5,6 +5,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 // ── Route definitions ─────────────────────────────────────────────────────────
 const routes = {
     '/': { view: 'home', protected: false },
+    '/oglasi': { view: 'oglasi', protected: false },
     '/iskanje': { view: 'advanced-search', protected: false },
     '/oglas': { view: 'listing', protected: false },
     '/prijava': { view: 'login', protected: false },
@@ -13,10 +14,14 @@ const routes = {
     '/novi-oglas': { view: 'create-listing', protected: true },
     '/profil': { view: 'profile', protected: true },
     '/primerjava': { view: 'compare', protected: false },
+    '/oceni-vrednost': { view: 'evaluate', protected: false },
     '/o-nas': { view: 'about', protected: false },
     '/kontakt': { view: 'contact', protected: false },
     '/faq': { view: 'faq', protected: false },
     '/admin': { view: 'admin', protected: true },
+    '/zemljevid': { view: 'map', protected: false },
+    '/poslovni-profil': { view: 'business-profile', protected: false },
+    '/booking': { view: 'booking', protected: false },
 };
 
 const PROTECTED_REDIRECT = '/prijava';
@@ -25,7 +30,7 @@ const APP = document.getElementById('app-container');
 // ── Load a view HTML into the main container ──────────────────────────────────
 async function loadView(viewName) {
     try {
-        const res = await fetch(`/views/${viewName}.html`);
+        const res = await fetch(`/views/${viewName}.html?v=${new Date().getTime()}`);
         if (!res.ok) throw new Error(`View not found: ${viewName}`);
         APP.innerHTML = await res.text();
         // Dispatch so page-specific scripts can init

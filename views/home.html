@@ -24,65 +24,90 @@
     </div>
 
     <div class="search-box-container">
-        <form id="homeSearchForm" class="search-box compact glass-card">
-            <div class="vehicle-tabs" style="display:none;"></div>
-            <div class="search-form">
-                <div class="form-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
-                    <div class="form-group">
-                        <label for="home-make">Znamka</label>
-                        <select id="home-make" name="make"><option value="">Vse znamke</option></select>
-                    </div>
-                    <div class="form-group" id="group-home-model">
-                        <label for="home-model">Model</label>
-                        <select id="home-model" name="model" disabled><option value="">Vsi modeli</option></select>
-                    </div>
-                    <div class="form-group" id="group-home-bodyType">
-                        <label for="home-bodyType">Karoserija</label>
-                        <select id="home-bodyType" name="bodyType">
-                            <option value="">Vse oblike</option>
-                            <option value="Limuzina">Limuzina</option>
-                            <option value="Kombilimuzina">Kombilimuzina / Hatchback</option>
-                            <option value="Karavan">Karavan</option>
-                            <option value="Terensko">Terensko vozilo / SUV</option>
-                            <option value="Enoprostorec">Enoprostorec</option>
-                            <option value="Kabriolet">Kabriolet</option>
-                            <option value="Coupe">Coupe</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="home-reg-from">1. reg. od</label>
-                        <select id="home-reg-from" name="yearFrom"><option value="">Vse</option></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="home-price-to">Cena do</label>
-                        <input type="number" id="home-price-to" name="priceTo" placeholder="Neomejena">
+        <form id="homeSearchForm" class="search-box compact glass-card main-search-card">
+            <div class="search-grid">
+                <!-- Row 1 -->
+                <div class="form-group">
+                    <label for="home-make">Znamka</label>
+                    <div class="pill-select-wrapper">
+                        <select id="home-make" name="make" class="pill-input"><option value="">Vse znamke</option></select>
                     </div>
                 </div>
-                <div class="form-grid three-columns" style="margin-top: 1rem;">
-                    <div class="form-group">
-                        <label for="home-fuel-type">Tip goriva</label>
-                        <select id="home-fuel-type" name="fuel">
-                            <option value="">Vse</option>
-                            <option>Bencin</option>
-                            <option>Dizel</option>
-                            <option>Elektrika</option>
-                            <option>Hibrid</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="home-mileage-to">Kilometri do</label>
-                        <input type="number" id="home-mileage-to" name="mileageTo" placeholder="Neomejeno">
-                    </div>
-                    <div class="form-group">
-                        <label for="home-region">Regija Slovenije</label>
-                        <select id="home-region" name="region"><option value="">Celotna Slovenija</option></select>
+                <div class="form-group" id="group-home-model">
+                    <label for="home-model">Model</label>
+                    <div class="pill-select-wrapper">
+                        <select id="home-model" name="model" disabled class="pill-input"><option value="">Vsi modeli</option></select>
                     </div>
                 </div>
-                <div class="form-actions">
-                    <a href="#/advanced-search" class="more-filters-btn">Napredno iskanje</a>
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-search"></i> Poišči ponudbe
+                <div class="form-group">
+                    <label for="home-reg-from">1. reg. od</label>
+                    <div class="pill-select-wrapper">
+                        <select id="home-reg-from" name="yearFrom" class="pill-input"><option value="">Vse</option></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="home-mileage-to">Kilometri do</label>
+                    <div class="pill-select-wrapper">
+                        <select id="home-mileage-to" name="mileageTo" class="pill-input">
+                            <option value="">Neomejeno</option>
+                            <option value="5000">5.000 km</option>
+                            <option value="10000">10.000 km</option>
+                            <option value="20000">20.000 km</option>
+                            <option value="50000">50.000 km</option>
+                            <option value="100000">100.000 km</option>
+                            <option value="150000">150.000 km</option>
+                            <option value="200000">200.000 km</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+
+                <div class="form-group">
+                    <label for="home-price-to">Cena do</label>
+                    <div class="pill-select-wrapper">
+                        <select id="home-price-to" name="priceTo" class="pill-input">
+                            <option value="">Neomejena</option>
+                            <option value="1000">1.000 €</option>
+                            <option value="2000">2.000 €</option>
+                            <option value="5000">5.000 €</option>
+                            <option value="10000">10.000 €</option>
+                            <option value="15000">15.000 €</option>
+                            <option value="20000">20.000 €</option>
+                            <option value="30000">30.000 €</option>
+                            <option value="50000">50.000 €</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="home-location">Kraj ali poštna št.</label>
+                    <div class="pill-input-wrapper">
+                        <input type="text" id="home-location" name="location" class="pill-input" placeholder="Vnesi kraj...">
+                        <i data-lucide="navigation" class="input-icon-right"></i>
+                    </div>
+                </div>
+                <div class="form-group flex-end">
+                    <button type="submit" class="pill-btn primary search-submit-btn">
+                        <i data-lucide="search"></i> 
+                        <span id="offer-count-text">1.471.281 ponudb</span>
                     </button>
+                </div>
+            </div>
+
+            <div class="search-footer">
+                <div class="footer-left">
+                    <a href="#/oceni-vrednost" class="checkbox-pill glass-pill" style="text-decoration:none; color:var(--color-text-primary, #374151); font-weight:600; display:flex; align-items:center; gap:8px;">
+                        <i data-lucide="calculator" style="color:var(--color-primary-start);"></i>
+                        <span class="label-text">Oceni vrednost mojega avta</span>
+                    </a>
+                </div>
+                <div class="footer-right">
+                    <button type="reset" class="footer-link-btn">
+                        <i data-lucide="refresh-cw"></i> Ponastavi
+                    </button>
+                    <a href="#/advanced-search" class="footer-link-btn">
+                        <i data-lucide="sliders-horizontal"></i> Več filtrov
+                    </a>
                 </div>
             </div>
         </form>

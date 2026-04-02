@@ -1,0 +1,147 @@
+<!-- Map Discovery — MojAvto.si -->
+<link rel="stylesheet" href="/css/map.css" />
+
+<div class="map-page">
+
+    <!-- ── LEFT PANEL ──────────────────────────────────────── -->
+    <div class="map-left-panel">
+
+        <!-- Filter Sidebar -->
+        <div class="map-filters" id="mapFilters">
+            <div class="map-filters-header" id="mapFiltersToggle">
+                <div class="map-filters-title">
+                    <i data-lucide="sliders-horizontal"></i>
+                    Filtri
+                    <span id="activeFiltersCount" style="display:none; background:var(--color-primary-start); color:white; border-radius:9999px; padding:1px 7px; font-size:0.65rem;">0</span>
+                </div>
+                <div class="map-filters-toggle">
+                    <i data-lucide="chevron-up" id="filtersChevron"></i>
+                </div>
+            </div>
+
+            <!-- Type Filter -->
+            <div class="filter-section">
+                <div class="filter-section-label">Tip posla</div>
+                <div class="type-filter-pills">
+                    <button class="type-pill dealer" data-type="dealer" id="typeDealer">
+                        <span class="type-pill-dot" style="background:#2563eb;"></span>
+                        Avto hiša
+                    </button>
+                    <button class="type-pill service" data-type="service" id="typeService">
+                        <span class="type-pill-dot" style="background:#16a34a;"></span>
+                        Servis
+                    </button>
+                    <button class="type-pill vulcanizer" data-type="vulcanizer" id="typeVulcanizer">
+                        <span class="type-pill-dot" style="background:#ea580c;"></span>
+                        Vulkanizer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Brand Filter -->
+            <div class="filter-section">
+                <div class="filter-section-label">Znamke</div>
+                <select id="brandSelect"><option value="">Izberi znamko...</option></select>
+                <div id="brandSelectedPills" class="brand-selected-pills"></div>
+            </div>
+
+            <!-- Toggles -->
+            <div class="filter-section">
+                <div class="filter-section-label">Posebnosti</div>
+                <div class="toggle-filters">
+                    <div class="toggle-row">
+                        <label class="toggle-row-label" for="filterAuthorized">
+                            <i data-lucide="badge-check"></i> Pooblaščen servis
+                        </label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="filterAuthorized" />
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-row">
+                        <label class="toggle-row-label" for="filterLeasing">
+                            <i data-lucide="landmark"></i> Ponuja leasing
+                        </label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="filterLeasing" />
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-row">
+                        <label class="toggle-row-label" for="filterTyre">
+                            <i data-lucide="circle"></i> Hramba gum
+                        </label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="filterTyre" />
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rating Slider -->
+            <div class="filter-section">
+                <div class="filter-section-label">Minimalna ocena</div>
+                <div class="rating-slider-wrap">
+                    <input type="range" min="0" max="5" step="0.5" value="0" class="rating-slider" id="ratingSlider" />
+                    <div class="rating-value">
+                        <span id="ratingSliderVal">0</span>
+                        <i data-lucide="star" style="width:11px;height:11px;color:#f59e0b;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distance -->
+            <div class="filter-section">
+                <div class="filter-section-label">Razdalja od moje lokacije</div>
+                <div class="distance-radios">
+                    <input type="radio" name="dist" id="dist5" class="dist-radio" value="5" />
+                    <label for="dist5" class="dist-label">5 km</label>
+                    <input type="radio" name="dist" id="dist10" class="dist-radio" value="10" />
+                    <label for="dist10" class="dist-label">10 km</label>
+                    <input type="radio" name="dist" id="dist20" class="dist-radio" value="20" checked />
+                    <label for="dist20" class="dist-label">20 km</label>
+                    <input type="radio" name="dist" id="dist50" class="dist-radio" value="50" />
+                    <label for="dist50" class="dist-label">50 km</label>
+                </div>
+            </div>
+
+            <button class="filter-reset-btn" id="resetFiltersBtn">
+                <i data-lucide="x" style="width:13px;height:13px;display:inline;"></i> Počisti filtre
+            </button>
+        </div>
+
+        <!-- Business List -->
+        <div class="map-list">
+            <div class="map-list-header">
+                <span id="mapListCount">0 podjetij</span>
+                <select class="map-list-sort" id="mapListSort">
+                    <option value="distance">Razdalja</option>
+                    <option value="rating">Ocena</option>
+                    <option value="name">Ime</option>
+                </select>
+            </div>
+            <div id="mapBusinessList">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ── MAP ─────────────────────────────────────────────── -->
+    <div class="map-right-panel">
+        <!-- Location overlay bar -->
+        <div class="map-overlay-bar">
+            <div class="map-overlay-loc">
+                <i data-lucide="map-pin"></i>
+                <span id="mapLocationLabel">Določanje lokacije...</span>
+            </div>
+            <button class="map-locate-btn" id="mapLocateBtn">
+                <i data-lucide="locate"></i> Moja lokacija
+            </button>
+        </div>
+
+        <!-- Leaflet map -->
+        <div id="businessMap"></div>
+    </div>
+
+</div>

@@ -1,0 +1,667 @@
+/* ═══════════════════════════════════════════════════════════
+   BUSINESS PROFILE PAGE — MojAvto.si
+   Liquid Glass UI, hero, tabs, badges
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Page Wrapper ────────────────────────────────────────── */
+.biz-profile-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem 3rem;
+}
+
+/* ── Hero / Cover ────────────────────────────────────────── */
+.biz-hero {
+    position: relative;
+    border-radius: 2rem;
+    overflow: hidden;
+    margin-bottom: 1.75rem;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+.biz-hero-cover {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+}
+
+.biz-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.65) 100%);
+}
+
+.biz-hero-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 1.25rem;
+}
+
+.biz-hero-logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 1.25rem;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.9);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    flex-shrink: 0;
+}
+
+.biz-hero-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.biz-hero-name {
+    font-size: 1.65rem;
+    font-weight: 900;
+    color: white;
+    margin: 0 0 0.35rem 0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    letter-spacing: -0.02em;
+}
+
+.biz-hero-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.biz-stars {
+    color: #fbbf24;
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+.biz-rating-num {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: white;
+}
+
+.biz-rating-count {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+}
+
+.biz-hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.biz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+    letter-spacing: 0.01em;
+}
+
+.biz-badge i { width: 12px; height: 12px; }
+
+.biz-badge.verified { background: rgba(37,99,235,0.85); color: white; }
+.biz-badge.leasing { background: rgba(22,163,74,0.85); color: white; }
+.biz-badge.tyre { background: rgba(234,88,12,0.85); color: white; }
+.biz-badge.authorized { background: rgba(124,58,237,0.85); color: white; }
+.biz-badge.dealer { background: rgba(37,99,235,0.85); color: white; }
+.biz-badge.service { background: rgba(22,163,74,0.85); color: white; }
+.biz-badge.vulcanizer { background: rgba(234,88,12,0.85); color: white; }
+
+.biz-hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.biz-cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: 0.75rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.biz-cta-btn i { width: 15px; height: 15px; }
+
+.biz-cta-btn.primary {
+    background: white;
+    color: #1e293b;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.biz-cta-btn.primary:hover {
+    background: #f1f5f9;
+    transform: translateY(-1px);
+}
+
+.biz-cta-btn.outline {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    backdrop-filter: blur(8px);
+}
+
+.biz-cta-btn.outline:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+/* ── Info Bar ────────────────────────────────────────────── */
+.biz-info-bar {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 1.5rem;
+    padding: 1.25rem 1.75rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.biz-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+.biz-info-item i {
+    width: 16px;
+    height: 16px;
+    color: var(--color-primary-start);
+    flex-shrink: 0;
+}
+
+.biz-info-item a {
+    color: var(--color-primary-start);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.biz-info-item a:hover { text-decoration: underline; }
+
+.biz-brands-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.biz-brand-tag {
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.4rem;
+    background: #f1f5f9;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #475569;
+}
+
+.biz-brand-tag.authorized {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+/* ── Tabs ────────────────────────────────────────────────── */
+.biz-tabs-nav {
+    display: flex;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 1rem;
+    padding: 0.35rem;
+    margin-bottom: 1.5rem;
+    gap: 0.25rem;
+    width: fit-content;
+}
+
+.biz-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.7rem;
+    border: none;
+    background: transparent;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.biz-tab-btn i { width: 15px; height: 15px; }
+
+.biz-tab-btn:hover { color: #334155; background: rgba(255,255,255,0.5); }
+
+.biz-tab-btn.active {
+    background: white;
+    color: var(--color-primary-start);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.biz-tab-content { display: none; }
+.biz-tab-content.active { display: block; animation: tabFadeIn 0.25s ease; }
+
+@keyframes tabFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Listings Tab (Oglasi) ───────────────────────────────── */
+.biz-listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.biz-listing-card {
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(255,255,255,0.6);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+
+.biz-listing-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(37,99,235,0.1);
+    border-color: rgba(37,99,235,0.2);
+}
+
+.biz-listing-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.biz-listing-body {
+    padding: 1rem;
+}
+
+.biz-listing-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 0.25rem;
+}
+
+.biz-listing-sub {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin-bottom: 0.6rem;
+}
+
+.biz-listing-price {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #1e293b;
+}
+
+/* ── Services Tab ────────────────────────────────────────── */
+.biz-services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.biz-service-card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(255,255,255,0.6);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    transition: all 0.2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.biz-service-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.biz-service-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 0.85rem;
+    background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.85rem;
+}
+
+.biz-service-icon i { width: 20px; height: 20px; color: white; }
+
+.biz-service-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.3rem;
+}
+
+.biz-service-price {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.biz-service-cta {
+    margin-top: 0.75rem;
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.6rem;
+    border: none;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.biz-service-cta:hover { background: #e2e8f0; }
+
+/* ── Reviews Tab ─────────────────────────────────────────── */
+.biz-reviews-summary {
+    background: rgba(255,255,255,0.75);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.biz-reviews-big-rating {
+    text-align: center;
+}
+
+.biz-rating-big {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #1e293b;
+    line-height: 1;
+}
+
+.biz-rating-stars-big {
+    color: #f59e0b;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    margin: 0.25rem 0;
+}
+
+.biz-rating-total {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.biz-rating-bars {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.biz-rating-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.biz-rating-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.biz-rating-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    border-radius: 9999px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+.biz-reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.biz-review-card {
+    background: rgba(255,255,255,0.75);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.biz-review-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.biz-review-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.biz-review-author { font-size: 0.88rem; font-weight: 700; color: #1e293b; }
+.biz-review-date { font-size: 0.72rem; color: #94a3b8; font-weight: 500; }
+.biz-review-stars { color: #f59e0b; font-size: 0.85rem; letter-spacing: 1px; }
+.biz-review-text { font-size: 0.83rem; color: #475569; line-height: 1.6; }
+
+/* ── About Tab ───────────────────────────────────────────── */
+.biz-about-section {
+    background: rgba(255,255,255,0.75);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 1.5rem;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.biz-about-section h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.biz-about-section h3 i { width: 18px; height: 18px; color: var(--color-primary-start); }
+
+.biz-about-text {
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.75;
+    margin: 0;
+}
+
+.biz-leasing-partners {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.biz-leasing-tag {
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    background: #f0fdf4;
+    color: #15803d;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid #bbf7d0;
+}
+
+/* ── Booking CTA Banner ──────────────────────────────────── */
+.biz-booking-banner {
+    background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+    border-radius: 1.5rem;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 8px 24px rgba(37,99,235,0.25);
+}
+
+.biz-booking-text h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: white;
+    margin: 0 0 0.25rem;
+}
+
+.biz-booking-text p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.8);
+    margin: 0;
+}
+
+.biz-booking-cta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.85rem;
+    border: none;
+    background: white;
+    color: var(--color-primary-start);
+    font-size: 0.88rem;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.biz-booking-cta i { width: 16px; height: 16px; }
+.biz-booking-cta:hover { transform: scale(1.03); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+
+/* ── Empty states ────────────────────────────────────────── */
+.biz-empty {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.biz-empty i { width: 40px; height: 40px; margin-bottom: 1rem; }
+
+/* ── Back button ─────────────────────────────────────────── */
+.biz-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 9999px;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px);
+    color: #475569;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.18s;
+    margin-bottom: 1.25rem;
+    margin-top: 1rem;
+}
+
+.biz-back-btn:hover { background: white; color: #1e293b; }
+.biz-back-btn i { width: 14px; height: 14px; }
+
+/* ── Dark Mode ───────────────────────────────────────────── */
+body.dark-mode .biz-info-bar {
+    background: rgba(15,23,42,0.8);
+    border-color: rgba(255,255,255,0.08);
+}
+body.dark-mode .biz-info-item { color: #94a3b8; }
+body.dark-mode .biz-tabs-nav {
+    background: rgba(15,23,42,0.7);
+    border-color: rgba(255,255,255,0.08);
+}
+body.dark-mode .biz-tab-btn.active { background: rgba(30,41,59,0.9); }
+body.dark-mode .biz-about-section,
+body.dark-mode .biz-reviews-summary,
+body.dark-mode .biz-review-card,
+body.dark-mode .biz-service-card,
+body.dark-mode .biz-listing-card {
+    background: rgba(30,41,59,0.8);
+    border-color: rgba(255,255,255,0.08);
+}
+body.dark-mode .biz-listing-title,
+body.dark-mode .biz-service-name,
+body.dark-mode .biz-review-author,
+body.dark-mode .biz-about-section h3,
+body.dark-mode .biz-rating-big { color: #f8fafc; }
+body.dark-mode .biz-hero-name { color: white; }
+body.dark-mode .biz-back-btn { background: rgba(30,41,59,0.8); border-color: rgba(255,255,255,0.1); color: #94a3b8; }
+body.dark-mode .biz-brand-tag { background: rgba(30,41,59,0.6); color: #94a3b8; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .biz-hero-cover { height: 180px; }
+    .biz-hero-content { flex-direction: column; align-items: flex-start; padding: 1rem; }
+    .biz-hero-actions { flex-direction: row; }
+    .biz-hero-name { font-size: 1.25rem; }
+    .biz-tabs-nav { overflow-x: auto; width: 100%; }
+    .biz-booking-banner { flex-direction: column; }
+    .biz-info-bar { flex-direction: column; align-items: flex-start; }
+}

@@ -1,30 +1,358 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n-key="page_title_compare">Primerjava vozil - MojAvto.si</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/compare.css" />
-</head>
-<body>
-    <div id="header"></div>
+<!-- Primerjalni kotiček — MojAvto.si -->
+<style>
+/* ═══════════════════════════════════════════════════════════
+   COMPARE PAGE — Side-by-side vehicle comparison
+   ═══════════════════════════════════════════════════════════ */
 
-    <main>
-        <section class="comparison-section">
-            <h2 data-i18n-key="compare_h2">Primerjava izbranih vozil</h2>
-            <div class="comparison-grid" id="comparisonGrid"></div>
-            <div id="noSelectionMessage" style="display: none; text-align: center; margin-top: 40px;">
-                <h3 data-i18n-key="compare_no_selection_h3">Niste izbrali nobenega vozila za primerjavo.</h3>
-                <p data-i18n-key="compare_no_selection_p">Pojdite na <a href="index.html">domačo stran</a> in pri oglasih kliknite na ikono <i class="fas fa-balance-scale"></i>, da jih dodate v primerjavo.</p>
-            </div>
-        </section>
-    </main>
+.compare-page {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
 
-    <div id="footer"></div>
-    
-    <script src="js/i18n.js" defer></script>
-    <script src="js/compare.js" defer></script>
-</body>
-</html>
+.compare-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.compare-header h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+}
+
+.compare-header p {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.compare-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px);
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.compare-empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    color: #94a3b8;
+}
+
+.compare-empty h2 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #334155;
+    margin: 0 0 0.5rem 0;
+}
+
+.compare-empty p {
+    color: #64748b;
+    margin: 0 0 1.5rem 0;
+}
+
+.compare-empty a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 9999px;
+    background: var(--color-primary-start);
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.compare-empty a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+/* ── Comparison Grid ─────────────────────────────────────── */
+.compare-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.compare-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.compare-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+/* ── Column Card ─────────────────────────────────────────── */
+.compare-col {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+    border-radius: 2rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Image */
+.compare-col-img {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.compare-col-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Car info header */
+.compare-col-header {
+    padding: 1.25rem 1.25rem 0;
+}
+
+.compare-col-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 0.25rem 0;
+}
+
+.compare-col-subtitle {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.compare-col-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+}
+
+.compare-col-price {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #1e293b;
+}
+
+/* ── Spec Table ──────────────────────────────────────────── */
+.compare-specs {
+    padding: 1.25rem;
+    flex: 1;
+}
+
+.compare-spec-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.compare-spec-row:last-child {
+    border-bottom: none;
+}
+
+.compare-spec-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.compare-spec-label i {
+    width: 16px;
+    height: 16px;
+    color: var(--color-primary-start);
+}
+
+.compare-spec-value {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: right;
+}
+
+/* ── Remove Button ───────────────────────────────────────── */
+.compare-col-footer {
+    padding: 0 1.25rem 1.25rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.compare-remove-btn {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid #e2e8f0;
+    background: transparent;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.compare-remove-btn:hover {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.compare-remove-btn i { width: 15px; height: 15px; }
+
+.compare-contact-btn {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    border-radius: 9999px;
+    border: none;
+    background: #1e293b;
+    color: white;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.compare-contact-btn:hover {
+    background: #0f172a;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.compare-contact-btn i { width: 15px; height: 15px; }
+
+/* ── Clear All Button ────────────────────────────────────── */
+.compare-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.compare-clear-all {
+    padding: 0.75rem 1.75rem;
+    border-radius: 9999px;
+    border: 1px solid #e2e8f0;
+    background: transparent;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.compare-clear-all:hover {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.compare-add-more {
+    padding: 0.75rem 1.75rem;
+    border-radius: 9999px;
+    border: none;
+    background: var(--color-primary-start);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.compare-add-more:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+/* ── Dark Mode ───────────────────────────────────────────── */
+body.dark-mode .compare-header h1,
+body.dark-mode .compare-col-title,
+body.dark-mode .compare-col-price,
+body.dark-mode .compare-spec-value {
+    color: #f8fafc;
+}
+
+body.dark-mode .compare-header p,
+body.dark-mode .compare-spec-label,
+body.dark-mode .compare-col-subtitle {
+    color: #94a3b8;
+}
+
+body.dark-mode .compare-col {
+    background: rgba(30, 41, 59, 0.7);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .compare-empty {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .compare-empty h2 { color: #f8fafc; }
+
+body.dark-mode .compare-spec-row {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .compare-remove-btn {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+
+body.dark-mode .compare-clear-all {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .compare-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+    .compare-grid.cols-2,
+    .compare-grid.cols-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .compare-col-img { height: 180px; }
+}
+</style>
+
+<div class="compare-page">
+    <div class="compare-header">
+        <h1>Primerjalni kotiček</h1>
+        <p>Primerjajte do 3 vozila hkrati in izberite najboljšo ponudbo</p>
+    </div>
+
+    <!-- Content rendered by compare.js -->
+    <div id="compareContent"></div>
+</div>

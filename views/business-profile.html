@@ -1,0 +1,90 @@
+<!-- Business Profile — MojAvto.si -->
+<link rel="stylesheet" href="/css/business-profile.css" />
+
+<div class="biz-profile-page" id="bizProfilePage">
+    <!-- Loading state -->
+    <div id="bizProfileLoading" style="text-align:center; padding:4rem 2rem; color:#94a3b8;">
+        <div style="font-size:2rem; margin-bottom:0.75rem;">⏳</div>
+        <div style="font-size:0.9rem; font-weight:600;">Nalaganje profila...</div>
+    </div>
+
+    <!-- Error state -->
+    <div id="bizProfileError" style="display:none; text-align:center; padding:4rem 2rem;">
+        <div style="font-size:2rem; margin-bottom:0.75rem;">😕</div>
+        <div style="font-size:1.1rem; font-weight:700; color:#1e293b; margin-bottom:0.5rem;">Podjetje ni najdeno</div>
+        <div style="font-size:0.88rem; color:#94a3b8; margin-bottom:1.5rem;">Poslovni profil ne obstaja ali je bil odstranjen.</div>
+        <a href="#/zemljevid" class="biz-cta-btn primary" style="display:inline-flex;">← Nazaj na zemljevid</a>
+    </div>
+
+    <!-- Profile content (populated dynamically) -->
+    <div id="bizProfileContent" style="display:none;">
+
+        <!-- Back button -->
+        <a href="#/zemljevid" class="biz-back-btn" id="bizBackBtn">
+            <i data-lucide="arrow-left"></i>
+            Nazaj na zemljevid
+        </a>
+
+        <!-- HERO -->
+        <div class="biz-hero" id="bizHero">
+            <img class="biz-hero-cover" id="bizCoverImg" src="" alt="Cover" />
+            <div class="biz-hero-overlay"></div>
+            <div class="biz-hero-content">
+                <img class="biz-hero-logo" id="bizLogoImg" src="" alt="Logo" />
+                <div class="biz-hero-info">
+                    <h1 class="biz-hero-name" id="bizName"></h1>
+                    <div class="biz-hero-rating">
+                        <span class="biz-stars" id="bizStars"></span>
+                        <span class="biz-rating-num" id="bizRatingNum"></span>
+                        <span class="biz-rating-count" id="bizRatingCount"></span>
+                    </div>
+                    <div class="biz-hero-badges" id="bizBadges"></div>
+                </div>
+                <div class="biz-hero-actions" id="bizHeroActions"></div>
+            </div>
+        </div>
+
+        <!-- INFO BAR -->
+        <div class="biz-info-bar" id="bizInfoBar"></div>
+
+        <!-- TABS NAV -->
+        <div class="biz-tabs-nav" id="bizTabsNav"></div>
+
+        <!-- TAB: OGLASI -->
+        <div class="biz-tab-content" id="tab-oglasi">
+            <div class="biz-listings-grid" id="bizListingsGrid">
+                <div class="biz-empty">
+                    <i data-lucide="car"></i>
+                    <div>Ta avto hiša nima aktivnih oglasov.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: STORITVE -->
+        <div class="biz-tab-content" id="tab-storitve">
+            <div class="biz-services-grid" id="bizServicesGrid"></div>
+            <div class="biz-booking-banner" id="bizBookingBanner">
+                <div class="biz-booking-text">
+                    <h3>Rezerviraj termin</h3>
+                    <p>Preprosto in hitro — izberite storitev in termin.</p>
+                </div>
+                <button class="biz-booking-cta" id="bizBookingBtn">
+                    <i data-lucide="calendar"></i>
+                    Rezerviraj termin
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB: OCENE -->
+        <div class="biz-tab-content" id="tab-ocene">
+            <div class="biz-reviews-summary" id="bizReviewsSummary"></div>
+            <div class="biz-reviews-list" id="bizReviewsList"></div>
+        </div>
+
+        <!-- TAB: O PODJETJU -->
+        <div class="biz-tab-content" id="tab-o-podjetju">
+            <div id="bizAboutContent"></div>
+        </div>
+
+    </div>
+</div>
