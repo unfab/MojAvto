@@ -1,0 +1,1093 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tire Search Page — MojAvto.si
+   Specialized design for tire search by dimensions (NOT the car listings page)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Page Layout ──────────────────────────────────────────────────────────── */
+.tire-page {
+    min-height: 100vh;
+    background: var(--color-bg-base);
+    padding-top: 0;
+}
+
+/* ── Hero Dimension Selector ─────────────────────────────────────────────── */
+.tire-hero {
+    background: transparent;
+    padding: 85px 1.5rem 2.5rem;
+    position: relative;
+    overflow: visible;
+    z-index: 50;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tire-hero-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tire-hero-bg::before {
+    display: none;
+}
+
+.tire-hero-inner {
+    max-width: 1200px;
+    margin-left: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+@media (min-width: 1400px) {
+    .tire-hero-inner {
+        margin-left: max(2rem, calc((100vw - 1280px) / 2));
+    }
+}
+
+.tire-hero-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tire-hero-title {
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.vehicle-pills {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.pill-dropdown {
+    position: relative;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
+}
+
+body.dark-mode .pill-dropdown {
+    background: rgba(30, 41, 59, 0.82);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.pill-dropdown:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+body.dark-mode .pill-dropdown:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pill-dropdown i {
+    width: 14px;
+    height: 14px;
+    opacity: 0.7;
+    transition: transform 0.25s ease;
+}
+
+.pill-dropdown.open i {
+    transform: rotate(-180deg);
+}
+
+.pill-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 240px;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 1.25rem;
+    padding: 0.6rem;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.pill-dropdown.open .pill-dropdown-menu {
+    display: flex;
+    animation: pillFadeIn 0.2s ease forwards;
+}
+
+@keyframes pillFadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pill-search-wrap i {
+    color: #94a3b8;
+    width: 14px !important;
+    height: 14px !important;
+    transform: none !important;
+}
+
+.pill-options-scroll {
+    max-height: 280px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-right: 4px;
+}
+
+.pill-option {
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    color: #1e293b;
+    font-size: 0.82rem;
+    transition: background 0.15s;
+}
+
+.pill-option:hover {
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--color-primary-start);
+}
+
+.pill-option.active {
+    background: var(--color-primary-start);
+    color: #fff;
+}
+
+.pill-value-input {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    outline: none;
+    width: 100%;
+    min-width: 60px;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+#vehicleMain .pill-value-input { width: 190px; }
+#vehicleSub .pill-value-input { width: 140px; }
+
+.pill-value-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.pill-value-input:focus {
+    cursor: text;
+}
+
+body.dark-mode .pill-dropdown-menu {
+    background: rgba(30, 41, 59, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .pill-option {
+    color: #cbd5e1;
+}
+
+body.dark-mode .pill-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.tire-hero-sub {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.9rem;
+    margin: 0 0 1.75rem;
+}
+
+/* Dimension input row */
+.dim-selector {
+    display: flex;
+    gap: 0.75rem;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.dim-pill {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    padding: 0.65rem 1rem;
+    height: 48px;
+    box-sizing: border-box;
+}
+
+body.dark-mode .dim-pill {
+    background: rgba(30, 41, 59, 0.82);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.dim-pill:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+body.dark-mode .dim-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dim-pill .pill-value-input {
+    width: 100%;
+    font-size: 1rem;
+}
+
+#selWidth.dim-pill { width: 110px; }
+#selHeight.dim-pill { width: 100px; }
+#selDiameter.dim-pill { width: 110px; }
+
+.dim-selector-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 0 0 auto;
+}
+
+.dim-separator {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+    font-weight: 300;
+    align-self: flex-end;
+    margin-bottom: 0.75rem;
+}
+
+.dim-select:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.dim-select option {
+    background: #1e3a5f;
+    color: #fff;
+}
+
+.dim-separator {
+    align-self: flex-end;
+    padding-bottom: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.1rem;
+    font-weight: 300;
+    flex: none;
+}
+
+.dim-search-btn {
+    align-self: flex-end;
+    background: #fff;
+    color: var(--color-primary-start);
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.7rem 1.75rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    flex-shrink: 0;
+}
+
+.dim-search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.dim-search-btn:active {
+    transform: translateY(0);
+}
+
+/* Quick dimension pills */
+.quick-dims {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.quick-dims-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.72rem;
+    margin-right: 0.25rem;
+}
+
+.quick-dim-pill {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.78rem;
+    padding: 0.2rem 0.65rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+}
+
+.quick-dim-pill:hover {
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
+}
+
+/* ── Season Tabs ─────────────────────────────────────────────────────────── */
+.season-bar {
+    width: fit-content;
+    margin: 1.5rem auto;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 9999px;
+    padding: 6px;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    z-index: 10;
+    position: relative;
+}
+
+.season-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.season-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 8px 18px;
+    border: none;
+    background: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    white-space: nowrap;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.season-tab:hover {
+    color: var(--color-primary-start);
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.season-tab.active {
+    background: #ffffff;
+    color: var(--color-primary-start);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.season-tab i {
+    width: 15px;
+    height: 15px;
+}
+
+body.dark-mode .season-bar {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .season-tab {
+    color: #94a3b8;
+}
+
+body.dark-mode .season-tab.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+body.dark-mode .season-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.05);
+    color: #60a5fa;
+}
+
+/* ── Main Content: Sidebar + Results ────────────────────────────────────── */
+.tire-main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* ── Filter Sidebar ──────────────────────────────────────────────────────── */
+.tire-filters {
+    background: var(--bg-glass, rgba(255, 255, 255, 0.4));
+    border: var(--border-glass);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(12px);
+    padding: 1.25rem;
+    position: sticky;
+    top: 90px;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+.filter-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #94a3b8;
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.filter-clear-btn {
+    background: none;
+    border: none;
+    color: var(--color-primary-start);
+    font-size: 0.75rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    padding: 0;
+}
+
+.filter-section {
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    padding: 1rem 0;
+}
+
+.filter-section:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+.filter-section-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+    margin: 0 0 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+}
+
+.filter-section-title i {
+    width: 12px;
+    height: 12px;
+    opacity: 0.5;
+}
+
+/* Checkbox list */
+.filter-check-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.filter-check-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: #334155;
+    padding: 0.2rem 0;
+}
+
+.filter-check-item input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    accent-color: var(--color-primary-start);
+    flex-shrink: 0;
+}
+
+/* Price range */
+.price-range-inputs {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.price-range-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1.5px solid rgba(0, 0, 0, 0.12);
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.82rem;
+    font-family: inherit;
+    color: #1e293b;
+    width: 100%;
+}
+
+.price-range-sep {
+    color: #94a3b8;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+/* EU rating filter */
+.eu-rating-row {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+}
+
+.eu-pill-filter {
+    width: 30px;
+    height: 30px;
+    border-radius: 0.4rem;
+    border: 2px solid transparent;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    transition: opacity 0.15s, transform 0.1s;
+}
+
+.eu-pill-filter.eu-A {
+    background: #15803d;
+    color: #fff;
+}
+
+.eu-pill-filter.eu-B {
+    background: #65a30d;
+    color: #fff;
+}
+
+.eu-pill-filter.eu-C {
+    background: #ca8a04;
+    color: #fff;
+}
+
+.eu-pill-filter.eu-D {
+    background: #ea580c;
+    color: #fff;
+}
+
+.eu-pill-filter.eu-E {
+    background: #dc2626;
+    color: #fff;
+}
+
+.eu-pill-filter.inactive {
+    opacity: 0.3;
+}
+
+.eu-pill-filter.active {
+    outline: 2.5px solid #1e293b;
+    outline-offset: 2px;
+}
+
+/* Dark mode filters */
+body.dark-mode .tire-filters {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .filter-section {
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .filter-section-title,
+body.dark-mode .filter-check-item {
+    color: #cbd5e1;
+}
+
+body.dark-mode .price-range-input {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #f1f5f9;
+}
+
+/* ── Results Area ────────────────────────────────────────────────────────── */
+.tire-results-area {
+    min-width: 0;
+}
+
+.results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.results-count {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.results-count strong {
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.sort-select {
+    background: var(--bg-glass, rgba(255, 255, 255, 0.4));
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.6rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.82rem;
+    font-family: inherit;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    color: #334155;
+}
+
+/* ── Tire Card Grid ──────────────────────────────────────────────────────── */
+.tire-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+/* ── Tire Card ───────────────────────────────────────────────────────────── */
+.tire-card {
+    background: var(--bg-glass, rgba(255, 255, 255, 0.55));
+    border: var(--border-glass);
+    border-radius: 1.1rem;
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+.tire-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(37, 99, 235, 0.13);
+}
+
+.tire-card-img-wrap {
+    position: relative;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    aspect-ratio: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tire-card-img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.tire-card:hover .tire-card-img {
+    transform: scale(1.05);
+}
+
+.tire-card-season-badge {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+}
+
+.tire-card-season-badge.letna {
+    background: rgba(245, 158, 11, 0.15);
+    color: #b45309;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.tire-card-season-badge.zimska {
+    background: rgba(59, 130, 246, 0.15);
+    color: #1d4ed8;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.tire-card-season-badge.celoletna {
+    background: rgba(16, 185, 129, 0.15);
+    color: #065f46;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.tire-card-badge-xl {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    background: #2563eb;
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.3rem;
+    letter-spacing: 0.05em;
+}
+
+.tire-card-body {
+    padding: 0.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex: 1;
+}
+
+.tire-card-brand {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.tire-card-model {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.tire-card-dim {
+    font-size: 0.8rem;
+    color: #475569;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* EU label mini row */
+.tire-card-eu {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 0.1rem;
+}
+
+.eu-mini {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.eu-mini-badge {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 800;
+}
+
+.eu-mini-badge.eu-A {
+    background: #15803d;
+    color: #fff;
+}
+
+.eu-mini-badge.eu-B {
+    background: #65a30d;
+    color: #fff;
+}
+
+.eu-mini-badge.eu-C {
+    background: #ca8a04;
+    color: #fff;
+}
+
+.eu-mini-badge.eu-D {
+    background: #ea580c;
+    color: #fff;
+}
+
+.eu-mini-badge.eu-E {
+    background: #dc2626;
+    color: #fff;
+}
+
+.eu-mini-label {
+    color: #94a3b8;
+}
+
+/* Price section */
+.tire-card-price-section {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.tire-card-price-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+    margin-bottom: 0.15rem;
+}
+
+.tire-card-price {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #16a34a;
+    letter-spacing: -0.03em;
+}
+
+.tire-card-price-suffix {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #64748b;
+    margin-left: 0.15rem;
+}
+
+.tire-card-offers {
+    font-size: 0.72rem;
+    color: #94a3b8;
+}
+
+/* Dark mode cards */
+body.dark-mode .tire-card {
+    background: rgba(30, 41, 59, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .tire-card-img-wrap {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+body.dark-mode .tire-card-model {
+    color: #f1f5f9;
+}
+
+body.dark-mode .tire-card-brand {
+    color: #94a3b8;
+}
+
+body.dark-mode .tire-card-dim {
+    color: #94a3b8;
+}
+
+body.dark-mode .tire-card-price-section {
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .results-count strong {
+    color: #f1f5f9;
+}
+
+body.dark-mode .sort-select {
+    background: rgba(30, 41, 59, 0.9);
+    color: #f1f5f9;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.tire-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #94a3b8;
+}
+
+.tire-empty i {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+    opacity: 0.4;
+}
+
+.tire-empty h3 {
+    font-size: 1.1rem;
+    color: #475569;
+    margin: 0 0 0.4rem;
+}
+
+.tire-empty p {
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* ── Load more ───────────────────────────────────────────────────────────── */
+.load-more-wrap {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.load-more-btn {
+    background: var(--bg-glass, rgba(255, 255, 255, 0.5));
+    border: 1.5px solid rgba(37, 99, 235, 0.3);
+    border-radius: 999px;
+    padding: 0.65rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary-start);
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: background 0.15s, transform 0.1s;
+    font-family: inherit;
+}
+
+.load-more-btn:hover {
+    background: rgba(37, 99, 235, 0.08);
+    transform: translateY(-1px);
+}
+
+/* ── Mobile Filter Drawer ────────────────────────────────────────────────── */
+.filter-drawer-btn {
+    display: none;
+    position: fixed;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 0.75rem 1.75rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: inherit;
+}
+
+.filter-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 300;
+    backdrop-filter: blur(2px);
+}
+
+.filter-overlay.open {
+    display: block;
+}
+
+.tire-filters.drawer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    max-height: 80vh;
+    border-radius: 1.5rem 1.5rem 0 0;
+    z-index: 400;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.tire-filters.drawer.open {
+    transform: translateY(0);
+}
+
+.drawer-handle {
+    width: 36px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+    margin: 0 auto 1rem;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .tire-main {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    .tire-filters:not(.drawer) {
+        display: none;
+    }
+
+    .filter-drawer-btn {
+        display: flex;
+    }
+
+    .tire-hero-title {
+        font-size: 1.35rem;
+    }
+
+    .dim-selector {
+        flex-wrap: wrap;
+    }
+
+    .dim-selector-group {
+        min-width: calc(33% - 0.5rem);
+    }
+
+    .dim-separator {
+        display: none;
+    }
+
+    .dim-search-btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.25rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .tire-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .tire-hero {
+        padding: 1.75rem 1rem 2.5rem;
+    }
+
+    .dim-selector-group {
+        min-width: calc(50% - 0.5rem);
+    }
+}
+
+@media (max-width: 400px) {
+    .tire-grid {
+        grid-template-columns: 1fr;
+    }
+}

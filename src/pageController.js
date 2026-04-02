@@ -20,6 +20,8 @@ const pageModules = {
     map: () => import('./pages/map.js').then(m => m.initMapPage()),
     'business-profile': () => import('./pages/business-profile.js').then(m => m.initBusinessProfilePage()),
     booking: () => import('./pages/booking.js').then(m => m.initBookingPage()),
+    'tire-search': () => import('./pages/tire-search.js').then(m => m.initTireSearchPage()),
+    'tire-product': () => import('./pages/tire-product.js').then(m => m.initTireProductPage()),
 };
 
 document.addEventListener('routeChanged', (e) => {

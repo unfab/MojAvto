@@ -22,6 +22,8 @@ const routes = {
     '/zemljevid': { view: 'map', protected: false },
     '/poslovni-profil': { view: 'business-profile', protected: false },
     '/booking': { view: 'booking', protected: false },
+    '/nakup/pnevmatike': { view: 'tire-search', protected: false },
+    '/nakup/pnevmatika': { view: 'tire-product', protected: false },
 };
 
 const PROTECTED_REDIRECT = '/prijava';
@@ -46,7 +48,12 @@ async function router() {
     // Strip query params for route matching
     const path = hash.split('?')[0];
 
-    const route = routes[path] || { view: '404', protected: false };
+    // Support dimension-in-path URLs: /nakup/pnevmatike/205-55-r16
+    let route = routes[path];
+    if (!route && path.startsWith('/nakup/pnevmatike/')) {
+        route = { view: 'tire-search', protected: false };
+    }
+    route = route || { view: '404', protected: false };
 
     if (route.protected) {
         // Wait for auth state before deciding
