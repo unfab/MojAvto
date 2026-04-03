@@ -12,12 +12,40 @@
 
 /* ── Hero Dimension Selector ─────────────────────────────────────────────── */
 .tire-hero {
-    background: transparent;
-    padding: 85px 1.5rem 2.5rem;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #4f46e5 100%);
+    padding: 100px 1.5rem 100px;
+    /* Increased padding to match the fade height and prevent content veiling */
     position: relative;
     overflow: visible;
     z-index: 50;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tire-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, var(--color-bg-base) 0%, rgba(30, 58, 138, 0) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.tire-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to top, var(--color-bg-base) 0%, rgba(79, 70, 229, 0) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+body.dark-mode .tire-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e3a8a 100%);
 }
 
 .tire-hero-bg {
@@ -107,6 +135,10 @@ body.dark-mode .pill-dropdown:hover {
     transition: transform 0.25s ease;
 }
 
+.pill-dropdown.open {
+    z-index: 150;
+}
+
 .pill-dropdown.open i {
     transform: rotate(-180deg);
 }
@@ -134,8 +166,15 @@ body.dark-mode .pill-dropdown:hover {
 }
 
 @keyframes pillFadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .pill-search-wrap i {
@@ -187,8 +226,13 @@ body.dark-mode .pill-dropdown:hover {
     transition: all 0.2s;
 }
 
-#vehicleMain .pill-value-input { width: 190px; }
-#vehicleSub .pill-value-input { width: 140px; }
+#vehicleMain .pill-value-input {
+    width: 225px;
+}
+
+#vehicleSub .pill-value-input {
+    width: 225px;
+}
 
 .pill-value-input::placeholder {
     color: rgba(255, 255, 255, 0.6);
@@ -253,9 +297,17 @@ body.dark-mode .dim-pill:hover {
     font-size: 1rem;
 }
 
-#selWidth.dim-pill { width: 110px; }
-#selHeight.dim-pill { width: 100px; }
-#selDiameter.dim-pill { width: 110px; }
+#selWidth.dim-pill {
+    width: 110px;
+}
+
+#selHeight.dim-pill {
+    width: 100px;
+}
+
+#selDiameter.dim-pill {
+    width: 110px;
+}
 
 .dim-selector-group {
     display: flex;
@@ -444,13 +496,20 @@ body.dark-mode .season-tab:hover:not(.active) {
     border-radius: 1.25rem;
     box-shadow: var(--shadow-glass);
     backdrop-filter: blur(12px);
-    padding: 1.25rem;
+    padding: 0.8rem 1.25rem 1.25rem;
     position: sticky;
     top: 90px;
     max-height: calc(100vh - 110px);
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.tire-filters::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
 }
 
 .filter-title {
@@ -1026,11 +1085,7 @@ body.dark-mode .sort-select {
 }
 
 .drawer-handle {
-    width: 36px;
-    height: 4px;
-    background: rgba(0, 0, 0, 0.15);
-    border-radius: 2px;
-    margin: 0 auto 1rem;
+    display: none;
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */

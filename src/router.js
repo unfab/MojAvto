@@ -11,7 +11,7 @@ const routes = {
     '/prijava': { view: 'login', protected: false },
     '/registracija': { view: 'register', protected: false },
     '/dashboard': { view: 'dashboard', protected: true },
-    '/novi-oglas': { view: 'create-listing', protected: true },
+    '/novi-oglas': { view: 'create-listing', protected: false },
     '/profil': { view: 'profile', protected: true },
     '/primerjava': { view: 'compare', protected: false },
     '/oceni-vrednost': { view: 'evaluate', protected: false },

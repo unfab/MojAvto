@@ -1,4 +1,4 @@
-// Home page — MojAvto.si
+import { sampleCars } from '../data/sampleListings.js';
 import { getListings } from '../services/listingService.js';
 
 export async function initHomePage() {
@@ -7,14 +7,15 @@ export async function initHomePage() {
     // Load dropdown options for the search
     setupSearchForm();
 
+    // Setup rotating sponsored ads
+    setupRotatingAds();
+
     // Fetch listings and populate sections
     try {
         const listings = await getListings();
-        renderListingsSection('newest-container', 'newest-section', listings);
 
         // Temporarily using the same listings for featured and popular until we have real stats
         renderListingsSection('featured-container', 'featured-section', listings.filter(l => l.isPremium), true);
-        renderListingsSection('popular-container', 'popular-section', [...listings].sort(() => 0.5 - Math.random()).slice(0, 5));
 
         setupCarousels();
     } catch (err) {
@@ -24,6 +25,86 @@ export async function initHomePage() {
     if (window.lucide) {
         window.lucide.createIcons();
     }
+}
+
+function setupRotatingAds() {
+    const track = document.getElementById('rotating-ads-container');
+    const prevBtn = document.getElementById('rot-prev-btn');
+    const nextBtn = document.getElementById('rot-next-btn');
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const sponsored = [...sampleCars];
+    if (sponsored.length === 0) return;
+
+    function renderAdCard(car) {
+        const img = car.images?.exterior?.[0] || 'https://via.placeholder.com/120x80?text=Ni+slike';
+        const engine = car.engineCc ? `${(car.engineCc / 1000).toFixed(1)}L` : 'N/A';
+        const fuel = car.fuel === 'Priključni hibrid' ? 'Priključni h.' : car.fuel;
+        
+        return `
+            <div class="sponsored-mini-card-wrapper">
+                <a href="#/oglas?id=${car.id}" class="sponsored-mini-card">
+                    <img src="${img}" alt="${car.title}">
+                    <h4 class="sponsored-title">${car.make} ${car.model}</h4>
+                    <div class="sponsored-specs">
+                        <span><i data-lucide="calendar"></i> ${car.year}</span>
+                        <span><i data-lucide="gauge"></i> ${car.mileage}</span>
+                        <span><i data-lucide="cog"></i> ${engine}</span>
+                        <span><i data-lucide="fuel"></i> ${fuel}</span>
+                        <span><i data-lucide="joystick"></i> ${car.transmission}</span>
+                    </div>
+                    <div class="sponsored-price">${car.price}</div>
+                </a>
+            </div>
+        `;
+    }
+
+    // Render twice for loop
+    track.innerHTML = [...sponsored, ...sponsored].map(car => renderAdCard(car)).join('');
+    if (window.lucide) window.lucide.createIcons();
+
+    let scrollAmount = 0;
+    let targetScroll = 0;
+    let step = 0.8; // Speed of auto-scroll
+    let isPaused = false;
+    let animationId = null;
+
+    function startAnimation() {
+        if (!isPaused) {
+            // Smoothly move targetScroll forward by auto-scroll step
+            targetScroll += step;
+            
+            // Loop logic for targetScroll
+            if (targetScroll >= track.scrollWidth / 2) {
+                targetScroll = 0;
+                scrollAmount = 0; // jump immediately to avoid visible glitch
+            }
+        }
+
+        // Standard ease-out chase: move scrollAmount toward targetScroll
+        // current += (target - current) * ease
+        scrollAmount += (targetScroll - scrollAmount) * 0.1;
+        
+        track.style.transform = `translateX(-${scrollAmount}px)`;
+        animationId = requestAnimationFrame(startAnimation);
+    }
+
+    // Start
+    startAnimation();
+
+    // Pause on hover
+    track.addEventListener('mouseenter', () => { isPaused = true; });
+    track.addEventListener('mouseleave', () => { isPaused = false; });
+
+    // Buttons functionality with smooth chase
+    const jumpSize = 400;
+    nextBtn.addEventListener('click', () => {
+        targetScroll += jumpSize;
+    });
+
+    prevBtn.addEventListener('click', () => {
+        targetScroll -= jumpSize;
+    });
 }
 
 function renderListingsSection(containerId, sectionId, listings, hideIfEmpty = false) {
@@ -74,7 +155,7 @@ function renderListingsSection(containerId, sectionId, listings, hideIfEmpty = f
 }
 
 function setupCarousels() {
-    const sections = ['featured', 'recently-viewed', 'popular', 'newest'];
+    const sections = ['featured', 'recently-viewed'];
 
     sections.forEach(section => {
         const track = document.getElementById(`${section}-container`);

@@ -3,160 +3,7 @@
 
 const MAX_COMPARE = 3;
 
-// Sample listing data (will be replaced by Firebase data)
-export const sampleCars = [
-    {
-        id: 'car-1',
-        title: 'Audi A4 Avant',
-        subtitle: '2.0 TDI S-tronic S-line (LED, NAVI, PANORAMA)',
-        price: '24.500 €',
-        priceRaw: 24500,
-        year: '05/2019',
-        mileage: '125.000 km',
-        mileageRaw: 125000,
-        power: '140 kW (190 KM)',
-        fuel: 'Diesel',
-        condition: 'Rabljeno',
-        sellerNote: 'Avto prodajam, ker kupujem večjega.',
-        location: '1000 Ljubljana',
-        seller: 'Janez Novak (Avtohiša Premium)',
-        sellerImage: 'https://i.pravatar.cc/150?u=janez',
-        sellerType: 'dealer',
-        segment: 'D-sedan',
-        images: [
-            'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=80'
-        ],
-        isNew: true,
-        imgCount: 15
-    },
-    {
-        id: 'car-2',
-        title: 'Volkswagen Golf',
-        subtitle: '1.5 TSI Evo Highline',
-        price: '18.900 €',
-        priceRaw: 18900,
-        year: '11/2020',
-        mileage: '65.000 km',
-        mileageRaw: 65000,
-        power: '110 kW (150 KM)',
-        fuel: 'Bencin',
-        condition: 'Rabljeno',
-        sellerNote: 'Prvi lastnik, potrjena servisna knjiga.',
-        location: '2000 Maribor',
-        seller: 'Marko Kovač',
-        sellerImage: 'https://i.pravatar.cc/150?u=marko',
-        sellerType: 'private',
-        segment: 'C-hatchback',
-        images: [
-            'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fd?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80'
-        ],
-        isNew: false,
-        imgCount: 8
-    },
-    {
-        id: 'car-3',
-        title: 'BMW Serija 3',
-        subtitle: '320d xDrive M-Sport',
-        price: '31.200 €',
-        priceRaw: 31200,
-        year: '03/2021',
-        mileage: '48.000 km',
-        mileageRaw: 48000,
-        power: '140 kW (190 KM)',
-        fuel: 'Diesel',
-        condition: 'Novo vozilo',
-        sellerNote: 'Na voljo takoj, možen ugoden leasing.',
-        location: '3000 Celje',
-        seller: 'Andrej Potočnik (BMW Center)',
-        sellerImage: 'https://i.pravatar.cc/150?u=andrej',
-        sellerType: 'dealer',
-        segment: 'D-sedan',
-        images: [
-            'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&w=800&q=80'
-        ],
-        isNew: true,
-        imgCount: 22
-    },
-    {
-        id: 'car-4',
-        title: 'Honda CR-V',
-        subtitle: '2.0 i-MMD Hybrid Elegance',
-        price: '27.950 €',
-        priceRaw: 27950,
-        year: '08/2022',
-        mileage: '22.300 km',
-        mileageRaw: 22300,
-        power: '135 kW (184 KM)',
-        fuel: 'Hibrid',
-        condition: 'Testno vozilo',
-        sellerNote: 'Nizka poraba, varčen hibridni motor.',
-        location: '6000 Koper',
-        seller: 'Uroš Zupan',
-        sellerImage: 'https://i.pravatar.cc/150?u=uros',
-        sellerType: 'private',
-        segment: 'SUV',
-        images: [
-            'https://images.unsplash.com/photo-1568844293986-8d0400bc4745?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80'
-        ],
-        isNew: false,
-        imgCount: 12
-    },
-    {
-        id: 'car-5',
-        title: 'Mercedes-Benz C 220 d',
-        subtitle: 'AMG Line 4MATIC (Full LED, Panorama)',
-        price: '38.700 €',
-        priceRaw: 38700,
-        year: '01/2022',
-        mileage: '35.000 km',
-        mileageRaw: 35000,
-        power: '147 kW (200 KM)',
-        fuel: 'Diesel',
-        condition: 'Oldtimer',
-        sellerNote: 'Odlično ohranjen, garažiran od prvega dne.',
-        location: '4000 Kranj',
-        seller: 'Luka Horvat (Star Premium)',
-        sellerImage: 'https://i.pravatar.cc/150?u=luka',
-        sellerType: 'dealer',
-        segment: 'D-sedan',
-        images: [
-            'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&w=800&q=80'
-        ],
-        isNew: true,
-        imgCount: 28
-    },
-    {
-        id: 'car-6',
-        title: 'Škoda Octavia',
-        subtitle: '2.0 TDI Style (ACC, NAVI, LED)',
-        price: '21.400 €',
-        priceRaw: 21400,
-        year: '06/2020',
-        mileage: '98.000 km',
-        mileageRaw: 98000,
-        power: '110 kW (150 KM)',
-        fuel: 'Diesel',
-        condition: 'Rabljeno',
-        sellerNote: 'Avto prodajam, ker sem dobil službenega.',
-        location: '5000 Nova Gorica',
-        seller: 'Maja Bizjak',
-        sellerImage: 'https://i.pravatar.cc/150?u=maja',
-        sellerType: 'private',
-        segment: 'C-hatchback',
-        images: [
-            'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&w=800&q=80'
-        ],
-        isNew: false,
-        imgCount: 10
-    }
-];
+import { sampleCars } from '../data/sampleListings.js';
 
 // ── Price Rating Logic ──────────────────────────────────────
 // Compares car price to average of similar vehicles in same segment
@@ -383,6 +230,18 @@ function renderListings(cars) {
 
     // Init Lucide icons inside the rendered content
     if (window.lucide) window.lucide.createIcons();
+
+    // Bind card click for navigation
+    container.querySelectorAll('.car-listing').forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Don't navigate if clicking an action button or carousel btn
+            if (e.target.closest('.pill-btn') || e.target.closest('.carousel-btn') || e.target.closest('.carousel-dots')) {
+                return;
+            }
+            const carId = card.getAttribute('data-car-id');
+            window.location.hash = `#/oglas?id=${carId}`;
+        });
+    });
 
     // Bind compare buttons
     container.querySelectorAll('.listing-compare-btn').forEach(btn => {

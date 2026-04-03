@@ -22,6 +22,7 @@ const pageModules = {
     booking: () => import('./pages/booking.js').then(m => m.initBookingPage()),
     'tire-search': () => import('./pages/tire-search.js').then(m => m.initTireSearchPage()),
     'tire-product': () => import('./pages/tire-product.js').then(m => m.initTireProductPage()),
+    admin: () => import('./pages/admin.js').then(m => m.initAdminPage()),
 };
 
 document.addEventListener('routeChanged', (e) => {

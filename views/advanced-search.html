@@ -1,5 +1,5 @@
 <style>
-    .adv-title-wrapper { display: flex; justify-content: center; width: 100%; margin-bottom: 2.5rem; }
+
     .hero-title { text-align: center !important; margin: 0 !important; }
     #group-bodyType { order: -1; }
     .adv-acc-body { flex-direction: column; }
@@ -39,31 +39,48 @@
     }
     .vehicle-entry-card .vec-remove:hover { background: rgba(255,255,255,0.35); }
 
-    /* Standard adv chips */
+    /* Standard adv chips (Modern Toggles) */
     .adv-chip {
         display: inline-flex; align-items: center; gap: 0.5rem;
-        padding: 0.35rem 0.9rem; border-radius: 99px;
-        background: rgba(255,255,255,0.5); border: 1px solid rgba(0,0,0,0.08);
-        font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+        padding: 0.45rem 1.1rem; border-radius: 99px;
+        background: rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.1);
+        font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        color: #4b5563; user-select: none;
     }
-    .adv-chip:hover { background: rgba(255,255,255,0.8); }
-    .adv-chip input { margin: 0; }
-    body.dark-mode .adv-chip { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #e2e8f0; }
+    .adv-chip:hover { background: #fff; border-color: rgba(37, 99, 235, 0.2); transform: translateY(-1px); }
+    .adv-chip input { display: none; }
+    
+    .adv-chip:has(input:checked) {
+        background: var(--color-primary-start);
+        color: #fff;
+        border-color: var(--color-primary-start);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
 
-    /* Category breadcrumb bar */
-    .cat-breadcrumb {
-        display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
-        margin-bottom: 1.5rem; padding: 0.75rem 1.25rem;
-        background: rgba(255,255,255,0.5); backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.4); border-radius: 99px;
-        font-size: 0.85rem; font-weight: 500; color: #4b5563;
+    body.dark-mode .adv-chip { 
+        background: rgba(255,255,255,0.05); 
+        border-color: rgba(255,255,255,0.1); 
+        color: #94a3b8; 
     }
-    .cat-breadcrumb a { color: var(--color-primary-start); text-decoration: none; font-weight: 600; }
-    .cat-breadcrumb a:hover { text-decoration: underline; }
-    .cat-breadcrumb .sep { opacity: 0.4; }
-    .cat-breadcrumb .current { font-weight: 700; color: #111827; }
-    body.dark-mode .cat-breadcrumb { background: rgba(30,41,59,0.6); border-color: rgba(255,255,255,0.1); color: #94a3b8; }
-    body.dark-mode .cat-breadcrumb .current { color: #f1f5f9; }
+    body.dark-mode .adv-chip:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    body.dark-mode .adv-chip:has(input:checked) { background: var(--color-primary-start); color: #fff; }
+
+    /* Toggle Row */
+    .adv-toggle-row {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0.75rem 1rem; background: rgba(255,255,255,0.4);
+        border: 1px solid rgba(0,0,0,0.05); border-radius: 1rem;
+        margin-bottom: 0.75rem; transition: all 0.2s;
+    }
+    .adv-toggle-row:hover { background: rgba(255,255,255,0.6); border-color: rgba(37, 99, 235, 0.2); }
+    .adv-toggle-label { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; font-weight: 600; color: #1e293b; }
+    .adv-toggle-label i { color: var(--color-primary-start); width: 18px; height: 18px; }
+    
+    body.dark-mode .adv-toggle-row { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
+    body.dark-mode .adv-toggle-label { color: #f1f5f9; }
+
+
+
 
     /* Rental badge */
     .rental-badge {
@@ -99,35 +116,22 @@
         display: flex; align-items: center; justify-content: flex-end;
         gap: 0.75rem; margin-bottom: 1rem;
     }
+    
+    #vehicleCards:empty { margin-bottom: 0 !important; }
 </style>
 
 <div class="search-container" style="max-width:1060px; margin:3rem auto; padding:0 1rem;">
-    <!-- Category Breadcrumb (populated by JS) -->
-    <div id="catBreadcrumb" class="cat-breadcrumb" style="display:none;"></div>
-
-    <div class="adv-title-wrapper">
-        <h1 class="hero-title" id="searchPageTitle">Napredno <span class="text-gradient">iskanje</span></h1>
-    </div>
-
     <!-- Search Type Pills (Vozilo / Deli / Pnevmatike) — shown for categories that need it -->
     <div id="searchTypePills" class="search-type-pills" style="display:none;"></div>
 
     <!-- Vehicle Type Tabs (Avto/Moto/Gosp/Prosti) — shown for generic search or avto -->
     <div id="vehicleTypeTabs" class="glass-tabs" style="display:flex; justify-content:center; gap:0.5rem; margin-bottom:2rem; background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); padding:0.5rem; border-radius:99px; width:fit-content; margin-inline:auto;">
-        <button type="button" class="tab-btn active" data-tab="avto" title="Avtomobili" style="padding:0.75rem 2rem; border-radius:99px; border:none; background:white; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:0.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.05); transition:all 0.2s;"><i data-lucide="car"></i> Avtomobili</button>
-        <button type="button" class="tab-btn" data-tab="moto" title="Motorji" style="padding:0.75rem 2rem; border-radius:99px; border:none; background:transparent; color:#6b7280; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:0.5rem; transition:all 0.2s;"><i data-lucide="bike"></i> Motorji</button>
-        <button type="button" class="tab-btn" data-tab="gospodarska" title="Gospodarska vozila" style="padding:0.75rem 2rem; border-radius:99px; border:none; background:transparent; color:#6b7280; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:0.5rem; transition:all 0.2s;"><i data-lucide="truck"></i> Gospodarska</button>
-        <button type="button" class="tab-btn" data-tab="prosti-cas" title="Prosti čas" style="padding:0.75rem 2rem; border-radius:99px; border:none; background:transparent; color:#6b7280; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:0.5rem; transition:all 0.2s;"><i data-lucide="palmtree"></i> Prosti čas</button>
+        <button type="button" class="tab-btn active" data-tab="avto" title="Avtomobili"><i data-lucide="car"></i> Avtomobili</button>
+        <button type="button" class="tab-btn" data-tab="moto" title="Motorji"><i data-lucide="bike"></i> Motorji</button>
+        <button type="button" class="tab-btn" data-tab="gospodarska" title="Gospodarska vozila"><i data-lucide="truck"></i> Gospodarska</button>
+        <button type="button" class="tab-btn" data-tab="prosti-cas" title="Prosti čas"><i data-lucide="palmtree"></i> Prosti čas</button>
     </div>
 
-    <!-- Remember search toggle -->
-    <div class="adv-remember-bar">
-        <label class="remember-toggle" title="Zapomni si iskalni filter">
-            <span class="toggle-label">Zapomni si filter</span>
-            <input type="checkbox" class="remember-check" id="rememberSearchToggle" data-category="search-global">
-            <span class="toggle-slider"></span>
-        </label>
-    </div>
 
     <form id="advancedSearchForm" data-v="3">
         <!-- Hidden fields for category context -->
@@ -187,9 +191,13 @@
                         <button type="button" class="body-type-card" data-value="Minimoto"><i class="fas fa-motorcycle"></i><span>Minimoto</span></button>
                         <button type="button" class="body-type-card" data-value="Gocart"><i class="fas fa-flag-checkered"></i><span>Gocart</span></button>
                         <button type="button" class="body-type-card" data-value="MotorneSani"><i data-lucide="snowflake"></i><span>Motorne sani</span></button>
-                        <button type="button" class="body-type-card" data-value="EMoto"><i data-lucide="zap"></i><span>E-Moto</span></button>
-                        <button type="button" class="body-type-card" data-value="ESkiro"><i data-lucide="zap"></i><span>E-Skiro</span></button>
-                        <button type="button" class="body-type-card" data-value="EKolo"><i data-lucide="zap"></i><span>E-Kolo</span></button>
+                        <button type="button" class="body-type-card" data-value="EVozila">
+                            <div style="display:flex; gap:0.2rem; align-items:center; justify-content:center;">
+                                <i data-lucide="bike" style="width:16px;height:16px;"></i>
+                                <i data-lucide="zap" style="width:12px;height:12px; color:var(--color-primary-start);"></i>
+                            </div>
+                            <span>E-Vozila</span>
+                        </button>
                     </div>
 
                     <!-- Gospodarska body types -->
@@ -215,28 +223,6 @@
                     </div>
                 </div>
 
-                <!-- Condition checkboxes -->
-                <div class="adv-field-group">
-                    <label class="adv-label">Stanje vozila</label>
-                    <div class="adv-chip-group">
-                        <label class="adv-chip"><input type="checkbox" name="condition" value="Novo"> Novo</label>
-                        <label class="adv-chip"><input type="checkbox" name="condition" value="Rabljeno"> Rabljeno</label>
-                        <label class="adv-chip"><input type="checkbox" name="condition" value="Razstavno"> Razstavno vozilo</label>
-                        <label class="adv-chip"><input type="checkbox" name="condition" value="DnevnaRegistracija"> Dnevna registracija</label>
-                        <label class="adv-chip"><input type="checkbox" name="condition" value="Starodobnik"> Starodobnik</label>
-                    </div>
-                </div>
-
-                <!-- Damaged vehicle toggle -->
-                <div class="adv-field-group">
-                    <label class="adv-label">Poškodovana vozila</label>
-                    <div class="adv-chip-group">
-                        <label class="adv-chip"><input type="radio" name="damaged" value=""> Vsa</label>
-                        <label class="adv-chip"><input type="radio" name="damaged" value="only"> Samo poškodovana</label>
-                        <label class="adv-chip"><input type="radio" name="damaged" value="exclude"> Izključi poškodovana</label>
-                    </div>
-                </div>
-
                 <!-- Vehicle Selector (up to 3 vehicles) -->
                 <div class="adv-field-group">
                     <label class="adv-label">Iskana vozila (do 3)</label>
@@ -255,19 +241,60 @@
                         <button type="button" id="addVehicleBtn" class="pill-btn primary" style="height:28px; padding:0 1.2rem; font-size:0.75rem; width:fit-content; border-radius:99px;">
                             <i data-lucide="plus" style="width:14px;height:14px;"></i> Dodaj
                         </button>
+                        <button type="button" id="toggleExcludeBtn" class="pill-btn secondary" style="height:28px; padding:0 1.2rem; font-size:0.75rem; width:fit-content; border-radius:99px; border-style: dashed; background: transparent;">
+                            <i data-lucide="minus-circle" style="width:14px;height:14px;"></i> Želiš izločiti vozila?
+                        </button>
                         <p class="brand-limit-note" id="brandLimitNote" style="margin:0;"></p>
                     </div>
                     <div id="vehicleCards" style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.5rem;"></div>
                 </div>
 
-                <!-- Exclude brands -->
-                <div class="adv-field-group">
-                    <label class="adv-label">Izloči znamko</label>
-                    <div class="brand-chips-container" id="excludeChips"></div>
-                    <div class="brand-add-row">
-                        <div class="adv-field-group">
-                            <select id="excludeMake" class="glass-select"><option value="">+ Izloči znamko</option></select>
+                <!-- Exclude vehicles Section (initially hidden) -->
+                <div id="excludeSection" style="display:none; flex-direction:column; padding-top:1.5rem; border-top: 1.5px dashed rgba(0,0,0,0.1); border-bottom: 1.5px dashed rgba(0,0,0,0.1); margin-top:0.25rem; margin-bottom:1.5rem; padding-bottom:1.5rem;">
+                    <div class="adv-field-group">
+                        <label class="adv-label">Izloči vozilo</label>
+                        
+                        <div id="excludeSelectorRow" class="adv-grid-3" style="margin-bottom:0.75rem;">
+                            <div class="adv-field-group" style="margin-bottom:0;">
+                                <select id="excludeMake" class="glass-select"><option value="">Znamka</option></select>
+                            </div>
+                            <div class="adv-field-group" style="margin-bottom:0;">
+                                <select id="excludeModel" disabled class="glass-select"><option value="">Model</option></select>
+                            </div>
+                            <div class="adv-field-group" style="margin-bottom:0;">
+                                <select id="excludeVariant" disabled class="glass-select"><option value="">Različica</option></select>
+                            </div>
                         </div>
+                        
+                        <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem;">
+                            <button type="button" id="addExcludeBtn" class="pill-btn primary" style="height:28px; padding:0 1.2rem; font-size:0.75rem; width:fit-content; border-radius:99px; background:linear-gradient(135deg,#ef4444,#dc2626) !important; color:white !important; box-shadow:0 10px 20px -5px rgba(220, 38, 38, 0.35) !important;">
+                                <i data-lucide="minus-circle" style="width:14px;height:14px;"></i> Izloči
+                            </button>
+                        </div>
+
+                        <div id="excludeChips" style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;"></div>
+                    </div>
+                </div>
+
+                <!-- Condition checkboxes -->
+                <div class="adv-field-group" style="margin-bottom: 1.5rem;">
+                    <label class="adv-label">Stanje vozila</label>
+                    <div class="adv-chip-group">
+                        <label class="adv-chip"><input type="checkbox" name="condition" value="Novo"> Novo</label>
+                        <label class="adv-chip"><input type="checkbox" name="condition" value="Rabljeno"> Rabljeno</label>
+                        <label class="adv-chip"><input type="checkbox" name="condition" value="Razstavno"> Razstavno vozilo</label>
+                        <label class="adv-chip"><input type="checkbox" name="condition" value="DnevnaRegistracija"> Dnevna registracija</label>
+                        <label class="adv-chip"><input type="checkbox" name="condition" value="Starodobnik"> Starodobnik</label>
+                    </div>
+                </div>
+
+                <!-- Damaged vehicle toggle -->
+                <div class="adv-field-group" style="margin-bottom: 2rem;">
+                    <label class="adv-label">Poškodovana vozila</label>
+                    <div class="adv-chip-group">
+                        <label class="adv-chip"><input type="radio" name="damaged" value=""> Vsa</label>
+                        <label class="adv-chip"><input type="radio" name="damaged" value="only"> Samo poškodovana</label>
+                        <label class="adv-chip"><input type="radio" name="damaged" value="exclude"> Izključi poškodovana</label>
                     </div>
                 </div>
 
@@ -284,6 +311,9 @@
                 </div>
                 <div class="adv-field-group">
                     <label class="adv-chip" style="width:fit-content;"><input type="checkbox" name="hideVAT" value="1"> Prikaži cene brez DDV</label>
+                </div>
+                <div class="adv-field-group">
+                    <label class="adv-chip" style="width:fit-content;"><input type="checkbox" name="includeCallForPrice" value="1"> Prikaži tudi oglase brez cene</label>
                 </div>
 
                 <!-- First Registration -->
@@ -660,12 +690,18 @@
                         <label class="adv-chip"><input type="checkbox" name="features" value="HeatedGrips"> Gretje ročic</label>
                         
                         <!-- 6-axis IMU with Info logic -->
-                        <div style="display:flex; align-items:center; gap:0.5rem; width:100%; margin-top:0.5rem;">
-                            <label class="adv-chip" id="imu-trigger">
-                                <input type="checkbox" name="features" value="IMU"> 6 axis IMU
-                                <i data-lucide="help-circle" style="width:14px;height:14px; cursor:help;" onclick="event.preventDefault(); window.showIMUTip && window.showIMUTip()"></i>
+                        <div class="adv-toggle-row" style="width:100%; margin-top:0.5rem;">
+                            <div class="adv-toggle-label">
+                                <i data-lucide="zap"></i>
+                                <span>6 axis IMU</span>
+                                <i data-lucide="help-circle" style="width:14px;height:14px; cursor:help; opacity:0.6;" onclick="event.preventDefault(); window.showIMUTip && window.showIMUTip()"></i>
+                            </div>
+                            <label class="remember-toggle" style="padding:0;">
+                                <input type="checkbox" name="features" value="IMU" class="remember-check" id="imu-trigger-checkbox">
+                                <span class="toggle-slider"></span>
                             </label>
                         </div>
+
                         
                         <div class="adv-chip-group" style="padding-left:1.5rem; border-left:2px solid rgba(0,0,0,0.05); margin-top:0.5rem;">
                             <label class="adv-chip"><input type="checkbox" name="features" value="TractionControl" class="imu-sub"> Traction control</label>
@@ -749,23 +785,30 @@
                 </button>
             </div>
             <div class="adv-acc-body" style="display:none;">
-                <div class="adv-chip-group">
-                    <label class="adv-chip adv-chip-large">
-                        <input type="checkbox" name="history" value="ServiceBook">
-                        <i data-lucide="book-open"></i>
-                        <span>Potrjena servisna knjiga</span>
-                    </label>
-                    <label class="adv-chip adv-chip-large">
-                        <input type="checkbox" name="history" value="Warranty">
-                        <i data-lucide="shield"></i>
-                        <span>Z garancijo</span>
-                    </label>
-                    <label class="adv-chip adv-chip-large">
-                        <input type="checkbox" name="history" value="NonSmoker">
-                        <i data-lucide="wind"></i>
-                        <span>Nekadilsko vozilo</span>
-                    </label>
+                <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                    <div class="adv-toggle-row">
+                        <div class="adv-toggle-label"><i data-lucide="book-open"></i> Potrjena servisna knjiga</div>
+                        <label class="remember-toggle" style="padding:0;">
+                            <input type="checkbox" name="history" value="ServiceBook" class="remember-check">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="adv-toggle-row">
+                        <div class="adv-toggle-label"><i data-lucide="shield"></i> Z garancijo</div>
+                        <label class="remember-toggle" style="padding:0;">
+                            <input type="checkbox" name="history" value="Warranty" class="remember-check">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="adv-toggle-row">
+                        <div class="adv-toggle-label"><i data-lucide="wind"></i> Nekadilsko vozilo</div>
+                        <label class="remember-toggle" style="padding:0;">
+                            <input type="checkbox" name="history" value="NonSmoker" class="remember-check">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
                 </div>
+
             </div>
         </div>
 

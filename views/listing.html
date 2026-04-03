@@ -1,45 +1,9 @@
-<div class="listing-container">
-    <div class="back-link-container">
-        <a href="#/" class="back-link"><i class="fas fa-arrow-left"></i> Vsi oglasi</a>
-    </div>
-    <div class="title-container">
-        <h1 id="listing-title">Nalagam...</h1>
-        <button class="fav-btn-details" id="fav-btn-details">
-            <i class="far fa-heart"></i> Dodaj med priljubljene
-        </button>
-    </div>
-    <div class="listing-layout">
-        <div class="image-gallery">
-            <div class="main-image-container">
-                <img id="main-image" src="" alt="Glavna slika vozila">
-                <button class="nav-btn prev" id="prev-btn">&#10094;</button>
-                <button class="nav-btn next" id="next-btn">&#10095;</button>
-            </div>
-            <div class="thumbnail-container" id="thumbnail-container"></div>
-        </div>
-        <div class="details-panel">
-            <div class="price-tag"><h2 id="price"></h2></div>
-            <h3>Ključni podatki</h3>
-            <div class="key-details" id="key-details">
-                <!-- Injected via JS -->
-            </div>
-            <h3>Opis vozila</h3>
-            <p id="description"></p>
-            <h3>Podatki o prodajalcu</h3>
-            <div class="seller-info">
-                <p><i class="fas fa-user"></i> <strong id="seller-name"></strong></p>
-                <p><i class="fas fa-map-marker-alt"></i> <span id="seller-location"></span></p>
-                <div class="contact-btn-group">
-                    <button id="show-phone-btn" class="contact-btn phone-btn" style="display: none;"><i class="fas fa-phone"></i> Pokaži telefonsko</button>
-                    <button id="contact-email-btn" class="contact-btn email-btn"><i class="fas fa-envelope"></i> Kontaktiraj prodajalca</button>
-                </div>
-            </div>
+<div class="listing-page" id="listingPage">
+    <!-- Populated entirely by listing.js -->
+    <div style="display:flex;align-items:center;justify-content:center;min-height:60vh;">
+        <div style="text-align:center;">
+            <div class="cl-vin-spinner" style="margin:0 auto 1rem;"></div>
+            <p style="color:#64748b;">Nalagam oglas...</p>
         </div>
     </div>
-    <section class="similar-vehicles-section">
-        <h2>Podobni oglasi</h2>
-        <div class="listings-grid" id="similar-vehicles-container">
-            <!-- Injected via JS -->
-        </div>
-    </section>
 </div>

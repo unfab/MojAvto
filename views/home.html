@@ -114,11 +114,16 @@
     </div>
 </div>
 
-<div class="ad-banner-container">
-    <div class="ad-placeholder">
-        <span>Prostor za oglas (728px x 90px)</span>
+    <div class="ad-banner-container rotating-ads-carousel">
+        <span class="sponsored-badge">Oglas</span>
+        <button class="carousel-btn prev" id="rot-prev-btn" aria-label="Prejšnji">&#10094;</button>
+        <div class="rotating-ads-track-container">
+            <div class="rotating-ads-track" id="rotating-ads-container">
+                <!-- Mini cards will be rendered here -->
+            </div>
+        </div>
+        <button class="carousel-btn next" id="rot-next-btn" aria-label="Naslednji">&#10095;</button>
     </div>
-</div>
 
 <div class="page-container" style="margin-top: 2rem; flex-direction: column;">
     <section id="featured-section" class="carousel-section" style="display: none;">
@@ -134,37 +139,6 @@
     </section>
 </div>
 
-<div class="page-container" style="margin-top: 2rem; flex-direction: column;">
-    <section class="popular-brands-section">
-        <h2 data-i18n-key="popular_brands_title">Priljubljene znamke</h2>
-        <div class="brands-grid">
-            <a href="#/search-results" class="brand-card" data-brand="Volkswagen">
-                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
-                <span>Volkswagen</span>
-            </a>
-            <a href="#/search-results" class="brand-card" data-brand="BMW">
-                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
-                <span>BMW</span>
-            </a>
-            <a href="#/search-results" class="brand-card" data-brand="Audi">
-                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
-                <span>Audi</span>
-            </a>
-            <a href="#/search-results" class="brand-card" data-brand="Škoda">
-                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
-                <span>Škoda</span>
-            </a>
-            <a href="#/search-results" class="brand-card" data-brand="Renault">
-                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
-                <span>Renault</span>
-            </a>
-            <a href="#/search-results" class="brand-card" data-brand="Mercedes-Benz">
-                <i data-lucide="car-front" style="color:var(--color-primary-start); width:32px; height:32px;"></i>
-                <span>Mercedes-Benz</span>
-            </a>
-        </div>
-    </section>
-</div>
 
 <div class="page-container" style="margin-top: 2rem; flex-direction: column;">
     <section id="recently-viewed-section" class="carousel-section" style="display: none;">
@@ -180,33 +154,7 @@
     </section>
 </div>
 
-<div class="page-container" style="margin-top: 2rem; flex-direction: column;">
-    <section id="popular-section" class="carousel-section" style="display: none;">
-        <h2 data-i18n-key="popular_title">Priljubljeno med uporabniki</h2>
-        <div class="carousel-wrapper">
-            <button class="carousel-btn prev" id="popular-prev-btn" aria-label="Prejšnji oglas">&#10094;</button>
-            <div class="carousel-track-container">
-                <div class="carousel-track" id="popular-container">
-                </div>
-            </div>
-            <button class="carousel-btn next" id="popular-next-btn" aria-label="Naslednji oglas">&#10095;</button>
-        </div>
-    </section>
-</div>
 
-<div class="page-container" style="margin-top: 2rem; flex-direction: column;">
-    <section id="newest-section" class="carousel-section" style="display: none;">
-        <h2 data-i18n-key="newest_title">Novo v ponudbi</h2>
-        <div class="carousel-wrapper">
-            <button class="carousel-btn prev" id="newest-prev-btn" aria-label="Prejšnji oglas">&#10094;</button>
-            <div class="carousel-track-container">
-                <div class="carousel-track" id="newest-container">
-                </div>
-            </div>
-            <button class="carousel-btn next" id="newest-next-btn" aria-label="Naslednji oglas">&#10095;</button>
-        </div>
-    </section>
-</div>
 
 <div class="page-container" style="margin-top: 2rem; flex-direction: column;">
     <section class="news-section">

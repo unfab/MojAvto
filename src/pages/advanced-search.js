@@ -36,8 +36,6 @@ function parseHashParams() {
 // Apply category context to the page UI
 // ═══════════════════════════════════════════════════════════════════════════════
 function applyCategoryContext(ctx) {
-    const breadcrumb = document.getElementById('catBreadcrumb');
-    const title = document.getElementById('searchPageTitle');
     const tabs = document.getElementById('vehicleTypeTabs');
     const searchTypePills = document.getElementById('searchTypePills');
 
@@ -50,25 +48,8 @@ function applyCategoryContext(ctx) {
 
     const resolved = ctx.cat ? resolveCategory(ctx.cat, ctx.sub) : null;
 
-    // ── Breadcrumb ──
-    if (resolved && resolved.main) {
-        breadcrumb.style.display = 'flex';
-        let crumbs = `<a href="#/iskanje">Oglasi</a> <span class="sep">›</span>`;
-        crumbs += `<span class="current">${resolved.main.label}</span>`;
-        if (resolved.sub) {
-            crumbs += ` <span class="sep">›</span> <span class="current">${resolved.sub.label}</span>`;
-        }
-        if (ctx.najem === '1') {
-            crumbs += ` <span class="rental-badge"><i data-lucide="calendar" style="width:12px;height:12px;"></i> Najem</span>`;
-        }
-        breadcrumb.innerHTML = crumbs;
-    }
+    // Title is now removed in Phase 3 cleanup
 
-    // ── Title adaptation ──
-    if (resolved && resolved.main) {
-        const catName = resolved.sub ? resolved.sub.label : resolved.main.label;
-        title.innerHTML = `Iskanje: <span class="text-gradient">${catName}</span>`;
-    }
 
     // ── Tab selection ──
     // Map category slugs to tab data-tab values
@@ -80,8 +61,6 @@ function applyCategoryContext(ctx) {
         tabBtns.forEach(btn => {
             const isTarget = btn.dataset.tab === tabMap[ctx.cat];
             btn.classList.toggle('active', isTarget);
-            btn.style.background = isTarget ? 'white' : 'transparent';
-            btn.style.color = isTarget ? 'inherit' : '#6b7280';
         });
         // Show correct grid
         showGridForTab(tabMap[ctx.cat]);
@@ -184,9 +163,12 @@ function bindSearchLogic(catContext) {
     const variantSelect = document.getElementById("variant");
     const addVehicleBtn = document.getElementById("addVehicleBtn");
     const vehicleCardsEl = document.getElementById("vehicleCards");
-    const selectorRow = document.getElementById("vehicleSelectorRow");
-    const brandLimitNote = document.getElementById("brandLimitNote");
     const excludeSelect = document.getElementById("excludeMake");
+    const excludeModelSelect = document.getElementById("excludeModel");
+    const excludeVariantSelect = document.getElementById("excludeVariant");
+    const addExcludeBtn = document.getElementById("addExcludeBtn");
+    const toggleExcludeBtn = document.getElementById("toggleExcludeBtn");
+    const excludeSection = document.getElementById("excludeSection");
     const excludeChipsEl = document.getElementById("excludeChips");
 
     const tabBtns = document.querySelectorAll('.glass-tabs .tab-btn');
@@ -203,10 +185,8 @@ function bindSearchLogic(catContext) {
     // --- Tabs ---
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            tabBtns.forEach(b => { b.classList.remove('active'); b.style.background = 'transparent'; b.style.color = '#6b7280'; });
+            tabBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            btn.style.background = 'white';
-            btn.style.color = 'inherit';
 
             // Clear body type selections
             allBodyTypeCards.forEach(c => c.classList.remove('active'));
@@ -248,7 +228,7 @@ function bindSearchLogic(catContext) {
     toggleVehicleSpecificFields(activeTab);
 
     // --- 6-axis IMU Special Logic ---
-    const imuTrigger = document.getElementById('imu-trigger')?.querySelector('input');
+    const imuTrigger = document.getElementById('imu-trigger-checkbox');
     const imuSubs = document.querySelectorAll('.imu-sub');
     if (imuTrigger) {
         imuTrigger.addEventListener('change', () => {
@@ -317,7 +297,7 @@ function bindSearchLogic(catContext) {
     // ═══════════════════════════════════════════════════════════════════
     const MAX_VEHICLES = 3;
     let vehicles = [];
-    let excludedBrands = [];
+    let excludedVehicles = [];
 
     function renderVehicleCards() {
         vehicleCardsEl.innerHTML = vehicles.map((v, i) => {
@@ -343,11 +323,17 @@ function bindSearchLogic(catContext) {
     }
 
     function renderExcludeChips() {
-        excludeChipsEl.innerHTML = excludedBrands.map((b, i) =>
-            `<span class="brand-chip" style="background:linear-gradient(135deg,#ef4444,#dc2626);">${b}<button type="button" class="chip-remove" data-idx="${i}">&times;</button></span>`
-        ).join('');
-        excludeChipsEl.querySelectorAll('.chip-remove').forEach(btn => {
-            btn.addEventListener('click', () => { excludedBrands.splice(+btn.dataset.idx, 1); renderExcludeChips(); updateLiveCount(); });
+        excludeChipsEl.innerHTML = excludedVehicles.map((v, i) => {
+            const parts = [v.make];
+            if (v.model) parts.push(v.model);
+            if (v.variant) parts.push(v.variant);
+            return `<div class="vehicle-entry-card" style="background:linear-gradient(135deg, #ef4444, #dc2626) !important; box-shadow:0 6px 15px rgba(239, 68, 68, 0.25);">
+                <div class="vec-info">${parts.map(p => `<span>${p}</span>`).join('<span class="vec-sep">›</span>')}</div>
+                <button type="button" class="vec-remove" data-idx="${i}">&times;</button>
+            </div>`;
+        }).join('');
+        excludeChipsEl.querySelectorAll('.vec-remove').forEach(btn => {
+            btn.addEventListener('click', () => { excludedVehicles.splice(+btn.dataset.idx, 1); renderExcludeChips(); updateLiveCount(); });
         });
     }
 
@@ -394,6 +380,8 @@ function bindSearchLogic(catContext) {
                 m.createCustomSelect(yearFromSelect);
                 m.createCustomSelect(yearToSelect);
                 if (excludeSelect) m.createCustomSelect(excludeSelect);
+                if (excludeModelSelect) m.createCustomSelect(excludeModelSelect);
+                if (excludeVariantSelect) m.createCustomSelect(excludeVariantSelect);
             });
 
             // Make → populate models
@@ -421,13 +409,51 @@ function bindSearchLogic(catContext) {
                 }
             });
 
-            // Exclude
+            // Exclude flow
             if (excludeSelect) {
                 excludeSelect.addEventListener("change", () => {
-                    const v = excludeSelect.value;
-                    if (!v || excludedBrands.includes(v)) return;
-                    excludedBrands.push(v); excludeSelect.value = '';
-                    renderExcludeChips(); updateLiveCount();
+                    const mk = excludeSelect.value;
+                    excludeModelSelect.innerHTML = '<option value="">Model</option>';
+                    excludeVariantSelect.innerHTML = '<option value="">Različica</option>';
+                    excludeModelSelect.disabled = true; excludeVariantSelect.disabled = true;
+                    if (mk && data[mk]) {
+                        const models = data[mk];
+                        const keys = typeof models === 'object' && !Array.isArray(models) ? Object.keys(models).sort() : (Array.isArray(models) ? models.sort() : []);
+                        keys.forEach(m => { const o = document.createElement("option"); o.value = m; o.textContent = m; excludeModelSelect.appendChild(o); });
+                        if (keys.length) excludeModelSelect.disabled = false;
+                    }
+                });
+                excludeModelSelect.addEventListener("change", () => {
+                    const mk = excludeSelect.value, md = excludeModelSelect.value;
+                    excludeVariantSelect.innerHTML = '<option value="">Različica</option>';
+                    excludeVariantSelect.disabled = true;
+                    if (mk && md && data[mk] && data[mk][md] && Array.isArray(data[mk][md])) {
+                        data[mk][md].forEach(v => { const o = document.createElement("option"); o.value = v; o.textContent = v; excludeVariantSelect.appendChild(o); });
+                        if (data[mk][md].length) excludeVariantSelect.disabled = false;
+                    }
+                });
+
+                addExcludeBtn.addEventListener('click', () => {
+                   const make = excludeSelect.value;
+                   if (!make) return;
+                   const model = excludeModelSelect.value || '';
+                   const variant = excludeVariantSelect.value || '';
+                   excludedVehicles.push({ make, model, variant });
+                   excludeSelect.value = '';
+                   excludeModelSelect.innerHTML = '<option value="">Model</option>'; excludeModelSelect.disabled = true;
+                   excludeVariantSelect.innerHTML = '<option value="">Različica</option>'; excludeVariantSelect.disabled = true;
+                   renderExcludeChips();
+                   updateLiveCount();
+                });
+            }
+
+            // Toggle exclude section
+            if (toggleExcludeBtn && excludeSection) {
+                toggleExcludeBtn.addEventListener('click', () => {
+                    const isHidden = excludeSection.style.display === 'none';
+                    excludeSection.style.display = isHidden ? 'flex' : 'none';
+                    toggleExcludeBtn.style.display = isHidden ? 'none' : 'flex';
+                    if (isHidden && window.lucide) window.lucide.createIcons({ scope: excludeSection });
                 });
             }
         }).catch(err => console.warn("Could not load brands_models_global.json.", err));
@@ -451,7 +477,7 @@ function bindSearchLogic(catContext) {
 
             const filters = {
                 vehicles,
-                excludes: excludedBrands,
+                excludes: excludedVehicles,
                 bodyTypes: selectedBodyTypes,
                 conditions,
                 damaged,
@@ -464,6 +490,7 @@ function bindSearchLogic(catContext) {
                 features,
                 priceFrom: Number(fd.get('priceFrom')) || 0,
                 priceTo: Number(fd.get('priceTo')) || Infinity,
+                includeCallForPrice: fd.get('includeCallForPrice') === '1',
                 yearFrom: Number(fd.get('yearFrom')) || 0,
                 yearTo: Number(fd.get('yearTo')) || Infinity,
                 mileageTo: Number(fd.get('mileageTo')) || Infinity,
@@ -492,11 +519,16 @@ function bindSearchLogic(catContext) {
 
     searchForm.addEventListener('reset', () => {
         setTimeout(() => {
-            vehicles = []; excludedBrands = [];
+            vehicles = []; excludedVehicles = [];
             renderVehicleCards(); renderExcludeChips();
             makeSelect.value = '';
             modelSelect.innerHTML = '<option value="">Model</option>'; modelSelect.disabled = true;
             variantSelect.innerHTML = '<option value="">Različica</option>'; variantSelect.disabled = true;
+            excludeSelect.value = '';
+            excludeModelSelect.innerHTML = '<option value="">Model</option>'; excludeModelSelect.disabled = true;
+            excludeVariantSelect.innerHTML = '<option value="">Različica</option>'; excludeVariantSelect.disabled = true;
+            if (excludeSection) excludeSection.style.display = 'none';
+            if (toggleExcludeBtn) toggleExcludeBtn.style.display = 'flex';
             allBodyTypeCards.forEach(c => c.classList.remove('active'));
             bodyTypeHidden.value = '';
             if (hybridSub) { hybridSub.classList.remove('visible'); hybridSub.querySelectorAll('input').forEach(c => c.checked = false); }
@@ -549,14 +581,25 @@ function matchesFilters(l, filters) {
         if (!match) return false;
     }
 
-    // Excludes
-    if (filters.excludes.length && filters.excludes.includes(l.make)) return false;
+    // Excludes (Vehicles)
+    if (filters.excludes && filters.excludes.length > 0) {
+        const isExcluded = filters.excludes.some(v => {
+            if (l.make !== v.make) return false;
+            // If model is specified, it must match. If NO model specified, match entire make.
+            if (v.model && l.model !== v.model) return false;
+            // If variant is specified, it must be contained in the title.
+            if (v.variant && l.title && !l.title.includes(v.variant)) return false;
+            return true;
+        });
+        if (isExcluded) return false;
+    }
 
     // Body Types (OR between tiles)
     if (filters.bodyTypes.length > 0) {
         const typeMatch = filters.bodyTypes.some(type => {
             if (type === 'Damaged') return l.isDamaged || l.condition === 'Poškodovano' || l.damaged === 'only';
             if (type === 'Oldtimer') return l.condition === 'Starodobnik' || (l.year && l.year < 1995);
+            if (type === 'EVozila') return ['EMoto', 'ESkiro', 'EKolo'].includes(l.bodyType) || ['EMoto', 'ESkiro', 'EKolo'].includes(l.vehicleType);
             return l.bodyType === type || l.vehicleType === type;
         });
         if (!typeMatch) return false;
@@ -584,7 +627,13 @@ function matchesFilters(l, filters) {
     if (filters.damaged === 'exclude' && (l.isDamaged || l.damaged === 'only')) return false;
 
     // Price, Year, Mileage
-    if (l.price < filters.priceFrom || (filters.priceTo !== Infinity && l.price > filters.priceTo)) return false;
+    const isCallForPrice = l.callForPrice || (!l.priceEur && !l.price);
+    if (isCallForPrice) {
+        if (!filters.includeCallForPrice) return false;
+    } else {
+        const price = l.priceEur || l.price || 0;
+        if (price < filters.priceFrom || (filters.priceTo !== Infinity && price > filters.priceTo)) return false;
+    }
     if (l.year < filters.yearFrom || (filters.yearTo !== Infinity && l.year > filters.yearTo)) return false;
     if (filters.mileageTo !== Infinity && l.mileage > filters.mileageTo) return false;
 

@@ -4,8 +4,10 @@
 export function initCustomSelects() {
     const selects = document.querySelectorAll('select:not(.custom-select-hidden)');
     selects.forEach(select => {
-        // Skip hidden or already processed
-        if (select.offsetParent === null && !select.classList.contains('pill-input')) return;
+        // Skip already processed
+        // We allow hidden selects if they are form inputs (cl-select, pill-input)
+        const isFormInput = select.classList.contains('pill-input') || select.classList.contains('cl-select') || select.classList.contains('pill-select');
+        if (select.offsetParent === null && !isFormInput) return;
         createCustomSelect(select);
     });
 }
