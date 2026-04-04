@@ -25,24 +25,13 @@ export function initHeader() {
                 </div>
               </div>
 
-              <!-- Primerjava -->
-              <div class="compare-nav-wrapper">
-                <a href="#/primerjava" id="compareNavLink" class="nav-pill ${hash === '#/primerjava' ? 'active-pill' : ''}">
-                  <i data-lucide="scale"></i> Primerjava
-                  <span id="compareBadge" class="compare-badge" style="display: none;">0</span>
-                </a>
-                <div id="comparePreview" class="compare-preview glass-card">
-                  <!-- Dynamic content -->
-                </div>
-              </div>
-
               <!-- Avtohise — simple link, no submenu -->
               <a href="#/zemljevid?type=dealer" class="nav-pill ${hash.startsWith('#/zemljevid') ? 'active-pill' : ''}">
                 <i data-lucide="building-2"></i> Avtohiše
               </a>
 
               <!-- Deli in oprema -->
-              <a href="${buildSearchUrl(null, null, 'deli')}" class="nav-pill">
+              <a href="#/deli" class="nav-pill ${hash.startsWith('#/deli') ? 'active-pill' : ''}">
                 <i data-lucide="wrench"></i> Deli in oprema
               </a>
 
@@ -66,6 +55,10 @@ export function initHeader() {
                     <a href="#/dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</a>
                     <a href="#/profil"><i data-lucide="user"></i> Moj profil</a>
                     <a href="#/garaža"><i data-lucide="warehouse"></i> Moja garaža</a>
+                    <a href="#/primerjava" style="display: flex; align-items: center; justify-content: space-between;">
+                        <span><i data-lucide="scale"></i> Primerjalni kotiček</span>
+                        <span id="compareBadgeDropdown" class="compare-badge-small" style="display: none; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.65rem; align-items: center; justify-content: center; font-weight: 800;">0</span>
+                    </a>
                     <div class="dropdown-divider"></div>
                     <button id="logoutBtn" class="dropdown-logout"><i data-lucide="log-out"></i> Odjava</button>
                   </div>
@@ -181,32 +174,11 @@ export function initHeader() {
     // ═══════════════════════════════════════════════════════════════════════
     window.updateHeaderCompare = () => {
         const compareList = JSON.parse(localStorage.getItem('mojavto_compare') || '[]');
-        const badge = document.getElementById('compareBadge');
-        const preview = document.getElementById('comparePreview');
+        const badge = document.getElementById('compareBadgeDropdown');
 
         if (badge) {
             badge.innerText = compareList.length;
             badge.style.display = compareList.length > 0 ? 'flex' : 'none';
-        }
-
-        if (preview) {
-            if (compareList.length === 0) {
-                preview.innerHTML = '<div class="preview-empty">Ni izbranih vozil</div>';
-            } else {
-                preview.innerHTML = compareList.map(item => `
-                    <div class="preview-item">
-                        <img src="${item.image}" alt="${item.title}" class="preview-img">
-                        <div class="preview-info">
-                            <div class="preview-name">${item.title}</div>
-                            <div class="preview-year">${item.year || '2020'}</div>
-                        </div>
-                    </div>
-                `).join('') + `
-                    <div class="preview-footer">
-                        <a href="#/primerjava" class="preview-btn">Poglej primerjavo</a>
-                    </div>
-                `;
-            }
         }
     };
 

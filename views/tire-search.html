@@ -1,232 +1,238 @@
 <!DOCTYPE html>
 <html lang="sl">
+
 <head>
     <meta charset="UTF-8" />
     <title>Nakup pnevmatik — primerjalnik cen | MojAvto.si</title>
     <link rel="stylesheet" href="/css/tire-search.css" />
 </head>
+
 <body>
 
-<div class="tire-page">
+    <div class="tire-page">
 
-    <!-- ── Hero: Dimension Selector ───────────────────────────────────── -->
-    <div class="tire-hero">
-        <div class="tire-hero-bg"></div>
-        <div class="tire-hero-inner">
-            <div class="tire-hero-header">
-                <h1 class="tire-hero-title">
-                    <i data-lucide="circle-dot"></i>
-                    Poišči svoje pnevmatike
-                </h1>
-                <div class="vehicle-pills">
-                    <div class="pill-dropdown" id="vehicleMain">
-                        <input type="text" class="pill-value-input" value="Avtomobili" readonly />
-                        <i data-lucide="chevron-down"></i>
-                        <div class="pill-dropdown-menu">
-                            <div class="pill-options-scroll">
-                                <div class="pill-option active" data-value="avto">Avtomobili</div>
-                                <div class="pill-option" data-value="moto">Motorji</div>
-                                <div class="pill-option" data-value="gospodarska">Gospodarska vozila</div>
+        <!-- ── Hero: Dimension Selector ───────────────────────────────────── -->
+        <div class="tire-hero">
+            <div class="tire-hero-bg"></div>
+            <div class="tire-hero-inner">
+                <div class="tire-hero-header">
+                    <h1 class="tire-hero-title">
+                        <i data-lucide="circle-dot" style="color: var(--color-primary-start);"></i>
+                        Poišči svoje pnevmatike
+                    </h1>
+                    <div class="vehicle-pills">
+                        <div class="pill-dropdown" id="vehicleMain">
+                            <input type="text" class="pill-value-input" value="Avtomobili" readonly />
+                            <i data-lucide="chevron-down"></i>
+                            <div class="pill-dropdown-menu">
+                                <div class="pill-options-scroll">
+                                    <div class="pill-option active" data-value="avto">Avtomobili</div>
+                                    <div class="pill-option" data-value="moto">Motorji</div>
+                                    <div class="pill-option" data-value="gospodarska">Gospodarska vozila</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pill-dropdown" id="vehicleSub" style="display:none;">
+                            <input type="text" class="pill-value-input" value="Vse vrste" readonly />
+                            <i data-lucide="chevron-down"></i>
+                            <div class="pill-dropdown-menu">
+                                <div class="pill-options-scroll" id="subVehicleMenu">
+                                    <!-- Filled by JS -->
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="pill-dropdown" id="vehicleSub" style="display:none;">
-                        <input type="text" class="pill-value-input" value="Vse vrste" readonly />
-                        <i data-lucide="chevron-down"></i>
-                        <div class="pill-dropdown-menu">
-                            <div class="pill-options-scroll" id="subVehicleMenu">
-                                <!-- Filled by JS -->
+                </div>
+                <p class="tire-hero-sub">Poiščite najcenejšo pnevmatiko iz <strong>5+ spletnih trgovin</strong> — vse na
+                    enem mestu</p>
+
+                <div class="dim-selector" id="dimSelector">
+                    <div class="dim-selector-group">
+                        <label class="dim-label">Širina (mm)</label>
+                        <div class="pill-dropdown dim-pill">
+                            <input type="text" id="selWidth" class="pill-value-input" placeholder="Izberi" readonly />
+                            <i data-lucide="chevron-down"></i>
+                            <div class="pill-dropdown-menu">
+                                <div class="pill-options-scroll"></div>
                             </div>
                         </div>
                     </div>
+
+                    <span class="dim-separator">/</span>
+
+                    <div class="dim-selector-group">
+                        <label class="dim-label">Višina (%)</label>
+                        <div class="pill-dropdown dim-pill">
+                            <input type="text" id="selHeight" class="pill-value-input" placeholder="Izberi" readonly />
+                            <i data-lucide="chevron-down"></i>
+                            <div class="pill-dropdown-menu">
+                                <div class="pill-options-scroll"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="dim-separator">R</span>
+
+                    <div class="dim-selector-group">
+                        <label class="dim-label">Premer (col)</label>
+                        <div class="pill-dropdown dim-pill">
+                            <input type="text" id="selDiameter" class="pill-value-input" placeholder="Izberi"
+                                readonly />
+                            <i data-lucide="chevron-down"></i>
+                            <div class="pill-dropdown-menu">
+                                <div class="pill-options-scroll"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="dim-search-btn" id="btnSearch">
+                        <i data-lucide="search" style="width:16px;height:16px;"></i>
+                        Išči
+                    </button>
+                </div>
+
+                <div class="quick-dims" id="quickDims">
+                    <span class="quick-dims-label">Priljubljene:</span>
+                    <!-- Filled by JS -->
                 </div>
             </div>
-            <p class="tire-hero-sub">Poiščite najcenejšo pnevmatiko iz <strong>5+ spletnih trgovin</strong> — vse na enem mestu</p>
+        </div>
 
-            <div class="dim-selector" id="dimSelector">
-                <div class="dim-selector-group">
-                    <label class="dim-label">Širina (mm)</label>
-                    <div class="pill-dropdown dim-pill">
-                        <input type="text" id="selWidth" class="pill-value-input" placeholder="Izberi" readonly />
+        <!-- ── Season Tabs ──────────────────────────────────────────────────── -->
+        <div class="season-bar" id="seasonBar">
+            <button class="season-tab active" data-season="vse">
+                <i data-lucide="layers"></i> Vse
+            </button>
+            <button class="season-tab" data-season="letna">
+                <i data-lucide="sun"></i> Letne
+            </button>
+            <button class="season-tab" data-season="zimska">
+                <i data-lucide="snowflake"></i> Zimske
+            </button>
+            <button class="season-tab" data-season="celoletna">
+                <i data-lucide="cloud-sun"></i> Celoletne
+            </button>
+        </div>
+
+        <!-- ── Main: Sidebar Filters + Results ──────────────────────────────── -->
+        <div class="tire-main">
+
+            <!-- Filter Sidebar (desktop sticky / mobile drawer) -->
+            <aside class="tire-filters" id="filterPanel">
+                <div class="drawer-handle" id="drawerHandle"></div>
+
+                <div class="filter-title">
+                    Filtri
+                    <button class="filter-clear-btn" id="btnClearFilters">Počisti vse</button>
+                </div>
+
+                <!-- Brand filter -->
+                <div class="filter-section">
+                    <div class="filter-section-title" data-toggle="brandList">
+                        Znamka
                         <i data-lucide="chevron-down"></i>
-                        <div class="pill-dropdown-menu">
-                            <div class="pill-options-scroll"></div>
-                        </div>
+                    </div>
+                    <div class="filter-check-list" id="brandList">
+                        <!-- Filled by JS -->
                     </div>
                 </div>
 
-                <span class="dim-separator">/</span>
-
-                <div class="dim-selector-group">
-                    <label class="dim-label">Višina (%)</label>
-                    <div class="pill-dropdown dim-pill">
-                        <input type="text" id="selHeight" class="pill-value-input" placeholder="Izberi" readonly />
-                        <i data-lucide="chevron-down"></i>
-                        <div class="pill-dropdown-menu">
-                            <div class="pill-options-scroll"></div>
-                        </div>
+                <!-- Price range -->
+                <div class="filter-section">
+                    <div class="filter-section-title">Cena (€/kos)</div>
+                    <div class="price-range-inputs">
+                        <input type="number" class="price-range-input" id="priceFrom" placeholder="Od" min="0" />
+                        <span class="price-range-sep">—</span>
+                        <input type="number" class="price-range-input" id="priceTo" placeholder="Do" min="0" />
                     </div>
                 </div>
 
-                <span class="dim-separator">R</span>
-
-                <div class="dim-selector-group">
-                    <label class="dim-label">Premer (col)</label>
-                    <div class="pill-dropdown dim-pill">
-                        <input type="text" id="selDiameter" class="pill-value-input" placeholder="Izberi" readonly />
+                <!-- Speed rating -->
+                <div class="filter-section">
+                    <div class="filter-section-title" data-toggle="speedList">
+                        Hitrostni razred
                         <i data-lucide="chevron-down"></i>
-                        <div class="pill-dropdown-menu">
-                            <div class="pill-options-scroll"></div>
-                        </div>
+                    </div>
+                    <div class="filter-check-list" id="speedList">
+                        <!-- Filled by JS -->
                     </div>
                 </div>
 
-                <button class="dim-search-btn" id="btnSearch">
-                    <i data-lucide="search" style="width:16px;height:16px;"></i>
-                    Išči
+                <!-- EU Fuel Efficiency -->
+                <div class="filter-section">
+                    <div class="filter-section-title">Poraba goriva (EU)</div>
+                    <div class="eu-rating-row" id="euFuelFilter">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- EU Wet Grip -->
+                <div class="filter-section">
+                    <div class="filter-section-title">Oprijem na mokrem (EU)</div>
+                    <div class="eu-rating-row" id="euWetFilter">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Extras -->
+                <div class="filter-section">
+                    <div class="filter-section-title">Posebnosti</div>
+                    <div class="filter-check-list">
+                        <label class="filter-check-item">
+                            <input type="checkbox" id="filterXL" /> XL / Reinforced
+                        </label>
+                        <label class="filter-check-item">
+                            <input type="checkbox" id="filterRunFlat" /> Run Flat
+                        </label>
+                    </div>
+                </div>
+
+                <button class="dim-search-btn" id="btnApplyFilters"
+                    style="width:100%;justify-content:center;margin-top:0.5rem;background:linear-gradient(135deg,var(--color-primary-start),var(--color-primary-end));color:#fff;border-radius:0.75rem;">
+                    <i data-lucide="check" style="width:15px;height:15px;"></i>
+                    Uporabi filtre
                 </button>
-            </div>
+            </aside>
 
-            <div class="quick-dims" id="quickDims">
-                <span class="quick-dims-label">Priljubljene:</span>
-                <!-- Filled by JS -->
-            </div>
+            <!-- Results area -->
+            <section class="tire-results-area">
+                <div class="results-header">
+                    <div class="results-count" id="resultsCount">
+                        Izberite dimenzijo za iskanje
+                    </div>
+                    <select class="sort-select" id="sortSelect">
+                        <option value="price_asc">Najcenejše</option>
+                        <option value="price_desc">Najdražje</option>
+                        <option value="brand_asc">Znamka A–Z</option>
+                        <option value="offers_desc">Največ ponudb</option>
+                    </select>
+                </div>
+
+                <div class="tire-grid" id="tireGrid">
+                    <!-- Filled by JS -->
+                    <div class="tire-empty">
+                        <i data-lucide="circle-dot" style="display:block;margin:0 auto 1rem;"></i>
+                        <h3>Izberite dimenzijo pnevmatike</h3>
+                        <p>Vnesite širino, višino in premer ter kliknite Išči</p>
+                    </div>
+                </div>
+
+                <div class="load-more-wrap" id="loadMoreWrap" style="display:none;">
+                    <button class="load-more-btn" id="btnLoadMore">
+                        Naloži več pnevmatik
+                    </button>
+                </div>
+            </section>
         </div>
     </div>
 
-    <!-- ── Season Tabs ──────────────────────────────────────────────────── -->
-    <div class="season-bar" id="seasonBar">
-        <button class="season-tab active" data-season="vse">
-            <i data-lucide="layers"></i> Vse
-        </button>
-        <button class="season-tab" data-season="letna">
-            <i data-lucide="sun"></i> Letne
-        </button>
-        <button class="season-tab" data-season="zimska">
-            <i data-lucide="snowflake"></i> Zimske
-        </button>
-        <button class="season-tab" data-season="celoletna">
-            <i data-lucide="cloud-sun"></i> Celoletne
-        </button>
-    </div>
-
-    <!-- ── Main: Sidebar Filters + Results ──────────────────────────────── -->
-    <div class="tire-main">
-
-        <!-- Filter Sidebar (desktop sticky / mobile drawer) -->
-        <aside class="tire-filters" id="filterPanel">
-            <div class="drawer-handle" id="drawerHandle"></div>
-
-            <div class="filter-title">
-                Filtri
-                <button class="filter-clear-btn" id="btnClearFilters">Počisti vse</button>
-            </div>
-
-            <!-- Brand filter -->
-            <div class="filter-section">
-                <div class="filter-section-title" data-toggle="brandList">
-                    Znamka
-                    <i data-lucide="chevron-down"></i>
-                </div>
-                <div class="filter-check-list" id="brandList">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-
-            <!-- Price range -->
-            <div class="filter-section">
-                <div class="filter-section-title">Cena (€/kos)</div>
-                <div class="price-range-inputs">
-                    <input type="number" class="price-range-input" id="priceFrom" placeholder="Od" min="0" />
-                    <span class="price-range-sep">—</span>
-                    <input type="number" class="price-range-input" id="priceTo" placeholder="Do" min="0" />
-                </div>
-            </div>
-
-            <!-- Speed rating -->
-            <div class="filter-section">
-                <div class="filter-section-title" data-toggle="speedList">
-                    Hitrostni razred
-                    <i data-lucide="chevron-down"></i>
-                </div>
-                <div class="filter-check-list" id="speedList">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-
-            <!-- EU Fuel Efficiency -->
-            <div class="filter-section">
-                <div class="filter-section-title">Poraba goriva (EU)</div>
-                <div class="eu-rating-row" id="euFuelFilter">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-
-            <!-- EU Wet Grip -->
-            <div class="filter-section">
-                <div class="filter-section-title">Oprijem na mokrem (EU)</div>
-                <div class="eu-rating-row" id="euWetFilter">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-
-            <!-- Extras -->
-            <div class="filter-section">
-                <div class="filter-section-title">Posebnosti</div>
-                <div class="filter-check-list">
-                    <label class="filter-check-item">
-                        <input type="checkbox" id="filterXL" /> XL / Reinforced
-                    </label>
-                    <label class="filter-check-item">
-                        <input type="checkbox" id="filterRunFlat" /> Run Flat
-                    </label>
-                </div>
-            </div>
-
-            <button class="dim-search-btn" id="btnApplyFilters" style="width:100%;justify-content:center;margin-top:0.5rem;background:linear-gradient(135deg,var(--color-primary-start),var(--color-primary-end));color:#fff;border-radius:0.75rem;">
-                <i data-lucide="check" style="width:15px;height:15px;"></i>
-                Uporabi filtre
-            </button>
-        </aside>
-
-        <!-- Results area -->
-        <section class="tire-results-area">
-            <div class="results-header">
-                <div class="results-count" id="resultsCount">
-                    Izberite dimenzijo za iskanje
-                </div>
-                <select class="sort-select" id="sortSelect">
-                    <option value="price_asc">Najcenejše</option>
-                    <option value="price_desc">Najdražje</option>
-                    <option value="brand_asc">Znamka A–Z</option>
-                    <option value="offers_desc">Največ ponudb</option>
-                </select>
-            </div>
-
-            <div class="tire-grid" id="tireGrid">
-                <!-- Filled by JS -->
-                <div class="tire-empty">
-                    <i data-lucide="circle-dot" style="display:block;margin:0 auto 1rem;"></i>
-                    <h3>Izberite dimenzijo pnevmatike</h3>
-                    <p>Vnesite širino, višino in premer ter kliknite Išči</p>
-                </div>
-            </div>
-
-            <div class="load-more-wrap" id="loadMoreWrap" style="display:none;">
-                <button class="load-more-btn" id="btnLoadMore">
-                    Naloži več pnevmatik
-                </button>
-            </div>
-        </section>
-    </div>
-</div>
-
-<!-- Mobile filter drawer button -->
-<button class="filter-drawer-btn" id="filterDrawerBtn" style="display:none;">
-    <i data-lucide="sliders-horizontal" style="width:16px;height:16px;"></i>
-    Filtri
-</button>
-<div class="filter-overlay" id="filterOverlay"></div>
+    <!-- Mobile filter drawer button -->
+    <button class="filter-drawer-btn" id="filterDrawerBtn" style="display:none;">
+        <i data-lucide="sliders-horizontal" style="width:16px;height:16px;"></i>
+        Filtri
+    </button>
+    <div class="filter-overlay" id="filterOverlay"></div>
 
 </body>
+
 </html>

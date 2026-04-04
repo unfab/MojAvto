@@ -22,6 +22,7 @@ const pageModules = {
     booking: () => import('./pages/booking.js').then(m => m.initBookingPage()),
     'tire-search': () => import('./pages/tire-search.js').then(m => m.initTireSearchPage()),
     'tire-product': () => import('./pages/tire-product.js').then(m => m.initTireProductPage()),
+    parts: () => import('./pages/parts.js').then(m => m.initPartsPage()),
     admin: () => import('./pages/admin.js').then(m => m.initAdminPage()),
 };
 

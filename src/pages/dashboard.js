@@ -35,30 +35,30 @@ export async function initDashboardPage() {
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">
-        <a href="#/novi-oglas" style="display:flex;flex-direction:column;align-items:flex-start;padding:1.5rem;background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#f97316';this.style.boxShadow='0 4px 16px rgba(249,115,22,0.15)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
+        <a href="#/novi-oglas" style="display:flex;flex-direction:column;align-items:flex-start;padding:1.5rem;background:rgba(255,255,255,0.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.5);border-radius:2rem;text-decoration:none;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:var(--shadow-glass);" onmouseover="this.style.borderColor='var(--color-primary-start)';this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.5)';this.style.transform='translateY(0)';this.style.boxShadow='var(--shadow-glass)'">
           <span style="font-size:1.8rem;margin-bottom:0.5rem;">➕</span>
-          <span style="font-weight:600;color:#1f2937;">Objavi oglas</span>
-          <span style="font-size:0.8rem;color:#9ca3af;margin-top:4px;">Dodaj novo vozilo</span>
+          <span style="font-weight:700;color:#1e293b;">Objavi oglas</span>
+          <span style="font-size:0.8rem;color:#64748b;margin-top:4px;">Dodaj novo vozilo</span>
         </a>
-        <a href="#/garaža" style="display:flex;flex-direction:column;align-items:flex-start;padding:1.5rem;background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#6366f1';this.style.boxShadow='0 4px 16px rgba(99,102,241,0.15)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
+        <a href="#/garaža" style="display:flex;flex-direction:column;align-items:flex-start;padding:1.5rem;background:rgba(255,255,255,0.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.5);border-radius:2rem;text-decoration:none;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:var(--shadow-glass);" onmouseover="this.style.borderColor='#6366f1';this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.5)';this.style.transform='translateY(0)';this.style.boxShadow='var(--shadow-glass)'">
           <span style="font-size:1.8rem;margin-bottom:0.5rem;">🏎️</span>
-          <span style="font-weight:600;color:#1f2937;">Moja garaža</span>
-          <span style="font-size:0.8rem;color:#9ca3af;margin-top:4px;">Upravljaj vozila</span>
+          <span style="font-weight:700;color:#1e293b;">Moja garaža</span>
+          <span style="font-size:0.8rem;color:#64748b;margin-top:4px;">Upravljaj vozila</span>
         </a>
-        <a href="#/zemljevid" style="display:flex;flex-direction:column;align-items:flex-start;padding:1.5rem;background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#2563eb';this.style.boxShadow='0 4px 16px rgba(37,99,235,0.15)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
-          <span style="font-size:1.8rem;margin-bottom:0.5rem;">📅</span>
-          <span style="font-weight:600;color:#1f2937;">Nova rezervacija</span>
-          <span style="font-size:0.8rem;color:#9ca3af;margin-top:4px;">Najdi servis ali vulkanizer</span>
+        <a href="#/primerjava" style="display:flex;flex-direction:column;align-items:flex-start;padding:1.5rem;background:rgba(255,255,255,0.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.5);border-radius:2rem;text-decoration:none;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:var(--shadow-glass);" onmouseover="this.style.borderColor='#2563eb';this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.5)';this.style.transform='translateY(0)';this.style.boxShadow='var(--shadow-glass)'">
+          <span style="font-size:1.8rem;margin-bottom:0.5rem;">⚖️</span>
+          <span style="font-weight:700;color:#1e293b;">Primerjalni kotiček</span>
+          <span style="font-size:0.8rem;color:#64748b;margin-top:4px;">Primerjaj svoja izbrana vozila</span>
         </a>
-        <a href="#/profil" style="display:flex;flex-direction:column;align-items:flex-start;padding:1.5rem;background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#22c55e';this.style.boxShadow='0 4px 16px rgba(34,197,94,0.15)'" onmouseout="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
+        <a href="#/profil" style="display:flex;flex-direction:column;align-items:flex-start;padding:1.5rem;background:rgba(255,255,255,0.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.5);border-radius:2rem;text-decoration:none;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:var(--shadow-glass);" onmouseover="this.style.borderColor='#22c55e';this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.5)';this.style.transform='translateY(0)';this.style.boxShadow='var(--shadow-glass)'">
           <span style="font-size:1.8rem;margin-bottom:0.5rem;">👤</span>
-          <span style="font-weight:600;color:#1f2937;">Moj profil</span>
-          <span style="font-size:0.8rem;color:#9ca3af;margin-top:4px;">Uredi podatke</span>
+          <span style="font-weight:700;color:#1e293b;">Moj profil</span>
+          <span style="font-size:0.8rem;color:#64748b;margin-top:4px;">Uredi podatke</span>
         </a>
       </div>
 
-      <div style="background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;padding:1.5rem;">
-        <h2 style="margin:0 0 1rem;font-size:1rem;font-weight:600;color:#374151;">Moji aktivni oglasi</h2>
+      <div style="background:rgba(255,255,255,0.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.5);border-radius:2rem;padding:1.5rem;box-shadow:var(--shadow-glass);margin-bottom:3rem;">
+        <h2 style="margin:0 0 1.5rem;font-size:1.1rem;font-weight:800;color:#1e293b;">📋 Moji aktivni oglasi</h2>
         <div id="user-listings-container" style="min-height: 100px;">
           <div style="text-align:center;padding:2rem;color:#9ca3af;">
             <i class="fas fa-spinner fa-spin" style="font-size:2rem;margin-bottom:0.5rem;"></i>
@@ -68,10 +68,10 @@ export async function initDashboardPage() {
       </div>
 
       <!-- Reservations section -->
-      <div style="background:rgba(255,255,255,0.85);backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,0.6);border-radius:1.25rem;padding:1.5rem;" id="bookings-section">
+      <div style="background:rgba(255,255,255,0.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.5);border-radius:2rem;padding:1.5rem;box-shadow:var(--shadow-glass);margin-bottom:3rem;" id="bookings-section">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
           <h2 style="margin:0;font-size:1rem;font-weight:700;color:#1e293b;">📅 Moje rezervacije</h2>
-          <a href="#/zemljevid" style="font-size:0.8rem;font-weight:600;color:#2563eb;text-decoration:none;">+ Nova rezervacija</a>
+          <a href="#/zemljevid" style="font-size:0.85rem;font-weight:700;color:#2563eb;text-decoration:none;padding:8px 16px;background:rgba(37,99,235,0.1);border-radius:9999px;transition:all 0.2s;">+ Nova rezervacija</a>
         </div>
         <div id="bookings-container">
           <div style="text-align:center;padding:1.5rem;color:#9ca3af;font-size:0.85rem;">Nalagam rezervacije...</div>
@@ -79,7 +79,7 @@ export async function initDashboardPage() {
       </div>
 
       <!-- Service history section -->
-      <div style="background:rgba(255,255,255,0.85);backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,0.6);border-radius:1.25rem;padding:1.5rem;" id="service-history-section">
+      <div style="background:rgba(255,255,255,0.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.5);border-radius:2rem;padding:1.5rem;box-shadow:var(--shadow-glass);" id="service-history-section">
         <h2 style="margin:0 0 1rem;font-size:1rem;font-weight:700;color:#1e293b;">🔧 Servisna knjiga</h2>
         <div id="service-history-container">
           <div style="text-align:center;padding:1.5rem;color:#9ca3af;font-size:0.85rem;">Nalagam servisno zgodovino...</div>
@@ -99,7 +99,7 @@ export async function initDashboardPage() {
         <div style="text-align:center;padding:2rem;color:#9ca3af;">
           <div style="font-size:2rem;margin-bottom:0.5rem;">📋</div>
           <p style="margin:0;font-size:0.9rem;">Še nimaš objavljenih oglasov.</p>
-          <a href="#/novi-oglas" style="display:inline-block;margin-top:1rem;padding:8px 20px;background:#f97316;color:#fff;border-radius:8px;text-decoration:none;font-size:0.875rem;font-weight:600;">Objavi prvi oglas</a>
+          <a href="#/novi-oglas" style="display:inline-block;margin-top:1rem;padding:12px 28px;background:linear-gradient(135deg, #f97316, #ea580c);color:#fff;border-radius:9999px;text-decoration:none;font-size:0.95rem;font-weight:700;box-shadow:0 10px 15px -3px rgba(249,115,22,0.3);transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 20px -3px rgba(249,115,22,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 10px 15px -3px rgba(249,115,22,0.3)'">Objavi prvi oglas</a>
         </div>
       `;
     } else {
@@ -109,7 +109,7 @@ export async function initDashboardPage() {
         const price = new Intl.NumberFormat('sl-SI', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(listing.price);
 
         html += `
-          <div style="display:flex;align-items:center;padding:1rem;border:1px solid #e5e7eb;border-radius:10px;gap:1rem;">
+          <div style="display:flex;align-items:center;padding:1.25rem;background:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.4);border-radius:1.5rem;gap:1.25rem;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'">
               <img src="${imgUrl}" style="width:120px;height:80px;object-fit:cover;border-radius:6px;" alt="${listing.title}">
               <div style="flex:1;">
                   <h3 style="margin:0 0 0.5rem;font-size:1.1rem;color:#1f2937;">${listing.make} ${listing.model} ${listing.type}</h3>
@@ -121,7 +121,7 @@ export async function initDashboardPage() {
               </div>
               <div style="text-align:right;">
                   <div style="font-weight:700;font-size:1.2rem;color:#f97316;margin-bottom:0.5rem;">${price}</div>
-                  <button class="btn btn-outline btn-sm delete-listing-btn" data-id="${listing.id}">Izbriši</button>
+                  <button class="btn btn-outline btn-sm delete-listing-btn" data-id="${listing.id}" data-title="${listing.make} ${listing.model}">Odstrani</button>
               </div>
           </div>
         `;
@@ -132,22 +132,10 @@ export async function initDashboardPage() {
       // Bind delete functionality
       const deleteButtons = listingsContainer.querySelectorAll('.delete-listing-btn');
       deleteButtons.forEach(btn => {
-        btn.addEventListener('click', async (e) => {
+        btn.addEventListener('click', (e) => {
           const id = e.target.getAttribute('data-id');
-          if (confirm("Ste prepričani, da želite izbrisati ta oglas?")) {
-            e.target.disabled = true;
-            e.target.textContent = 'Brišem...';
-            try {
-              await deleteListing(id);
-              alert('Oglas izbrisan.');
-              initDashboardPage(); // refresh
-            } catch (err) {
-              console.error('Delete failed:', err);
-              alert('Napaka pri brisanju.');
-              e.target.disabled = false;
-              e.target.textContent = 'Izbriši';
-            }
-          }
+          const title = e.target.getAttribute('data-title') || 'ta oglas';
+          showRemoveListingPopup(id, title);
         });
       });
     }
@@ -159,6 +147,54 @@ export async function initDashboardPage() {
   // Render bookings and service history
   renderBookingsSection(user.uid);
   renderServiceHistorySection(user.uid);
+}
+
+// ── Remove / Sold popup ───────────────────────────────────────
+function showRemoveListingPopup(listingId, listingTitle) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.5);backdrop-filter:blur(8px);z-index:9000;display:flex;align-items:center;justify-content:center;padding:1.5rem;';
+    overlay.innerHTML = `
+        <div style="background:white;border-radius:2rem;padding:2rem;max-width:380px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.18);text-align:center;animation:agCardIn 0.3s cubic-bezier(0.34,1.56,0.64,1);">
+            <div style="font-size:2rem;margin-bottom:0.75rem;">🗑️</div>
+            <h3 style="font-size:1.1rem;font-weight:800;color:#0f172a;margin:0 0 0.4rem;">Odstraniti oglas?</h3>
+            <p style="font-size:0.875rem;color:#64748b;margin:0 0 1.5rem;">"${listingTitle}"</p>
+            <p style="font-size:0.82rem;color:#475569;margin:0 0 1.5rem;font-weight:500;">Je bilo vozilo prodano ali samo odstranjujete oglas?</p>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;">
+                <button id="removeSoldBtn" style="padding:0.75rem 1rem;border:none;border-radius:1rem;background:linear-gradient(135deg,#16a34a,#15803d);color:white;font-size:0.9rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(22,163,74,0.3);">
+                    ✅ Da, vozilo je prodano
+                </button>
+                <button id="removeOnlyBtn" style="padding:0.75rem 1rem;border:2px solid #e2e8f0;border-radius:1rem;background:white;color:#334155;font-size:0.9rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;">
+                    Samo odstrani oglas
+                </button>
+                <button id="removeCancelBtn" style="padding:0.6rem;border:none;background:none;color:#94a3b8;font-size:0.85rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">
+                    Prekliči
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const closePopup = () => overlay.remove();
+
+    overlay.querySelector('#removeCancelBtn').addEventListener('click', closePopup);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
+
+    const doDelete = async (markAsSold) => {
+        const btns = overlay.querySelectorAll('button');
+        btns.forEach(b => { b.disabled = true; });
+        try {
+            await deleteListing(listingId, markAsSold ? 'sold' : 'removed');
+            closePopup();
+            initDashboardPage();
+        } catch (err) {
+            console.error('Delete failed:', err);
+            btns.forEach(b => { b.disabled = false; });
+        }
+    };
+
+    overlay.querySelector('#removeSoldBtn').addEventListener('click', () => doDelete(true));
+    overlay.querySelector('#removeOnlyBtn').addEventListener('click', () => doDelete(false));
 }
 
 // ── Bookings section ──────────────────────────────────────────

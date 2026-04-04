@@ -4,6 +4,9 @@
 
 import { getListingById, incrementViewCount, formatPrice } from '../services/listingService.js';
 import { getEquipmentLabel, EQUIPMENT_GROUPS } from '../data/equipment.js';
+import { auth } from '../firebase.js';
+import { showAuthGate } from '../utils/authGate.js';
+import { addToFavourites, removeFromFavourites, isFavourite } from '../services/garageService.js';
 
 export async function initListingPage() {
     console.log('[ListingPage] init');
@@ -25,6 +28,81 @@ export async function initListingPage() {
         console.error('[ListingPage]', err);
         if (page) page.innerHTML = errorHtml('Oglas ne obstaja.', err.message);
     }
+}
+
+// ── Favourite button ──────────────────────────────────────────────────────────
+async function initFavBtn(l) {
+    const btn = document.getElementById('lpFavBtn');
+    if (!btn) return;
+
+    const user = auth.currentUser;
+    if (user) {
+        const liked = await isFavourite(user.uid, l.id);
+        if (liked) btn.classList.add('active');
+    }
+
+    btn.addEventListener('click', async () => {
+        let currentUser = auth.currentUser;
+        if (!currentUser) {
+            try {
+                currentUser = await showAuthGate({
+                    icon: '❤️',
+                    title: 'Shrani med všečkane',
+                    message: 'Prijavite se, da shranite ta oglas med všečkane.',
+                });
+            } catch { return; }
+        }
+        btn.disabled = true;
+        try {
+            if (btn.classList.contains('active')) {
+                await removeFromFavourites(currentUser.uid, l.id);
+                btn.classList.remove('active');
+            } else {
+                await addToFavourites(currentUser.uid, { id: l.id, title: l.make + ' ' + l.model, price: l.priceEur || l.price, images: l.images });
+                btn.classList.add('active');
+            }
+        } finally {
+            btn.disabled = false;
+        }
+    });
+}
+
+// ── Compare button ────────────────────────────────────────────────────────────
+function initCompareBtn(l) {
+    const btn = document.getElementById('lpCompareBtn');
+    if (!btn) return;
+
+    const compareList = JSON.parse(localStorage.getItem('mojavto_compare') || '[]');
+    const inCompare = compareList.some(c => c.id === l.id);
+    if (inCompare) btn.classList.add('active');
+
+    btn.addEventListener('click', async () => {
+        let currentUser = auth.currentUser;
+        if (!currentUser) {
+            try {
+                currentUser = await showAuthGate({
+                    icon: '⚖️',
+                    title: 'Primerjaj vozila',
+                    message: 'Prijavite se, da dodate vozilo v primerjavo.',
+                });
+            } catch { return; }
+        }
+        const list = JSON.parse(localStorage.getItem('mojavto_compare') || '[]');
+        const idx = list.findIndex(c => c.id === l.id);
+        if (idx !== -1) {
+            list.splice(idx, 1);
+            btn.classList.remove('active');
+        } else {
+            if (list.length >= 3) {
+                alert('Lahko primerjate največ 3 vozila naenkrat.');
+                return;
+            }
+            list.push({ id: l.id, title: l.make + ' ' + l.model, image: l.images?.exterior?.[0] || '', price: l.priceEur || l.price });
+            btn.classList.add('active');
+        }
+        localStorage.setItem('mojavto_compare', JSON.stringify(list));
+        if (window.updateHeaderCompare) window.updateHeaderCompare();
+    });
 }
 
 // ── Main render ───────────────────────────────────────────────────────────────
@@ -110,6 +188,18 @@ function renderListing(l) {
                         <button class="lp-leasing-btn" id="btnShowLeasing">
                             <i data-lucide="credit-card"></i> Preveri možnost leasinga / hitrega kredita
                         </button>` : ''}
+
+                        <!-- Like + Compare actions -->
+                        <div class="lp-action-row">
+                            <button class="lp-action-btn lp-fav-btn" id="lpFavBtn" data-listing-id="${l.id}" title="Shrani med všečkane">
+                                <i data-lucide="heart"></i>
+                                <span>Všečkaj</span>
+                            </button>
+                            <button class="lp-action-btn lp-compare-btn" id="lpCompareBtn" data-listing-id="${l.id}" title="Dodaj v primerjavo">
+                                <i data-lucide="scale"></i>
+                                <span>Primerjaj</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Seller card -->
@@ -160,6 +250,12 @@ function renderListing(l) {
 
     // Init gallery interactivity
     initGallery(exteriorImages, interiorImages);
+
+    // Favourite button
+    initFavBtn(l);
+
+    // Compare button
+    initCompareBtn(l);
 
     // Phone reveal
     document.getElementById('btnShowPhone')?.addEventListener('click', () => {
@@ -363,6 +459,8 @@ function renderSpecsHtml(l) {
         ['Prostornina', l.engineCc ? l.engineCc + ' cc' : null],
         ['Moč (kW)', l.powerKw ? l.powerKw + ' kW' : l.power ? l.power + ' kW' : null],
         ['Moč (KM)', l.powerKw ? Math.round(l.powerKw * 1.3596) + ' KM' : null],
+        ['Poraba', l.fuelL100km ? l.fuelL100km + ' l/100 km' : null],
+        ['El. domet (WLTP)', l.electricRangeKm ? l.electricRangeKm + ' km' : null],
         ['CO₂', l.co2 ? l.co2 + ' g/km' : null],
         ['Emisijski razred', l.emissionClass],
         ['Kapaciteta baterije', l.batteryKwh ? l.batteryKwh + ' kWh' : null],
@@ -416,12 +514,17 @@ function renderEquipmentHtml(l) {
         <section class="lp-section">
             <h2 class="lp-section-title">Oprema</h2>
             ${grouped.map(g => `
-                <div class="lp-eq-group">
-                    <p class="lp-eq-group-label"><i data-lucide="${g.icon}"></i> ${escHtml(g.label)}</p>
-                    <div class="lp-eq-chips">
+                <details class="lp-eq-group-collapsible">
+                    <summary class="lp-eq-group-summary">
+                        <i data-lucide="${g.icon}"></i>
+                        <span>${escHtml(g.label)}</span>
+                        <span class="lp-eq-count">${g.items.length}</span>
+                        <i data-lucide="chevron-down" class="lp-eq-chevron"></i>
+                    </summary>
+                    <div class="lp-eq-chips lp-eq-chips-padded">
                         ${g.items.map(i => `<span class="lp-eq-chip">${escHtml(i.label)}</span>`).join('')}
                     </div>
-                </div>`).join('')}
+                </details>`).join('')}
         </section>`;
 }
 

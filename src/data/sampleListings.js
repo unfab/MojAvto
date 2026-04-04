@@ -1,5 +1,129 @@
 export const sampleCars = [
     {
+        id: 'car-premium-1',
+        title: 'Porsche 911 GT3',
+        subtitle: '4.0 (510 KM) - PDK, Clubsport, Carbon, Lift',
+        price: '215.900 €',
+        priceRaw: 215900,
+        year: '2023',
+        mileage: '1.200 km',
+        mileageKm: 1200,
+        power: '375 kW (510 KM)',
+        powerKw: 375,
+        fuel: 'Bencin',
+        condition: 'Rabljeno',
+        sellerNote: 'Vrhunsko stanje, brez praske. Prvi lastnik, SLO poreklo.',
+        location: { city: 'Ljubljana', postalCode: '1000', region: 'Osrednjeslovenska' },
+        seller: 'Porsche Center Ljubljana',
+        sellerImage: 'https://i.pravatar.cc/150?u=porsche',
+        sellerType: 'dealer',
+        segment: 'Sport',
+        category: 'avto',
+        make: 'Porsche',
+        model: '911',
+        variant: 'GT3 PDK',
+        transmission: 'Avtomatski',
+        driveType: 'Zadaj',
+        color: 'Srebrna',
+        doorsCount: 2,
+        seatsCount: 2,
+        images: {
+            exterior: [
+                '/images/porsche.png',
+                'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&w=800&q=80'
+            ],
+            interior: []
+        },
+        imgCount: 24,
+        isNew: true,
+        engineCc: 3996,
+        fuelL100km: 13.2,
+        status: 'active'
+    },
+    {
+        id: 'car-premium-2',
+        title: 'Tesla Model S Plaid',
+        subtitle: 'Tri-Motor (1020 KM) - Autopilot, 21" Arachnid',
+        price: '112.400 €',
+        priceRaw: 112400,
+        year: '2024',
+        mileage: '5.000 km',
+        mileageKm: 5000,
+        power: '750 kW (1020 KM)',
+        powerKw: 750,
+        fuel: 'Elektrika',
+        condition: 'Novo vozilo',
+        sellerNote: 'Na voljo takoj. Vključena brezplačna supercharge 1 leto.',
+        location: { city: 'Maribor', postalCode: '2000', region: 'Podravska' },
+        seller: 'Tesla Slovenija',
+        sellerImage: 'https://i.pravatar.cc/150?u=tesla',
+        sellerType: 'dealer',
+        segment: 'E-sedan',
+        category: 'avto',
+        make: 'Tesla',
+        model: 'Model S',
+        variant: 'Plaid',
+        transmission: 'Avtomatski',
+        driveType: '4x4',
+        color: 'Črna',
+        doorsCount: 5,
+        seatsCount: 5,
+        images: {
+            exterior: [
+                '/images/tesla.png',
+                'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fd?auto=format&fit=crop&w=800&q=80'
+            ],
+            interior: []
+        },
+        imgCount: 18,
+        isNew: true,
+        engineCc: 0,
+        electricRangeKm: 637,
+        fuelL100km: null,
+        status: 'active'
+    },
+    {
+        id: 'car-premium-3',
+        title: 'Audi RS6 Avant',
+        subtitle: '4.0 TFSI V8 quattro - Performance, Carbon, Bang&Olufsen',
+        price: '148.500 €',
+        priceRaw: 148500,
+        year: '2022',
+        mileage: '28.500 km',
+        mileageKm: 28500,
+        power: '441 kW (600 KM)',
+        powerKw: 441,
+        fuel: 'Bencin',
+        condition: 'Rabljeno',
+        sellerNote: 'V tovarniški garanciji. Servis pravkar opravljen.',
+        location: { city: 'Kranj', postalCode: '4000', region: 'Gorenjska' },
+        seller: 'Audi Sport Center',
+        sellerImage: 'https://i.pravatar.cc/150?u=audi',
+        sellerType: 'dealer',
+        segment: 'E-wagon',
+        category: 'avto',
+        make: 'Audi',
+        model: 'RS6',
+        variant: 'Avant quattro',
+        transmission: 'Avtomatski',
+        driveType: '4x4',
+        color: 'Siva',
+        doorsCount: 5,
+        seatsCount: 5,
+        images: {
+            exterior: [
+                '/images/audi.png',
+                'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=80'
+            ],
+            interior: []
+        },
+        imgCount: 32,
+        isNew: false,
+        engineCc: 3996,
+        fuelL100km: 11.5,
+        status: 'active'
+    },
+    {
         id: 'car-1',
         title: 'Audi A4 Avant',
         subtitle: '2.0 TDI S-tronic S-line (LED, NAVI, PANORAMA)',
@@ -13,7 +137,7 @@ export const sampleCars = [
         fuel: 'Diesel',
         condition: 'Rabljeno',
         sellerNote: 'Avto prodajam, ker kupujem večjega.',
-        location: { city: 'Ljubljana', postalCode: '1000' },
+        location: { city: 'Ljubljana', postalCode: '1000', region: 'Osrednjeslovenska' },
         seller: 'Janez Novak (Avtohiša Premium)',
         sellerImage: 'https://i.pravatar.cc/150?u=janez',
         sellerType: 'dealer',
@@ -30,13 +154,14 @@ export const sampleCars = [
         images: {
             exterior: [
                 'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=80'
-            ]
+                'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80'
+            ],
+            interior: []
         },
         imgCount: 15,
         isNew: true,
         engineCc: 1968,
+        fuelL100km: 5.2,
         status: 'active'
     },
     {
@@ -76,6 +201,7 @@ export const sampleCars = [
         imgCount: 8,
         isNew: false,
         engineCc: 1498,
+        fuelL100km: 6.1,
         status: 'active'
     },
     {
@@ -115,6 +241,7 @@ export const sampleCars = [
         imgCount: 22,
         isNew: true,
         engineCc: 1995,
+        fuelL100km: 4.8,
         status: 'active'
     },
     {
@@ -154,6 +281,7 @@ export const sampleCars = [
         imgCount: 12,
         isNew: false,
         engineCc: 1993,
+        fuelL100km: 4.9,
         status: 'active'
     },
     {
@@ -193,6 +321,7 @@ export const sampleCars = [
         imgCount: 28,
         isNew: true,
         engineCc: 1950,
+        fuelL100km: 5.5,
         status: 'active'
     },
     {
@@ -232,6 +361,7 @@ export const sampleCars = [
         imgCount: 10,
         isNew: false,
         engineCc: 1968,
+        fuelL100km: 4.7,
         status: 'active'
     },
     {
@@ -268,6 +398,7 @@ export const sampleCars = [
         imgCount: 18,
         isNew: true,
         engineCc: 2487,
+        fuelL100km: 5.8,
         status: 'active'
     },
     {
@@ -304,6 +435,7 @@ export const sampleCars = [
         imgCount: 5,
         isNew: false,
         engineCc: 998,
+        fuelL100km: 5.6,
         status: 'active'
     },
     {
@@ -340,6 +472,8 @@ export const sampleCars = [
         imgCount: 25,
         isNew: true,
         engineCc: 1598,
+        fuelL100km: 1.4,
+        electricRangeKm: 56,
         status: 'active'
     },
     {
@@ -376,6 +510,7 @@ export const sampleCars = [
         imgCount: 7,
         isNew: false,
         engineCc: 999,
+        fuelL100km: 5.2,
         status: 'active'
     }
 ];

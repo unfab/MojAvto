@@ -18,6 +18,8 @@ import {
     unavailableSlots,
 } from '../data/bookingData.js';
 import { store } from '../store/store.js';
+import QRCode from 'qrcode';
+import { buildGoogleCalendarUrl } from '../services/googleCalendarService.js';
 
 // ── Wizard state (reset on every initBookingPage call) ────────
 let state = {};
@@ -47,6 +49,15 @@ function resetState() {
         selectedDate: null,
         selectedTime: null,
         notes: '',
+
+        // Calendar navigation
+        calendarYear: new Date().getFullYear(),
+        calendarMonth: new Date().getMonth(),
+
+        // Confirmation toggles & service number
+        sendConfirmEmail: false,
+        sendConfirmSms: false,
+        serviceNumber: null,
 
         // Computed
         priceBreakdown: null,
@@ -87,6 +98,34 @@ function getUserId() {
     return window.__currentUser?.uid || 'mock-user';
 }
 
+// Returns true if there are no products for selected services (step 4 should be skipped)
+function shouldSkipProductsStep() {
+    return getProductsForServices(state.selectedServiceIds).length === 0;
+}
+
+// Generates a human-readable service number
+function generateServiceNumber() {
+    const now = new Date();
+    const ymd = now.toISOString().slice(0, 10).replace(/-/g, '');
+    const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
+    return `MA-${ymd}-${rand}`;
+}
+
+// Async: renders a QR code canvas
+async function renderQRCanvas(canvasId, data) {
+    const el = document.getElementById(canvasId);
+    if (!el) return;
+    try {
+        await QRCode.toCanvas(el, data, {
+            width: 160,
+            margin: 2,
+            color: { dark: '#1e293b', light: '#ffffff' },
+        });
+    } catch (e) {
+        console.warn('[Booking] QR render failed', e);
+    }
+}
+
 // ── Step validation ───────────────────────────────────────────
 function validateStep(logical) {
     switch (logical) {
@@ -100,6 +139,7 @@ function validateStep(logical) {
             if (state.selectedServiceIds.length === 0) return 'Prosim izberite vsaj eno storitev.';
             return null;
         case 4:
+            return null; // Izdelki so neobvezni
         case 5:
             if (!state.selectedDate) return 'Prosim izberite datum.';
             if (!state.selectedTime) return 'Prosim izberite uro termina.';
@@ -415,15 +455,14 @@ function buildStep3() {
     const cards = services.map(s => {
         const sel = state.selectedServiceIds.includes(s.id) ? 'selected' : '';
         return `
-        <label class="service-check-card ${sel}" data-sid="${s.id}">
-            <input type="checkbox" value="${s.id}" ${sel ? 'checked' : ''} />
+        <div class="service-check-card ${sel}" data-sid="${s.id}" role="checkbox" aria-checked="${!!sel}" tabindex="0">
             <div class="service-check-icon"><i data-lucide="${s.icon}"></i></div>
             <div class="service-check-info">
                 <div class="service-check-name">${s.label}</div>
                 <div class="service-check-price">${s.priceLabel}</div>
             </div>
             <div class="service-check-mark"><i data-lucide="check"></i></div>
-        </label>`;
+        </div>`;
     }).join('');
 
     return `
@@ -568,51 +607,94 @@ function bindStep4() {
     });
 }
 
-// ── STEP 5: Date & Time ───────────────────────────────────────
-function buildStep5() {
-    // Generate next 14 days (skip Sundays)
-    const days = ['Ned', 'Pon', 'Tor', 'Sre', 'Čet', 'Pet', 'Sob'];
-    const months = ['jan','feb','mar','apr','maj','jun','jul','avg','sep','okt','nov','dec'];
-    const dateOptions = [];
-    let d = new Date();
-    d.setHours(0,0,0,0);
-    while (dateOptions.length < 14) {
-        if (d.getDay() !== 0) { // skip Sundays
-            const iso = d.toISOString().slice(0,10);
-            dateOptions.push({
-                iso,
-                day: days[d.getDay()],
-                label: `${d.getDate()}. ${months[d.getMonth()]}`
-            });
-        }
-        d.setDate(d.getDate() + 1);
+// ── STEP 5: Date & Time — Modern Calendar ─────────────────────
+const SL_MONTHS = ['Januar','Februar','Marec','April','Maj','Junij','Julij','Avgust','September','Oktober','November','December'];
+const SL_DOW    = ['Pon','Tor','Sre','Čet','Pet','Sob','Ned'];
+
+function buildCalendarGrid(year, month) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    // First day of month (0=Sun…6=Sat), convert to Mon-based
+    const firstDay = new Date(year, month, 1);
+    let startDow = firstDay.getDay(); // 0=Sun
+    startDow = startDow === 0 ? 6 : startDow - 1; // Mon=0…Sun=6
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrev  = new Date(year, month, 0).getDate();
+
+    let cells = '';
+    // Leading cells from previous month
+    for (let i = startDow - 1; i >= 0; i--) {
+        cells += `<div class="cal-day other-month">${daysInPrev - i}</div>`;
     }
+    // Days of current month
+    for (let d = 1; d <= daysInMonth; d++) {
+        const date   = new Date(year, month, d);
+        const iso    = date.toISOString().slice(0, 10);
+        const isSun  = date.getDay() === 0;
+        const isPast = date < today;
+        const isTod  = date.getTime() === today.getTime();
+        const isSel  = state.selectedDate === iso;
 
-    const datePills = dateOptions.map(opt => `
-        <button class="date-pill ${state.selectedDate === opt.iso ? 'selected' : ''}" data-date="${opt.iso}">
-            <span class="date-pill-day">${opt.day}</span>
-            <span class="date-pill-num">${opt.label}</span>
-        </button>
-    `).join('');
+        let cls = 'cal-day';
+        if (isPast || isSun) cls += ' disabled';
+        else if (isSel)      cls += ' selected';
+        if (isTod)           cls += ' today';
 
+        const dataAttr = (!isPast && !isSun) ? `data-date="${iso}"` : '';
+        cells += `<div class="${cls}" ${dataAttr}>${d}${isTod ? '<span class="cal-today-dot"></span>' : ''}</div>`;
+    }
+    // Trailing cells
+    const total = startDow + daysInMonth;
+    const trailing = total % 7 === 0 ? 0 : 7 - (total % 7);
+    for (let i = 1; i <= trailing; i++) {
+        cells += `<div class="cal-day other-month">${i}</div>`;
+    }
+    return cells;
+}
+
+function buildStep5() {
     const timePills = timeSlots.map(t => {
         const disabled = unavailableSlots.includes(t) ? 'disabled' : '';
         const sel = state.selectedTime === t && !disabled ? 'selected' : '';
         return `<button class="time-pill ${sel}" data-time="${t}" ${disabled}>${t}</button>`;
     }).join('');
 
+    const { calendarYear: yr, calendarMonth: mo } = state;
+    const prevOk = !(yr === new Date().getFullYear() && mo <= new Date().getMonth());
+
     return `
     <div class="wizard-step">
         <h2 class="step-title"><i data-lucide="calendar"></i> Izberite termin</h2>
         <div class="datetime-layout">
-            <div>
-                <div class="dt-section-label">Datum</div>
-                <div class="date-grid">${datePills}</div>
+
+            <div class="cal-section">
+                <div class="cal-widget glass-card">
+                    <div class="cal-header">
+                        <button class="cal-nav-btn" id="calPrev" ${prevOk ? '' : 'disabled'}>
+                            <i data-lucide="chevron-left"></i>
+                        </button>
+                        <span class="cal-month-label">${SL_MONTHS[mo]} ${yr}</span>
+                        <button class="cal-nav-btn" id="calNext">
+                            <i data-lucide="chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="cal-dow-row">
+                        ${SL_DOW.map(d => `<span>${d}</span>`).join('')}
+                    </div>
+                    <div class="cal-grid" id="calGrid">
+                        ${buildCalendarGrid(yr, mo)}
+                    </div>
+                    ${state.selectedDate ? `<div class="cal-selected-label">
+                        <i data-lucide="check-circle" style="width:13px;height:13px;color:#16a34a;"></i>
+                        ${formatBookingDate(state.selectedDate)}
+                    </div>` : ''}
+                </div>
             </div>
+
             <div>
                 <div class="dt-section-label">Ura</div>
                 <div class="time-grid">${timePills}</div>
             </div>
+
             <div class="notes-section">
                 <div class="dt-section-label">Opomba (neobvezno)</div>
                 <textarea id="bookingNotes" class="glass-input" rows="3"
@@ -623,14 +705,34 @@ function buildStep5() {
 }
 
 function bindStep5() {
-    document.querySelectorAll('.date-pill').forEach(btn => {
-        btn.addEventListener('click', () => {
-            state.selectedDate = btn.getAttribute('data-date');
-            document.querySelectorAll('.date-pill').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-        });
+    // Calendar navigation — prev month
+    document.getElementById('calPrev')?.addEventListener('click', () => {
+        if (state.calendarMonth === 0) { state.calendarMonth = 11; state.calendarYear--; }
+        else state.calendarMonth--;
+        rerenderCalendar();
     });
 
+    // Calendar navigation — next month (max 6 months ahead)
+    document.getElementById('calNext')?.addEventListener('click', () => {
+        const now = new Date();
+        const maxY = now.getFullYear() + (now.getMonth() + 6 > 11 ? 1 : 0);
+        const maxM = (now.getMonth() + 6) % 12;
+        if (state.calendarYear < maxY || (state.calendarYear === maxY && state.calendarMonth < maxM)) {
+            if (state.calendarMonth === 11) { state.calendarMonth = 0; state.calendarYear++; }
+            else state.calendarMonth++;
+            rerenderCalendar();
+        }
+    });
+
+    // Day selection — delegated on calGrid
+    document.getElementById('calGrid')?.addEventListener('click', (e) => {
+        const cell = e.target.closest('.cal-day[data-date]');
+        if (!cell) return;
+        state.selectedDate = cell.getAttribute('data-date');
+        rerenderCalendar();
+    });
+
+    // Time pills
     document.querySelectorAll('.time-pill:not(:disabled)').forEach(btn => {
         btn.addEventListener('click', () => {
             state.selectedTime = btn.getAttribute('data-time');
@@ -644,16 +746,58 @@ function bindStep5() {
     });
 }
 
+function rerenderCalendar() {
+    const grid  = document.getElementById('calGrid');
+    const label = document.querySelector('.cal-month-label');
+    const selLabel = document.querySelector('.cal-selected-label');
+    const prevBtn  = document.getElementById('calPrev');
+    const { calendarYear: yr, calendarMonth: mo } = state;
+
+    if (grid)  grid.innerHTML  = buildCalendarGrid(yr, mo);
+    if (label) label.textContent = `${SL_MONTHS[mo]} ${yr}`;
+    if (prevBtn) {
+        const prevOk = !(yr === new Date().getFullYear() && mo <= new Date().getMonth());
+        prevBtn.disabled = !prevOk;
+    }
+    // Re-bind day clicks after innerHTML update
+    document.getElementById('calGrid')?.addEventListener('click', (e) => {
+        const cell = e.target.closest('.cal-day[data-date]');
+        if (!cell) return;
+        state.selectedDate = cell.getAttribute('data-date');
+        rerenderCalendar();
+    });
+
+    // Update selected label
+    const widget = document.querySelector('.cal-widget');
+    if (widget) {
+        let sl = widget.querySelector('.cal-selected-label');
+        if (state.selectedDate) {
+            if (!sl) {
+                sl = document.createElement('div');
+                sl.className = 'cal-selected-label';
+                widget.appendChild(sl);
+            }
+            sl.innerHTML = `<i data-lucide="check-circle" style="width:13px;height:13px;color:#16a34a;"></i> ${formatBookingDate(state.selectedDate)}`;
+        } else if (sl) {
+            sl.remove();
+        }
+    }
+    if (window.lucide) window.lucide.createIcons();
+}
+
 // ── STEP 6: Summary & Confirm ─────────────────────────────────
 function buildStep6() {
     const biz = state.business;
     const vehicle = state.vehicles.find(v => v.id === state.selectedVehicleId);
     const { lineItems, total, hasQuoteItems } = calculateTotal(state.selectedServiceIds, state.selectedProducts);
 
+    // Generate service number preview (final saved on confirm)
+    if (!state.serviceNumber) state.serviceNumber = generateServiceNumber();
+
     const serviceLines = lineItems.map(item => `
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.2rem 0;">
-            <span style="color:#475569;">${item.label}</span>
-            <strong>${item.isQuote ? 'Po ogledu' : item.price + ' €'}</strong>
+        <div class="confirm-line-item">
+            <span class="confirm-line-label">${item.label}</span>
+            <strong class="confirm-line-price">${item.isQuote ? 'Po ogledu' : item.price + ' €'}</strong>
         </div>
     `).join('');
 
@@ -661,13 +805,29 @@ function buildStep6() {
         bring_own: 'Prinesem lastne gume',
         use_stored: 'Sezonska menjava (hramba)',
         buy_new: 'Kupim nove gume',
-        null: ''
     }[state.bookingType] || '';
 
     return `
     <div class="wizard-step">
         <h2 class="step-title"><i data-lucide="clipboard-check"></i> Potrdite rezervacijo</h2>
         <div class="confirm-layout">
+
+            <!-- Service number badge -->
+            <div class="confirm-service-number-card glass-card">
+                <div class="csn-icon"><i data-lucide="hash"></i></div>
+                <div>
+                    <div class="csn-label">Številka storitve</div>
+                    <div class="csn-value">${state.serviceNumber}</div>
+                </div>
+                <div class="confirm-qr-mini">
+                    <canvas id="confirmQRMini"></canvas>
+                </div>
+            </div>
+
+            <div class="confirm-section glass-card">
+                <div class="confirm-section-label">Podjetje</div>
+                <div class="confirm-section-value">${biz.name} · ${biz.location.city}</div>
+            </div>
 
             <div class="confirm-section glass-card">
                 <div class="confirm-section-label">Vozilo</div>
@@ -700,9 +860,34 @@ function buildStep6() {
                 <span class="confirm-total-price">${total > 0 ? total + ' €' : 'Po ogledu'}</span>
             </div>
 
-            ${hasQuoteItems ? `<p style="font-size:0.75rem;color:#94a3b8;text-align:center;margin:0;">
+            ${hasQuoteItems ? `<p class="confirm-quote-note">
                 * Nekatere storitve so po ogledu in niso vključene v skupno ceno.
             </p>` : ''}
+
+            <!-- Notification toggles -->
+            <div class="confirm-notify-card glass-card">
+                <div class="notify-card-title"><i data-lucide="bell"></i> Obvesti me</div>
+                <label class="toggle-row">
+                    <div class="toggle-row-text">
+                        <span class="toggle-row-label">Pošlji potrditev s QR kodo na email</span>
+                        <span class="toggle-row-sub">Kupec prejme potrditv in QR kodo po e-pošti</span>
+                    </div>
+                    <div class="toggle-switch-wrap">
+                        <input type="checkbox" id="toggleEmail" class="toggle-input" ${state.sendConfirmEmail ? 'checked' : ''} />
+                        <span class="toggle-switch"></span>
+                    </div>
+                </label>
+                <label class="toggle-row">
+                    <div class="toggle-row-text">
+                        <span class="toggle-row-label">Pošlji link potrditve na SMS</span>
+                        <span class="toggle-row-sub">Kupec prejme SMS s kratkim linkom na potrditev</span>
+                    </div>
+                    <div class="toggle-switch-wrap">
+                        <input type="checkbox" id="toggleSms" class="toggle-input" ${state.sendConfirmSms ? 'checked' : ''} />
+                        <span class="toggle-switch"></span>
+                    </div>
+                </label>
+            </div>
 
             <button class="btn-confirm-booking" id="confirmBookingBtn">
                 <i data-lucide="check-circle"></i> Potrdi rezervacijo
@@ -713,6 +898,16 @@ function buildStep6() {
 
 function bindStep6() {
     document.getElementById('confirmBookingBtn')?.addEventListener('click', confirmBooking);
+
+    document.getElementById('toggleEmail')?.addEventListener('change', function () {
+        state.sendConfirmEmail = this.checked;
+    });
+    document.getElementById('toggleSms')?.addEventListener('change', function () {
+        state.sendConfirmSms = this.checked;
+    });
+
+    // Render QR preview
+    renderQRCanvas('confirmQRMini', state.serviceNumber);
 }
 
 // ── Confirm and save booking ──────────────────────────────────
@@ -720,6 +915,7 @@ function confirmBooking() {
     const userId = getUserId();
     const vehicle = state.vehicles.find(v => v.id === state.selectedVehicleId);
     const { total } = calculateTotal(state.selectedServiceIds, state.selectedProducts);
+    const serviceNumber = state.serviceNumber || generateServiceNumber();
 
     const bookingData = {
         userId,
@@ -736,10 +932,20 @@ function confirmBooking() {
         date: state.selectedDate,
         time: state.selectedTime,
         notes: state.notes,
+        serviceNumber,
+        sendConfirmEmail: state.sendConfirmEmail,
+        sendConfirmSms: state.sendConfirmSms,
     };
 
     const saved = saveBooking(bookingData);
     store.addBooking(saved);
+
+    // Mock notifications
+    if (state.sendConfirmEmail) console.info('[Booking] Email s QR kodo poslan na:', userId);
+    if (state.sendConfirmSms)   console.info('[Booking] SMS z linkom poslan na:', userId);
+
+    // Build Google Calendar URL
+    const gCalUrl = buildGoogleCalendarUrl(saved, state.business);
 
     // Hide nav buttons
     const nav = document.getElementById('bookingNav');
@@ -753,9 +959,33 @@ function confirmBooking() {
         <div class="success-icon"><i data-lucide="check-circle"></i></div>
         <h2 class="success-title">Rezervacija uspešna!</h2>
         <p class="success-subtitle">
-            Vaša rezervacija je bila posredovana. Potrditev boste prejeli kmalu.
+            Potrditev je bila posredovana.
             Vse rezervacije si oglejte v <a href="#/dashboard">svojem profilu</a>.
         </p>
+
+        <!-- Service number + QR -->
+        <div class="success-sn-block">
+            <div class="success-sn-left">
+                <div class="success-sn-label">Številka storitve</div>
+                <div class="success-sn-value">${serviceNumber}</div>
+                <div class="success-sn-hint">
+                    <i data-lucide="info" style="width:11px;height:11px;"></i>
+                    Pokažite QR kodo serviserju ob prihodu
+                </div>
+            </div>
+            <div class="success-qr-wrap">
+                <canvas id="successQRCanvas"></canvas>
+            </div>
+        </div>
+
+        <!-- Notification status badges -->
+        ${state.sendConfirmEmail ? `<div class="success-notify-badge email">
+            <i data-lucide="mail"></i> Potrditev s QR kodo poslana na e-pošto
+        </div>` : ''}
+        ${state.sendConfirmSms ? `<div class="success-notify-badge sms">
+            <i data-lucide="smartphone"></i> SMS z linkom poslan
+        </div>` : ''}
+
         <div class="success-details">
             <div class="success-detail-row">
                 <span class="success-detail-key">Podjetje</span>
@@ -774,10 +1004,24 @@ function confirmBooking() {
                 <span class="success-detail-val" style="color:#d97706;">Čaka potrditve</span>
             </div>
         </div>
-        <a href="#/dashboard" class="booking-btn-primary" style="text-decoration:none;margin-top:0.5rem;">
-            <i data-lucide="layout-dashboard"></i> Pojdi na profil
-        </a>
+
+        <div class="success-actions">
+            <a href="${gCalUrl}" target="_blank" rel="noopener" class="btn-gcal">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0">
+                    <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" stroke="#4285f4" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+                Shrani v Google Koledar
+            </a>
+            <a href="#/dashboard" class="booking-btn-primary" style="text-decoration:none;">
+                <i data-lucide="layout-dashboard"></i> Pojdi na profil
+            </a>
+        </div>
     </div>`;
+
+    // Render QR code on the canvas
+    renderQRCanvas('successQRCanvas', serviceNumber);
 
     // Hide summary on mobile
     const summary = document.getElementById('bookingSummary');
@@ -804,6 +1048,12 @@ function goNext() {
     }
 
     state.currentStep++;
+
+    // Auto-skip products step (logical 4) if no products available for selected services
+    if (logicalStep(state.currentStep) === 4 && shouldSkipProductsStep()) {
+        state.currentStep++;
+    }
+
     renderProgress();
     renderStep(state.currentStep);
     updateNavButtons();
@@ -813,6 +1063,12 @@ function goNext() {
 function goBack() {
     if (state.currentStep <= 1) return;
     state.currentStep--;
+
+    // Auto-skip products step backwards if no products
+    if (logicalStep(state.currentStep) === 4 && shouldSkipProductsStep()) {
+        state.currentStep--;
+    }
+
     clearStepError();
     renderProgress();
     renderStep(state.currentStep);

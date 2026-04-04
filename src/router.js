@@ -13,6 +13,7 @@ const routes = {
     '/dashboard': { view: 'dashboard', protected: true },
     '/novi-oglas': { view: 'create-listing', protected: false },
     '/profil': { view: 'profile', protected: true },
+    '/garaža': { view: 'profile', protected: true },
     '/primerjava': { view: 'compare', protected: false },
     '/oceni-vrednost': { view: 'evaluate', protected: false },
     '/o-nas': { view: 'about', protected: false },
@@ -24,6 +25,8 @@ const routes = {
     '/booking': { view: 'booking', protected: false },
     '/nakup/pnevmatike': { view: 'tire-search', protected: false },
     '/nakup/pnevmatika': { view: 'tire-product', protected: false },
+    '/deli':             { view: 'parts', protected: false },
+    '/del':              { view: 'parts-listing', protected: false },
 };
 
 const PROTECTED_REDIRECT = '/prijava';
@@ -45,8 +48,8 @@ async function loadView(viewName) {
 // ── Main router function ──────────────────────────────────────────────────────
 async function router() {
     const hash = window.location.hash.slice(1) || '/';
-    // Strip query params for route matching
-    const path = hash.split('?')[0];
+    // Strip query params and decode special characters (e.g. č, š, ž)
+    const path = decodeURIComponent(hash.split('?')[0]);
 
     // Support dimension-in-path URLs: /nakup/pnevmatike/205-55-r16
     let route = routes[path];

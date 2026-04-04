@@ -1090,3 +1090,153 @@ body.dark-mode .lp-modal-body { color: #cbd5e1; }
     border-color: #fecaca;
     color: #ef4444;
 }
+
+/* ── Like + Compare action row in sidebar ──────────��──────────────────────── */
+.lp-action-row {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.lp-action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.lp-action-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.lp-fav-btn:hover {
+    border-color: #f43f5e;
+    color: #f43f5e;
+    background: rgba(244,63,94,0.05);
+}
+
+.lp-fav-btn.active {
+    border-color: rgba(244,63,94,0.4);
+    color: #e11d48;
+    background: rgba(244,63,94,0.08);
+}
+
+.lp-fav-btn.active i {
+    fill: currentColor;
+}
+
+.lp-compare-btn:hover {
+    border-color: var(--color-primary-start);
+    color: var(--color-primary-start);
+    background: rgba(37,99,235,0.05);
+}
+
+.lp-compare-btn.active {
+    border-color: var(--color-primary-start);
+    color: white;
+    background: var(--color-primary-start);
+}
+
+body.dark-mode .lp-action-btn {
+    background: rgba(30,41,59,0.8);
+    border-color: rgba(255,255,255,0.12);
+    color: #94a3b8;
+}
+
+/* ── Collapsible equipment groups ──────────────���──────────────────────────── */
+.lp-eq-group-collapsible {
+    border: 1px solid #f1f5f9;
+    border-radius: 1rem;
+    overflow: hidden;
+    margin-bottom: 0.6rem;
+}
+
+body.dark-mode .lp-eq-group-collapsible {
+    border-color: rgba(255,255,255,0.08);
+}
+
+.lp-eq-group-collapsible summary.lp-eq-group-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    list-style: none;
+    background: #f8fafc;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #334155;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+.lp-eq-group-collapsible summary.lp-eq-group-summary::-webkit-details-marker { display: none; }
+
+.lp-eq-group-collapsible summary.lp-eq-group-summary:hover {
+    background: #f1f5f9;
+}
+
+body.dark-mode .lp-eq-group-collapsible summary.lp-eq-group-summary {
+    background: rgba(255,255,255,0.04);
+    color: #cbd5e1;
+}
+
+body.dark-mode .lp-eq-group-collapsible summary.lp-eq-group-summary:hover {
+    background: rgba(255,255,255,0.07);
+}
+
+.lp-eq-group-summary i[data-lucide]:first-child {
+    width: 16px;
+    height: 16px;
+    color: var(--color-primary-start);
+    flex-shrink: 0;
+}
+
+.lp-eq-group-summary span:nth-child(2) {
+    flex: 1;
+}
+
+.lp-eq-count {
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: rgba(37,99,235,0.1);
+    color: var(--color-primary-start);
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    flex-shrink: 0;
+}
+
+.lp-eq-chevron {
+    width: 16px !important;
+    height: 16px !important;
+    color: #94a3b8;
+    flex-shrink: 0;
+    transition: transform 0.25s;
+}
+
+.lp-eq-group-collapsible[open] .lp-eq-chevron {
+    transform: rotate(180deg);
+}
+
+.lp-eq-chips-padded {
+    padding: 0.75rem 1rem 0.9rem;
+    background: white;
+    border-top: 1px solid #f1f5f9;
+}
+
+body.dark-mode .lp-eq-chips-padded {
+    background: rgba(15,23,42,0.4);
+    border-top-color: rgba(255,255,255,0.06);
+}

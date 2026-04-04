@@ -8,6 +8,7 @@ import { EQUIPMENT_GROUPS, getEquipmentForCategory } from '../data/equipment.js'
 import { auth } from '../firebase.js';
 import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { initCustomSelects, createCustomSelect } from '../utils/customSelect.js';
+import { getCurrentUserDoc } from '../auth/auth.js';
 
 // ── Draft persistence ─────────────────────────────────────────────────────────
 const DRAFT_KEY = 'cl_draft';
@@ -119,6 +120,18 @@ export async function initCreateListingPage() {
             clearDraft();
         }
     }
+    
+    // Check if user is logged in to pre-set seller type
+    if (auth.currentUser) {
+        try {
+            const userDoc = await getCurrentUserDoc();
+            if (userDoc && userDoc.sellerType) {
+                state.sellerType = userDoc.sellerType;
+            }
+        } catch (e) {
+            console.error('[CreateListing] Fetch user profile failed:', e);
+        }
+    }
 
     renderCurrentStep();
 }
@@ -223,14 +236,20 @@ function renderEntryStep() {
 
             <div class="cl-field" style="margin-bottom:1.5rem;">
                 <label class="cl-label">Tip prodajalca</label>
-                <div class="cl-seller-toggle">
-                    <button class="cl-seller-btn ${state.sellerType === 'private' ? 'active' : ''}" data-type="private">
-                        👤 Fizična oseba
-                    </button>
-                    <button class="cl-seller-btn ${state.sellerType === 'business' ? 'active' : ''}" data-type="business">
-                        🏢 Pravna oseba / Salon
-                    </button>
-                </div>
+                ${auth.currentUser 
+                    ? `<div style="padding:0.75rem 1rem;background:rgba(255,255,255,0.4);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,0.5);border-radius:12px;display:flex;align-items:center;gap:0.75rem;font-weight:600;">
+                         ${state.sellerType === 'business' ? '🏢 Pravna oseba / Salon' : '👤 Fizična oseba'}
+                         <span style="font-size:0.75rem;color:#64748b;font-weight:400;margin-left:auto;">Prijavljen kot: ${auth.currentUser.displayName || auth.currentUser.email}</span>
+                       </div>`
+                    : `<div class="cl-seller-toggle">
+                        <button class="cl-seller-btn ${state.sellerType === 'private' ? 'active' : ''}" data-type="private">
+                            👤 Fizična oseba
+                        </button>
+                        <button class="cl-seller-btn ${state.sellerType === 'business' ? 'active' : ''}" data-type="business">
+                            🏢 Pravna oseba / Salon
+                        </button>
+                    </div>`
+                }
             </div>
 
             <div class="cl-entry-cards">
@@ -1742,6 +1761,10 @@ async function submitListing(user) {
     if (window.lucide) window.lucide.createIcons();
 
     try {
+        const userDoc = await getCurrentUserDoc();
+        if (userDoc && userDoc.sellerType) {
+            state.sellerType = userDoc.sellerType;
+        }
         const id = await createListing(state, state._exteriorFiles, state._interiorFiles, user);
         clearDraft();
         state._exteriorUrls.forEach(url => URL.revokeObjectURL(url));

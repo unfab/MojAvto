@@ -271,6 +271,231 @@
     border-color: var(--color-primary-start);
 }
 
+/* ── Legend button ───────────────────────────────────────────── */
+.legend-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.legend-btn:hover {
+    background: #f1f5f9;
+    border-color: var(--color-primary-start);
+    color: var(--color-primary-start);
+}
+
+/* ── Legend Popup ────────────────────────────────────────────── */
+.legend-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.legend-overlay.active { opacity: 1; }
+
+.legend-card {
+    background: white;
+    width: 100%;
+    max-width: 440px;
+    border-radius: 2rem;
+    padding: 1.75rem 2rem 2rem;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    position: relative;
+    animation: popupIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body.dark-mode .legend-card {
+    background: #1e293b;
+}
+
+.legend-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.legend-card-header h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+}
+
+body.dark-mode .legend-card-header h3 { color: #f1f5f9; }
+
+.legend-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: background 0.15s;
+}
+
+.legend-close-btn:hover { background: #f1f5f9; color: #475569; }
+
+.legend-section-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+    margin: 1rem 0 0.6rem;
+}
+
+.legend-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.legend-pill-demo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    border: 1px solid;
+    flex-shrink: 0;
+    min-width: 52px;
+    justify-content: center;
+}
+
+.legend-row-desc {
+    font-size: 0.82rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+body.dark-mode .legend-row-desc { color: #94a3b8; }
+
+/* Power unit toggle inside legend */
+.power-unit-toggle {
+    display: flex;
+    background: #f1f5f9;
+    border-radius: 9999px;
+    padding: 3px;
+    width: fit-content;
+    margin: 0.75rem auto 0;
+}
+
+.power-unit-btn {
+    padding: 0.35rem 1rem;
+    border: none;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    background: transparent;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.power-unit-btn.active {
+    background: white;
+    color: #0f172a;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* ── Fuel Pill variants (in cards) ───────────────────────────── */
+.fuel-pill-B  { background: rgba(234,88,12,0.12);  border-color: rgba(234,88,12,0.3);  color: #c2410c; }
+.fuel-pill-D  { background: rgba(146,64,14,0.12);  border-color: rgba(146,64,14,0.3);  color: #92400e; }
+.fuel-pill-H  { background: rgba(124,58,237,0.12); border-color: rgba(124,58,237,0.3); color: #6d28d9; }
+.fuel-pill-HB { background: rgba(219,39,119,0.12); border-color: rgba(219,39,119,0.3); color: #be185d; }
+.fuel-pill-E  { background: rgba(22,163,74,0.12);  border-color: rgba(22,163,74,0.3);  color: #15803d; }
+.fuel-pill-LPG{ background: rgba(202,138,4,0.12);  border-color: rgba(202,138,4,0.3);  color: #b45309; }
+
+.spec-pill.fuel-coded {
+    font-weight: 900;
+    font-size: 0.8rem;
+    border: 1px solid;
+}
+
+.spec-pill.fuel-coded i {
+    color: inherit !important;
+}
+
+/* Consumption pill */
+.spec-pill.consumption-pill {
+    background: rgba(14,165,233,0.1);
+    border-color: rgba(14,165,233,0.25);
+    color: #0369a1;
+}
+
+.spec-pill.consumption-pill i {
+    color: #0369a1 !important;
+}
+
+/* Heart / favourite button */
+.listing-fav-btn {
+    background: white;
+    color: #94a3b8;
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.listing-fav-btn:hover {
+    border-color: #f43f5e;
+    color: #f43f5e;
+    background: rgba(244,63,94,0.04);
+}
+
+.listing-fav-btn.active {
+    background: rgba(244,63,94,0.08);
+    color: #e11d48;
+    border-color: rgba(244,63,94,0.35);
+}
+
+.listing-fav-btn i {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2px;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.listing-fav-btn.active i {
+    transform: scale(1.25);
+    fill: currentColor;
+}
+
+body.dark-mode .listing-fav-btn { background: rgba(30,41,59,0.8); border-color: rgba(255,255,255,0.12); }
+body.dark-mode .listing-fav-btn:hover { border-color: rgba(244,63,94,0.5); color: #f43f5e; }
+
 /* ── Car Card ────────────────────────────────────────────── */
 .car-listing {
     display: flex;
@@ -281,12 +506,12 @@
     border: 1px solid rgba(255,255,255,0.5);
     box-shadow: 0 4px 24px rgba(0,0,0,0.06);
     border-radius: 1.5rem;
-    padding: 1rem;
-    margin-bottom: 1.25rem;
+    padding: 0.85rem;
+    margin-bottom: 1rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-    min-height: 220px;
+    min-height: 180px;
     cursor: pointer;
 }
 
@@ -304,9 +529,9 @@
 
 /* Image */
 .car-listing-img {
-    width: 380px;
-    height: 260px;
-    border-radius: 1.5rem;
+    width: 320px;
+    height: 210px;
+    border-radius: 1.25rem;
     overflow: hidden;
     position: relative;
     flex-shrink: 0;
@@ -409,7 +634,7 @@
     display: flex;
     flex-direction: column;
     min-width: 0;
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 
 .car-listing-header {
@@ -465,10 +690,10 @@
 }
 
 .car-listing-subtitle {
-    font-size: 0.875rem;
+    font-size: 0.82rem;
     font-weight: 500;
     color: #64748b;
-    margin: 0.25rem 0 0.75rem 0;
+    margin: 0.15rem 0 0.5rem 0;
 }
 
 .car-listing-price {
@@ -684,6 +909,26 @@ body.dark-mode .price-rating.rating-red {
     border: 1px solid transparent;
 }
 
+.action-circle-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2px solid transparent;
+    align-self: center;
+}
+
+.action-circle-btn i {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2px;
+}
+
 .contact-btn {
     background: white;
     color: #475569;
@@ -694,21 +939,18 @@ body.dark-mode .price-rating.rating-red {
     background: #f8fafc;
     border-color: var(--color-primary-start);
     color: var(--color-primary-start);
-    transform: translateY(-2px);
 }
 
 .listing-compare-btn {
     background: white;
     color: var(--color-primary-start);
-    border-color: rgba(37,99,235,0.2);
+    border: 2px solid rgba(37,99,235,0.2);
     box-shadow: 0 4px 12px rgba(37,99,235,0.06);
-    flex: 1;
 }
 
 .listing-compare-btn:hover {
     border-color: var(--color-primary-start);
     background: rgba(37,99,235,0.02);
-    transform: translateY(-2px);
 }
 
 .listing-compare-btn.active {
@@ -730,49 +972,80 @@ body.dark-mode .price-rating.rating-red {
 .pagination-wrap {
     display: flex;
     justify-content: center;
-    margin-top: 2rem;
+    margin-top: 3.5rem;
+    margin-bottom: 2rem;
 }
 
 .pagination {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
-    background: white;
-    padding: 0.4rem 0.75rem;
-    border-radius: 9999px;
-    box-shadow: 0 2px 12px rgba(31,38,135,0.06);
-    border: 1px solid rgba(255,255,255,0.5);
+    gap: 0.75rem;
+    padding: 0.5rem;
+    background: transparent; /* Removed pill background */
+    border: none;
+    box-shadow: none;
 }
 
 .page-btn {
-    width: 34px;
-    height: 34px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    border: none;
-    background: transparent;
+    border-radius: 50% !important;
+    border: none !important;
+    background: transparent !important;
     color: #475569;
-    font-size: 0.85rem;
-    font-weight: 600;
-    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Outfit', 'Inter', sans-serif;
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    padding: 0;
 }
 
-.page-btn:hover { background: #f1f5f9; }
+.page-btn:hover:not(.active):not(.page-btn-glass) {
+    color: var(--color-primary-start);
+    transform: translateY(-2px);
+}
 
 .page-btn.active {
-    background: var(--color-primary-start);
-    color: white;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+    background: rgba(37, 99, 235, 0.08) !important;
+    color: var(--color-primary-start);
+    font-weight: 800;
+}
+
+/* Glassy circle arrow buttons */
+.page-btn-glass {
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    color: #1e293b;
+    border-radius: 50% !important;
+}
+
+.page-btn-glass:hover {
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(37, 99, 235, 0.2) !important;
+    transform: translateY(-2px) scale(1.05);
+    color: var(--color-primary-start);
 }
 
 .page-dots {
     color: #94a3b8;
-    padding: 0 0.35rem;
-    font-size: 0.85rem;
+    padding: 0 0.25rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.page-btn i {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5px;
 }
 
 /* Removed tray CSS - moved to header hover logic */
@@ -846,12 +1119,19 @@ body.dark-mode .compare-btn.active {
 }
 
 body.dark-mode .pagination {
-    background: rgba(30,41,59,0.8);
-    border-color: rgba(255,255,255,0.1);
+    background: transparent;
+    border: none;
 }
 
 body.dark-mode .page-btn { color: #94a3b8; }
-body.dark-mode .page-btn:hover { background: rgba(255,255,255,0.06); }
+body.dark-mode .page-btn:hover:not(.active):not(.page-btn-glass) { color: #f8fafc; }
+body.dark-mode .page-btn.active { background: rgba(255, 255, 255, 0.05); color: #60a5fa; }
+
+body.dark-mode .page-btn-glass {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #f1f5f9;
+}
 
 body.dark-mode .results-header h1 { color: #f8fafc; }
 body.dark-mode .mobile-filter-toggle { background: rgba(30,41,59,0.8); border-color: rgba(255,255,255,0.1); color: #f8fafc; }
@@ -1012,6 +1292,7 @@ body.dark-mode .mobile-filter-toggle { background: rgba(30,41,59,0.8); border-co
                     </select>
                     <i data-lucide="chevron-down" class="filter-select-icon"></i>
                 </div>
+                <button class="legend-btn" id="legendBtn" title="Legenda ikon">?</button>
             </div>
         </div>
 
@@ -1022,16 +1303,89 @@ body.dark-mode .mobile-filter-toggle { background: rgba(30,41,59,0.8); border-co
         <!-- Pagination -->
         <div class="pagination-wrap">
             <div class="pagination">
-                <button class="page-btn"><i data-lucide="chevron-left"></i></button>
+                <button class="page-btn page-btn-glass"><i data-lucide="chevron-left"></i></button>
                 <button class="page-btn active">1</button>
                 <button class="page-btn">2</button>
                 <button class="page-btn">3</button>
                 <span class="page-dots">...</span>
                 <button class="page-btn">48</button>
-                <button class="page-btn"><i data-lucide="chevron-right"></i></button>
+                <button class="page-btn page-btn-glass"><i data-lucide="chevron-right"></i></button>
             </div>
         </div>
     </main>
+</div>
+
+<!-- Legend popup (icons reference) -->
+<div class="legend-overlay" id="legendOverlay">
+    <div class="legend-card">
+        <div class="legend-card-header">
+            <h3>Legenda ikon oglasov</h3>
+            <button class="legend-close-btn" id="legendCloseBtn" aria-label="Zapri">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <!-- Fuel types -->
+        <p class="legend-section-title">Vrsta goriva</p>
+        <div class="legend-rows">
+            <div class="legend-row">
+                <span class="legend-pill-demo fuel-pill-B"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 22V6a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v5.5M13 22v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5M5 9h8"/></svg>B</span>
+                <span class="legend-row-desc">Bencin</span>
+            </div>
+            <div class="legend-row">
+                <span class="legend-pill-demo fuel-pill-D"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 22V6a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v5.5M13 22v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5M5 9h8"/></svg>D</span>
+                <span class="legend-row-desc">Dizel</span>
+            </div>
+            <div class="legend-row">
+                <span class="legend-pill-demo fuel-pill-H"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>H</span>
+                <span class="legend-row-desc">Hibrid (samonapolnjevalni)</span>
+            </div>
+            <div class="legend-row">
+                <span class="legend-pill-demo fuel-pill-HB"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>HB</span>
+                <span class="legend-row-desc">Priključni hibrid (plug-in)</span>
+            </div>
+            <div class="legend-row">
+                <span class="legend-pill-demo fuel-pill-E"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>E</span>
+                <span class="legend-row-desc">Električno vozilo (BEV)</span>
+            </div>
+            <div class="legend-row">
+                <span class="legend-pill-demo fuel-pill-LPG"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>LPG</span>
+                <span class="legend-row-desc">Utekočinjen naftni plin</span>
+            </div>
+        </div>
+
+        <!-- Other icons -->
+        <p class="legend-section-title">Tehnični podatki</p>
+        <div class="legend-rows">
+            <div class="legend-row">
+                <span class="legend-pill-demo" style="background:rgba(99,102,241,0.1);border-color:rgba(99,102,241,0.3);color:#4f46e5;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 4a4 4 0 0 1 0 8M14 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0M2 20c0-3.31 3.13-6 7-6M19 21v-6M16 18h6"/></svg>
+                    kW
+                </span>
+                <span class="legend-row-desc">Moč motorja — <strong id="powerToggleLabel">prikaži v KM</strong></span>
+            </div>
+            <div class="legend-row">
+                <span class="legend-pill-demo" style="background:rgba(14,165,233,0.1);border-color:rgba(14,165,233,0.25);color:#0369a1;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    l/100
+                </span>
+                <span class="legend-row-desc">Poraba goriva</span>
+            </div>
+            <div class="legend-row">
+                <span class="legend-pill-demo" style="background:rgba(241,245,249,0.5);border-color:#e2e8f0;color:#475569;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 7h-9m12 10h-9M15 3h-9m12 10h-9M9 17H2m12 4H2m10-8H2m12-4H2m7-4H2"/></svg>
+                    R/A/S
+                </span>
+                <span class="legend-row-desc">Menjalnik (Ročni / Avtomatski / Sekvenčni)</span>
+            </div>
+        </div>
+
+        <!-- Power unit toggle -->
+        <div class="power-unit-toggle">
+            <button class="power-unit-btn active" data-unit="kw" id="puBtnKw">kW</button>
+            <button class="power-unit-btn" data-unit="km" id="puBtnKm">KM</button>
+        </div>
+    </div>
 </div>
 
 <!-- Removed floating tray -->

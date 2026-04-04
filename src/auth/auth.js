@@ -21,6 +21,7 @@ async function ensureUserDoc(user) {
             photoURL: user.photoURL || '',
             region: '',
             phone: '',
+            sellerType: 'private', // 'private' or 'business'
             membershipTier: 'free',
             membershipExpiry: null,
             createdAt: serverTimestamp(),
@@ -41,6 +42,7 @@ export async function registerWithEmail({ fullname, email, password, region }) {
         photoURL: '',
         region: region || '',
         phone: '',
+        sellerType: 'private', 
         membershipTier: 'free',
         membershipExpiry: null,
         createdAt: serverTimestamp(),

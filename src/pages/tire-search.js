@@ -44,7 +44,7 @@ export async function initTireSearchPage() {
     // Set pre-fill values
     if (preW) document.getElementById('selWidth').value = preW;
     if (preH) document.getElementById('selHeight').value = preH;
-    if (preD) document.getElementById('selDiameter').value = `R${preD.replace('R','')}`;
+    if (preD) document.getElementById('selDiameter').value = `R${preD.replace('R', '')}`;
 
     // Quick dimension pills
     renderQuickDims();
@@ -96,14 +96,14 @@ function populateDimSelects() {
             const label = opt.textContent;
             const pill = opt.closest('.pill-dropdown');
             const input = pill?.querySelector('.pill-value-input');
-            
+
             pill.querySelectorAll('.pill-option').forEach(o => o.classList.remove('active'));
             opt.classList.add('active');
             if (input) {
                 input.value = label;
                 input.readOnly = true;
             }
-            
+
             e.stopPropagation();
             pill.classList.remove('open');
         });
@@ -277,12 +277,12 @@ function bindEvents() {
     // Toggle dropdowns and handle inline search
     document.querySelectorAll('.pill-dropdown').forEach(pill => {
         const input = pill.querySelector('.pill-value-input');
-        
+
         pill.addEventListener('click', (e) => {
             const isOpen = pill.classList.contains('open');
             // Close all
             document.querySelectorAll('.pill-dropdown').forEach(p => p.classList.remove('open'));
-            
+
             if (!isOpen) {
                 pill.classList.add('open');
                 if (input) {
@@ -334,7 +334,7 @@ function bindEvents() {
             const val = opt.dataset.value;
             const label = opt.textContent;
             const input = vehicleMain.querySelector('.pill-value-input');
-            
+
             // Update active state
             vehicleMain.querySelector('.pill-option.active')?.classList.remove('active');
             opt.classList.add('active');
@@ -349,7 +349,7 @@ function bindEvents() {
             } else {
                 vehicleSub.style.display = 'none';
             }
-            
+
             e.stopPropagation();
             vehicleMain.classList.remove('open');
             runSearch();
@@ -370,7 +370,7 @@ function bindEvents() {
             { v: 'komunalna', l: 'Komunalna mehanizacija' },
             { v: 'gozdarska', l: 'Gozdarska mehanizacija' }
         ];
-        
+
         subVehicleMenu.innerHTML = types.map(t => `
             <div class="pill-option ${t.v === 'vse' ? 'active' : ''}" data-value="${t.v}">${t.l}</div>
         `).join('');
