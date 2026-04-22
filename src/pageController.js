@@ -26,8 +26,16 @@ const pageModules = {
     admin: () => import('./pages/admin.js').then(m => m.initAdminPage()),
 };
 
+document.addEventListener('beforeRouteChange', () => {
+    // Always attempt to unmount React synchronously when leaving a page
+    if (window.unmountReactSearch) {
+        window.unmountReactSearch();
+    }
+});
+
 document.addEventListener('routeChanged', (e) => {
     const view = e.detail.view;
+    
     const initFn = pageModules[view];
     if (initFn) {
         initFn().catch(err => console.error(`[PageController] Error initializing "${view}":`, err));

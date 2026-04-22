@@ -17,9 +17,9 @@ export function initHeader() {
             <nav id="navLinks" class="desktop-links">
               <!-- Oglasi — mega menu trigger -->
               <div class="mega-menu-wrapper">
-                <button class="nav-pill ${hash.startsWith('#/iskanje') || hash.startsWith('#/oglasi') ? 'active-pill' : ''}" id="oglasiMenuBtn">
+                <a href="#/iskanje" class="nav-pill ${hash.startsWith('#/iskanje') || hash.startsWith('#/oglasi') ? 'active-pill' : ''}" id="oglasiMenuBtn">
                   <i data-lucide="search"></i> Oglasi
-                </button>
+                </a>
                 <div id="megaMenu" class="mega-menu">
                   ${renderMegaMenuContent()}
                 </div>

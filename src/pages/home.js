@@ -266,7 +266,7 @@ function setupSearchForm() {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             // In Phase 2 this should ideally navigate to advanced-search with query params
-            window.location.hash = '/oglasi';
+            window.location.hash = '/iskanje';
         });
     }
 
