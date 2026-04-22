@@ -75,15 +75,15 @@ export async function initPartsPage() {
 
     // Read initial state from URL
     const params = parseParams();
-    state.activeCatSlug   = params.get('cat')    || '';
-    state.activeSubSlug   = params.get('sub')    || '';
-    state.activeChildSlug = params.get('child')  || '';
-    state.vehicle.make    = params.get('make')   || '';
-    state.vehicle.model   = params.get('model')  || '';
-    state.vehicle.year    = params.get('year')   || '';
-    state.vehicle.engine  = params.get('engine') || '';
-    state.vehicleActive   = !!(state.vehicle.make);
-    state.brand           = params.get('brand')  || '';
+    state.activeCatSlug = params.get('cat') || '';
+    state.activeSubSlug = params.get('sub') || '';
+    state.activeChildSlug = params.get('child') || '';
+    state.vehicle.make = params.get('make') || '';
+    state.vehicle.model = params.get('model') || '';
+    state.vehicle.year = params.get('year') || '';
+    state.vehicle.engine = params.get('engine') || '';
+    state.vehicleActive = !!(state.vehicle.make);
+    state.brand = params.get('brand') || '';
 
     // Build UI
     renderSidebar();
@@ -105,10 +105,10 @@ export async function initPartsPage() {
 // ── Vehicle panel setup ───────────────────────────────────────────────────────
 async function setupVehiclePanel() {
     const data = await loadBrandModelData();
-    const makeSelect  = document.getElementById('parts-make');
+    const makeSelect = document.getElementById('parts-make');
     const modelSelect = document.getElementById('parts-model');
-    const yearSelect  = document.getElementById('parts-year');
-    const engineSelect= document.getElementById('parts-engine');
+    const yearSelect = document.getElementById('parts-year');
+    const engineSelect = document.getElementById('parts-engine');
 
     // Populate years
     const currentYear = new Date().getFullYear();
@@ -154,11 +154,11 @@ async function setupVehiclePanel() {
     });
 
     document.getElementById('parts-vehicle-search-btn').addEventListener('click', async () => {
-        state.vehicle.make   = makeSelect.value;
-        state.vehicle.model  = modelSelect.value;
-        state.vehicle.year   = yearSelect.value;
+        state.vehicle.make = makeSelect.value;
+        state.vehicle.model = modelSelect.value;
+        state.vehicle.year = yearSelect.value;
         state.vehicle.engine = engineSelect.value;
-        state.vehicleActive  = !!state.vehicle.make;
+        state.vehicleActive = !!state.vehicle.make;
         state.page = 1;
 
         updateVehicleBadge();
@@ -199,7 +199,7 @@ function populateModels(models, select, selectedModel) {
 
 function updateVehicleBadge() {
     const badge = document.getElementById('parts-vehicle-badge');
-    const text  = document.getElementById('parts-vehicle-badge-text');
+    const text = document.getElementById('parts-vehicle-badge-text');
     if (state.vehicleActive) {
         const parts = [state.vehicle.make, state.vehicle.model, state.vehicle.year, state.vehicle.engine].filter(Boolean);
         text.textContent = parts.join(' · ');
@@ -211,8 +211,8 @@ function updateVehicleBadge() {
 
 // ── Entry tabs ────────────────────────────────────────────────────────────────
 function setupEntryTabs() {
-    const tabs  = document.querySelectorAll('.parts-entry-tab');
-    const vPanel= document.getElementById('parts-vehicle-panel');
+    const tabs = document.querySelectorAll('.parts-entry-tab');
+    const vPanel = document.getElementById('parts-vehicle-panel');
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
@@ -230,7 +230,7 @@ function setupEntryTabs() {
 // ── Search + Sort bar ─────────────────────────────────────────────────────────
 function setupSearchSort() {
     const input = document.getElementById('parts-search-input');
-    const sort  = document.getElementById('parts-sort');
+    const sort = document.getElementById('parts-sort');
     let debounce;
 
     input.addEventListener('input', () => {
@@ -286,9 +286,9 @@ function renderSidebar() {
 }
 
 function toggleCat(catSlug) {
-    const header   = document.querySelector(`.parts-cat-header[data-cat-slug="${catSlug}"]`);
-    const subList  = header?.nextElementSibling;
-    const isOpen   = subList?.classList.contains('open');
+    const header = document.querySelector(`.parts-cat-header[data-cat-slug="${catSlug}"]`);
+    const subList = header?.nextElementSibling;
+    const isOpen = subList?.classList.contains('open');
 
     // Close all
     document.querySelectorAll('.parts-cat-header').forEach(h => h.classList.remove('open'));
@@ -300,8 +300,8 @@ function toggleCat(catSlug) {
         selectCat(catSlug);
     } else {
         // Clicking open cat again = deselect
-        state.activeCatSlug  = '';
-        state.activeSubSlug  = '';
+        state.activeCatSlug = '';
+        state.activeSubSlug = '';
         updateCatActiveState();
         renderBrowseGrid();
         hideResults();
@@ -309,12 +309,12 @@ function toggleCat(catSlug) {
 }
 
 async function selectCat(catSlug) {
-    state.activeCatSlug  = catSlug;
-    state.activeSubSlug  = '';
-    state.activeChildSlug= '';
-    state.brand          = '';
+    state.activeCatSlug = catSlug;
+    state.activeSubSlug = '';
+    state.activeChildSlug = '';
+    state.brand = '';
     state.dynamicFilters = {};
-    state.page           = 1;
+    state.page = 1;
 
     updateCatActiveState();
     renderSubcatPills(catSlug);
@@ -325,12 +325,12 @@ async function selectCat(catSlug) {
 }
 
 async function selectSub(catSlug, subSlug) {
-    state.activeCatSlug  = catSlug;
-    state.activeSubSlug  = subSlug;
-    state.activeChildSlug= '';
-    state.brand          = '';
+    state.activeCatSlug = catSlug;
+    state.activeSubSlug = subSlug;
+    state.activeChildSlug = '';
+    state.brand = '';
     state.dynamicFilters = {};
-    state.page           = 1;
+    state.page = 1;
 
     updateCatActiveState();
     renderSubcatPills(catSlug);
@@ -388,22 +388,22 @@ function renderSubcatPills(catSlug) {
 
 // ── Dynamic filter bar ────────────────────────────────────────────────────────
 function renderFilterBar(catSlug, subSlug) {
-    const bar     = document.getElementById('parts-filter-bar');
+    const bar = document.getElementById('parts-filter-bar');
     const filters = getPartsFilters(catSlug, subSlug);
 
     if (!filters.length) { hideFilterBar(); return; }
 
     const conditionChips = [
-        { value: '',           label: 'Vse'         },
-        { value: 'novo',       label: 'Novo'        },
-        { value: 'rabljeno',   label: 'Rabljeno'    },
-        { value: 'obnovljeno', label: 'Obnovljeno'  },
+        { value: '', label: 'Vse' },
+        { value: 'novo', label: 'Novo' },
+        { value: 'rabljeno', label: 'Rabljeno' },
+        { value: 'obnovljeno', label: 'Obnovljeno' },
     ];
     const typeChips = [
-        { value: '',             label: 'Vse'          },
-        { value: 'oem',         label: 'OEM / Orig.'  },
-        { value: 'aftermarket', label: 'Aftermarket'  },
-        { value: 'tuning',      label: 'Tuning'       },
+        { value: '', label: 'Vse' },
+        { value: 'oem', label: 'OEM / Orig.' },
+        { value: 'aftermarket', label: 'Aftermarket' },
+        { value: 'tuning', label: 'Tuning' },
     ];
 
     bar.innerHTML = `
@@ -444,11 +444,11 @@ function renderFilterBar(catSlug, subSlug) {
     bar.querySelectorAll('.parts-chip').forEach(chip => {
         chip.addEventListener('click', async () => {
             const group = chip.dataset.group;
-            const val   = chip.dataset.val;
+            const val = chip.dataset.val;
             bar.querySelectorAll(`.parts-chip[data-group="${group}"]`).forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
             if (group === 'condition') state.condition = val;
-            if (group === 'partType')  state.partType  = val;
+            if (group === 'partType') state.partType = val;
             state.page = 1;
             await applyFiltersAndRender();
         });
@@ -470,7 +470,7 @@ function renderFilterBar(catSlug, subSlug) {
             clearTimeout(priceDebounce);
             priceDebounce = setTimeout(async () => {
                 state.priceFrom = document.getElementById('pf-price-from').value;
-                state.priceTo   = document.getElementById('pf-price-to').value;
+                state.priceTo = document.getElementById('pf-price-to').value;
                 state.page = 1;
                 await applyFiltersAndRender();
             }, 400);
@@ -511,7 +511,7 @@ function hideFilterBar() {
 
 // ── Brand row ─────────────────────────────────────────────────────────────────
 function renderBrandRow(catSlug, subSlug) {
-    const row    = document.getElementById('parts-brand-row');
+    const row = document.getElementById('parts-brand-row');
     const brands = getPartsBrands(catSlug, subSlug);
     if (!brands.length) { hideBrandRow(); return; }
 
@@ -607,12 +607,12 @@ async function applyFiltersAndRender() {
         results = results.filter(l => {
             if (!l.compatibility) return false;
             const compat = l.compatibility;
-            if (state.vehicle.make  && compat.make  !== state.vehicle.make)  return false;
+            if (state.vehicle.make && compat.make !== state.vehicle.make) return false;
             if (state.vehicle.model && compat.model && compat.model !== state.vehicle.model) return false;
             if (state.vehicle.year) {
                 const y = parseInt(state.vehicle.year);
                 if (compat.yearFrom && y < compat.yearFrom) return false;
-                if (compat.yearTo   && y > compat.yearTo)   return false;
+                if (compat.yearTo && y > compat.yearTo) return false;
             }
             return true;
         });
@@ -643,7 +643,7 @@ async function applyFiltersAndRender() {
 
     // Price
     if (state.priceFrom) results = results.filter(l => (l.priceEur || 0) >= Number(state.priceFrom));
-    if (state.priceTo)   results = results.filter(l => (l.priceEur || 0) <= Number(state.priceTo));
+    if (state.priceTo) results = results.filter(l => (l.priceEur || 0) <= Number(state.priceTo));
 
     // Text search
     if (state.searchText) {
@@ -657,7 +657,7 @@ async function applyFiltersAndRender() {
     }
 
     // Sort
-    if (state.sort === 'price_asc')  results.sort((a, b) => (a.priceEur || 0) - (b.priceEur || 0));
+    if (state.sort === 'price_asc') results.sort((a, b) => (a.priceEur || 0) - (b.priceEur || 0));
     if (state.sort === 'price_desc') results.sort((a, b) => (b.priceEur || 0) - (a.priceEur || 0));
     if (state.sort === 'compat') {
         // Compatible items first
@@ -684,7 +684,7 @@ function isCompatible(listing) {
 
 // ── Results rendering ─────────────────────────────────────────────────────────
 function renderResults() {
-    const grid  = document.getElementById('parts-results-grid');
+    const grid = document.getElementById('parts-results-grid');
     const empty = document.getElementById('parts-empty');
     const count = document.getElementById('parts-results-count');
     const bgrid = document.getElementById('parts-browse-grid');
@@ -692,9 +692,9 @@ function renderResults() {
     bgrid.style.display = 'none';
 
     const { page, perPage, filteredListings } = state;
-    const total  = filteredListings.length;
-    const start  = (page - 1) * perPage;
-    const paged  = filteredListings.slice(start, start + perPage);
+    const total = filteredListings.length;
+    const start = (page - 1) * perPage;
+    const paged = filteredListings.slice(start, start + perPage);
 
     count.textContent = total === 0 ? '' : `${total} ${total === 1 ? 'oglas' : total < 5 ? 'oglasi' : 'oglasov'}`;
 
@@ -706,7 +706,7 @@ function renderResults() {
     }
 
     empty.style.display = 'none';
-    grid.style.display  = 'grid';
+    grid.style.display = 'grid';
 
     grid.innerHTML = paged.map(l => renderPartCard(l)).join('');
     renderPagination(total);
@@ -724,23 +724,23 @@ function renderPartCard(listing) {
     const compat = isCompatible(listing);
     const condClass = listing.condition === 'Novo' ? 'condition-new'
         : listing.condition === 'Obnovljeno' ? 'condition-refurb'
-        : 'condition-used';
+            : 'condition-used';
     const imgUrl = listing.images?.[0] || '';
-    const price  = listing.priceEur ? `${listing.priceEur.toLocaleString('sl-SI')} €` : 'Na povpraševanje';
+    const price = listing.priceEur ? `${listing.priceEur.toLocaleString('sl-SI')} €` : 'Na povpraševanje';
 
     return `
         <div class="parts-card" data-id="${listing.id}">
             ${imgUrl
-                ? `<img class="parts-card-img" src="${imgUrl}" alt="${listing.title}" loading="lazy">`
-                : `<div class="parts-card-img-placeholder"><i data-lucide="package" style="width:40px;height:40px;"></i></div>`
-            }
+            ? `<img class="parts-card-img" src="${imgUrl}" alt="${listing.title}" loading="lazy">`
+            : `<div class="parts-card-img-placeholder"><i data-lucide="package" style="width:40px;height:40px;"></i></div>`
+        }
             <div class="parts-card-body">
                 ${listing.brand ? `<div class="parts-card-brand">${listing.brand}</div>` : ''}
                 <div class="parts-card-title">${listing.title || 'Del / oprema'}</div>
                 <div class="parts-card-tags">
                     ${compat ? `<span class="parts-card-tag compat"><i data-lucide="check-circle" style="width:10px;height:10px;display:inline;"></i> Paše na tvoje vozilo</span>` : ''}
                     ${listing.condition ? `<span class="parts-card-tag ${condClass}">${listing.condition}</span>` : ''}
-                    ${listing.partType  ? `<span class="parts-card-tag">${listing.partType}</span>` : ''}
+                    ${listing.partType ? `<span class="parts-card-tag">${listing.partType}</span>` : ''}
                 </div>
                 <div class="parts-card-price">${price}${listing.priceNegotiable ? '<span>pogajanje</span>' : ''}</div>
                 <div class="parts-card-meta">
@@ -758,7 +758,7 @@ function renderPartCard(listing) {
 // ── Pagination ────────────────────────────────────────────────────────────────
 function renderPagination(total) {
     const pages = Math.ceil(total / state.perPage);
-    const pag   = document.getElementById('parts-pagination');
+    const pag = document.getElementById('parts-pagination');
     if (pages <= 1) { pag.innerHTML = ''; return; }
 
     const current = state.page;
@@ -793,7 +793,7 @@ function renderPagination(total) {
 // ── Cross-sell ────────────────────────────────────────────────────────────────
 function renderCrossSell() {
     const section = document.getElementById('parts-crosssell');
-    const pills   = document.getElementById('parts-crosssell-pills');
+    const pills = document.getElementById('parts-crosssell-pills');
 
     const related = state.activeSubSlug ? (CROSS_SELL_MAP[state.activeSubSlug] || []) : [];
     if (!related.length) { section.style.display = 'none'; return; }
@@ -823,14 +823,14 @@ function renderCrossSell() {
 // ── URL sync ──────────────────────────────────────────────────────────────────
 function updateUrl() {
     const params = new URLSearchParams();
-    if (state.activeCatSlug)   params.set('cat',    state.activeCatSlug);
-    if (state.activeSubSlug)   params.set('sub',    state.activeSubSlug);
-    if (state.activeChildSlug) params.set('child',  state.activeChildSlug);
-    if (state.vehicle.make)    params.set('make',   state.vehicle.make);
-    if (state.vehicle.model)   params.set('model',  state.vehicle.model);
-    if (state.vehicle.year)    params.set('year',   state.vehicle.year);
-    if (state.vehicle.engine)  params.set('engine', state.vehicle.engine);
-    if (state.brand)           params.set('brand',  state.brand);
+    if (state.activeCatSlug) params.set('cat', state.activeCatSlug);
+    if (state.activeSubSlug) params.set('sub', state.activeSubSlug);
+    if (state.activeChildSlug) params.set('child', state.activeChildSlug);
+    if (state.vehicle.make) params.set('make', state.vehicle.make);
+    if (state.vehicle.model) params.set('model', state.vehicle.model);
+    if (state.vehicle.year) params.set('year', state.vehicle.year);
+    if (state.vehicle.engine) params.set('engine', state.vehicle.engine);
+    if (state.brand) params.set('brand', state.brand);
 
     const newHash = `/deli?${params.toString()}`;
     // Replace hash without triggering router re-init

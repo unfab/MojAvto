@@ -1,7 +1,7 @@
 export const sampleCars = [
     {
         id: 'car-premium-1',
-        title: 'Porsche 911 GT3',
+        title: 'Porsche 911 GT3 PDK',
         subtitle: '4.0 (510 KM) - PDK, Clubsport, Carbon, Lift',
         price: '215.900 €',
         priceRaw: 215900,
@@ -38,6 +38,8 @@ export const sampleCars = [
         isNew: true,
         engineCc: 3996,
         fuelL100km: 13.2,
+        firstRegistration: '05/2023',
+        previousOwnersCount: 1,
         status: 'active'
     },
     {
@@ -80,11 +82,13 @@ export const sampleCars = [
         engineCc: 0,
         electricRangeKm: 637,
         fuelL100km: null,
+        firstRegistration: '01/2024',
+        previousOwnersCount: 1,
         status: 'active'
     },
     {
         id: 'car-premium-3',
-        title: 'Audi RS6 Avant',
+        title: 'Audi RS6 Avant quattro',
         subtitle: '4.0 TFSI V8 quattro - Performance, Carbon, Bang&Olufsen',
         price: '148.500 €',
         priceRaw: 148500,
@@ -121,11 +125,13 @@ export const sampleCars = [
         isNew: false,
         engineCc: 3996,
         fuelL100km: 11.5,
+        firstRegistration: '09/2022',
+        previousOwnersCount: 1,
         status: 'active'
     },
     {
         id: 'car-1',
-        title: 'Audi A4 Avant',
+        title: 'Audi A4 Avant 2.0 TDI S-line',
         subtitle: '2.0 TDI S-tronic S-line (LED, NAVI, PANORAMA)',
         price: '24.500 €',
         priceRaw: 24500,
@@ -166,7 +172,7 @@ export const sampleCars = [
     },
     {
         id: 'car-2',
-        title: 'Volkswagen Golf',
+        title: 'Volkswagen Golf 1.5 TSI Evo Highline',
         subtitle: '1.5 TSI Evo Highline',
         price: '18.900 €',
         priceRaw: 18900,
@@ -206,7 +212,7 @@ export const sampleCars = [
     },
     {
         id: 'car-3',
-        title: 'BMW Serija 3',
+        title: 'BMW Serija 3 320d xDrive M-Sport',
         subtitle: '320d xDrive M-Sport',
         price: '31.200 €',
         priceRaw: 31200,
@@ -246,7 +252,7 @@ export const sampleCars = [
     },
     {
         id: 'car-4',
-        title: 'Honda CR-V',
+        title: 'Honda CR-V 2.0 i-MMD Hybrid Elegance',
         subtitle: '2.0 i-MMD Hybrid Elegance',
         price: '27.950 €',
         priceRaw: 27950,
@@ -286,7 +292,7 @@ export const sampleCars = [
     },
     {
         id: 'car-5',
-        title: 'Mercedes-Benz C 220 d',
+        title: 'Mercedes-Benz C-Razred 220 d AMG Line 4MATIC',
         subtitle: 'AMG Line 4MATIC (Full LED, Panorama)',
         price: '38.700 €',
         priceRaw: 38700,
@@ -326,7 +332,7 @@ export const sampleCars = [
     },
     {
         id: 'car-6',
-        title: 'Škoda Octavia',
+        title: 'Škoda Octavia 2.0 TDI Style',
         subtitle: '2.0 TDI Style (ACC, NAVI, LED)',
         price: '21.400 €',
         priceRaw: 21400,
@@ -366,7 +372,7 @@ export const sampleCars = [
     },
     {
         id: 'car-7',
-        title: 'Toyota RAV4',
+        title: 'Toyota RAV4 2.5 Hybrid AWD-i Executive',
         subtitle: '2.5 Hybrid AWD-i Executive',
         price: '34.900 €',
         priceRaw: 34900,
@@ -403,7 +409,7 @@ export const sampleCars = [
     },
     {
         id: 'car-8',
-        title: 'Ford Focus',
+        title: 'Ford Focus 1.0 EcoBoost Titanium',
         subtitle: '1.0 EcoBoost Titanium',
         price: '15.400 €',
         priceRaw: 15400,
@@ -440,7 +446,7 @@ export const sampleCars = [
     },
     {
         id: 'car-9',
-        title: 'Hyundai Tucson',
+        title: 'Hyundai Tucson 1.6 T-GDI PHEV Premium',
         subtitle: '1.6 T-GDI PHEV Premium',
         price: '38.200 €',
         priceRaw: 38200,
@@ -478,7 +484,7 @@ export const sampleCars = [
     },
     {
         id: 'car-10',
-        title: 'Renault Clio',
+        title: 'Renault Clio 1.0 TCe Expression',
         subtitle: '1.0 TCe Expression',
         price: '12.800 €',
         priceRaw: 12800,
@@ -511,6 +517,11 @@ export const sampleCars = [
         isNew: false,
         engineCc: 999,
         fuelL100km: 5.2,
-        status: 'active'
+        status: 'active',
+        equipment: [
+            'Climate', 'Navigation', 'Bluetooth', 'CarPlay', 'ParkSensorRear', 
+            'ABS', 'ESP', 'LED', 'DRL', 'CruiseControl', 'LaneAssist', 
+            'ServiceBook', 'NonSmoking'
+        ]
     }
 ];

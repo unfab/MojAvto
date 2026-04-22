@@ -125,7 +125,7 @@ function renderListing(l) {
                 <a href="#/iskanje?cat=${encodeURIComponent(l.category || '')}">
                     ${escHtml(catLabel(l.category))}
                 </a>
-                ${l.make ? `<span class="lp-bc-sep">›</span><span class="lp-bc-current">${escHtml(l.make)} ${escHtml(l.model || '')}</span>` : ''}
+                ${l.make ? `<span class="lp-bc-sep">›</span><span class="lp-bc-current">${escHtml(l.make)} ${escHtml(l.model || '')} ${escHtml(l.variant || '')}</span>` : ''}
             </nav>
 
             <!-- Sponsored tag (subtle) -->
@@ -154,7 +154,7 @@ function renderListing(l) {
                 <div class="lp-main">
 
                     <!-- Image gallery -->
-                    ${renderGalleryHtml(exteriorImages, interiorImages)}
+                    ${renderGalleryHtml(exteriorImages, interiorImages, l.condition)}
 
                     <!-- VIN verified block -->
                     ${isVin ? renderVinBlockHtml(l) : ''}
@@ -180,7 +180,7 @@ function renderListing(l) {
                     <!-- Price Card (Pilled and Centered) -->
                     <div class="lp-sidebar-card lp-price-card centered">
                         <div class="lp-price-pill-container">
-                            <div class="lp-price">${formatPrice(l.priceEur || l.price || 0, l.callForPrice)}</div>
+                            <div class="lp-price">${formatPrice(l.priceRaw || l.priceEur || l.price || 0, l.callForPrice)}</div>
                         </div>
                         ${l.priceNegotiable ? '<div class="lp-price-sub">Cena je pogajalska</div>' : ''}
                         ${l.leaseAvailable && !l.leasingConditions ? '<div class="lp-price-sub">Možnost leasinga</div>' : ''}
@@ -272,10 +272,27 @@ function renderListing(l) {
 
     // Load similar
     loadSimilar(l);
+
+    // Accordion Logic (Local implementation for listing page)
+    const accTriggers = page.querySelectorAll('.adv-acc-trigger');
+    accTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const accordion = trigger.closest('.adv-accordion');
+            const body = accordion.querySelector('.adv-acc-body');
+            const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+
+            // Toggle
+            const newState = !isOpen;
+            trigger.setAttribute('aria-expanded', String(newState));
+            if (body) {
+                body.style.display = newState ? 'flex' : 'none';
+            }
+        });
+    });
 }
 
 // ── Gallery ───────────────────────────────────────────────────────────────────
-function renderGalleryHtml(exteriorImages, interiorImages) {
+function renderGalleryHtml(exteriorImages, interiorImages, condition) {
     if (exteriorImages.length === 0 && interiorImages.length === 0) {
         return `<div class="lp-gallery-empty">📷 Ni fotografij</div>`;
     }
@@ -284,7 +301,7 @@ function renderGalleryHtml(exteriorImages, interiorImages) {
 
     const thumbs = images.slice(0, 6).map((url, i) => `
         <div class="lp-thumb ${i === 0 ? 'active' : ''}" data-idx="${i}">
-            <img src="${escHtml(url)}" alt="Slika ${i+1}" loading="lazy" />
+            <img src="${escHtml(url)}" alt="Slika ${i + 1}" loading="lazy" />
             ${i === 5 && images.length > 6 ? `<div class="lp-thumb-more">+${images.length - 6}</div>` : ''}
         </div>`).join('');
 
@@ -292,6 +309,7 @@ function renderGalleryHtml(exteriorImages, interiorImages) {
         <section class="lp-gallery">
             <div class="lp-gallery-main">
                 <img id="galleryMainImg" src="${escHtml(images[0])}" alt="Glavna slika" />
+                ${condition ? `<span class="lp-condition-badge">${escHtml(condition)}</span>` : ''}
                 ${images.length > 1 ? `
                 <button class="lp-gallery-nav lp-gallery-prev" id="gallPrev">&#10094;</button>
                 <button class="lp-gallery-nav lp-gallery-next" id="gallNext">&#10095;</button>
@@ -329,7 +347,7 @@ function initGallery(exteriorImages, interiorImages) {
         if (thumbsContainer) {
             thumbsContainer.innerHTML = currentImages.slice(0, 6).map((url, i) => `
                 <div class="lp-thumb ${i === 0 ? 'active' : ''}" data-idx="${i}">
-                    <img src="${escHtml(url)}" alt="Slika ${i+1}" loading="lazy" />
+                    <img src="${escHtml(url)}" alt="Slika ${i + 1}" loading="lazy" />
                     ${i === 5 && currentImages.length > 6 ? `<div class="lp-thumb-more">+${currentImages.length - 6}</div>` : ''}
                 </div>`).join('');
             thumbsContainer.querySelectorAll('.lp-thumb').forEach(thumb => {
@@ -365,14 +383,14 @@ function renderKeyStripHtml(l) {
     const km = l.mileageKm || l.mileage;
     const kw = l.powerKw || l.power;
     const items = [
-        km   ? { icon: 'gauge', label: fmtKm(km) } : null,
-        l.year        ? { icon: 'calendar', label: l.year } : null,
-        l.fuel        ? { icon: 'fuel', label: escHtml(l.fuel) } : null,
-        l.transmission? { icon: 'settings-2', label: escHtml(l.transmission) } : null,
-        kw            ? { icon: 'zap', label: kw + ' kW / ' + Math.round(kw * 1.3596) + ' KM' } : null,
-        l.driveType   ? { icon: 'navigation', label: escHtml(l.driveType) } : null,
-        l.color       ? { icon: 'palette', label: escHtml(l.color) } : null,
-        l.doorsCount  ? { icon: 'door-open', label: l.doorsCount + ' vrat' } : null,
+        km ? { icon: 'gauge', label: fmtKm(km) } : null,
+        l.year ? { icon: 'calendar', label: l.year } : null,
+        l.fuel ? { icon: 'fuel', label: escHtml(l.fuel) } : null,
+        l.transmission ? { icon: 'settings-2', label: escHtml(l.transmission) } : null,
+        kw ? { icon: 'zap', label: kw + ' kW / ' + Math.round(kw * 1.3596) + ' KM' } : null,
+        l.driveType ? { icon: 'navigation', label: escHtml(l.driveType) } : null,
+        l.color ? { icon: 'palette', label: escHtml(l.color) } : null,
+        l.doorsCount ? { icon: 'door-open', label: l.doorsCount + ' vrat' } : null,
     ].filter(Boolean);
 
     if (items.length === 0) return '';
@@ -442,47 +460,111 @@ function vinRow(icon, label, value, cls) {
 
 // ── Technical specs ───────────────────────────────────────────────────────────
 function renderSpecsHtml(l) {
-    const specs = [
-        ['Znamka', l.make],
-        ['Model', l.model],
-        ['Različica', l.variant],
-        ['Letnik', l.year],
-        ['Prevoženi km', l.mileageKm ? fmtKm(l.mileageKm) : l.mileage ? fmtKm(l.mileage) : null],
-        ['Stanje', l.condition],
+    const km = l.mileageKm || l.mileage;
+
+    // 1. Key Specs for the primary box
+    const keySpecs = [
+        { label: 'Prva registracija', value: l.firstRegistration || l.year, icon: 'calendar-days' },
+        { label: 'Vrsta vozila', value: l.subcategory || l.segment, icon: 'car' },
+        { label: 'Prevoženi km', value: km ? fmtKm(km) : null, icon: 'gauge' },
+        { label: 'Št. lastnikov', value: l.previousOwnersCount ? l.previousOwnersCount + '.' : null, icon: 'user-check' },
+        { label: 'Vrsta goriva', value: l.fuel, icon: 'fuel' },
+        {
+            label: l.fuel === 'Elektrika' ? 'Domet' : 'Poraba',
+            value: buildConsumptionLabel(l),
+            icon: l.fuel === 'Elektrika' ? 'zap' : 'droplet'
+        },
+        { label: 'Menjalnik', value: l.transmission, icon: 'settings-2' },
+        { label: 'Prostornina', value: l.engineCc ? l.engineCc + ' cc' : null, icon: 'pipette' }
+    ].filter(s => s.value !== null && s.value !== undefined && s.value !== '');
+
+    // 2. All other specs for the accordion
+    const secondarySpecs = [
         ['Barva', l.color],
         ['Vrata', l.doorsCount],
         ['Sedeži', l.seatsCount],
-        ['Gorivo', l.fuel],
-        ['Tip hibrida', l.hybridType],
-        ['Menjalnik', l.transmission],
         ['Pogon', l.driveType],
-        ['Prostornina', l.engineCc ? l.engineCc + ' cc' : null],
-        ['Moč (kW)', l.powerKw ? l.powerKw + ' kW' : l.power ? l.power + ' kW' : null],
-        ['Moč (KM)', l.powerKw ? Math.round(l.powerKw * 1.3596) + ' KM' : null],
-        ['Poraba', l.fuelL100km ? l.fuelL100km + ' l/100 km' : null],
-        ['El. domet (WLTP)', l.electricRangeKm ? l.electricRangeKm + ' km' : null],
-        ['CO₂', l.co2 ? l.co2 + ' g/km' : null],
+        ['CO₂ emisije', l.co2 ? l.co2 + ' g/km' : null],
         ['Emisijski razred', l.emissionClass],
+        ['Poraba (kombinirana)', l.fuelL100kmCombined ? l.fuelL100kmCombined + ' l/100 km' : (l.fuelL100km ? l.fuelL100km + ' l/100 km' : null)],
+        ['Poraba (mesto)', l.fuelL100kmCity ? l.fuelL100kmCity + ' l/100 km' : null],
+        ['Poraba (izven mesta)', l.fuelL100kmHighway ? l.fuelL100kmHighway + ' l/100 km' : null],
         ['Kapaciteta baterije', l.batteryKwh ? l.batteryKwh + ' kWh' : null],
-        ['Domet (WLTP)', l.rangeKm ? l.rangeKm + ' km' : null],
         ['Vlečna masa', l.towingKg ? l.towingKg + ' kg' : null],
-        ['Prva registracija', l.firstRegistration],
         ['Registrirana do', l.registeredUntil],
     ].filter(([, v]) => v !== null && v !== undefined && v !== '');
 
-    if (specs.length === 0) return '';
+    if (keySpecs.length === 0 && secondarySpecs.length === 0) return '';
 
     return `
         <section class="lp-section">
             <h2 class="lp-section-title centered">Tehnični podatki</h2>
-            <div class="lp-specs-grid">
-                ${specs.map(([label, val]) => `
-                    <div class="lp-spec-item">
-                        <span class="lp-spec-label">${escHtml(label)}</span>
-                        <span class="lp-spec-value">${escHtml(String(val))}</span>
-                    </div>`).join('')}
+            
+            <div class="lp-specs-container">
+                <!-- Primary Grid Box -->
+                <div class="lp-key-specs-box">
+                    <div class="lp-key-specs-grid">
+                        ${keySpecs.map(s => `
+                            <div class="lp-key-spec-item">
+                                <span class="lp-key-spec-label">
+                                    <i data-lucide="${s.icon}"></i>
+                                    ${escHtml(s.label)}
+                                </span>
+                                <span class="lp-key-spec-value">${escHtml(String(s.value))}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Secondary Specs Accordion -->
+                ${secondarySpecs.length > 0 ? `
+                <div class="adv-accordion glass-card">
+                    <div class="adv-acc-header">
+                        <button type="button" class="adv-acc-trigger" aria-expanded="false">
+                            <span class="adv-acc-title">
+                                <i data-lucide="list"></i>
+                                Vse specifikacije in podrobnosti
+                            </span>
+                            <div class="adv-acc-right">
+                                <i data-lucide="chevron-down" class="adv-acc-chevron"></i>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="adv-acc-body" style="display:none; padding: 1.5rem; flex-direction: column; gap: 0.5rem;">
+                        <div class="lp-specs-content" style="width: 100%;">
+                            ${secondarySpecs.map(([label, val]) => `
+                                <div class="lp-spec-item">
+                                    <span class="lp-spec-label">${escHtml(label)}</span>
+                                    <span class="lp-spec-value">${escHtml(String(val))}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
             </div>
-        </section>`;
+        </section>
+    `;
+}
+
+function buildConsumptionLabel(l) {
+    const f = (l.fuel || '').toLowerCase();
+
+    if (f === 'elektrika') {
+        const d = l.rangeKm || l.electricRangeKm;
+        return d ? d + ' km (WLTP)' : null;
+    }
+
+    let parts = [];
+    const cons = l.fuelL100kmCombined || l.fuelL100km;
+    if (cons) parts.push(cons + ' l/100 km');
+
+    // Hybrid logic
+    if ((f.includes('hibrid')) && l.electricRangeKm) {
+        parts.push(l.electricRangeKm + ' km (el.)');
+    }
+
+    return parts.length > 0 ? parts.join(' + ') : null;
 }
 
 // ── Equipment ─────────────────────────────────────────────────────────────────
@@ -491,41 +573,41 @@ function renderEquipmentHtml(l) {
     if (!eq || eq.length === 0) return '';
 
     // Group by EQUIPMENT_GROUPS
-    const grouped = [];
+    const activeGroups = [];
     for (const group of EQUIPMENT_GROUPS) {
         const items = group.items.filter(i => eq.includes(i.value));
         if (items.length > 0) {
-            grouped.push({ label: group.label, icon: group.icon, items });
+            activeGroups.push({ label: group.label, icon: group.icon, items });
         }
     }
 
-    if (grouped.length === 0) {
-        // Flat list fallback
-        return `
-            <section class="lp-section">
-                <h2 class="lp-section-title">Oprema</h2>
-                <div class="lp-eq-chips">
-                    ${eq.map(v => `<span class="lp-eq-chip">${escHtml(getEquipmentLabel(v))}</span>`).join('')}
-                </div>
-            </section>`;
-    }
+    if (activeGroups.length === 0) return '';
 
     return `
         <section class="lp-section">
-            <h2 class="lp-section-title">Oprema</h2>
-            ${grouped.map(g => `
-                <details class="lp-eq-group-collapsible">
-                    <summary class="lp-eq-group-summary">
-                        <i data-lucide="${g.icon}"></i>
-                        <span>${escHtml(g.label)}</span>
-                        <span class="lp-eq-count">${g.items.length}</span>
-                        <i data-lucide="chevron-down" class="lp-eq-chevron"></i>
-                    </summary>
-                    <div class="lp-eq-chips lp-eq-chips-padded">
-                        ${g.items.map(i => `<span class="lp-eq-chip">${escHtml(i.label)}</span>`).join('')}
+            <h2 class="lp-section-title centered">Oprema in funkcije</h2>
+            <div class="lp-equipment-dropdowns">
+                ${activeGroups.map(g => `
+                    <div class="adv-accordion glass-card">
+                        <div class="adv-acc-header">
+                            <button type="button" class="adv-acc-trigger" aria-expanded="false">
+                                <span class="adv-acc-title">
+                                    <i data-lucide="${g.icon}"></i>
+                                    ${escHtml(g.label)}
+                                </span>
+                                <div class="adv-acc-right">
+                                    <i data-lucide="chevron-down" class="adv-acc-chevron"></i>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="adv-acc-body" style="display:none; padding: 1.5rem; flex-direction: row; flex-wrap: wrap; gap: 0.75rem;">
+                            ${g.items.map(i => `<span class="adv-chip" style="cursor: default;">${escHtml(i.label)}</span>`).join('')}
+                        </div>
                     </div>
-                </details>`).join('')}
-        </section>`;
+                `).join('')}
+            </div>
+        </section>
+    `;
 }
 
 // ── Seller card ───────────────────────────────────────────────────────────────
@@ -605,7 +687,7 @@ function renderSimilarCard(l) {
                 ${l.vinVerified ? '<span class="listing-vin-badge">🛡 VIN</span>' : ''}
             </div>
             <div class="lp-similar-body">
-                <div class="lp-similar-title">${escHtml(l.make || '')} ${escHtml(l.model || '')}</div>
+                <div class="lp-similar-title">${escHtml(buildTitle(l))}</div>
                 <div class="lp-similar-meta">${l.year || ''}${km ? ' · ' + fmtKm(km) : ''}${l.fuel ? ' · ' + l.fuel : ''}</div>
                 <div class="lp-similar-price">${price}</div>
             </div>
@@ -614,9 +696,7 @@ function renderSimilarCard(l) {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function buildTitle(l) {
-    const parts = [l.make, l.model, l.variant].filter(Boolean);
-    const specs = [l.year, l.fuel].filter(Boolean);
-    return parts.join(' ') + (specs.length ? ' · ' + specs.join(' · ') : '');
+    return [l.make, l.model, l.variant].filter(Boolean).join(' ');
 }
 
 function catLabel(cat) {
@@ -634,7 +714,7 @@ function formatDate(ts) {
 }
 
 function escHtml(str) {
-    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function errorHtml(title, msg) {

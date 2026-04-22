@@ -26,7 +26,7 @@ export function initHeader() {
               </div>
 
               <!-- Avtohise — simple link, no submenu -->
-              <a href="#/zemljevid?type=dealer" class="nav-pill ${hash.startsWith('#/zemljevid') ? 'active-pill' : ''}">
+              <a href="#/zemljevid" class="nav-pill ${hash.startsWith('#/zemljevid') ? 'active-pill' : ''}">
                 <i data-lucide="building-2"></i> Avtohiše
               </a>
 

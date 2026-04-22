@@ -1,17 +1,19 @@
 <div class="home-container">
     <div class="glass-hero">
         <h1 class="hero-title">
-            Naj tvoj naslednji avto <br/>
+            Naj tvoj naslednji avto <br />
             <span class="text-gradient">najde tebe</span>
         </h1>
-        <p class="hero-subtitle">Poiščite najboljše zase na največjem slovenskem portalu za vozila.</p>
     </div>
 
     <div class="home-tabs-container">
         <div class="glass-card rounded-pill tabs-glass">
-             <button type="button" class="tab-btn active" title="Avtomobili"><i data-lucide="car"></i> <span class="hidden-md">Avtomobili</span></button>
-             <button type="button" class="tab-btn" title="Motorji"><i data-lucide="bike"></i> <span class="hidden-md">Motorji</span></button>
-             <button type="button" class="tab-btn" title="Gospodarska vozila"><i data-lucide="truck"></i> <span class="hidden-md">Gospodarska</span></button>
+            <button type="button" class="tab-btn active" title="Avtomobili"><i data-lucide="car"></i> <span
+                    class="hidden-md">Avtomobili</span></button>
+            <button type="button" class="tab-btn" title="Motorji"><i data-lucide="bike"></i> <span
+                    class="hidden-md">Motorji</span></button>
+            <button type="button" class="tab-btn" title="Gospodarska vozila"><i data-lucide="truck"></i> <span
+                    class="hidden-md">Gospodarska</span></button>
         </div>
     </div>
 
@@ -24,25 +26,31 @@
     </div>
 
     <div class="search-box-container">
-        <form id="homeSearchForm" class="search-box compact glass-card main-search-card">
+        <form id="homeSearchForm" class="search-box compact glass-card main-search-card card-squircle">
             <div class="search-grid">
                 <!-- Row 1 -->
                 <div class="form-group">
                     <label for="home-make">Znamka</label>
                     <div class="pill-select-wrapper">
-                        <select id="home-make" name="make" class="pill-input"><option value="">Vse znamke</option></select>
+                        <select id="home-make" name="make" class="pill-input">
+                            <option value="">Vse znamke</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group" id="group-home-model">
                     <label for="home-model">Model</label>
                     <div class="pill-select-wrapper">
-                        <select id="home-model" name="model" disabled class="pill-input"><option value="">Vsi modeli</option></select>
+                        <select id="home-model" name="model" disabled class="pill-input">
+                            <option value="">Vsi modeli</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="home-reg-from">1. reg. od</label>
                     <div class="pill-select-wrapper">
-                        <select id="home-reg-from" name="yearFrom" class="pill-input"><option value="">Vse</option></select>
+                        <select id="home-reg-from" name="yearFrom" class="pill-input">
+                            <option value="">Vse</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -62,7 +70,6 @@
                 </div>
 
                 <!-- Row 2 -->
-
                 <div class="form-group">
                     <label for="home-price-to">Cena do</label>
                     <div class="pill-select-wrapper">
@@ -79,56 +86,54 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="home-location">Kraj ali poštna št.</label>
-                    <div class="pill-input-wrapper">
-                        <input type="text" id="home-location" name="location" class="pill-input" placeholder="Vnesi kraj...">
-                        <i data-lucide="navigation" class="input-icon-right"></i>
+                <div class="form-group" style="grid-column: span 3;">
+                    <label for="home-location" style="display: block; width: 100%; text-align: left; padding-left: 4%;">Kraj ali poštna št.</label>
+                    <div class="location-actions-wrapper">
+                        <div class="pill-input-wrapper">
+                            <input type="text" id="home-location" name="location" class="pill-input"
+                                placeholder="Vnesi kraj ali poštno št.">
+                            <i data-lucide="navigation" class="input-icon-right"></i>
+                        </div>
+                        <button type="reset" class="icon-only-circle" title="Ponastavi filtre">
+                            <i data-lucide="refresh-cw"></i>
+                        </button>
+                        <a href="#/advanced-search" class="icon-only-circle" title="Več filtrov">
+                            <i data-lucide="sliders-horizontal"></i>
+                        </a>
+                        <button type="submit" class="pill-btn primary search-submit-btn compact-search">
+                            <i data-lucide="search"></i>
+                            <span id="offer-count-text">1.4M</span>
+                        </button>
                     </div>
-                </div>
-                <div class="form-group flex-end">
-                    <button type="submit" class="pill-btn primary search-submit-btn">
-                        <i data-lucide="search"></i> 
-                        <span id="offer-count-text">1.471.281 ponudb</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="search-footer">
-                <div class="footer-left">
-                    <a href="#/oceni-vrednost" class="checkbox-pill glass-pill" style="text-decoration:none; color:var(--color-text-primary, #374151); font-weight:600; display:flex; align-items:center; gap:8px;">
-                        <i data-lucide="calculator" style="color:var(--color-primary-start);"></i>
-                        <span class="label-text">Oceni vrednost mojega avta</span>
-                    </a>
-                </div>
-                <div class="footer-right">
-                    <button type="reset" class="footer-link-btn">
-                        <i data-lucide="refresh-cw"></i> Ponastavi
-                    </button>
-                    <a href="#/advanced-search" class="footer-link-btn">
-                        <i data-lucide="sliders-horizontal"></i> Več filtrov
-                    </a>
                 </div>
             </div>
         </form>
+
+        <div class="secondary-actions-container">
+            <a href="#/oceni-vrednost" class="footer-pill evaluation-pill pill-btn btn-sm" title="Oceni vrednost mojega avta">
+                <i data-lucide="calculator"></i>
+                <span>Oceni vrednost mojega avta</span>
+            </a>
+        </div>
     </div>
 </div>
 
-    <div class="ad-banner-container rotating-ads-carousel">
-        <span class="sponsored-badge">Oglas</span>
-        <button class="carousel-btn prev" id="rot-prev-btn" aria-label="Prejšnji">&#10094;</button>
-        <div class="rotating-ads-track-container">
-            <div class="rotating-ads-track" id="rotating-ads-container">
-                <!-- Mini cards will be rendered here -->
-            </div>
+<div class="ad-banner-container rotating-ads-carousel">
+    <span class="sponsored-badge">Oglas</span>
+    <button class="carousel-btn prev" id="rot-prev-btn" aria-label="Prejšnji">&#10094;</button>
+    <div class="rotating-ads-track-container">
+        <div class="rotating-ads-track" id="rotating-ads-container">
+            <!-- Mini cards will be rendered here -->
         </div>
-        <button class="carousel-btn next" id="rot-next-btn" aria-label="Naslednji">&#10095;</button>
     </div>
+    <button class="carousel-btn next" id="rot-next-btn" aria-label="Naslednji">&#10095;</button>
+</div>
 
 <!-- ── Deli in oprema quick-entry ───────────────────────────────────────────── -->
 <div class="page-container" style="margin-top: 2rem; flex-direction: column;">
     <section class="parts-home-section">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <div
+            style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
             <h2 style="margin:0; font-size:1.2rem; font-weight:800; display:flex; align-items:center; gap:0.5rem;">
                 <i data-lucide="wrench" style="width:20px;height:20px;color:var(--color-primary-start);"></i>
                 Deli in oprema
@@ -139,41 +144,51 @@
         </div>
         <div class="parts-home-grid">
             <a href="#/deli?cat=motor-pogon" class="parts-home-card glass-card">
-                <div class="phc-icon" style="background:#ef444422;"><i data-lucide="cog" style="color:#ef4444;"></i></div>
+                <div class="phc-icon" style="background:#ef444422;"><i data-lucide="cog" style="color:#ef4444;"></i>
+                </div>
                 <span>Motor & pogon</span>
             </a>
             <a href="#/deli?cat=podvozje-zavore" class="parts-home-card glass-card">
-                <div class="phc-icon" style="background:#f9731622;"><i data-lucide="circle-dot" style="color:#f97316;"></i></div>
+                <div class="phc-icon" style="background:#f9731622;"><i data-lucide="circle-dot"
+                        style="color:#f97316;"></i></div>
                 <span>Podvozje & zavore</span>
             </a>
             <a href="#/deli?cat=karoserija-zunanjost" class="parts-home-card glass-card">
-                <div class="phc-icon" style="background:#3b82f622;"><i data-lucide="car-front" style="color:#3b82f6;"></i></div>
+                <div class="phc-icon" style="background:#3b82f622;"><i data-lucide="car-front"
+                        style="color:#3b82f6;"></i></div>
                 <span>Karoserija</span>
             </a>
             <a href="#/deli?cat=platisca-pnevmatike" class="parts-home-card glass-card">
-                <div class="phc-icon" style="background:#10b98122;"><i data-lucide="circle" style="color:#10b981;"></i></div>
+                <div class="phc-icon" style="background:#10b98122;"><i data-lucide="circle" style="color:#10b981;"></i>
+                </div>
                 <span>Platišča & pnevmatike</span>
             </a>
             <a href="#/deli?cat=elektronika" class="parts-home-card glass-card">
-                <div class="phc-icon" style="background:#06b6d422;"><i data-lucide="cpu" style="color:#06b6d4;"></i></div>
+                <div class="phc-icon" style="background:#06b6d422;"><i data-lucide="cpu" style="color:#06b6d4;"></i>
+                </div>
                 <span>Elektronika</span>
             </a>
             <a href="#/deli?cat=notranjost" class="parts-home-card glass-card">
-                <div class="phc-icon" style="background:#8b5cf622;"><i data-lucide="armchair" style="color:#8b5cf6;"></i></div>
+                <div class="phc-icon" style="background:#8b5cf622;"><i data-lucide="armchair"
+                        style="color:#8b5cf6;"></i></div>
                 <span>Notranjost</span>
             </a>
             <a href="#/deli?cat=servis-potrosni" class="parts-home-card glass-card">
-                <div class="phc-icon" style="background:#f59e0b22;"><i data-lucide="wrench" style="color:#f59e0b;"></i></div>
+                <div class="phc-icon" style="background:#f59e0b22;"><i data-lucide="wrench" style="color:#f59e0b;"></i>
+                </div>
                 <span>Servis & potrošni</span>
             </a>
             <a href="#/deli?cat=moto-deli" class="parts-home-card glass-card">
-                <div class="phc-icon" style="background:#6366f122;"><i data-lucide="bike" style="color:#6366f1;"></i></div>
+                <div class="phc-icon" style="background:#6366f122;"><i data-lucide="bike" style="color:#6366f1;"></i>
+                </div>
                 <span>Moto deli</span>
             </a>
         </div>
         <!-- Top brands strip -->
         <div style="margin-top:0.85rem; display:flex; gap:0.4rem; flex-wrap:wrap; align-items:center;">
-            <span style="font-size:0.75rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.06em; margin-right:0.25rem;">Priljubljene znamke:</span>
+            <span
+                style="font-size:0.75rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.06em; margin-right:0.25rem;">Priljubljene
+                znamke:</span>
             <a href="#/deli?brand=Akrapovi%C4%8D" class="parts-home-brand-pill">Akrapovič</a>
             <a href="#/deli?brand=Brembo" class="parts-home-brand-pill">Brembo</a>
             <a href="#/deli?brand=Bilstein" class="parts-home-brand-pill">Bilstein</a>
@@ -186,36 +201,85 @@
 </div>
 
 <style>
-.parts-home-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 0.75rem;
-}
-.parts-home-card {
-    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    padding: 1rem 0.75rem; border-radius: 1rem; text-decoration: none;
-    transition: all 0.2s; cursor: pointer; text-align: center;
-    border: 1px solid rgba(0,0,0,0.06);
-}
-.parts-home-card:hover {
-    transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.09);
-    border-color: rgba(37,99,235,0.2);
-}
-.parts-home-card span { font-size: 0.8rem; font-weight: 700; color: #374151; line-height: 1.3; }
-body.dark-mode .parts-home-card span { color: #e2e8f0; }
-.phc-icon {
-    width: 44px; height: 44px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-}
-.phc-icon i { width: 22px; height: 22px; }
-.parts-home-brand-pill {
-    padding: 0.25rem 0.65rem; border-radius: 99px; text-decoration: none;
-    background: rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.1);
-    font-size: 0.76rem; font-weight: 700; color: #374151; transition: all 0.15s;
-}
-.parts-home-brand-pill:hover { background: #fff; border-color: rgba(37,99,235,0.2); color: #2563eb; }
-body.dark-mode .parts-home-brand-pill { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #94a3b8; }
-body.dark-mode .parts-home-brand-pill:hover { background: rgba(255,255,255,0.1); color: #818cf8; }
+    .parts-home-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .parts-home-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 0.75rem;
+        border-radius: 1rem;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: pointer;
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .parts-home-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.09);
+        border-color: rgba(37, 99, 235, 0.2);
+    }
+
+    .parts-home-card span {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #374151;
+        line-height: 1.3;
+    }
+
+    body.dark-mode .parts-home-card span {
+        color: #e2e8f0;
+    }
+
+    .phc-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .phc-icon i {
+        width: 22px;
+        height: 22px;
+    }
+
+    .parts-home-brand-pill {
+        padding: 0.25rem 0.65rem;
+        border-radius: 99px;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: #374151;
+        transition: all 0.15s;
+    }
+
+    .parts-home-brand-pill:hover {
+        background: #fff;
+        border-color: rgba(37, 99, 235, 0.2);
+        color: #2563eb;
+    }
+
+    body.dark-mode .parts-home-brand-pill {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #94a3b8;
+    }
+
+    body.dark-mode .parts-home-brand-pill:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #818cf8;
+    }
 </style>
 
 <div class="page-container" style="margin-top: 2rem; flex-direction: column;">
@@ -254,33 +318,42 @@ body.dark-mode .parts-home-brand-pill:hover { background: rgba(255,255,255,0.1);
         <h2 data-i18n-key="news_title">Novice in nasveti</h2>
         <div class="news-grid">
             <a href="#/blog/kako-izbrati-druzinski-avto" class="news-card">
-                <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #e0e7ff, #c7d2fe); display:flex; align-items:center; justify-content:center;">
+                <div
+                    style="width: 100%; height: 200px; background: linear-gradient(135deg, #e0e7ff, #c7d2fe); display:flex; align-items:center; justify-content:center;">
                     <i data-lucide="users" style="color:#6366f1; width:64px; height:64px;"></i>
                 </div>
                 <div class="news-card-content">
                     <h3>Kako izbrati popoln družinski avto?</h3>
-                    <p>Preverite naš vodnik za nakup družinskega vozila, ki bo izpolnil vse vaše potrebe in zagotovil varnost vaših najdražjih.</p>
-                    <span class="read-more-btn">Preberi več <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></span>
+                    <p>Preverite naš vodnik za nakup družinskega vozila, ki bo izpolnil vse vaše potrebe in zagotovil
+                        varnost vaših najdražjih.</p>
+                    <span class="read-more-btn">Preberi več <i data-lucide="arrow-right"
+                            style="width: 16px; height: 16px;"></i></span>
                 </div>
             </a>
             <a href="#/blog/test-novi-elektricni-suv" class="news-card">
-                <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); display:flex; align-items:center; justify-content:center;">
+                <div
+                    style="width: 100%; height: 200px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); display:flex; align-items:center; justify-content:center;">
                     <i data-lucide="battery-charging" style="color:#10b981; width:64px; height:64px;"></i>
                 </div>
                 <div class="news-card-content">
                     <h3>Test: Novi električni SUV</h3>
-                    <p>Preizkusili smo najnovejši električni SUV na trgu. Preverite, kako se obnese v resničnem svetu.</p>
-                    <span class="read-more-btn">Preberi več <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></span>
+                    <p>Preizkusili smo najnovejši električni SUV na trgu. Preverite, kako se obnese v resničnem svetu.
+                    </p>
+                    <span class="read-more-btn">Preberi več <i data-lucide="arrow-right"
+                            style="width: 16px; height: 16px;"></i></span>
                 </div>
             </a>
             <a href="#/blog/5-nasvetov-za-vzdrzevanje" class="news-card">
-                <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #fef3c7, #fde68a); display:flex; align-items:center; justify-content:center;">
+                <div
+                    style="width: 100%; height: 200px; background: linear-gradient(135deg, #fef3c7, #fde68a); display:flex; align-items:center; justify-content:center;">
                     <i data-lucide="wrench" style="color:#f59e0b; width:64px; height:64px;"></i>
                 </div>
                 <div class="news-card-content">
                     <h3>5 nasvetov za vzdrževanje pozimi</h3>
-                    <p>S preprostimi koraki poskrbite, da bo vaše vozilo varno in zanesljivo preživelo zimske razmere.</p>
-                    <span class="read-more-btn">Preberi več <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></span>
+                    <p>S preprostimi koraki poskrbite, da bo vaše vozilo varno in zanesljivo preživelo zimske razmere.
+                    </p>
+                    <span class="read-more-btn">Preberi več <i data-lucide="arrow-right"
+                            style="width: 16px; height: 16px;"></i></span>
                 </div>
             </a>
         </div>

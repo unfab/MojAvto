@@ -134,9 +134,10 @@ function bindAccordions() {
             const isOpen = trigger.getAttribute('aria-expanded') === 'true';
             if (!isOpen) {
                 triggers.forEach(o => {
-                    if (o !== trigger) {
+                    const acc = o.closest('.adv-accordion');
+                    if (o !== trigger && !acc.classList.contains('persistent-open')) {
                         o.setAttribute('aria-expanded', 'false');
-                        const b = o.closest('.adv-accordion').querySelector('.adv-acc-body');
+                        const b = acc.querySelector('.adv-acc-body');
                         if (b) b.style.display = 'none';
                     }
                 });
@@ -434,16 +435,16 @@ function bindSearchLogic(catContext) {
                 });
 
                 addExcludeBtn.addEventListener('click', () => {
-                   const make = excludeSelect.value;
-                   if (!make) return;
-                   const model = excludeModelSelect.value || '';
-                   const variant = excludeVariantSelect.value || '';
-                   excludedVehicles.push({ make, model, variant });
-                   excludeSelect.value = '';
-                   excludeModelSelect.innerHTML = '<option value="">Model</option>'; excludeModelSelect.disabled = true;
-                   excludeVariantSelect.innerHTML = '<option value="">Različica</option>'; excludeVariantSelect.disabled = true;
-                   renderExcludeChips();
-                   updateLiveCount();
+                    const make = excludeSelect.value;
+                    if (!make) return;
+                    const model = excludeModelSelect.value || '';
+                    const variant = excludeVariantSelect.value || '';
+                    excludedVehicles.push({ make, model, variant });
+                    excludeSelect.value = '';
+                    excludeModelSelect.innerHTML = '<option value="">Model</option>'; excludeModelSelect.disabled = true;
+                    excludeVariantSelect.innerHTML = '<option value="">Različica</option>'; excludeVariantSelect.disabled = true;
+                    renderExcludeChips();
+                    updateLiveCount();
                 });
             }
 

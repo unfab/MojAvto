@@ -1,5 +1,12 @@
 import { sampleCars } from '../data/sampleListings.js';
 import { getListings } from '../services/listingService.js';
+import { 
+    getFuelPill, 
+    getPowerPill, 
+    getConsumptionPill, 
+    getTransmissionPill 
+} from '../utils/listingUtils.js';
+
 
 export async function initHomePage() {
     console.log('[HomePage] init');
@@ -38,8 +45,6 @@ function setupRotatingAds() {
 
     function renderAdCard(car) {
         const img = car.images?.exterior?.[0] || 'https://via.placeholder.com/120x80?text=Ni+slike';
-        const engine = car.engineCc ? `${(car.engineCc / 1000).toFixed(1)}L` : 'N/A';
-        const fuel = car.fuel === 'Priključni hibrid' ? 'Priključni h.' : car.fuel;
         
         return `
             <div class="sponsored-mini-card-wrapper">
@@ -47,11 +52,19 @@ function setupRotatingAds() {
                     <img src="${img}" alt="${car.title}">
                     <h4 class="sponsored-title">${car.make} ${car.model}</h4>
                     <div class="sponsored-specs">
-                        <span><i data-lucide="calendar"></i> ${car.year}</span>
-                        <span><i data-lucide="gauge"></i> ${car.mileage}</span>
-                        <span><i data-lucide="cog"></i> ${engine}</span>
-                        <span><i data-lucide="fuel"></i> ${fuel}</span>
-                        <span><i data-lucide="joystick"></i> ${car.transmission}</span>
+                        <div class="spec-row">
+                            <span><i data-lucide="calendar"></i> ${car.year}</span>
+                        </div>
+                        <div class="spec-row">
+                            <span><i data-lucide="gauge"></i> ${car.mileage}</span>
+                        </div>
+                        <div class="spec-row">
+                            ${getFuelPill(car.fuel)}
+                            ${getTransmissionPill(car.transmission)}
+                        </div>
+                        <div class="spec-row">
+                            ${getConsumptionPill(car)}
+                        </div>
                     </div>
                     <div class="sponsored-price">${car.price}</div>
                 </a>
@@ -131,20 +144,26 @@ function renderListingsSection(containerId, sectionId, listings, hideIfEmpty = f
 
         html += `
             <div class="carousel-item">
-                <a href="#/oglas?id=${listing.id}" class="listing-card" style="text-decoration:none; color:inherit; display:block; height:100%;">
-                    <div style="position:relative; padding-top:66%; overflow:hidden; border-radius:12px 12px 0 0;">
-                        <img src="${imgUrl}" alt="${listing.title}" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;">
-                        ${listing.isPremium ? '<span style="position:absolute; top:10px; left:10px; background:#f97316; color:white; padding:4px 8px; border-radius:6px; font-size:12px; font-weight:bold;">Izpostavljeno</span>' : ''}
+                <a href="#/oglas?id=${listing.id}" class="listing-card">
+                    <div class="listing-card-img">
+                        <img src="${imgUrl}" alt="${listing.title}">
+                        ${listing.isPremium ? '<span class="premium-badge">Izpostavljeno</span>' : ''}
                     </div>
-                    <div style="padding:15px;">
-                        <h3 style="margin:0 0 10px 0; font-size:16px;">${listing.make} ${listing.model} ${listing.type || ''}</h3>
-                        <div style="font-size:20px; font-weight:bold; color:#f97316; margin-bottom:15px;">${price}</div>
-                        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; gap:10px; font-size:13px; color:#6b7280;">
-                            <li><i class="fas fa-calendar-alt"></i> ${listing.year}</li>
-                            <li><i class="fas fa-road"></i> ${listing.mileage} km</li>
-                            <li><i class="fas fa-gas-pump"></i> ${listing.fuel}</li>
-                            <li><i class="fas fa-cogs"></i> ${listing.transmission}</li>
-                        </ul>
+                    <div class="listing-card-content">
+                        <h3 class="listing-card-title">${listing.make} ${listing.model}</h3>
+                        <div class="listing-card-specs centered">
+                            <div class="spec-row">
+                                <div class="spec-pill"><i data-lucide="calendar"></i> ${listing.year}</div>
+                                <div class="spec-pill"><i data-lucide="gauge"></i> ${listing.mileage}</div>
+                                <div class="spec-pill"><i data-lucide="cog"></i> ${(listing.engineCc / 1000).toFixed(1)}L</div>
+                            </div>
+                            <div class="spec-row">
+                                ${getFuelPill(listing.fuel)}
+                                ${getTransmissionPill(listing.transmission)}
+                                ${getConsumptionPill(listing)}
+                            </div>
+                        </div>
+                        <div class="listing-card-price">${price}</div>
                     </div>
                 </a>
             </div>
@@ -152,7 +171,9 @@ function renderListingsSection(containerId, sectionId, listings, hideIfEmpty = f
     });
 
     container.innerHTML = html;
+    if (window.lucide) window.lucide.createIcons();
 }
+
 
 function setupCarousels() {
     const sections = ['featured', 'recently-viewed'];

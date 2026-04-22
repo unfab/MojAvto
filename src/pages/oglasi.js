@@ -9,74 +9,13 @@ import { auth } from '../firebase.js';
 import { showAuthGate } from '../utils/authGate.js';
 import { addToFavourites, removeFromFavourites, isFavourite } from '../services/garageService.js';
 
-// ── Fuel pill map ────────────────────────────────────────────
-const FUEL_MAP = {
-    'bencin':            { code: 'B',   cls: 'fuel-pill-B',  icon: 'fuel',     title: 'Bencin' },
-    'benzin':            { code: 'B',   cls: 'fuel-pill-B',  icon: 'fuel',     title: 'Bencin' },
-    'diesel':            { code: 'D',   cls: 'fuel-pill-D',  icon: 'fuel',     title: 'Dizel' },
-    'dizel':             { code: 'D',   cls: 'fuel-pill-D',  icon: 'fuel',     title: 'Dizel' },
-    'hibrid':            { code: 'H',   cls: 'fuel-pill-H',  icon: 'zap',      title: 'Hibrid' },
-    'priključni hibrid': { code: 'HB',  cls: 'fuel-pill-HB', icon: 'plug-zap', title: 'Priključni hibrid' },
-    'elektrika':         { code: 'E',   cls: 'fuel-pill-E',  icon: 'zap',      title: 'Električno vozilo' },
-    'električno':        { code: 'E',   cls: 'fuel-pill-E',  icon: 'zap',      title: 'Električno vozilo' },
-    'lpg':               { code: 'LPG', cls: 'fuel-pill-LPG',icon: 'flame',    title: 'LPG' },
-};
+import {
+    getFuelPill,
+    getPowerPill,
+    getConsumptionPill,
+    getTransmissionPill
+} from '../utils/listingUtils.js';
 
-function getFuelPill(fuelStr) {
-    const key = (fuelStr || '').toLowerCase().trim();
-    const f = FUEL_MAP[key];
-    if (!f) {
-        return `<div class="spec-pill"><i data-lucide="fuel"></i> ${fuelStr}</div>`;
-    }
-    return `<div class="spec-pill fuel-coded ${f.cls}" title="${f.title}">
-        <i data-lucide="${f.icon}"></i>
-        <strong>${f.code}</strong>
-    </div>`;
-}
-
-function getPowerPill(powerKw) {
-    if (!powerKw) return '';
-    const km = Math.round(powerKw * 1.3596);
-    return `<div class="spec-pill power-pill" data-kw="${powerKw}" data-km="${km}">
-        <i data-lucide="dumbbell"></i>
-        <span class="power-val">${powerKw} kW</span>
-    </div>`;
-}
-
-function getConsumptionPill(car) {
-    const fuelKey = (car.fuel || '').toLowerCase().trim();
-    if (fuelKey === 'elektrika' || fuelKey === 'električno') {
-        if (!car.electricRangeKm) return '';
-        return `<div class="spec-pill consumption-pill" title="Domet WLTP">
-            <i data-lucide="gauge"></i>
-            ${car.electricRangeKm} km
-        </div>`;
-    }
-    if (car.electricRangeKm && car.fuelL100km) {
-        return `<div class="spec-pill consumption-pill" title="Poraba / električni domet">
-            <i data-lucide="droplets"></i>
-            ${car.fuelL100km} l · ${car.electricRangeKm} km E
-        </div>`;
-    }
-    if (!car.fuelL100km) return '';
-    return `<div class="spec-pill consumption-pill" title="Poraba goriva">
-        <i data-lucide="droplets"></i>
-        ${car.fuelL100km} l/100km
-    </div>`;
-}
-
-function getTransmissionPill(transStr) {
-    const t = (transStr || '').toLowerCase().trim();
-    let code = 'A';
-    let label = 'Avtomatski';
-    if (t.includes('roč') || t.includes('manual')) { code = 'R'; label = 'Ročni'; }
-    else if (t.includes('sekven')) { code = 'S'; label = 'Sekvenčni'; }
-    
-    return `<div class="spec-pill" title="Menjalnik: ${label}">
-        <i data-lucide="settings-2"></i>
-        <strong>${code}</strong>
-    </div>`;
-}
 
 // ── Power unit toggle ────────────────────────────────────────
 let currentPowerUnit = 'kw';
@@ -219,92 +158,97 @@ function renderCarCard(car) {
         : null;
 
     return `
-    <div class="car-listing" data-car-id="${car.id}">
-        <div class="car-listing-main">
-            <!-- Image -->
-            <div class="car-listing-img" data-current-idx="0">
-                <div class="carousel-track">
-                    ${images.map(img => `<img src="${img}" alt="${car.title}" loading="lazy">`).join('')}
-                </div>
-                <div class="img-count">
-                    <i data-lucide="camera"></i> ${car.imgCount}
-                </div>
-                ${images.length > 1 ? `
-                    <button class="carousel-btn prev" aria-label="Prejšnja slika">
-                        <i data-lucide="chevron-left"></i>
-                    </button>
-                    <button class="carousel-btn next" aria-label="Naslednja slika">
-                        <i data-lucide="chevron-right"></i>
-                    </button>
-                    <div class="carousel-dots">
-                        ${images.map((_, i) => `<span class="dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
-                    </div>
-                ` : ''}
+    <div class="listing-card" data-car-id="${car.id}">
+        <!-- Image Container -->
+        <div class="listing-card-img" data-current-idx="0">
+            <div class="carousel-track">
+                ${images.map(img => `<img src="${img}" alt="${car.title}" loading="lazy">`).join('')}
+            </div>
+            
+            <div class="img-overlay-count">
+                <i data-lucide="camera"></i> ${car.imgCount || images.length}
             </div>
 
-            <!-- Content -->
-            <div class="car-listing-content">
-                <div class="car-listing-header">
-                    <div class="car-info">
-                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
-                            ${car.isNew ? '<span class="badge-new-pill">NEU</span>' : ''}
-                            <h2 class="car-listing-title">${car.title}</h2>
-                            <div class="spec-pill condition-pill" style="margin-left: 0.5rem; padding: 0.25rem 0.65rem; font-size: 0.7rem;">
-                                ${car.condition}
-                            </div>
+            ${car.isNew ? '<span class="badge-new-pill overlay">NEU</span>' : ''}
+            
+            ${images.length > 1 ? `
+                <div class="listing-carousel-dots">
+                    ${images.map((_, i) => `<span class="mini-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+                </div>
+                <button class="carousel-btn prev" aria-label="Prejšnja slika">
+                    <i data-lucide="chevron-left"></i>
+                </button>
+                <button class="carousel-btn next" aria-label="Naslednja slika">
+                    <i data-lucide="chevron-right"></i>
+                </button>
+            ` : ''}
+        </div>
+
+        <!-- Content Area -->
+        <div class="listing-card-content">
+            <div class="listing-card-header">
+                <div class="car-info">
+                    <h2 class="listing-card-title">${car.title}</h2>
+                    <span class="spec-pill condition-pill">${car.condition}</span>
+                </div>
+                <div class="car-price-box">
+                    <span class="price-value">${car.price}</span>
+                    <span class="price-rating rating-${rating.color}">${rating.label}</span>
+                </div>
+            </div>
+
+            <div class="listing-card-specs">
+                <!-- Row 1: Primary Specs + Contact -->
+                <div class="spec-row">
+                    <div class="spec-group-left">
+                        <div class="spec-pill">
+                            <i data-lucide="calendar"></i> ${car.year}
                         </div>
+                        <div class="spec-pill">
+                            <i data-lucide="gauge"></i> ${car.mileage}
+                        </div>
+                        ${getPowerPill(car.powerKw)}
                     </div>
-                    <div class="car-price-box">
-                        <span class="price-rating rating-${rating.color}">${rating.label}</span>
-                        <span class="price-value">${car.price}</span>
-                    </div>
-                </div>
-
-                <!-- Row 1: Year & Mileage -->
-                <div class="spec-pills-row" style="margin-top: 0;">
-                    <div class="spec-pill">
-                        <i data-lucide="calendar"></i> ${car.year}
-                    </div>
-                    <div class="spec-pill">
-                        <i data-lucide="gauge"></i> ${car.mileage}
-                    </div>
-                </div>
-
-                <!-- Row 2: Tech specs (Power, Fuel, Consumption, Transmission) -->
-                <div class="spec-pills-row" style="margin-top: 0;">
-                    ${getPowerPill(car.powerKw)}
-                    ${getFuelPill(car.fuel)}
-                    ${getConsumptionPill(car)}
-                    ${getTransmissionPill(car.transmission)}
-                </div>
-
-                <div class="car-listing-bottom-row" style="display:flex;align-items:center;justify-content:space-between;margin-top:0.5rem;gap:1rem;">
-                    <div style="flex:1;min-width:0;overflow:hidden;">
-                        ${note ? `
-                        <div class="spec-pill seller-note-pill" style="display:inline-flex !important;max-width:100%;overflow:hidden;">
-                            <i data-lucide="message-square"></i>
-                            <em style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">"${note}"</em>
-                        </div>` : ''}
-                    </div>
-                    <div class="car-listing-actions" style="display:flex;gap:0.5rem;flex-shrink:0;">
-                        <button class="action-circle-btn contact-btn" onclick="showContactPopup('${car.id}')" title="Kontakt">
+                    
+                    <div class="spec-group-right">
+                        <button class="action-pill-btn contact-btn accent" data-car-id="${car.id}" title="Kontakt">
                             <i data-lucide="phone"></i>
                         </button>
-                        <button class="action-circle-btn listing-fav-btn" data-car-id="${car.id}" title="Shrani med všečkane">
+                    </div>
+                </div>
+
+                <!-- Row 2: Secondary Specs + Actions -->
+                <div class="spec-row secondary">
+                    <div class="spec-group-left">
+                        ${getFuelPill(car.fuel)}
+                        ${getTransmissionPill(car.transmission)}
+                        ${getConsumptionPill(car)}
+                    </div>
+
+                    <div class="spec-group-right">
+                        <button class="action-pill-btn listing-fav-btn" data-car-id="${car.id}" title="Shrani med všečkane">
                             <i data-lucide="heart"></i>
                         </button>
-                        <button class="action-circle-btn listing-compare-btn ${inCompare ? 'active' : ''}" data-car-id="${car.id}" title="Primerjaj">
+                        <button class="action-pill-btn listing-compare-btn ${inCompare ? 'active' : ''}" data-car-id="${car.id}" title="Primerjaj">
                             <i data-lucide="scale"></i>
                         </button>
                     </div>
                 </div>
             </div>
+
+            ${note ? `
+            <div class="seller-note-card">
+                <i data-lucide="message-square"></i>
+                <em>"${note}"</em>
+            </div>` : '<div style="flex:1;"></div>'}
+
+            <div style="flex:1;"></div>
         </div>
     </div>`;
 }
 
 // ── Contact Popup ────────────────────────────────────────────
-window.showContactPopup = function(carId) {
+window.showContactPopup = function (carId) {
     const car = sampleCars.find(c => c.id === carId);
     if (!car) return;
 
@@ -322,17 +266,35 @@ window.showContactPopup = function(carId) {
             </div>
             <div style="background:#f8fafc;border-radius:1.25rem;padding:1.25rem;margin-bottom:1.5rem;">
                 <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-                    <i data-lucide="map-pin" style="color:var(--color-primary-start);"></i>
+                    <i data-lucide="map-pin" style="color:var(--color-primary-start);flex-shrink:0;"></i>
                     <span style="font-weight:600;font-size:0.9rem;">${typeof car.location === 'object' ? car.location.city : car.location}</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-                    <i data-lucide="phone" style="color:var(--color-primary-start);"></i>
+                    <i data-lucide="phone" style="color:var(--color-primary-start);flex-shrink:0;"></i>
                     <span style="font-weight:600;font-size:0.9rem;">+386 41 123 456</span>
                 </div>
-                <div style="display:flex;align-items:center;gap:0.75rem;">
-                    <i data-lucide="mail" style="color:var(--color-primary-start);"></i>
+                <div style="display:flex;align-items:center;gap:0.75rem;${car.sellerType === 'dealer' && car.openingHours || car.sellerType !== 'dealer' && car.sellerNote ? 'margin-bottom:1rem;' : ''}">
+                    <i data-lucide="mail" style="color:var(--color-primary-start);flex-shrink:0;"></i>
                     <span style="font-weight:600;font-size:0.9rem;">info@mojavto.si</span>
                 </div>
+
+                ${car.sellerType === 'dealer' && car.openingHours ? `
+                <div style="padding-top:1rem;border-top:1px solid #e2e8f0;display:flex;align-items:flex-start;gap:0.75rem;">
+                    <i data-lucide="clock" style="color:#64748b;flex-shrink:0;width:18px;height:18px;margin-top:2px;"></i>
+                    <div>
+                        <p style="font-size:0.7rem;color:#94a3b8;text-transform:uppercase;font-weight:700;letter-spacing:0.06em;margin:0 0 0.2rem;">Delovni čas</p>
+                        <p style="font-weight:600;font-size:0.875rem;color:#1e293b;line-height:1.5;margin:0;">${car.openingHours}</p>
+                    </div>
+                </div>` : ''}
+
+                ${car.sellerType !== 'dealer' && car.sellerNote ? `
+                <div style="padding-top:1rem;border-top:1px solid #e2e8f0;display:flex;align-items:flex-start;gap:0.75rem;">
+                    <i data-lucide="info" style="color:#64748b;flex-shrink:0;width:18px;height:18px;margin-top:2px;"></i>
+                    <div>
+                        <p style="font-size:0.7rem;color:#94a3b8;text-transform:uppercase;font-weight:700;letter-spacing:0.06em;margin:0 0 0.2rem;">Opomnik prodajalca</p>
+                        <p style="font-weight:600;font-size:0.875rem;color:#1e293b;line-height:1.5;margin:0;">${car.sellerNote}</p>
+                    </div>
+                </div>` : ''}
             </div>
             <button class="pill-btn primary" style="width:100%;">Pošlji sporočilo</button>
         </div>
@@ -360,11 +322,21 @@ function renderListings(cars) {
     applyPowerUnit(currentPowerUnit);
 
     // Card click → navigate to listing
-    container.querySelectorAll('.car-listing').forEach(card => {
+    container.querySelectorAll('.listing-card').forEach(card => {
         card.addEventListener('click', e => {
-            if (e.target.closest('.pill-btn') || e.target.closest('.action-circle-btn') ||
+            if (e.target.closest('.pill-btn') || e.target.closest('.action-pill-btn') ||
+                e.target.closest('.action-circle-btn') ||
                 e.target.closest('.carousel-btn') || e.target.closest('.carousel-dots')) return;
             window.location.hash = `#/oglas?id=${card.getAttribute('data-car-id')}`;
+        });
+    });
+
+    // Contact buttons
+    container.querySelectorAll('.contact-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            const carId = btn.getAttribute('data-car-id');
+            showContactPopup(carId);
         });
     });
 
@@ -413,9 +385,9 @@ function renderListings(cars) {
     });
 
     // Carousel
-    container.querySelectorAll('.car-listing-img').forEach(imageWrapper => {
+    container.querySelectorAll('.listing-card-img').forEach(imageWrapper => {
         const track = imageWrapper.querySelector('.carousel-track');
-        const dots = imageWrapper.querySelectorAll('.dot');
+        const dots = imageWrapper.querySelectorAll('.mini-dot');
         const prevBtn = imageWrapper.querySelector('.carousel-btn.prev');
         const nextBtn = imageWrapper.querySelector('.carousel-btn.next');
         const imagesCount = imageWrapper.querySelectorAll('img').length;
@@ -424,7 +396,7 @@ function renderListings(cars) {
         let currentIdx = 0;
 
         function updateCarousel() {
-            track.style.transform = `translateX(-${currentIdx * 100}%)`;
+            if (track) track.style.transform = `translateX(-${currentIdx * 100}%)`;
             dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIdx));
         }
 
@@ -516,3 +488,5 @@ export function initOglasiPage() {
 
     if (window.lucide) window.lucide.createIcons();
 }
+
+if (window.lucide) window.lucide.createIcons();

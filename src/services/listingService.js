@@ -82,6 +82,9 @@ export async function createListing(draft, exteriorFiles, interiorFiles, user) {
         powerKw: Number(draft.powerKw) || 0,
         co2: Number(draft.co2) || 0,
         emissionClass: draft.emissionClass || '',
+        fuelL100km: draft.fuelL100kmCombined ? Number(draft.fuelL100kmCombined) : null,
+        fuelL100kmCity: draft.fuelL100kmCity ? Number(draft.fuelL100kmCity) : null,
+        fuelL100kmHighway: draft.fuelL100kmHighway ? Number(draft.fuelL100kmHighway) : null,
         batteryKwh: draft.batteryKwh ? Number(draft.batteryKwh) : null,
         rangeKm: draft.rangeKm ? Number(draft.rangeKm) : null,
         towingKg: draft.towingKg ? Number(draft.towingKg) : null,
@@ -220,12 +223,17 @@ export function sortByPromotion(listings) {
 }
 
 // ── Format helpers ────────────────────────────────────────────────────────────
-export function formatPrice(eur, callForPrice) {
+export function formatPrice(val, callForPrice) {
     if (callForPrice) return 'Pokliči za ceno';
-    if (!eur || eur <= 0) return 'Pokliči za ceno';
+    
+    // Handle strings, nulls, etc.
+    let num = typeof val === 'number' ? val : parseFloat(String(val).replace(/[^0-9.]/g, ''));
+    
+    if (isNaN(num) || num <= 0) return 'Pokliči za ceno';
+    
     return new Intl.NumberFormat('sl-SI', {
         style: 'currency', currency: 'EUR', maximumFractionDigits: 0,
-    }).format(eur);
+    }).format(num);
 }
 
 export function formatMileage(km) {

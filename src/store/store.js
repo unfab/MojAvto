@@ -16,7 +16,7 @@ export const store = {
 
     // Active filter state
     filters: {
-        types: [],           // [] = all, or ['dealer','service','vulcanizer']
+        types: ['dealer', 'service', 'vulcanizer'], // Default: show all main types
         brands: [],          // [] = all, or ['BMW','Audi',...]
         authorized: false,   // true = only authorized businesses
         leasing: false,      // true = only businesses offering leasing

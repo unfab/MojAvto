@@ -78,6 +78,7 @@ let state = {
     condition: 'Rabljeno', firstRegistration: '', previousOwnersCount: '',
     fuel: '', hybridType: null, transmission: '', driveType: '',
     engineCc: '', powerKw: '', co2: '', emissionClass: '',
+    fuelL100kmCombined: '', fuelL100kmCity: '', fuelL100kmHighway: '',
     batteryKwh: '', rangeKm: '', towingKg: '',
     equipment: [],
     _exteriorFiles: [],
@@ -980,6 +981,26 @@ function renderTechnicalStep() {
                 </div>
             </div>
 
+            <!-- Consumption fields (only for non-electric) -->
+            <div class="cl-conditional" id="consumptionFields">
+                <hr style="border:none;border-top:1px solid rgba(0,0,0,0.07);margin:1rem 0;" />
+                <p class="cl-label" style="font-weight:600;margin-bottom:0.75rem;">Poraba goriva (L/100km)</p>
+                <div class="cl-row">
+                    <div class="cl-field">
+                        <label class="cl-label">Kombinirana</label>
+                        <input class="cl-input" id="fConsCombined" type="number" step="0.1" min="0" value="${state.fuelL100kmCombined||''}" placeholder="npr. 6.5" />
+                    </div>
+                    <div class="cl-field">
+                        <label class="cl-label">Mestna</label>
+                        <input class="cl-input" id="fConsCity" type="number" step="0.1" min="0" value="${state.fuelL100kmCity||''}" placeholder="npr. 8.2" />
+                    </div>
+                    <div class="cl-field">
+                        <label class="cl-label">Izvenmestna</label>
+                        <input class="cl-input" id="fConsHighway" type="number" step="0.1" min="0" value="${state.fuelL100kmHighway||''}" placeholder="npr. 5.1" />
+                    </div>
+                </div>
+            </div>
+
             <!-- Electric fields -->
             <div class="cl-conditional" id="elFields">
                 <div class="cl-row">
@@ -1020,6 +1041,7 @@ function renderTechnicalStep() {
         const val = fuelSel.value;
         document.getElementById('elFields')?.classList.toggle('visible', val === 'Elektrika');
         document.getElementById('hybridFields')?.classList.toggle('visible', val === 'Hibrid');
+        document.getElementById('consumptionFields')?.classList.toggle('visible', val !== '' && val !== 'Elektrika');
     };
     fuelSel.addEventListener('change', updateConditionals);
     updateConditionals();
@@ -1071,6 +1093,9 @@ function renderTechnicalStep() {
         state.co2 = document.getElementById('fCo2').value;
         state.emissionClass = document.getElementById('fEuro').value;
         state.towingKg = document.getElementById('fTow').value;
+        state.fuelL100kmCombined = document.getElementById('fConsCombined')?.value || '';
+        state.fuelL100kmCity = document.getElementById('fConsCity')?.value || '';
+        state.fuelL100kmHighway = document.getElementById('fConsHighway')?.value || '';
         state.batteryKwh = document.getElementById('fBattery')?.value || '';
         state.rangeKm = document.getElementById('fRange')?.value || '';
         state.hybridType = document.getElementById('fHybridType')?.value || null;
@@ -1623,8 +1648,12 @@ function renderReviewStep() {
             ${section('Tehnični podatki', 'technical', [
                 ['Gorivo', state.fuel],
                 ['Menjalnik', state.transmission],
-                ['Moč', state.powerKw ? state.powerKw + ' kW' : ''],
+                ['Moč', state.powerKw ? state.powerKw + ' kW (' + Math.round(state.powerKw * 1.35962) + ' KM)' : ''],
                 ['Prostornina', state.engineCc ? state.engineCc + ' cc' : ''],
+                ['Poraba (komb.)', state.fuelL100kmCombined ? state.fuelL100kmCombined + ' L/100km' : ''],
+                ['Poraba (mesto)', state.fuelL100kmCity ? state.fuelL100kmCity + ' L/100km' : ''],
+                ['Poraba (izven)', state.fuelL100kmHighway ? state.fuelL100kmHighway + ' L/100km' : ''],
+                ['Domet WLTP', state.rangeKm ? state.rangeKm + ' km' : ''],
                 ['Emisije', state.emissionClass],
             ])}
 

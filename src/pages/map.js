@@ -345,9 +345,9 @@ function setupFilters() {
 
 // ── Reset all filters ─────────────────────────────────────────
 function resetFilters() {
-    store.updateFilters({ types: [], brands: [], authorized: false, leasing: false, tyreStorage: false, minRating: 0, radius: 20 });
+    store.updateFilters({ types: ['dealer', 'service', 'vulcanizer'], brands: [], authorized: false, leasing: false, tyreStorage: false, minRating: 0, radius: 20 });
 
-    document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.type-pill').forEach(p => p.classList.add('active'));
     // Reset brand dropdown pills
     const brandPillsReset = document.getElementById('brandSelectedPills');
     if (brandPillsReset) brandPillsReset.innerHTML = '';
@@ -491,6 +491,10 @@ export function initMapPage() {
         const pill = document.querySelector(`.type-pill[data-type="${typeParam}"]`);
         if (pill) pill.classList.add('active');
         store.updateFilters({ types: [typeParam] });
+    } else {
+        // Default: select all types
+        document.querySelectorAll('.type-pill').forEach(p => p.classList.add('active'));
+        store.updateFilters({ types: ['dealer', 'service', 'vulcanizer'] });
     }
 
     // Initial render
