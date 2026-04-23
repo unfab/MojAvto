@@ -7,7 +7,7 @@ const MAX_NOTE_CHARS = 110;
 import { sampleCars } from '../data/sampleListings.js';
 import { auth } from '../firebase.js';
 import { showAuthGate } from '../utils/authGate.js';
-import { addToFavourites, removeFromFavourites, isFavourite } from '../services/garageService.js';
+import { addToFavourites, removeFromFavourites, isFavourite, getFavourites } from '../services/garageService.js';
 import { useSearchStore } from '../store/useSearchStore.js';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -141,32 +141,61 @@ async function toggleFavourite(btn, carId, car) {
         }
     }
 
+    const liked = btn.classList.contains('active');
+    
+    // Optimistic UI update
+    if (liked) {
+        btn.classList.remove('active');
+        userFavouritesCache.delete(carId);
+    } else {
+        btn.classList.add('active');
+        userFavouritesCache.add(carId);
+    }
+
     btn.disabled = true;
     try {
-        const liked = btn.classList.contains('active');
         if (liked) {
             await removeFromFavourites(user.uid, carId);
-            btn.classList.remove('active');
         } else {
             await addToFavourites(user.uid, car);
-            btn.classList.add('active');
         }
+    } catch (err) {
+        // Rollback on error
+        if (liked) {
+            btn.classList.add('active');
+            userFavouritesCache.add(carId);
+        } else {
+            btn.classList.remove('active');
+            userFavouritesCache.delete(carId);
+        }
+        console.error('[toggleFavourite] Error:', err);
+        alert('Prišlo je do napake pri posodabljanju priljubljenih.');
     } finally {
         btn.disabled = false;
     }
 }
 
 // ── Check favourites on load ─────────────────────────────────
+let userFavouritesCache = new Set();
+
 async function checkFavouriteStates() {
     const user = auth.currentUser;
     if (!user) return;
-    const btns = document.querySelectorAll('.listing-fav-btn[data-car-id]');
-    await Promise.all(Array.from(btns).map(async btn => {
-        const carId = btn.getAttribute('data-car-id');
-        if (await isFavourite(user.uid, carId)) {
-            btn.classList.add('active');
-        }
-    }));
+    
+    try {
+        const favs = await getFavourites(user.uid);
+        userFavouritesCache = new Set(favs.map(f => f.listingId));
+        
+        const btns = document.querySelectorAll('.listing-fav-btn[data-car-id]');
+        btns.forEach(btn => {
+            const carId = btn.getAttribute('data-car-id');
+            if (userFavouritesCache.has(carId)) {
+                btn.classList.add('active');
+            }
+        });
+    } catch (err) {
+        console.error('[checkFavouriteStates] Error:', err);
+    }
 }
 
 // ── Render Car Card ──────────────────────────────────────────
@@ -234,6 +263,7 @@ function renderCarCard(car) {
                     <h2 class="listing-card-title">${car.title}</h2>
                     <span class="spec-pill condition-pill">${car.condition}</span>
                 </div>
+                
                 <div class="car-price-box">
                     <span class="price-value">${car.price}</span>
                     ${showStars
@@ -243,41 +273,36 @@ function renderCarCard(car) {
                 </div>
             </div>
 
-            <div class="listing-card-specs">
-                <!-- Row 1: Primary Specs + Contact -->
-                <div class="spec-row">
-                    <div class="spec-group-left">
-                        <div class="spec-pill">
-                            <i data-lucide="calendar"></i> ${car.year}
-                        </div>
-                        <div class="spec-pill">
-                            <i data-lucide="gauge"></i> ${car.mileage}
-                        </div>
-                        ${getPowerPill(car.powerKw)}
+            <div class="listing-card-action-bar">
+                <div class="primary-specs">
+                    <div class="spec-pill">
+                        <i data-lucide="calendar"></i> ${car.year}
                     </div>
-                    
-                    <div class="spec-group-right">
-                        <button class="action-pill-btn contact-btn accent" data-car-id="${car.id}" title="Kontakt">
-                            <i data-lucide="phone"></i>
-                        </button>
+                    <div class="spec-pill">
+                        <i data-lucide="gauge"></i> ${car.mileage}
                     </div>
+                    ${getPowerPill(car.powerKw)}
                 </div>
 
-                <!-- Row 2: Secondary Specs + Actions -->
+                <div class="listing-card-actions">
+                    <button class="action-pill-btn listing-fav-btn ${userFavouritesCache.has(car.id) ? 'active' : ''}" data-car-id="${car.id}" title="Shrani med všečkane">
+                        <i data-lucide="heart"></i>
+                    </button>
+                    <button class="action-pill-btn listing-compare-btn ${inCompare ? 'active' : ''}" data-car-id="${car.id}" title="Primerjaj">
+                        <i data-lucide="scale"></i>
+                    </button>
+                    <button class="action-pill-btn contact-btn accent" data-car-id="${car.id}" title="Kontakt">
+                        <i data-lucide="phone"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="listing-card-specs">
                 <div class="spec-row secondary">
                     <div class="spec-group-left">
                         ${getFuelPill(car.fuel)}
                         ${getTransmissionPill(car.transmission)}
                         ${getConsumptionPill(car)}
-                    </div>
-
-                    <div class="spec-group-right">
-                        <button class="action-pill-btn listing-fav-btn" data-car-id="${car.id}" title="Shrani med všečkane">
-                            <i data-lucide="heart"></i>
-                        </button>
-                        <button class="action-pill-btn listing-compare-btn ${inCompare ? 'active' : ''}" data-car-id="${car.id}" title="Primerjaj">
-                            <i data-lucide="scale"></i>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -286,9 +311,7 @@ function renderCarCard(car) {
             <div class="seller-note-card">
                 <i data-lucide="message-square"></i>
                 <em>"${note}"</em>
-            </div>` : '<div style="flex:1;"></div>'}
-
-            <div style="flex:1;"></div>
+            </div>` : ''}
         </div>
     </div>`;
 }

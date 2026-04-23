@@ -11,7 +11,7 @@
             <i data-lucide="chevron-down" id="mobileFilterChevron"></i>
         </button>
 
-        <div class="oglasi-sidebar-card glass-card card-squircle" id="filtersCard">
+        <div class="oglasi-sidebar-card glass-card" id="filtersCard">
             <div id="react-sidebar-filters-root"></div>
         </div>
     </aside>
@@ -22,8 +22,8 @@
             <h1>Zadetki iskanja <span>(1.471 vozil)</span></h1>
             <div class="sort-wrap">
                 <span class="sort-label">Razvrsti po:</span>
-                <div class="pill-select-wrapper" style="min-width: 200px;">
-                    <select class="pill-input" id="sortSelect" style="height: 42px; font-size: 0.85rem;">
+                <div class="pill-select-wrapper">
+                    <select class="pill-input" id="sortSelect">
                         <option>Standardno</option>
                         <option>Cena: najnižja najprej</option>
                         <option>Cena: najvišja najprej</option>
@@ -32,7 +32,9 @@
                     </select>
                     <i data-lucide="chevron-down" class="select-icon"></i>
                 </div>
-                <button class="legend-btn" id="legendBtn" title="Legenda ikon">?</button>
+                <button class="legend-btn" id="legendBtn" title="Legenda ikon">
+                    <i data-lucide="help-circle"></i>
+                </button>
                 <div class="view-toggle-group">
                     <button class="view-toggle-btn" data-view="list" title="Seznam" aria-label="Pogled seznam">
                         <i data-lucide="list"></i>
