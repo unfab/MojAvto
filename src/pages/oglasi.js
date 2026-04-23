@@ -8,6 +8,10 @@ import { sampleCars } from '../data/sampleListings.js';
 import { auth } from '../firebase.js';
 import { showAuthGate } from '../utils/authGate.js';
 import { addToFavourites, removeFromFavourites, isFavourite } from '../services/garageService.js';
+import { useSearchStore } from '../store/useSearchStore.js';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import AdvancedSearch from './AdvancedSearch.jsx';
 
 import {
     getFuelPill,
@@ -495,13 +499,101 @@ function initLegendPopup() {
     overlay.style.display = 'none';
 }
 
+// ── Sidebar React mount (single root, safe to call repeatedly) ───────────────
+let _sidebarRoot = null;
+
+function mountSidebarFilters() {
+    const container = document.getElementById('react-sidebar-filters-root');
+    if (!container) return;
+
+    if (!_sidebarRoot) {
+        _sidebarRoot = ReactDOM.createRoot(container);
+    }
+    _sidebarRoot.render(
+        React.createElement(AdvancedSearch, { variant: 'sidebar', compact: true })
+    );
+}
+
+function unmountSidebarFilters() {
+    if (_sidebarRoot) {
+        _sidebarRoot.unmount();
+        _sidebarRoot = null;
+    }
+}
+
+// ── Filter listings with current store state ─────────────────────────────────
+function applyStoreFilters() {
+    const { filters } = useSearchStore.getState();
+    const { brand, model, price, year, fuel } = filters;
+
+    const filtered = sampleCars.filter(car => {
+        if (brand.length && !brand.includes(car.make)) return false;
+        if (model && car.model !== model) return false;
+        const carYear = parseInt(car.year, 10) || 0;
+        if (carYear < year.min || carYear > year.max) return false;
+        const carPrice = car.priceRaw || 0;
+        if (carPrice < price.min || carPrice > price.max) return false;
+        if (fuel.length && !fuel.includes(car.fuel)) return false;
+        return true;
+    });
+
+    renderListings(filtered);
+}
+
+// ── View Mode ────────────────────────────────────────────────
+function applyViewMode(mode) {
+    const container = document.getElementById('carListingsContainer');
+    if (!container) return;
+    container.classList.toggle('grid-layout', mode === 'grid');
+    container.classList.toggle('list-layout', mode === 'list');
+
+    document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === mode);
+    });
+}
+
+function initViewToggle() {
+    const { viewMode } = useSearchStore.getState();
+    applyViewMode(viewMode);
+
+    document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            useSearchStore.getState().setViewMode(btn.dataset.view);
+        });
+    });
+}
+
 // ── Page Init ────────────────────────────────────────────────
 export function initOglasiPage() {
     console.log('[OglasiPage] init');
 
+    // Mount React sidebar filters
+    mountSidebarFilters();
+
+    // Initial render with all cars
     renderListings(sampleCars);
 
     if (window.updateHeaderCompare) window.updateHeaderCompare();
+
+    // Subscribe to store — re-render on filter changes, swap layout on viewMode changes.
+    let _prevSnapshot = JSON.stringify(useSearchStore.getState().filters);
+    let _prevViewMode = useSearchStore.getState().viewMode;
+    const unsubscribe = useSearchStore.subscribe((state) => {
+        const snapshot = JSON.stringify(state.filters);
+        if (snapshot !== _prevSnapshot) {
+            _prevSnapshot = snapshot;
+            applyStoreFilters();
+        }
+        if (state.viewMode !== _prevViewMode) {
+            _prevViewMode = state.viewMode;
+            applyViewMode(state.viewMode);
+        }
+    });
+
+    initViewToggle();
+
+    // Store unsubscribe so the router can clean up when navigating away
+    window._oglasiUnsubscribe = unsubscribe;
 
     // Mobile filter toggle
     const mobileToggle = document.getElementById('mobileFilterToggle');
@@ -529,6 +621,14 @@ export function initOglasiPage() {
     initLegendPopup();
 
     if (window.lucide) window.lucide.createIcons();
+}
+
+export function destroyOglasiPage() {
+    if (window._oglasiUnsubscribe) {
+        window._oglasiUnsubscribe();
+        delete window._oglasiUnsubscribe;
+    }
+    unmountSidebarFilters();
 }
 
 if (window.lucide) window.lucide.createIcons();

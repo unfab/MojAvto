@@ -27,6 +27,8 @@ const routes = {
     '/nakup/pnevmatika': { view: 'tire-product', protected: false },
     '/deli':             { view: 'parts', protected: false },
     '/del':              { view: 'parts-listing', protected: false },
+    '/servis/vnos':      { view: 'service-entry', protected: true },
+    '/b2b/oceni':        { view: 'b2b-evaluate', protected: false },
 };
 
 const PROTECTED_REDIRECT = '/prijava';

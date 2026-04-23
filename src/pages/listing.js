@@ -8,6 +8,10 @@ import { getEquipmentLabel, EQUIPMENT_GROUPS } from '../data/equipment.js';
 import { auth } from '../firebase.js';
 import { showAuthGate } from '../utils/authGate.js';
 import { addToFavourites, removeFromFavourites, isFavourite } from '../services/garageService.js';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import CostPanel from '../components/CostPanel.jsx';
+import { getServiceHistoryByVin } from '../services/serviceBookService.js';
 
 export async function initListingPage() {
     console.log('[ListingPage] init');
@@ -29,10 +33,69 @@ export async function initListingPage() {
         renderListing(listing);
         incrementViewCount(id);
         injectRating(listing, allListings);
+        injectServiceHistory(listing);
     } catch (err) {
         console.error('[ListingPage]', err);
         if (page) page.innerHTML = errorHtml('Oglas ne obstaja.', err.message);
     }
+}
+
+// ── Service history injection ─────────────────────────────────────────────────
+async function injectServiceHistory(listing) {
+    const vin = listing.vin || listing.vinDetails?.vin;
+    if (!vin) return;
+
+    const records = await getServiceHistoryByVin(vin);
+    if (!records.length) return;
+
+    // Trust badge
+    const badgeSlot = document.getElementById('lpServiceBadge');
+    if (badgeSlot) {
+        badgeSlot.innerHTML = `
+            <div class="trust-badge">
+                <i data-lucide="shield-check"></i>
+                Verificirana servisna zgodovina
+            </div>`;
+        if (window.lucide) window.lucide.createIcons();
+    }
+
+    // Timeline
+    const container = document.getElementById('service-history-container');
+    if (!container) return;
+
+    const typeLabels = {
+        mali_servis: 'Mali servis',
+        veliki_servis: 'Veliki servis',
+        popravilo: 'Popravilo',
+        pnevmatike: 'Pnevmatike',
+        drugo: 'Drugo',
+    };
+
+    const items = records.map(r => {
+        const dateStr = r.date ? new Date(r.date).toLocaleDateString('sl-SI', { day: 'numeric', month: 'long', year: 'numeric' }) : '—';
+        const km = r.mileage ? new Intl.NumberFormat('sl-SI').format(r.mileage) + ' km' : null;
+        const typeLabel = typeLabels[r.serviceType] || r.serviceType || 'Servis';
+        return `
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-type">${escHtml(typeLabel)}</span>
+                        <span class="timeline-date">${escHtml(dateStr)}</span>
+                    </div>
+                    ${km ? `<div class="timeline-km">${escHtml(km)}</div>` : ''}
+                    <div class="timeline-mechanic">${escHtml(r.mechanicName || '')}</div>
+                    ${r.description ? `<div class="timeline-desc">${escHtml(r.description)}</div>` : ''}
+                </div>
+            </div>`;
+    }).join('');
+
+    container.innerHTML = `
+        <section class="lp-section">
+            <h2 class="lp-section-title">Servisna zgodovina</h2>
+            <div class="service-timeline">${items}</div>
+        </section>`;
+    container.style.display = 'block';
 }
 
 // ── Rating injection ──────────────────────────────────────────────────────────
@@ -211,6 +274,9 @@ function renderListing(l) {
                     <!-- VIN verified block -->
                     ${isVin ? renderVinBlockHtml(l) : ''}
 
+                    <!-- Service history (populated async by injectServiceHistory) -->
+                    <div id="service-history-container" style="display:none;"></div>
+
                     <!-- Description -->
                     ${l.description ? `
                     <section class="lp-section">
@@ -235,6 +301,7 @@ function renderListing(l) {
                             <div class="lp-price">${formatPrice(l.priceRaw || l.priceEur || l.price || 0, l.callForPrice)}</div>
                         </div>
                         <div id="lpRatingBlock"></div>
+                        <div id="lpServiceBadge"></div>
                         ${l.priceNegotiable ? '<div class="lp-price-sub">Cena je pogajalska</div>' : ''}
                         ${l.leaseAvailable && !l.leasingConditions ? '<div class="lp-price-sub">Možnost leasinga</div>' : ''}
                         ${l.leasingConditions ? `
@@ -255,6 +322,9 @@ function renderListing(l) {
                         </div>
                     </div>
 
+                    <!-- Cost Panel -->
+                    <div id="react-cost-panel-root"></div>
+
                     <!-- Seller card -->
                     ${renderSellerCardHtml(l)}
 
@@ -274,6 +344,20 @@ function renderListing(l) {
         </div>
     `;
 
+
+    // Cost Panel (React)
+    const costPanelRoot = document.getElementById('react-cost-panel-root');
+    const cpPrice = l.priceRaw || l.priceEur || l.price;
+    const cpKw = l.powerKw || l.power;
+    if (costPanelRoot && cpPrice && cpKw) {
+        ReactDOM.createRoot(costPanelRoot).render(
+            React.createElement(CostPanel, {
+                price: Number(cpPrice),
+                powerKw: Number(cpKw),
+                fuelType: l.fuel || '',
+            })
+        );
+    }
 
     // Leasing popup
     if (l.leasingConditions) {

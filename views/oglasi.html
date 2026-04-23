@@ -12,79 +12,7 @@
         </button>
 
         <div class="oglasi-sidebar-card glass-card card-squircle" id="filtersCard">
-            <div class="oglasi-filters-header">
-                <h2>Filtri</h2>
-                <button class="oglasi-reset-btn" id="resetFiltersBtn">Ponastavi</button>
-            </div>
-
-            <div class="filter-fields" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                <div class="form-group">
-                    <label for="filter-make">Znamka</label>
-                    <div class="pill-select-wrapper">
-                        <select id="filter-make" class="pill-input">
-                            <option>Vse znamke</option>
-                            <option>Audi</option>
-                            <option>BMW</option>
-                            <option>Honda</option>
-                            <option>Mercedes-Benz</option>
-                            <option>Volkswagen</option>
-                        </select>
-                        <i data-lucide="chevron-down" class="select-icon"></i>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="filter-model">Model</label>
-                    <div class="pill-select-wrapper">
-                        <select id="filter-model" class="pill-input">
-                            <option>Vsi modeli</option>
-                        </select>
-                        <i data-lucide="chevron-down" class="select-icon"></i>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Cena (€)</label>
-                    <div class="filter-row">
-                        <div class="pill-select-wrapper">
-                            <select class="pill-input">
-                                <option>Od</option>
-                            </select>
-                            <i data-lucide="chevron-down" class="select-icon"></i>
-                        </div>
-                        <div class="pill-select-wrapper">
-                            <select class="pill-input">
-                                <option>Do</option>
-                            </select>
-                            <i data-lucide="chevron-down" class="select-icon"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Letnik</label>
-                    <div class="filter-row">
-                        <div class="pill-select-wrapper">
-                            <select class="pill-input">
-                                <option>Od</option>
-                            </select>
-                            <i data-lucide="chevron-down" class="select-icon"></i>
-                        </div>
-                        <div class="pill-select-wrapper">
-                            <select class="pill-input">
-                                <option>Do</option>
-                            </select>
-                            <i data-lucide="chevron-down" class="select-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button class="oglasi-search-btn compact-search" id="filterSearchBtn"
-                style="height: 52px; border-radius: 999px; margin-top: 2rem;">
-                <i data-lucide="search"></i>
-                Prikaži rezultate
-            </button>
+            <div id="react-sidebar-filters-root"></div>
         </div>
     </aside>
 
@@ -105,6 +33,14 @@
                     <i data-lucide="chevron-down" class="select-icon"></i>
                 </div>
                 <button class="legend-btn" id="legendBtn" title="Legenda ikon">?</button>
+                <div class="view-toggle-group">
+                    <button class="view-toggle-btn" data-view="list" title="Seznam" aria-label="Pogled seznam">
+                        <i data-lucide="list"></i>
+                    </button>
+                    <button class="view-toggle-btn" data-view="grid" title="Mreža" aria-label="Pogled mreža">
+                        <i data-lucide="layout-grid"></i>
+                    </button>
+                </div>
             </div>
         </div>
 

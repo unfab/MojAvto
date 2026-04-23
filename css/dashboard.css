@@ -11,3 +11,47 @@
 .profile-form label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
 .profile-form input { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; }
 .btn-primary { background-color: #f97316; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; }
+
+/* ── Print-to-Sell: skrito med brskanjem ────────────────────── */
+#print-template { display: none; }
+
+/* ── Print-to-Sell: A4 tiskalna predloga ───────────────────── */
+@media print {
+    body * { visibility: hidden !important; }
+
+    #print-template,
+    #print-template * { visibility: visible !important; }
+
+    #print-template {
+        display: block !important;
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        padding: 2cm;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        color: #0f172a;
+        box-sizing: border-box;
+    }
+
+    .print-header { text-align: center; margin-bottom: 1.5cm; border-bottom: 3px solid #f97316; padding-bottom: 0.75cm; }
+    .print-header h1 { font-size: 2.8rem; margin: 0 0 0.3rem; font-weight: 900; color: #0f172a; }
+    .print-header h2 { font-size: 2.2rem; margin: 0; color: #f97316; font-weight: 800; }
+
+    .print-content { display: flex; gap: 1cm; margin-bottom: 1cm; align-items: flex-start; }
+    #print-image { width: 55%; max-height: 9cm; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+
+    #print-specs { flex: 1; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 0.4cm; font-size: 1.1rem; }
+    #print-specs li { padding: 0.3cm 0; border-bottom: 1px solid #e2e8f0; }
+    #print-specs li strong { color: #64748b; font-size: 0.9rem; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+    #print-specs li span { font-weight: 700; font-size: 1.15rem; color: #0f172a; }
+
+    .print-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 2px solid #e2e8f0; padding-top: 0.75cm; margin-top: auto; }
+    .qr-container { text-align: center; }
+    #print-qr-canvas { width: 5cm !important; height: 5cm !important; display: block; margin: 0 auto 0.3cm; }
+    .qr-container p { font-size: 0.75rem; color: #64748b; margin: 0; }
+
+    .print-branding { text-align: right; }
+    .print-branding p { font-size: 1rem; color: #64748b; margin: 0 0 0.2cm; }
+    .print-branding strong { color: #f97316; font-size: 1.4rem; font-weight: 900; }
+}

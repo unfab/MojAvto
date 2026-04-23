@@ -8,6 +8,8 @@ import { EQUIPMENT_GROUPS, getEquipmentForCategory } from '../data/equipment.js'
 import { auth } from '../firebase.js';
 import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { initCustomSelects, createCustomSelect } from '../utils/customSelect.js';
+import { fetchRawListingData } from '../utils/scraper.js';
+import { parseListingWithGemini } from '../services/geminiService.js';
 import { getCurrentUserDoc } from '../auth/auth.js';
 
 // ── Draft persistence ─────────────────────────────────────────────────────────
@@ -253,6 +255,28 @@ function renderEntryStep() {
                 }
             </div>
 
+            <!-- Smart Import -->
+            <div class="cl-smart-import" id="smartImportBox">
+                <div class="cl-smart-import-header">
+                    <i data-lucide="wand-2"></i>
+                    <span>Uvozi podatke z obstoječega oglasa</span>
+                    <span class="cl-smart-import-badge">AI</span>
+                </div>
+                <p class="cl-smart-import-hint">Prilepite povezavo do oglasa (mobile.de, avto.net, njuskalo.hr…) — AI bo samodejno izpolnil obrazec.</p>
+                <div class="cl-smart-import-row">
+                    <input id="importUrlInput" type="url" class="cl-input" placeholder="https://www.mobile.de/...">
+                    <button id="btnSmartImport" class="cl-btn cl-btn--primary">Uvozi</button>
+                </div>
+                <div id="importLoader" style="display:none;" class="cl-smart-import-loader">
+                    <i data-lucide="loader-2" class="cl-spin"></i>
+                    <span id="importLoaderText">Umetna inteligenca analizira oglas...</span>
+                </div>
+                <div id="importWarning" style="display:none;" class="cl-smart-import-warning">
+                    ✅ Podatki so bili izpolnjeni avtomatsko. Preverite točnost pred objavo!
+                </div>
+                <div id="importError" style="display:none;" class="cl-smart-import-error"></div>
+            </div>
+
             <div class="cl-entry-cards">
                 <div class="cl-entry-card" id="entryClassic">
                     <span class="cl-entry-card-icon">📋</span>
@@ -297,6 +321,90 @@ function renderEntryStep() {
         state.entryType = 'vin';
         goNext();
     });
+
+    document.getElementById('btnSmartImport')?.addEventListener('click', runSmartImport);
+}
+
+// ── Smart Import ──────────────────────────────────────────────────────────────
+async function runSmartImport() {
+    const urlInput  = document.getElementById('importUrlInput');
+    const loader    = document.getElementById('importLoader');
+    const loaderTxt = document.getElementById('importLoaderText');
+    const warning   = document.getElementById('importWarning');
+    const errorEl   = document.getElementById('importError');
+    const btn       = document.getElementById('btnSmartImport');
+
+    const url = urlInput?.value?.trim();
+    if (!url || !url.startsWith('http')) {
+        showImportError(errorEl, 'Vnesite veljavno spletno povezavo (mora se začeti s http).');
+        return;
+    }
+
+    // UI: loading state
+    btn.disabled = true;
+    if (loader)  loader.style.display  = 'flex';
+    if (warning) warning.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'none';
+
+    try {
+        // Step 1: fetch raw text via CORS proxy
+        if (loaderTxt) loaderTxt.textContent = 'Pridobivam vsebino oglasa...';
+        const rawText = await fetchRawListingData(url);
+
+        // Step 2: collect allowed values from local data
+        const allowedBrands = brandModelData ? Object.keys(brandModelData) : [];
+        const allowedSlugs  = EQUIPMENT_GROUPS.flatMap(g => g.items.map(i => i.value));
+
+        // Step 3: send to Gemini
+        if (loaderTxt) loaderTxt.textContent = 'Umetna inteligenca analizira oglas...';
+        const parsed = await parseListingWithGemini(rawText, allowedBrands, allowedSlugs);
+
+        // Step 4: apply to state
+        applyImportedData(parsed);
+
+        // UI: success
+        if (loader)  loader.style.display  = 'none';
+        if (warning) warning.style.display = 'block';
+
+    } catch (err) {
+        console.error('[SmartImport]', err);
+        if (loader) loader.style.display = 'none';
+        showImportError(errorEl, 'Uvoz ni uspel — prosimo vnesite podatke ročno. (' + err.message + ')');
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function showImportError(el, msg) {
+    if (!el) return;
+    el.textContent = msg;
+    el.style.display = 'block';
+}
+
+function applyImportedData(d) {
+    if (!d || typeof d !== 'object') return;
+
+    // Basic fields → state (steps will read from state when rendered)
+    if (d.brand)        state.make         = d.brand;
+    if (d.model)        state.model        = d.model;
+    if (d.year)         state.year         = Number(d.year);
+    if (d.mileage)      state.mileageKm    = Number(d.mileage);
+    if (d.fuel)         state.fuel         = d.fuel;
+    if (d.transmission) state.transmission = d.transmission;
+    if (d.powerKw)      state.powerKw      = Number(d.powerKw);
+    if (d.price)        state.priceEur     = Number(d.price);
+
+    // Equipment — merge with existing selection
+    if (Array.isArray(d.equipment) && d.equipment.length) {
+        const existing = new Set(state.equipment);
+        d.equipment.forEach(s => existing.add(s));
+        state.equipment = [...existing];
+    }
+
+    // Mark state as imported so steps can highlight fields
+    state._imported = d;
+
+    saveDraft(state);
 }
 
 // ── Step 1: VIN input (conditional) ──────────────────────────────────────────
@@ -760,6 +868,15 @@ function renderBasicStep() {
     const modelSel = document.getElementById('fModel');
     const variantSel = document.getElementById('fVariant');
 
+    // Highlight imported fields
+    if (state._imported) {
+        const imp = state._imported;
+        if (imp.brand)    makeSel?.classList.add('imported-field');
+        if (imp.model)    modelSel?.classList.add('imported-field');
+        if (imp.year)     document.getElementById('fYear')?.classList.add('imported-field');
+        if (imp.mileage)  document.getElementById('fMileage')?.classList.add('imported-field');
+    }
+
     // Populate Brands
     if (brandModelData) {
         Object.keys(brandModelData).sort().forEach(b => {
@@ -1035,6 +1152,14 @@ function renderTechnicalStep() {
     `);
 
     if (window.lucide) window.lucide.createIcons();
+
+    // Highlight imported fields in technical step
+    if (state._imported) {
+        const imp = state._imported;
+        if (imp.fuel)         document.getElementById('fFuel')?.classList.add('imported-field');
+        if (imp.transmission) document.getElementById('fTransmission')?.classList.add('imported-field');
+        if (imp.powerKw)      document.getElementById('fPower')?.classList.add('imported-field');
+    }
 
     const fuelSel = document.getElementById('fFuel');
     const updateConditionals = () => {
@@ -1403,6 +1528,8 @@ function renderPriceStep() {
     });
 
     const priceInput = document.getElementById('fPrice');
+    if (state._imported?.price) priceInput?.classList.add('imported-field');
+
     if (priceInput) {
         priceInput.addEventListener('input', (e) => {
             const raw = e.target.value.replace(/\D/g, '');

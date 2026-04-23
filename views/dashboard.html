@@ -57,7 +57,37 @@
     </main>
     
     <div id="footer"></div>
-    
+
+    <!-- Print-to-Sell predloga: vidna samo ob tiskanju -->
+    <div id="print-template">
+        <div class="print-header">
+            <h1 id="print-title">Znamka Model</h1>
+            <h2 id="print-price">Cena €</h2>
+        </div>
+
+        <div class="print-content">
+            <img id="print-image" src="" alt="Slika vozila" />
+            <ul id="print-specs">
+                <li><strong>Letnik</strong><span id="print-year"></span></li>
+                <li><strong>Kilometri</strong><span id="print-mileage"></span></li>
+                <li><strong>Gorivo</strong><span id="print-fuel"></span></li>
+                <li><strong>Menjalnik</strong><span id="print-transmission"></span></li>
+                <li><strong>Moč</strong><span id="print-power"></span></li>
+            </ul>
+        </div>
+
+        <div class="print-footer">
+            <div class="qr-container">
+                <canvas id="print-qr-canvas"></canvas>
+                <p>Skeniraj za več slik in podrobnosti</p>
+            </div>
+            <div class="print-branding">
+                <p>Objavljeno na</p>
+                <strong>MojAvto.si</strong>
+            </div>
+        </div>
+    </div>
+
     <script src="js/i18n.js" defer></script>
     <script src="js/dashboard.js" defer></script>
 </body>

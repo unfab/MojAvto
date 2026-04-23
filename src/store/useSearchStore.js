@@ -27,7 +27,10 @@ export const useSearchStore = create(
         }
       }),
       
-      setSearchMode: (mode) => set({ searchMode: mode })
+      setSearchMode: (mode) => set({ searchMode: mode }),
+
+      viewMode: 'list',
+      setViewMode: (mode) => set({ viewMode: mode })
     }),
     {
       name: 'mojavto-search-storage',

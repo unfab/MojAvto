@@ -24,12 +24,19 @@ const pageModules = {
     'tire-product': () => import('./pages/tire-product.js').then(m => m.initTireProductPage()),
     parts: () => import('./pages/parts.js').then(m => m.initPartsPage()),
     admin: () => import('./pages/admin.js').then(m => m.initAdminPage()),
+    'service-entry': () => import('./pages/service-entry.js').then(m => m.initServiceEntryPage()),
+    'b2b-evaluate':  () => import('./pages/b2b-evaluate.js').then(m => m.initB2bEvaluatePage()),
 };
 
 document.addEventListener('beforeRouteChange', () => {
     // Always attempt to unmount React synchronously when leaving a page
     if (window.unmountReactSearch) {
         window.unmountReactSearch();
+    }
+    // Tear down oglasi subscriptions and React sidebar when navigating away
+    if (window._oglasiUnsubscribe) {
+        window._oglasiUnsubscribe();
+        delete window._oglasiUnsubscribe;
     }
 });
 

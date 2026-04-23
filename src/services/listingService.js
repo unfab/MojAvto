@@ -4,6 +4,7 @@ import {
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase.js';
+import { ALL_EQUIPMENT_VALUES } from '../data/equipment.js';
 
 // ── Image upload ──────────────────────────────────────────────────────────────
 export async function uploadImages(files, userId) {
@@ -29,6 +30,9 @@ export async function uploadImages(files, userId) {
 export async function createListing(draft, exteriorFiles, interiorFiles, user) {
     if (!user) throw new Error('Prijava je obvezna za objavo oglasa.');
 
+    const missing = ['priceEur', 'make', 'model', 'fuel'].filter(k => !draft[k]);
+    if (missing.length) throw new Error(`Manjkajo ključni tehnični podatki: ${missing.join(', ')}.`);
+
     const [exteriorUrls, interiorUrls] = await Promise.all([
         exteriorFiles.length > 0 ? uploadImages(exteriorFiles, user.uid) : Promise.resolve([]),
         interiorFiles.length > 0 ? uploadImages(interiorFiles, user.uid) : Promise.resolve([]),
@@ -52,7 +56,7 @@ export async function createListing(draft, exteriorFiles, interiorFiles, user) {
         entryType: draft.entryType || 'classic',
         vin: draft.vin || null,
         vinVerified: draft.vinVerified || false,
-        vinData: draft.vinData || null,
+        vinDetails: draft.vinData ? { ...draft.vinData } : null,
         vinOverrides: draft.vinOverrides || {},
 
         // Category
@@ -89,8 +93,10 @@ export async function createListing(draft, exteriorFiles, interiorFiles, user) {
         rangeKm: draft.rangeKm ? Number(draft.rangeKm) : null,
         towingKg: draft.towingKg ? Number(draft.towingKg) : null,
 
-        // Equipment (array of feature value strings)
-        equipment: draft.equipment || [],
+        // Equipment (array of feature value strings) — only allow known slugs
+        equipment: Array.isArray(draft.equipment)
+            ? draft.equipment.filter(v => v && ALL_EQUIPMENT_VALUES.includes(v))
+            : [],
 
         // Media
         images: {

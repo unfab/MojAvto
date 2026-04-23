@@ -1,5 +1,6 @@
 // Dashboard page — MojAvto.si
 // Shows after login — user's listings, stats, quick actions
+import QRCode from 'qrcode';
 import { getUserListings, deleteListing } from '../services/listingService.js';
 import {
     getBookingsForUser,
@@ -8,6 +9,12 @@ import {
     cancelBooking,
 } from '../services/bookingService.js';
 import { serviceLabels } from '../data/businesses.js';
+
+function isVerifiedBusiness(user) {
+    if (!user) return false;
+    const profile = window.__currentUserProfile || {};
+    return profile.businessTier === 'verified' || profile.role === 'mechanic';
+}
 
 export async function initDashboardPage() {
   const container = document.getElementById('app-container');
@@ -55,6 +62,12 @@ export async function initDashboardPage() {
           <span style="font-weight:700;color:#1e293b;">Moj profil</span>
           <span style="font-size:0.8rem;color:#64748b;margin-top:4px;">Uredi podatke</span>
         </a>
+        ${isVerifiedBusiness(user) ? `
+        <a href="#/servis/vnos" style="display:flex;flex-direction:column;align-items:flex-start;padding:1.5rem;background:rgba(255,255,255,0.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.5);border-radius:2rem;text-decoration:none;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:var(--shadow-glass);" onmouseover="this.style.borderColor='#16a34a';this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.5)';this.style.transform='translateY(0)';this.style.boxShadow='var(--shadow-glass)'">
+          <span style="font-size:1.8rem;margin-bottom:0.5rem;">🔧</span>
+          <span style="font-weight:700;color:#1e293b;">Servisni karton</span>
+          <span style="font-size:0.8rem;color:#64748b;margin-top:4px;">Vnos servisnega zapisa</span>
+        </a>` : ''}
       </div>
 
       <div style="background:rgba(255,255,255,0.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.5);border-radius:2rem;padding:1.5rem;box-shadow:var(--shadow-glass);margin-bottom:3rem;">
@@ -121,7 +134,10 @@ export async function initDashboardPage() {
               </div>
               <div style="text-align:right;">
                   <div style="font-weight:700;font-size:1.2rem;color:#f97316;margin-bottom:0.5rem;">${price}</div>
+                  <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
+                  <button class="btn btn-outline btn-sm print-listing-btn" data-id="${listing.id}" style="border-color:#3b82f6;color:#3b82f6;" title="Natisni prodajni list">🖨️ Natisni list</button>
                   <button class="btn btn-outline btn-sm delete-listing-btn" data-id="${listing.id}" data-title="${listing.make} ${listing.model}">Odstrani</button>
+              </div>
               </div>
           </div>
         `;
@@ -138,6 +154,16 @@ export async function initDashboardPage() {
           showRemoveListingPopup(id, title);
         });
       });
+
+      // Bind print functionality
+      const printButtons = listingsContainer.querySelectorAll('.print-listing-btn');
+      printButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.currentTarget.getAttribute('data-id');
+          const listing = listings.find(l => l.id === id);
+          if (listing) printListing(listing);
+        });
+      });
     }
   } catch (err) {
     console.error("Error loading user listings:", err);
@@ -147,6 +173,31 @@ export async function initDashboardPage() {
   // Render bookings and service history
   renderBookingsSection(user.uid);
   renderServiceHistorySection(user.uid);
+}
+
+// ── Print-to-Sell ─────────────────────────────────────────────
+async function printListing(listing) {
+  const imgUrl = listing.images?.exterior?.[0] || '';
+  const price = new Intl.NumberFormat('sl-SI', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(listing.price);
+
+  document.getElementById('print-title').textContent = `${listing.make} ${listing.model} ${listing.type || ''}`.trim();
+  document.getElementById('print-price').textContent = price;
+  document.getElementById('print-image').src = imgUrl;
+  document.getElementById('print-year').textContent = listing.year || '—';
+  document.getElementById('print-mileage').textContent = listing.mileage ? `${listing.mileage.toLocaleString('sl-SI')} km` : '—';
+  document.getElementById('print-fuel').textContent = listing.fuel || '—';
+  document.getElementById('print-transmission').textContent = listing.transmission || '—';
+  document.getElementById('print-power').textContent = listing.power ? `${listing.power} KM` : '—';
+
+  const qrUrl = `${window.location.origin}/#/oglas/${listing.id}?src=qr_print`;
+  const canvas = document.getElementById('print-qr-canvas');
+  try {
+    await QRCode.toCanvas(canvas, qrUrl, { width: 200, margin: 1 });
+  } catch (err) {
+    console.error('QR generiranje ni uspelo:', err);
+  }
+
+  window.print();
 }
 
 // ── Remove / Sold popup ───────────────────────────────────────
