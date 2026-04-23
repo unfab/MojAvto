@@ -16,6 +16,25 @@ import {
     getTransmissionPill
 } from '../utils/listingUtils.js';
 
+import { getVehicleRating } from '../utils/valuationScore.js';
+
+// ── Render star SVG (sm size, inline) ────────────────────────
+function renderStarBadge(stars) {
+    const dim = 13;
+    const color = 'var(--color-primary-start, #f59e0b)';
+    let svgs = '';
+    for (let i = 1; i <= 5; i++) {
+        const fill = stars >= i ? 'full' : stars >= i - 0.5 ? 'half' : 'empty';
+        const fc = fill === 'empty' ? '#374151' : color;
+        const gradId = `sg-${i}-${Math.random().toString(36).slice(2, 6)}`;
+        if (fill === 'half') {
+            svgs += `<svg width="${dim}" height="${dim}" viewBox="0 0 24 24" fill="none" style="display:block"><defs><linearGradient id="${gradId}"><stop offset="50%" stop-color="${color}"/><stop offset="50%" stop-color="#374151"/></linearGradient></defs><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="url(#${gradId})"/></svg>`;
+        } else {
+            svgs += `<svg width="${dim}" height="${dim}" viewBox="0 0 24 24" style="display:block"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="${fc}"/></svg>`;
+        }
+    }
+    return `<div style="display:inline-flex;align-items:center;gap:1px;">${svgs}</div>`;
+}
 
 // ── Power unit toggle ────────────────────────────────────────
 let currentPowerUnit = 'kw';
@@ -151,6 +170,26 @@ function renderCarCard(car) {
     const inCompare = isInCompare(car.id);
     const images = car.images?.exterior || [car.image];
     const rating = getPriceRating(car, sampleCars);
+
+    // Normalise car to listing shape for getVehicleRating
+    const listingShape = {
+        ...car,
+        id: car.id,
+        make: car.make,
+        model: car.model,
+        year: parseInt(car.year, 10) || 0,
+        priceEur: car.priceRaw,
+        equipment: car.equipment || [],
+    };
+    const allListingsShape = sampleCars.map(c => ({
+        ...c,
+        year: parseInt(c.year, 10) || 0,
+        priceEur: c.priceRaw,
+        equipment: c.equipment || [],
+    }));
+    const vRating = getVehicleRating(listingShape, allListingsShape);
+    const showStars = vRating && vRating.confidence !== 'low';
+
     const note = car.sellerNote
         ? (car.sellerNote.length > MAX_NOTE_CHARS
             ? car.sellerNote.slice(0, MAX_NOTE_CHARS) + '…'
@@ -193,7 +232,10 @@ function renderCarCard(car) {
                 </div>
                 <div class="car-price-box">
                     <span class="price-value">${car.price}</span>
-                    <span class="price-rating rating-${rating.color}">${rating.label}</span>
+                    ${showStars
+                        ? `<span class="price-rating" title="${vRating.label} · ${vRating.priceSignal}">${renderStarBadge(vRating.stars)}</span>`
+                        : `<span class="price-rating rating-${rating.color}">${rating.label}</span>`
+                    }
                 </div>
             </div>
 

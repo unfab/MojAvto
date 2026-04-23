@@ -2,7 +2,8 @@
 // Listing Detail Page — MojAvto.si
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { getListingById, incrementViewCount, formatPrice } from '../services/listingService.js';
+import { getListingById, incrementViewCount, formatPrice, getListings } from '../services/listingService.js';
+import { getVehicleRating } from '../utils/valuationScore.js';
 import { getEquipmentLabel, EQUIPMENT_GROUPS } from '../data/equipment.js';
 import { auth } from '../firebase.js';
 import { showAuthGate } from '../utils/authGate.js';
@@ -21,13 +22,64 @@ export async function initListingPage() {
     }
 
     try {
-        const listing = await getListingById(id);
+        const [listing, allListings] = await Promise.all([
+            getListingById(id),
+            getListings().catch(() => []),
+        ]);
         renderListing(listing);
         incrementViewCount(id);
+        injectRating(listing, allListings);
     } catch (err) {
         console.error('[ListingPage]', err);
         if (page) page.innerHTML = errorHtml('Oglas ne obstaja.', err.message);
     }
+}
+
+// ── Rating injection ──────────────────────────────────────────────────────────
+function injectRating(listing, allListings) {
+    const slot = document.getElementById('lpRatingBlock');
+    if (!slot) return;
+
+    const rating = getVehicleRating(listing, allListings);
+    if (!rating || rating.confidence === 'low') return;
+
+    const confidenceLabel = rating.confidence === 'high'
+        ? `Visoka zanesljivost (${rating.comparablesCount} oglasov)`
+        : `Srednja zanesljivost (${rating.comparablesCount} oglasov)`;
+
+    slot.innerHTML = `
+        <div style="margin:0.75rem 0 0.25rem; padding:0.75rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:0.75rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                ${renderStarsHtml(rating.stars, 18)}
+                <span style="font-size:0.9rem; font-weight:700; color:var(--color-primary-start);">${escHtml(rating.label)}</span>
+            </div>
+            <div style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">${escHtml(rating.priceSignal)}</div>
+            ${rating.equipmentSignal ? `<div style="font-size:0.78rem; color:#64748b; margin-top:2px;">Redka oprema: ${escHtml(rating.equipmentSignal)}</div>` : ''}
+            <div style="margin-top:6px;">
+                <span style="font-size:0.72rem; font-weight:600; padding:0.2rem 0.5rem; border-radius:999px; background:rgba(255,255,255,0.05); color:#64748b;">${escHtml(confidenceLabel)}</span>
+            </div>
+            ${rating.warning ? `
+            <div style="margin-top:0.6rem; padding:0.5rem 0.75rem; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:0.5rem; font-size:0.8rem; color:#fca5a5; display:flex; gap:0.4rem; align-items:center;">
+                <span>⚠️</span>${escHtml(rating.warning)}
+            </div>` : ''}
+        </div>`;
+}
+
+function renderStarsHtml(stars, dim) {
+    const color = 'var(--color-primary-start, #f59e0b)';
+    let html = '<div style="display:inline-flex;align-items:center;gap:2px;">';
+    for (let i = 1; i <= 5; i++) {
+        const fill = stars >= i ? 'full' : stars >= i - 0.5 ? 'half' : 'empty';
+        const fc = fill === 'empty' ? '#374151' : color;
+        const gid = `lp-s${i}`;
+        if (fill === 'half') {
+            html += `<svg width="${dim}" height="${dim}" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="${gid}"><stop offset="50%" stop-color="${color}"/><stop offset="50%" stop-color="#374151"/></linearGradient></defs><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="url(#${gid})"/></svg>`;
+        } else {
+            html += `<svg width="${dim}" height="${dim}" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="${fc}"/></svg>`;
+        }
+    }
+    html += '</div>';
+    return html;
 }
 
 // ── Favourite button ──────────────────────────────────────────────────────────
@@ -182,6 +234,7 @@ function renderListing(l) {
                         <div class="lp-price-pill-container">
                             <div class="lp-price">${formatPrice(l.priceRaw || l.priceEur || l.price || 0, l.callForPrice)}</div>
                         </div>
+                        <div id="lpRatingBlock"></div>
                         ${l.priceNegotiable ? '<div class="lp-price-sub">Cena je pogajalska</div>' : ''}
                         ${l.leaseAvailable && !l.leasingConditions ? '<div class="lp-price-sub">Možnost leasinga</div>' : ''}
                         ${l.leasingConditions ? `
