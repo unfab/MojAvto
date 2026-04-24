@@ -935,6 +935,7 @@ function confirmBooking() {
         serviceNumber,
         sendConfirmEmail: state.sendConfirmEmail,
         sendConfirmSms: state.sendConfirmSms,
+        ...(state.tireHandoff ? { tireHandoff: state.tireHandoff } : {}),
     };
 
     const saved = saveBooking(bookingData);
@@ -1123,17 +1124,59 @@ function renderBizContext() {
     if (window.lucide) window.lucide.createIcons();
 }
 
+// ── Tire handoff banner ───────────────────────────────────────
+function renderTireHandoffBanner(handoff) {
+    const existing = document.getElementById('tireHandoffBanner');
+    if (existing) return;
+
+    const banner = document.createElement('div');
+    banner.id = 'tireHandoffBanner';
+    banner.style.cssText = [
+        'background:linear-gradient(135deg,rgba(37,99,235,0.12),rgba(79,70,229,0.10))',
+        'border:1px solid rgba(37,99,235,0.25)',
+        'border-radius:1rem',
+        'padding:0.875rem 1.125rem',
+        'margin-bottom:1.25rem',
+        'display:flex',
+        'align-items:center',
+        'gap:0.75rem',
+        'font-size:0.82rem',
+        'color:#1e40af',
+    ].join(';');
+    banner.innerHTML = `
+        <i data-lucide="package-check" style="width:18px;height:18px;flex-shrink:0;color:#2563eb;"></i>
+        <span>
+            <strong>Nadaljujemo z rezervacijo montaže za vaše nove pnevmatike.</strong>
+            ${handoff.quantity}× ${handoff.tireBrand} ${handoff.tireModel} (${handoff.tireDim}) —
+            izberite samo še termin.
+        </span>
+    `;
+
+    const progress = document.getElementById('bookingProgress');
+    progress?.insertAdjacentElement('afterend', banner);
+    if (window.lucide) window.lucide.createIcons();
+}
+
 // ── Page init ─────────────────────────────────────────────────
 export async function initBookingPage() {
     console.log('[BookingPage] init');
     resetState();
+
+    // Check for tire purchase handoff
+    const tireHandoffRaw = sessionStorage.getItem('mojavto_tire_handoff');
+    const tireHandoff = tireHandoffRaw ? (() => {
+        try { return JSON.parse(tireHandoffRaw); } catch { return null; }
+    })() : null;
+    // Clear immediately so it doesn't re-trigger on next visit
+    if (tireHandoff) sessionStorage.removeItem('mojavto_tire_handoff');
 
     // Parse URL params
     const hash = window.location.hash;
     const bizIdMatch = hash.match(/[?&]businessId=([^&]+)/);
     const serviceParam = (hash.match(/[?&]service=([^&]+)/) || [])[1];
 
-    state.businessId = bizIdMatch ? bizIdMatch[1] : null;
+    // Handoff overrides businessId from URL if present
+    state.businessId = (tireHandoff?.vulcanizerId) || (bizIdMatch ? bizIdMatch[1] : null);
 
     if (!state.businessId) {
         const wizard = document.getElementById('bookingWizard');
@@ -1148,7 +1191,18 @@ export async function initBookingPage() {
     // Load business
     state.business = getBusinessById(state.businessId);
 
+    // Safety: if vulcanizer from handoff no longer exists, fall back to standard flow without handoff
     if (!state.business) {
+        if (tireHandoff) {
+            console.warn('[Booking] Handoff vulcanizer not found, falling back to standard flow');
+            const wizard = document.getElementById('bookingWizard');
+            if (wizard) wizard.innerHTML = `
+                <div class="booking-error">
+                    <h2>Vulkanizer ni več na voljo</h2>
+                    <p>Izbrani vulkanizer ni bil najden. Izberite drugega na <a href="#/zemljevid">zemljevidu</a>.</p>
+                </div>`;
+            return;
+        }
         const wizard = document.getElementById('bookingWizard');
         if (wizard) wizard.innerHTML = `
             <div class="booking-error">
@@ -1171,6 +1225,24 @@ export async function initBookingPage() {
         state.selectedServiceIds = [serviceParam];
     }
 
+    // Apply tire handoff automation
+    if (tireHandoff) {
+        state.tireHandoff = tireHandoff;
+
+        // Auto-select booking type: bring own tires (delivered via MojAvto)
+        state.bookingType = 'bring_own';
+
+        // Auto-select tyre_change service if offered by this business
+        if (state.business.servicesOffered.includes('tyre_change')) {
+            if (!state.selectedServiceIds.includes('tyre_change')) {
+                state.selectedServiceIds.push('tyre_change');
+            }
+        }
+
+        // Pre-fill notes with system message
+        state.notes = `SISTEMSKO SPOROČILO: Naročene pnevmatike (${tireHandoff.quantity}× ${tireHandoff.tireBrand} ${tireHandoff.tireModel}, dimenzije: ${tireHandoff.tireDim}) bodo dostavljene na vaš naslov. Stranka želi montažo.`;
+    }
+
     // Update back button
     const backLabel = document.getElementById('bookingBackLabel');
     if (backLabel) backLabel.textContent = 'Nazaj na profil';
@@ -1182,6 +1254,9 @@ export async function initBookingPage() {
 
     // Render initial progress
     renderProgress();
+
+    // Show handoff banner after progress bar
+    if (tireHandoff) renderTireHandoffBanner(tireHandoff);
 
     // Render first step
     renderStep(1);

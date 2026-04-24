@@ -171,6 +171,7 @@ export function saveBooking(bookingData) {
         id: generateId('bk'),
         status: 'pending',
         createdAt: new Date().toISOString(),
+        ...(bookingData.tireHandoff ? { linkedTireOrder: true, tireHandoff: bookingData.tireHandoff } : {}),
     };
     try {
         const userId = bookingData.userId || 'mock-user';

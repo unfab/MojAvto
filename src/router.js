@@ -53,6 +53,9 @@ async function router() {
     // Strip query params and decode special characters (e.g. č, š, ž)
     const path = decodeURIComponent(hash.split('?')[0]);
 
+    // Restore site navbar if leaving admin
+    document.getElementById('adm-hide-sitenav')?.remove();
+
     // Dispatch event to allow cleanup (e.g. unmounting React) before replacing content
     document.dispatchEvent(new CustomEvent('beforeRouteChange', { detail: { path } }));
 

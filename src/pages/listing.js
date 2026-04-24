@@ -104,17 +104,36 @@ function injectRating(listing, allListings) {
     if (!slot) return;
 
     const rating = getVehicleRating(listing, allListings);
-    if (!rating || rating.confidence === 'low') return;
+
+    // Low confidence or no rating — show a neutral pill
+    if (!rating || rating.confidence === 'low') {
+        slot.innerHTML = `
+            <div style="margin:0.6rem 0 0.1rem;">
+                <span style="display:inline-block; font-size:0.72rem; font-weight:600; padding:0.25rem 0.7rem; border-radius:999px; background:rgba(255,255,255,0.05); color:#64748b; border:1px solid rgba(255,255,255,0.08);">
+                    Ocena cene ni na voljo
+                </span>
+            </div>`;
+        return;
+    }
 
     const confidenceLabel = rating.confidence === 'high'
         ? `Visoka zanesljivost (${rating.comparablesCount} oglasov)`
         : `Srednja zanesljivost (${rating.comparablesCount} oglasov)`;
 
+    // Pick badge colour by label
+    const labelColor = {
+        'Odlična vrednost': '#22c55e',
+        'Dobra vrednost':   '#86efac',
+        'Poštena cena':     '#94a3b8',
+        'Nad povprečjem':   '#fb923c',
+        'Predrago':         '#ef4444',
+    }[rating.label] || 'var(--color-primary-start)';
+
     slot.innerHTML = `
         <div style="margin:0.75rem 0 0.25rem; padding:0.75rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:0.75rem;">
             <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
                 ${renderStarsHtml(rating.stars, 18)}
-                <span style="font-size:0.9rem; font-weight:700; color:var(--color-primary-start);">${escHtml(rating.label)}</span>
+                <span style="font-size:0.9rem; font-weight:700; color:${labelColor};">${escHtml(rating.label)}</span>
             </div>
             <div style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">${escHtml(rating.priceSignal)}</div>
             ${rating.equipmentSignal ? `<div style="font-size:0.78rem; color:#64748b; margin-top:2px;">Redka oprema: ${escHtml(rating.equipmentSignal)}</div>` : ''}
@@ -284,11 +303,20 @@ function renderListing(l) {
                         <div class="lp-description">${escHtml(l.description).replace(/\n/g, '<br>')}</div>
                     </section>` : ''}
 
-                    <!-- Technical specs -->
+                    <!-- Technical specs + equipment (combined) -->
                     ${renderSpecsHtml(l)}
 
-                    <!-- Equipment -->
-                    ${renderEquipmentHtml(l)}
+                    <!-- Seller note (private sellers) -->
+                    ${(!l.sellerType || l.sellerType === 'private') && l.sellerNote ? `
+                    <section class="lp-section">
+                        <div class="lp-seller-note-block">
+                            <i data-lucide="message-circle"></i>
+                            <div>
+                                <span class="lp-seller-note-label">Opomnik prodajalca</span>
+                                <p class="lp-seller-note-text">${escHtml(l.sellerNote)}</p>
+                            </div>
+                        </div>
+                    </section>` : ''}
 
                 </div>
 
@@ -598,35 +626,43 @@ function vinRow(icon, label, value, cls) {
 // ── Technical specs ───────────────────────────────────────────────────────────
 function renderSpecsHtml(l) {
     const km = l.mileageKm || l.mileage;
+    const powerKw = l.powerKw || l.power;
+    const powerLabel = powerKw
+        ? `${Math.round(powerKw * 1.35962)} KM (${powerKw} kW)`
+        : null;
 
     // 1. Key Specs for the primary box
     const keySpecs = [
         { label: 'Prva registracija', value: l.firstRegistration || l.year, icon: 'calendar-days' },
         { label: 'Vrsta vozila', value: l.subcategory || l.segment, icon: 'car' },
         { label: 'Prevoženi km', value: km ? fmtKm(km) : null, icon: 'gauge' },
-        { label: 'Št. lastnikov', value: l.previousOwnersCount ? l.previousOwnersCount + '.' : null, icon: 'user-check' },
+        { label: 'Moč', value: powerLabel, icon: 'zap' },
         { label: 'Vrsta goriva', value: l.fuel, icon: 'fuel' },
+        { label: 'Menjalnik', value: l.transmission, icon: 'settings-2' },
+        { label: 'Prostornina', value: l.engineCc ? l.engineCc + ' cc' : null, icon: 'pipette' },
         {
             label: l.fuel === 'Elektrika' ? 'Domet' : 'Poraba',
             value: buildConsumptionLabel(l),
-            icon: l.fuel === 'Elektrika' ? 'zap' : 'droplet'
+            icon: l.fuel === 'Elektrika' ? 'battery-charging' : 'droplet'
         },
-        { label: 'Menjalnik', value: l.transmission, icon: 'settings-2' },
-        { label: 'Prostornina', value: l.engineCc ? l.engineCc + ' cc' : null, icon: 'pipette' }
     ].filter(s => s.value !== null && s.value !== undefined && s.value !== '');
 
     // 2. All other specs for the accordion
     const secondarySpecs = [
-        ['Barva', l.color],
+        ['Stanje', l.condition],
+        ['Pogon', l.driveType],
+        ['Št. lastnikov', l.previousOwnersCount ? l.previousOwnersCount + '.' : null],
+        ['Barva', l.color ? (l.colorType && l.colorType !== 'solid' ? `${l.color} (${l.colorType})` : l.color) : null],
         ['Vrata', l.doorsCount],
         ['Sedeži', l.seatsCount],
-        ['Pogon', l.driveType],
         ['CO₂ emisije', l.co2 ? l.co2 + ' g/km' : null],
         ['Emisijski razred', l.emissionClass],
+        ['Tip hibrida', l.hybridType],
         ['Poraba (kombinirana)', l.fuelL100kmCombined ? l.fuelL100kmCombined + ' l/100 km' : (l.fuelL100km ? l.fuelL100km + ' l/100 km' : null)],
-        ['Poraba (mesto)', l.fuelL100kmCity ? l.fuelL100kmCity + ' l/100 km' : null],
-        ['Poraba (izven mesta)', l.fuelL100kmHighway ? l.fuelL100kmHighway + ' l/100 km' : null],
+        ['Poraba (mestna)', l.fuelL100kmCity ? l.fuelL100kmCity + ' l/100 km' : null],
+        ['Poraba (izvenmestna)', l.fuelL100kmHighway ? l.fuelL100kmHighway + ' l/100 km' : null],
         ['Kapaciteta baterije', l.batteryKwh ? l.batteryKwh + ' kWh' : null],
+        ['Domet WLTP', l.rangeKm ? l.rangeKm + ' km' : null],
         ['Vlečna masa', l.towingKg ? l.towingKg + ' kg' : null],
         ['Registrirana do', l.registeredUntil],
     ].filter(([, v]) => v !== null && v !== undefined && v !== '');
@@ -679,8 +715,63 @@ function renderSpecsHtml(l) {
                     </div>
                 </div>
                 ` : ''}
+
+                <!-- Equipment dropdowns (inline under specs) -->
+                ${renderEquipmentAccordions(l)}
             </div>
         </section>
+    `;
+}
+
+function renderEquipmentAccordions(l) {
+    const eq = l.equipment;
+    if (!eq || eq.length === 0) return '';
+
+    // Map group IDs into two top-level dropdowns
+    const INTERIOR_IDS = new Set(['udobje', 'parkiranje']);
+    const EQUIPMENT_IDS = new Set(['varnost', 'razsvetljava', 'multimedija', 'asistenti', 'prtljaga', 'garancija', 'moto', 'gospodarska']);
+
+    const interiorItems = [];
+    const equipmentItems = [];
+
+    for (const group of EQUIPMENT_GROUPS) {
+        const matched = group.items.filter(i => eq.includes(i.value));
+        if (matched.length === 0) continue;
+        if (INTERIOR_IDS.has(group.id)) {
+            interiorItems.push(...matched);
+        } else if (EQUIPMENT_IDS.has(group.id)) {
+            equipmentItems.push(...matched);
+        }
+    }
+
+    const accordionHtml = (icon, label, items) => {
+        if (items.length === 0) return '';
+        return `
+            <div class="adv-accordion glass-card">
+                <div class="adv-acc-header">
+                    <button type="button" class="adv-acc-trigger" aria-expanded="false">
+                        <span class="adv-acc-title">
+                            <i data-lucide="${icon}"></i>
+                            ${escHtml(label)}
+                            <span style="font-size:0.75rem; color:#94a3b8; margin-left:0.4rem;">(${items.length})</span>
+                        </span>
+                        <div class="adv-acc-right"><i data-lucide="chevron-down" class="adv-acc-chevron"></i></div>
+                    </button>
+                </div>
+                <div class="adv-acc-body" style="display:none; padding:1rem 1.5rem 1.25rem; flex-direction:row; flex-wrap:wrap; gap:0.6rem;">
+                    ${items.map(i => `<span class="adv-chip" style="cursor:default;">${escHtml(i.label)}</span>`).join('')}
+                </div>
+            </div>`;
+    };
+
+    if (interiorItems.length === 0 && equipmentItems.length === 0) return '';
+
+    return `
+        <div style="margin-top:1rem; padding-top:0.75rem; border-top:1px solid rgba(0,0,0,0.06);">
+            <span style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Oprema in funkcije</span>
+        </div>
+        ${accordionHtml('sofa', 'Notranjost in udobje', interiorItems)}
+        ${accordionHtml('shield-check', 'Oprema (varnost, razsvetljava, udobje, multimedija)', equipmentItems)}
     `;
 }
 
@@ -704,63 +795,65 @@ function buildConsumptionLabel(l) {
     return parts.length > 0 ? parts.join(' + ') : null;
 }
 
-// ── Equipment ─────────────────────────────────────────────────────────────────
-function renderEquipmentHtml(l) {
-    const eq = l.equipment;
-    if (!eq || eq.length === 0) return '';
-
-    // Group by EQUIPMENT_GROUPS
-    const activeGroups = [];
-    for (const group of EQUIPMENT_GROUPS) {
-        const items = group.items.filter(i => eq.includes(i.value));
-        if (items.length > 0) {
-            activeGroups.push({ label: group.label, icon: group.icon, items });
-        }
-    }
-
-    if (activeGroups.length === 0) return '';
-
-    return `
-        <section class="lp-section">
-            <h2 class="lp-section-title centered">Oprema in funkcije</h2>
-            <div class="lp-equipment-dropdowns">
-                ${activeGroups.map(g => `
-                    <div class="adv-accordion glass-card">
-                        <div class="adv-acc-header">
-                            <button type="button" class="adv-acc-trigger" aria-expanded="false">
-                                <span class="adv-acc-title">
-                                    <i data-lucide="${g.icon}"></i>
-                                    ${escHtml(g.label)}
-                                </span>
-                                <div class="adv-acc-right">
-                                    <i data-lucide="chevron-down" class="adv-acc-chevron"></i>
-                                </div>
-                            </button>
-                        </div>
-                        <div class="adv-acc-body" style="display:none; padding: 1.5rem; flex-direction: row; flex-wrap: wrap; gap: 0.75rem;">
-                            ${g.items.map(i => `<span class="adv-chip" style="cursor: default;">${escHtml(i.label)}</span>`).join('')}
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </section>
-    `;
-}
-
 // ── Seller card ───────────────────────────────────────────────────────────────
+const BH_DAY_LABELS = { mon:'Pon', tue:'Tor', wed:'Sre', thu:'Čet', fri:'Pet', sat:'Sob', sun:'Ned' };
+const BH_DAY_ORDER  = ['mon','tue','wed','thu','fri','sat','sun'];
+
 function renderSellerCardHtml(l) {
     const contact = l.contact || {};
-    const name = l.authorName || contact.name || 'Zasebni prodajalec';
+    const isBusiness = l.sellerType === 'business';
+    const name = l.authorName || contact.name || (isBusiness ? 'Avtohiša' : 'Zasebni prodajalec');
     const initial = name.charAt(0).toUpperCase();
     const phone = contact.phone;
     const email = contact.email;
     const loc = l.location || {};
 
+    const sellerBadge = isBusiness
+        ? `<span class="lp-seller-badge lp-seller-badge--business"><i data-lucide="building-2"></i> Avtohiša</span>`
+        : `<span class="lp-seller-badge lp-seller-badge--private"><i data-lucide="user"></i> Zasebni prodajalec</span>`;
+
+    // Business hours accordion
+    let hoursHtml = '';
+    if (isBusiness && l.businessHours && Object.keys(l.businessHours).length > 0) {
+        const rows = BH_DAY_ORDER
+            .filter(d => l.businessHours[d])
+            .map(d => `
+                <div class="lp-bh-row">
+                    <span class="lp-bh-day">${BH_DAY_LABELS[d]}</span>
+                    <span class="lp-bh-time">${escHtml(l.businessHours[d].from)} – ${escHtml(l.businessHours[d].to)}</span>
+                </div>`)
+            .join('');
+        hoursHtml = `
+            <div class="adv-accordion lp-bh-accordion" style="margin-top:0.75rem;">
+                <div class="adv-acc-header">
+                    <button type="button" class="adv-acc-trigger" aria-expanded="false" style="padding:0.6rem 0.85rem;">
+                        <span class="adv-acc-title" style="font-size:0.82rem;">
+                            <i data-lucide="clock"></i> Delovni čas
+                        </span>
+                        <div class="adv-acc-right"><i data-lucide="chevron-down" class="adv-acc-chevron"></i></div>
+                    </button>
+                </div>
+                <div class="adv-acc-body" style="display:none; padding:0.75rem 1rem; flex-direction:column; gap:0.35rem;">
+                    ${rows}
+                </div>
+            </div>`;
+    }
+
+    // Private seller note
+    let noteHtml = '';
+    if (!isBusiness && l.sellerNote) {
+        noteHtml = `
+            <div class="lp-seller-note">
+                <i data-lucide="message-circle"></i>
+                <span>${escHtml(l.sellerNote)}</span>
+            </div>`;
+    }
+
     return `
         <div class="lp-sidebar-card lp-seller-card centered">
             <div class="lp-seller-avatar">${initial}</div>
             <div class="lp-seller-name">${escHtml(name)}</div>
-            <div class="lp-seller-sub">Zasebni prodajalec</div>
+            ${sellerBadge}
 
             ${loc.city ? `
             <div class="lp-seller-location">
@@ -777,6 +870,8 @@ function renderSellerCardHtml(l) {
                     <i data-lucide="mail"></i> ${escHtml(email)}
                 </a>` : ''}
             </div>
+            ${noteHtml}
+            ${hoursHtml}
         </div>`;
 }
 

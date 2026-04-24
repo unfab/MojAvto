@@ -1,0 +1,62 @@
+{
+  "BMW Motorrad": {
+    "S 1000 RR": { "type": "SportniMotor", "variants": ["S 1000 RR", "S 1000 RR M"] },
+    "R 1250 GS": { "type": "Enduro", "variants": ["R 1250 GS", "R 1250 GS Adventure"] },
+    "R 1250 RT": { "type": "Tourer", "variants": ["R 1250 RT"] },
+    "F 900 R": { "type": "NakedBike", "variants": ["F 900 R", "F 900 XR"] },
+    "M 1000 RR": { "type": "SportniMotor", "variants": ["M 1000 RR"] }
+  },
+  "Honda": {
+    "CBR 1000RR": { "type": "SportniMotor", "variants": ["CBR 1000RR", "CBR 1000RR-R Fireblade"] },
+    "CB 1000R": { "type": "NakedBike", "variants": ["CB 1000R", "CB 1000R Black Edition"] },
+    "Africa Twin": { "type": "Enduro", "variants": ["CRF 1100L", "CRF 1100L Adventure Sports"] },
+    "CB 650R": { "type": "NakedBike", "variants": ["CB 650R"] },
+    "PCX 125": { "type": "Skuter", "variants": ["PCX 125", "PCX e:HEV"] }
+  },
+  "Yamaha": {
+    "R1": { "type": "SportniMotor", "variants": ["YZF-R1", "YZF-R1M"] },
+    "MT-09": { "type": "NakedBike", "variants": ["MT-09", "MT-09 SP"] },
+    "Ténéré 700": { "type": "Enduro", "variants": ["Ténéré 700", "Ténéré 700 World Raid"] },
+    "XMAX 300": { "type": "Skuter", "variants": ["XMAX 300"] },
+    "MT-07": { "type": "NakedBike", "variants": ["MT-07"] }
+  },
+  "Kawasaki": {
+    "Ninja ZX-10R": { "type": "SportniMotor", "variants": ["Ninja ZX-10R", "Ninja ZX-10RR"] },
+    "Z900": { "type": "NakedBike", "variants": ["Z900", "Z900 SE"] },
+    "Versys 1000": { "type": "Tourer", "variants": ["Versys 1000", "Versys 1000 SE"] },
+    "KX 450": { "type": "Cross", "variants": ["KX 450", "KX 450SR"] }
+  },
+  "Ducati": {
+    "Panigale V4": { "type": "SportniMotor", "variants": ["Panigale V4", "Panigale V4S", "Panigale V4R"] },
+    "Monster": { "type": "NakedBike", "variants": ["Monster", "Monster SP"] },
+    "Multistrada V4": { "type": "Tourer", "variants": ["Multistrada V4", "Multistrada V4S", "Multistrada V4 Rally"] },
+    "Scrambler": { "type": "NakedBike", "variants": ["Scrambler Icon", "Scrambler Full Throttle"] }
+  },
+  "KTM": {
+    "1290 Super Duke R": { "type": "NakedBike", "variants": ["1290 Super Duke R", "1290 Super Duke RR"] },
+    "890 Adventure": { "type": "Enduro", "variants": ["890 Adventure", "890 Adventure R"] },
+    "450 EXC-F": { "type": "Enduro", "variants": ["450 EXC-F", "450 EXC-F Six Days"] },
+    "RC 390": { "type": "SportniMotor", "variants": ["RC 390"] }
+  },
+  "Harley-Davidson": {
+    "Sportster S": { "type": "Chopper", "variants": ["Sportster S"] },
+    "Fat Boy": { "type": "Chopper", "variants": ["Fat Boy 114", "Fat Boy 114 Anniversary"] },
+    "Road Glide": { "type": "Tourer", "variants": ["Road Glide", "Road Glide Special"] },
+    "Street Glide": { "type": "Tourer", "variants": ["Street Glide", "Street Glide Special"] }
+  },
+  "Suzuki": {
+    "GSX-R1000": { "type": "SportniMotor", "variants": ["GSX-R1000", "GSX-R1000R"] },
+    "V-Strom 1050": { "type": "Enduro", "variants": ["V-Strom 1050", "V-Strom 1050XT"] },
+    "Burgman 400": { "type": "Skuter", "variants": ["Burgman 400"] }
+  },
+  "Triumph": {
+    "Street Triple": { "type": "NakedBike", "variants": ["Street Triple R", "Street Triple RS"] },
+    "Tiger 900": { "type": "Enduro", "variants": ["Tiger 900", "Tiger 900 GT", "Tiger 900 Rally"] },
+    "Bonneville T120": { "type": "NakedBike", "variants": ["Bonneville T120", "Bonneville T120 Black"] }
+  },
+  "Aprilia": {
+    "RSV4": { "type": "SportniMotor", "variants": ["RSV4 1100", "RSV4 Factory"] },
+    "Tuono V4": { "type": "NakedBike", "variants": ["Tuono V4", "Tuono V4 Factory"] },
+    "RS 660": { "type": "SportniMotor", "variants": ["RS 660"] }
+  }
+}

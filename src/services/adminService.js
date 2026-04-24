@@ -202,12 +202,13 @@ export async function getUserListingsCount(uid) {
 export async function getBrands(categoryFilter = null) {
     let q;
     if (categoryFilter) {
-        q = query(collection(db, 'brands'), where('category', '==', categoryFilter), orderBy('name'));
+        q = query(collection(db, 'brands'), where('category', '==', categoryFilter));
     } else {
-        q = query(collection(db, 'brands'), orderBy('name'));
+        q = query(collection(db, 'brands'));
     }
     const snap = await getDocs(q);
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    return docs.sort((a, b) => a.name.localeCompare(b.name, 'sl'));
 }
 
 export async function createBrand(data) {
@@ -234,12 +235,13 @@ export async function deleteBrand(id) {
 export async function getModels(brandId = null) {
     let q;
     if (brandId) {
-        q = query(collection(db, 'models'), where('brandId', '==', brandId), orderBy('name'));
+        q = query(collection(db, 'models'), where('brandId', '==', brandId));
     } else {
-        q = query(collection(db, 'models'), orderBy('name'));
+        q = query(collection(db, 'models'));
     }
     const snap = await getDocs(q);
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    return docs.sort((a, b) => a.name.localeCompare(b.name, 'sl'));
 }
 
 export async function createModel(data) {
@@ -280,7 +282,7 @@ export async function importTaxonomyRows(rows, adminUid, adminName) {
     const brandMap = new Map(existingBrands.map(b => [normalize(b.name + '|' + b.category), b]));
     const modelMap = new Map(existingModels.map(m => [normalize(m.name + '|' + m.brandId), m]));
 
-    const batch = writeBatch(db);
+    let batch = writeBatch(db);
     let batchCount = 0;
 
     for (const row of rows) {
@@ -335,6 +337,7 @@ export async function importTaxonomyRows(rows, adminUid, adminName) {
             // Firestore batch limit: 500 ops
             if (batchCount >= 490) {
                 await batch.commit();
+                batch = writeBatch(db);
                 batchCount = 0;
             }
         } catch (e) {

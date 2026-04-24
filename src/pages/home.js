@@ -4,7 +4,9 @@ import {
     getFuelPill, 
     getPowerPill, 
     getConsumptionPill, 
-    getTransmissionPill 
+    getTransmissionPill,
+    getYearPill,
+    getKmPill
 } from '../utils/listingUtils.js';
 
 
@@ -51,18 +53,16 @@ function setupRotatingAds() {
                 <a href="#/oglas?id=${car.id}" class="sponsored-mini-card">
                     <img src="${img}" alt="${car.title}">
                     <h4 class="sponsored-title">${car.make} ${car.model}</h4>
-                    <div class="sponsored-specs">
-                        <div class="spec-row">
-                            <span><i data-lucide="calendar"></i> ${car.year}</span>
+                    <div class="sponsored-specs centered">
+                        <div class="spec-row centered">
+                            ${getYearPill(car.year)}
+                            ${getKmPill(car.mileage)}
                         </div>
-                        <div class="spec-row">
-                            <span><i data-lucide="gauge"></i> ${car.mileage}</span>
-                        </div>
-                        <div class="spec-row">
+                        <div class="spec-row centered">
                             ${getFuelPill(car.fuel)}
                             ${getTransmissionPill(car.transmission)}
                         </div>
-                        <div class="spec-row">
+                        <div class="spec-row centered">
                             ${getConsumptionPill(car)}
                         </div>
                     </div>
@@ -152,12 +152,12 @@ function renderListingsSection(containerId, sectionId, listings, hideIfEmpty = f
                     <div class="listing-card-content">
                         <h3 class="listing-card-title">${listing.make} ${listing.model}</h3>
                         <div class="listing-card-specs centered">
-                            <div class="spec-row">
-                                <div class="spec-pill"><i data-lucide="calendar"></i> ${listing.year}</div>
-                                <div class="spec-pill"><i data-lucide="gauge"></i> ${listing.mileage}</div>
+                            <div class="spec-row centered">
+                                ${getYearPill(listing.year)}
+                                ${getKmPill(listing.mileage)}
                                 <div class="spec-pill"><i data-lucide="cog"></i> ${(listing.engineCc / 1000).toFixed(1)}L</div>
                             </div>
-                            <div class="spec-row">
+                            <div class="spec-row centered">
                                 ${getFuelPill(listing.fuel)}
                                 ${getTransmissionPill(listing.transmission)}
                                 ${getConsumptionPill(listing)}

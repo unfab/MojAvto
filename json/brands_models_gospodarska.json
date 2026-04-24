@@ -1,0 +1,544 @@
+{
+  "Mercedes-Benz": {
+    "Sprinter": {
+      "type": "Dostavna",
+      "variants": [
+        "Sprinter 314",
+        "Sprinter 316",
+        "Sprinter 319",
+        "Sprinter 416",
+        "Sprinter 519"
+      ]
+    },
+    "Vito": {
+      "type": "Dostavna",
+      "variants": [
+        "Vito 114",
+        "Vito 116",
+        "Vito 119"
+      ]
+    },
+    "Actros": {
+      "type": "Tovorna",
+      "variants": [
+        "Actros 1842",
+        "Actros 1845",
+        "Actros 2542",
+        "Actros 2545"
+      ]
+    },
+    "Atego": {
+      "type": "Tovorna",
+      "variants": [
+        "Atego 818",
+        "Atego 1218",
+        "Atego 1530"
+      ]
+    },
+    "Arocs": {
+      "type": "Tovorna",
+      "variants": [
+        "Arocs 1840",
+        "Arocs 2040",
+        "Arocs 3340"
+      ]
+    }
+  },
+  "Volkswagen": {
+    "Transporter": {
+      "type": "Dostavna",
+      "variants": [
+        "Transporter T6.1",
+        "Transporter T7"
+      ]
+    },
+    "Crafter": {
+      "type": "Dostavna",
+      "variants": [
+        "Crafter 30",
+        "Crafter 35",
+        "Crafter 50"
+      ]
+    },
+    "Caddy": {
+      "type": "Dostavna",
+      "variants": [
+        "Caddy Cargo",
+        "Caddy Maxi Cargo"
+      ]
+    }
+  },
+  "Ford": {
+    "Transit": {
+      "type": "Dostavna",
+      "variants": [
+        "Transit 350",
+        "Transit 350L",
+        "Transit 470"
+      ]
+    },
+    "Transit Custom": {
+      "type": "Dostavna",
+      "variants": [
+        "Transit Custom 280",
+        "Transit Custom 320"
+      ]
+    },
+    "Transit Connect": {
+      "type": "Dostavna",
+      "variants": [
+        "Transit Connect L1",
+        "Transit Connect L2"
+      ]
+    }
+  },
+  "Iveco": {
+    "Daily": {
+      "type": "Dostavna",
+      "variants": [
+        "Daily 35S",
+        "Daily 35C",
+        "Daily 50C",
+        "Daily 70C"
+      ]
+    },
+    "S-Way": {
+      "type": "Tovorna",
+      "variants": [
+        "S-Way 400",
+        "S-Way 480",
+        "S-Way 570"
+      ]
+    },
+    "Stralis": {
+      "type": "Tovorna",
+      "variants": [
+        "Stralis 400",
+        "Stralis 480"
+      ]
+    },
+    "Eurocargo": {
+      "type": "Tovorna",
+      "variants": [
+        "Eurocargo 80E",
+        "Eurocargo 120E",
+        "Eurocargo 160E"
+      ]
+    }
+  },
+  "MAN": {
+    "TGX": {
+      "type": "Tovorna",
+      "variants": [
+        "TGX 18.400",
+        "TGX 18.460",
+        "TGX 18.510",
+        "TGX 26.500"
+      ]
+    },
+    "TGS": {
+      "type": "Tovorna",
+      "variants": [
+        "TGS 18.400",
+        "TGS 26.400",
+        "TGS 33.400"
+      ]
+    },
+    "TGL": {
+      "type": "Tovorna",
+      "variants": [
+        "TGL 8.190",
+        "TGL 12.220"
+      ]
+    },
+    "TGM": {
+      "type": "Tovorna",
+      "variants": [
+        "TGM 15.290",
+        "TGM 18.290"
+      ]
+    }
+  },
+  "Volvo": {
+    "FH": {
+      "type": "Tovorna",
+      "variants": [
+        "FH 460",
+        "FH 500",
+        "FH 540",
+        "FH 16 600"
+      ]
+    },
+    "FM": {
+      "type": "Tovorna",
+      "variants": [
+        "FM 370",
+        "FM 420",
+        "FM 460"
+      ]
+    },
+    "FMX": {
+      "type": "Tovorna",
+      "variants": [
+        "FMX 370",
+        "FMX 420",
+        "FMX 460"
+      ]
+    }
+  },
+  "Scania": {
+    "R Series": {
+      "type": "Tovorna",
+      "variants": [
+        "R 410",
+        "R 450",
+        "R 500",
+        "R 560"
+      ]
+    },
+    "S Series": {
+      "type": "Tovorna",
+      "variants": [
+        "S 450",
+        "S 500",
+        "S 560",
+        "S 650"
+      ]
+    },
+    "G Series": {
+      "type": "Tovorna",
+      "variants": [
+        "G 380",
+        "G 410",
+        "G 450"
+      ]
+    }
+  },
+  "DAF": {
+    "XF": {
+      "type": "Tovorna",
+      "variants": [
+        "XF 410",
+        "XF 450",
+        "XF 480",
+        "XF 530"
+      ]
+    },
+    "XG": {
+      "type": "Tovorna",
+      "variants": [
+        "XG 480",
+        "XG 530",
+        "XG+ 480"
+      ]
+    },
+    "LF": {
+      "type": "Tovorna",
+      "variants": [
+        "LF 180",
+        "LF 210",
+        "LF 250"
+      ]
+    }
+  },
+  "Renault": {
+    "Trafic": {
+      "type": "Dostavna",
+      "variants": [
+        "Trafic L1H1",
+        "Trafic L2H1",
+        "Trafic L2H2"
+      ]
+    },
+    "Master": {
+      "type": "Dostavna",
+      "variants": [
+        "Master L2H2",
+        "Master L3H2",
+        "Master L4H3"
+      ]
+    },
+    "T Series": {
+      "type": "Tovorna",
+      "variants": [
+        "T 430",
+        "T 460",
+        "T 480",
+        "T 520"
+      ]
+    }
+  },
+  "Peugeot": {
+    "Boxer": {
+      "type": "Dostavna",
+      "variants": [
+        "Boxer 330",
+        "Boxer 335",
+        "Boxer 435"
+      ]
+    },
+    "Expert": {
+      "type": "Dostavna",
+      "variants": [
+        "Expert S",
+        "Expert M",
+        "Expert L"
+      ]
+    }
+  },
+  "Citroën": {
+    "Jumper": {
+      "type": "Dostavna",
+      "variants": [
+        "Jumper 30",
+        "Jumper 33",
+        "Jumper 35"
+      ]
+    },
+    "Dispatch": {
+      "type": "Dostavna",
+      "variants": [
+        "Dispatch S",
+        "Dispatch M",
+        "Dispatch XL"
+      ]
+    }
+  },
+  "Fiat": {
+    "Ducato": {
+      "type": "Dostavna",
+      "variants": [
+        "Ducato 30",
+        "Ducato 33",
+        "Ducato 35",
+        "Ducato 40"
+      ]
+    },
+    "Doblo Cargo": {
+      "type": "Dostavna",
+      "variants": [
+        "Doblo Cargo L1H1",
+        "Doblo Cargo L2H1"
+      ]
+    }
+  },
+  "Opel": {
+    "Movano": {
+      "type": "Dostavna",
+      "variants": [
+        "Movano L1H1",
+        "Movano L2H2",
+        "Movano L3H2"
+      ]
+    },
+    "Vivaro": {
+      "type": "Dostavna",
+      "variants": [
+        "Vivaro S",
+        "Vivaro M",
+        "Vivaro L"
+      ]
+    }
+  },
+  "Nissan": {
+    "Interstar": {
+      "type": "Dostavna",
+      "variants": [
+        "Interstar L1H1",
+        "Interstar L2H2",
+        "Interstar L3H2"
+      ]
+    }
+  },
+  "Setra": {
+    "S 516 HD": {
+      "type": "Avtobus",
+      "variants": [
+        "S 516 HD",
+        "S 516 MDH"
+      ]
+    },
+    "S 531 DT": {
+      "type": "Avtobus",
+      "variants": [
+        "S 531 DT"
+      ]
+    }
+  },
+  "Neoplan": {
+    "Cityliner": {
+      "type": "Avtobus",
+      "variants": [
+        "Cityliner",
+        "Cityliner L"
+      ]
+    },
+    "Tourliner": {
+      "type": "Avtobus",
+      "variants": [
+        "Tourliner",
+        "Tourliner SHD"
+      ]
+    }
+  },
+  "Caterpillar": {
+    "320": {
+      "type": "Gradbena",
+      "variants": [
+        "320 GC",
+        "320",
+        "320 Next Gen"
+      ]
+    },
+    "336": {
+      "type": "Gradbena",
+      "variants": [
+        "336",
+        "336 Next Gen"
+      ]
+    },
+    "D6": {
+      "type": "Gradbena",
+      "variants": [
+        "D6 XE",
+        "D6T"
+      ]
+    }
+  },
+  "JCB": {
+    "3CX": {
+      "type": "Gradbena",
+      "variants": [
+        "3CX",
+        "3CX Pro",
+        "3CX Compact"
+      ]
+    },
+    "4CX": {
+      "type": "Gradbena",
+      "variants": [
+        "4CX",
+        "4CX Eco"
+      ]
+    },
+    "Fastrac": {
+      "type": "Kmetijska",
+      "variants": [
+        "Fastrac 4000",
+        "Fastrac 8000"
+      ]
+    }
+  },
+  "John Deere": {
+    "6M Series": {
+      "type": "Kmetijska",
+      "variants": [
+        "6120M",
+        "6130M",
+        "6145M"
+      ]
+    },
+    "8R Series": {
+      "type": "Kmetijska",
+      "variants": [
+        "8R 250",
+        "8R 310",
+        "8R 370"
+      ]
+    },
+    "5M Series": {
+      "type": "Kmetijska",
+      "variants": [
+        "5075M",
+        "5090M",
+        "5100M"
+      ]
+    }
+  },
+  "Fendt": {
+    "700 Vario": {
+      "type": "Kmetijska",
+      "variants": [
+        "714 Vario",
+        "716 Vario",
+        "720 Vario",
+        "724 Vario"
+      ]
+    },
+    "800 Vario": {
+      "type": "Kmetijska",
+      "variants": [
+        "818 Vario",
+        "820 Vario",
+        "824 Vario"
+      ]
+    }
+  },
+  "Krone": {
+    "Profi Liner": {
+      "type": "TovornePrikolice",
+      "variants": [
+        "Profi Liner",
+        "Profi Liner Multi"
+      ]
+    },
+    "Box Liner": {
+      "type": "TovornePrikolice",
+      "variants": [
+        "Box Liner 7.7",
+        "Box Liner 8.7"
+      ]
+    }
+  },
+  "Schmitz Cargobull": {
+    "S.KO": {
+      "type": "TovornePrikolice",
+      "variants": [
+        "S.KO 24",
+        "S.KO 27"
+      ]
+    },
+    "S.CS": {
+      "type": "TovornePrikolice",
+      "variants": [
+        "S.CS 24",
+        "S.CS 27"
+      ]
+    }
+  },
+  "Toyota Forklift": {
+    "Tonero": {
+      "type": "Vilicarji",
+      "variants": [
+        "Tonero 1.5T",
+        "Tonero 2.0T",
+        "Tonero 2.5T",
+        "Tonero 3.0T"
+      ]
+    },
+    "Traigo": {
+      "type": "Vilicarji",
+      "variants": [
+        "Traigo 48V",
+        "Traigo 80V"
+      ]
+    }
+  },
+  "Still": {
+    "RX 20": {
+      "type": "Vilicarji",
+      "variants": [
+        "RX 20-16",
+        "RX 20-20"
+      ]
+    },
+    "FM-X": {
+      "type": "Vilicarji",
+      "variants": [
+        "FM-X 10",
+        "FM-X 14",
+        "FM-X 17"
+      ]
+    }
+  }
+}

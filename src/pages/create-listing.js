@@ -91,6 +91,8 @@ let state = {
     description: '',
     priceEur: '', priceNegotiable: false, priceInclVat: false, leaseAvailable: false, callForPrice: false, priceIsFinal: false,
     sellerType: 'private',
+    sellerNote: '',
+    businessHours: {},
     leasingConditions: '',
     location: { city: '', postalCode: '', region: '' },
     contact: { name: '', phone: '', showPhone: false, email: '' },
@@ -1591,6 +1593,18 @@ function renderPriceStep() {
 // ── Step 9: Location & contact ────────────────────────────────────────────────
 function renderLocationStep() {
     const regions = ['Osrednjeslovenska','Gorenjska','Podravska','Savinjska','Dolenjska','Obalno-kraška','Koroška','Pomurska','Zasavska','Posavska','Primorsko-notranjska','Goriška'];
+    const isBusiness = state.sellerType === 'business';
+
+    const BH_DAYS = [
+        { key: 'mon', label: 'Ponedeljek' },
+        { key: 'tue', label: 'Torek' },
+        { key: 'wed', label: 'Sreda' },
+        { key: 'thu', label: 'Četrtek' },
+        { key: 'fri', label: 'Petek' },
+        { key: 'sat', label: 'Sobota' },
+        { key: 'sun', label: 'Nedelja' },
+    ];
+    const bh = state.businessHours || {};
 
     setHtml(`
         <div class="cl-card">
@@ -1636,6 +1650,37 @@ function renderLocationStep() {
                 </div>
             </div>
 
+            ${!isBusiness ? `
+            <hr style="border:none;border-top:1px solid rgba(0,0,0,0.07);margin:1.25rem 0;" />
+            <div class="cl-field">
+                <label class="cl-label">Opomnik za kupce <span style="font-size:0.78rem;color:#94a3b8;">(neobvezno)</span></label>
+                <textarea class="cl-input" id="fSellerNote" rows="3" placeholder="npr. Kliči samo po 17:00 uri, Ogled možen ob vikendih..."
+                    style="resize:vertical;">${escHtml(state.sellerNote||'')}</textarea>
+                <span class="cl-hint">Prikazano pod vašim profilom na oglasu.</span>
+            </div>` : ''}
+
+            ${isBusiness ? `
+            <hr style="border:none;border-top:1px solid rgba(0,0,0,0.07);margin:1.25rem 0;" />
+            <div class="cl-field">
+                <label class="cl-label">Delovni čas salona <span style="font-size:0.78rem;color:#94a3b8;">(neobvezno)</span></label>
+                <div class="cl-bh-grid" style="display:grid;gap:0.5rem;margin-top:0.5rem;">
+                    ${BH_DAYS.map(d => `
+                    <div class="cl-bh-row" style="display:grid;grid-template-columns:7rem 1fr 0.4rem 1fr auto;align-items:center;gap:0.5rem;">
+                        <label class="cl-checkbox-label" style="margin:0;">
+                            <input type="checkbox" class="bh-check" data-day="${d.key}" ${bh[d.key] ? 'checked' : ''} />
+                            ${d.label}
+                        </label>
+                        <input class="cl-input" type="time" id="bh_${d.key}_from" value="${escHtml(bh[d.key]?.from||'08:00')}"
+                            ${bh[d.key] ? '' : 'disabled'} style="padding:0.4rem;" />
+                        <span style="text-align:center;color:#94a3b8;">–</span>
+                        <input class="cl-input" type="time" id="bh_${d.key}_to" value="${escHtml(bh[d.key]?.to||'17:00')}"
+                            ${bh[d.key] ? '' : 'disabled'} style="padding:0.4rem;" />
+                        <span class="cl-bh-closed" id="bh_${d.key}_label"
+                            style="font-size:0.75rem;color:#94a3b8;width:4rem;">${bh[d.key] ? '' : 'Zaprto'}</span>
+                    </div>`).join('')}
+                </div>
+            </div>` : ''}
+
             <div class="cl-nav">
                 <button class="cl-btn cl-btn--ghost" id="btnLocBack">Nazaj</button>
                 <button class="cl-btn cl-btn--primary" id="btnLocNext">Nadaljuj</button>
@@ -1646,6 +1691,20 @@ function renderLocationStep() {
     document.getElementById('btnLocBack').addEventListener('click', goPrev);
     initCustomSelects();
     if (window.lucide) window.lucide.createIcons();
+
+    // Wire business hours checkboxes
+    if (isBusiness) {
+        document.querySelectorAll('.bh-check').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const day = cb.dataset.day;
+                const enabled = cb.checked;
+                document.getElementById(`bh_${day}_from`).disabled = !enabled;
+                document.getElementById(`bh_${day}_to`).disabled = !enabled;
+                document.getElementById(`bh_${day}_label`).textContent = enabled ? '' : 'Zaprto';
+            });
+        });
+    }
+
     document.getElementById('btnLocNext').addEventListener('click', () => {
         const city = document.getElementById('fCity').value.trim();
         const name = document.getElementById('fContactName').value.trim();
@@ -1663,6 +1722,23 @@ function renderLocationStep() {
             showPhone: document.getElementById('fShowPhone').checked,
             email: auth.currentUser?.email || '',
         };
+
+        if (!isBusiness) {
+            state.sellerNote = document.getElementById('fSellerNote')?.value.trim() || '';
+        } else {
+            const hours = {};
+            BH_DAYS.forEach(d => {
+                const cb = document.querySelector(`.bh-check[data-day="${d.key}"]`);
+                if (cb?.checked) {
+                    hours[d.key] = {
+                        from: document.getElementById(`bh_${d.key}_from`).value || '08:00',
+                        to:   document.getElementById(`bh_${d.key}_to`).value   || '17:00',
+                    };
+                }
+            });
+            state.businessHours = hours;
+        }
+
         goNext();
     });
 }

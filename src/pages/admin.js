@@ -42,12 +42,36 @@ export async function initAdminPage() {
     _adminUser = user;
     _adminRole = await getUserRole(user.uid);
 
+    // hide the main site navbar while on admin page
+    if (!document.getElementById('adm-hide-sitenav')) {
+        const s = document.createElement('style');
+        s.id = 'adm-hide-sitenav';
+        s.textContent = '.sticky-nav { display: none !important; }';
+        document.head.appendChild(s);
+    }
+
     renderShell();
     attachSidebarNav();
     navigateTo('dashboard');
 }
 
 // ── Shell layout ──────────────────────────────────────────────────────────────
+const NAV_ICONS = {
+    dashboard:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
+    listings:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>`,
+    users:      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/></svg>`,
+    taxonomy:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h10M4 18h6"/><circle cx="19" cy="17" r="3"/><path d="m21.5 19.5-1.5-1.5"/></svg>`,
+    featured:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+    reports:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    analytics:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    seo:        `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>`,
+    payments:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
+    media:      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
+    audit:      `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+    settings:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
+    vozila:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
+};
+
 function renderShell() {
     const container = document.getElementById('app-container');
     container.innerHTML = `
@@ -55,44 +79,60 @@ function renderShell() {
       <!-- Sidebar -->
       <aside class="adm-sidebar" id="adm-sidebar">
         <div class="adm-brand">
-          <span class="adm-brand-icon">🚗</span>
-          <span class="adm-brand-text">MojAvto<em>Admin</em></span>
+          <div class="adm-brand-logo">
+            <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#f97316"/><path d="M6 20h20M9 20l1.5-6h11L23 20M10 17h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><circle cx="11" cy="22" r="1.5" fill="#fff"/><circle cx="21" cy="22" r="1.5" fill="#fff"/></svg>
+          </div>
+          <div class="adm-brand-text">MojAvto <span>Admin</span></div>
         </div>
+
+        <div class="adm-sidebar-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="adm-global-search" id="adm-global-search" type="search" placeholder="Išči…" />
+        </div>
+
         <nav class="adm-nav">
-          ${navItem('dashboard',   '📊', 'Dashboard')}
-          ${navItem('listings',    '📋', 'Oglasi')}
-          ${navItem('users',       '👥', 'Uporabniki')}
-          ${navItem('taxonomy',    '🏷️', 'Taksonomija')}
-          ${navItem('featured',    '⭐', 'Sponzorirani')}
-          ${navItem('reports',     '🚩', 'Poročila')}
-          ${navItem('analytics',   '📈', 'Analitika')}
-          ${navItem('seo',         '🔍', 'SEO')}
-          ${navItem('payments',    '💳', 'Plačila')}
-          ${navItem('media',       '🖼️', 'Mediji')}
-          ${navItem('audit',       '📜', 'Audit log')}
-          ${navItem('settings',    '⚙️', 'Nastavitve')}
+          <div class="adm-nav-group-label">Pregled</div>
+          ${navItem('dashboard',    'dashboard', 'Dashboard')}
+
+          <div class="adm-nav-group-label">Vsebina</div>
+          ${navItem('listings',     'listings',  'Oglasi')}
+          ${navItem('users',        'users',     'Uporabniki')}
+          ${navItem('featured',     'featured',  'Sponzorirani')}
+          ${navItem('reports',      'reports',   'Poročila')}
+
+          <div class="adm-nav-group-label">Katalog</div>
+          ${navItem('taxonomy',     'taxonomy',  'Taksonomija vozil')}
+          ${navItem('vozila-uvoz',  'vozila',    'Vnos vozil (Excel)')}
+
+          <div class="adm-nav-group-label">Sistem</div>
+          ${navItem('analytics',    'analytics', 'Analitika')}
+          ${navItem('seo',          'seo',       'SEO')}
+          ${navItem('payments',     'payments',  'Plačila')}
+          ${navItem('media',        'media',     'Mediji')}
+          ${navItem('audit',        'audit',     'Audit log')}
+          ${navItem('settings',     'settings',  'Nastavitve')}
         </nav>
+
         <div class="adm-sidebar-footer">
           <div class="adm-user-badge">
             <span class="adm-user-avatar">${(_adminUser.displayName || 'A')[0].toUpperCase()}</span>
-            <div>
+            <div class="adm-user-info">
               <div class="adm-user-name">${_adminUser.displayName || _adminUser.email}</div>
               <div class="adm-user-role">${roleLabel(_adminRole)}</div>
             </div>
           </div>
-          <a href="#/" class="adm-logout-btn">← Na stran</a>
+          <a href="#/" class="adm-logout-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Na stran
+          </a>
         </div>
       </aside>
 
-      <!-- Main content -->
+      <!-- Main content — no topbar, content starts at top -->
       <div class="adm-main">
-        <header class="adm-topbar">
-          <button class="adm-menu-toggle" id="adm-menu-toggle" aria-label="Menu">☰</button>
-          <div class="adm-topbar-title" id="adm-topbar-title">Dashboard</div>
-          <div class="adm-topbar-actions">
-            <input class="adm-global-search" id="adm-global-search" type="search" placeholder="Išči oglas, uporabnik, znamka…" />
-          </div>
-        </header>
+        <button class="adm-menu-toggle" id="adm-menu-toggle" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
         <div class="adm-content" id="adm-content">
           <div class="adm-loading">Nalagam…</div>
         </div>
@@ -100,9 +140,9 @@ function renderShell() {
     </div>`;
 }
 
-function navItem(id, icon, label) {
+function navItem(id, iconKey, label) {
     return `<button class="adm-nav-item" data-section="${id}">
-      <span class="adm-nav-icon">${icon}</span>
+      <span class="adm-nav-icon">${NAV_ICONS[iconKey] || ''}</span>
       <span class="adm-nav-label">${label}</span>
     </button>`;
 }
@@ -127,16 +167,8 @@ function attachSidebarNav() {
 function navigateTo(section) {
     _activeSection = section;
     document.querySelectorAll('.adm-nav-item').forEach(b => b.classList.toggle('active', b.dataset.section === section));
-    document.getElementById('adm-topbar-title').textContent = sectionTitle(section);
     document.getElementById('adm-content').innerHTML = '<div class="adm-loading"><div class="adm-spinner"></div> Nalagam…</div>';
     sections[section]?.();
-}
-
-function sectionTitle(s) {
-    return { dashboard: 'Dashboard', listings: 'Upravljanje oglasov', users: 'Upravljanje uporabnikov',
-             taxonomy: 'Taksonomija vozil', featured: 'Sponzorirani oglasi', reports: 'Poročila in moderacija',
-             analytics: 'Analitika', seo: 'SEO Management', payments: 'Plačila & Subscription',
-             media: 'Upravljanje medijev', audit: 'Audit log', settings: 'Nastavitve sistema' }[s] || s;
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -144,18 +176,19 @@ function sectionTitle(s) {
 // ══════════════════════════════════════════════════════════════════════════════
 
 const sections = {
-    dashboard: renderDashboard,
-    listings:  renderListings,
-    users:     renderUsers,
-    taxonomy:  renderTaxonomy,
-    featured:  renderFeatured,
-    reports:   renderReports,
-    analytics: renderAnalytics,
-    seo:       renderSeo,
-    payments:  renderPayments,
-    media:     renderMedia,
-    audit:     renderAudit,
-    settings:  renderSettings,
+    dashboard:    renderDashboard,
+    listings:     renderListings,
+    users:        renderUsers,
+    taxonomy:     renderTaxonomy,
+    'vozila-uvoz': renderVozilaUvoz,
+    featured:     renderFeatured,
+    reports:      renderReports,
+    analytics:    renderAnalytics,
+    seo:          renderSeo,
+    payments:     renderPayments,
+    media:        renderMedia,
+    audit:        renderAudit,
+    settings:     renderSettings,
 };
 
 // ── 1. DASHBOARD ──────────────────────────────────────────────────────────────
@@ -505,235 +538,463 @@ async function doToggleBan(uid, users) {
     } catch (e) { showToast('Napaka: ' + e.message, 'error'); }
 }
 
-// ── 4. TAXONOMY ───────────────────────────────────────────────────────────────
+// ── 4. TAXONOMY — unified tree view (source: JSON files) ─────────────────────
+
+const TAX_SOURCES = {
+    avto:        { file: '/json/brands_models_global.json',     label: 'Avtomobili' },
+    moto:        { file: '/json/brands_models_moto.json',       label: 'Motorji' },
+    gospodarska: { file: '/json/brands_models_gospodarska.json', label: 'Gospodarska' },
+};
+const _taxCache = {};
+
+async function loadTaxJson(cat) {
+    if (_taxCache[cat]) return _taxCache[cat];
+    const res = await fetch(TAX_SOURCES[cat].file);
+    if (!res.ok) throw new Error(`Napaka pri nalaganju ${TAX_SOURCES[cat].file}`);
+    _taxCache[cat] = await res.json();
+    return _taxCache[cat];
+}
+
+// Parse raw JSON into flat brand list regardless of category format
+// avto:        { Brand: { Model: [variants] } }
+// moto:        { Brand: { Model: { type, variants[] } } }
+// gospodarska: { Brand: { Model: { type, variants[] } } }
+function parseTaxData(rawData, cat) {
+    return Object.entries(rawData).map(([brandName, modelsObj]) => {
+        const models = Object.entries(modelsObj).map(([modelName, val]) => {
+            if (cat === 'avto') {
+                return { name: modelName, type: null, variants: Array.isArray(val) ? val : [] };
+            } else {
+                return {
+                    name: modelName,
+                    type: val.type || null,
+                    variants: Array.isArray(val.variants) ? val.variants : [],
+                };
+            }
+        }).sort((a, b) => a.name.localeCompare(b.name, 'sl'));
+        return { brand: brandName, models };
+    }).sort((a, b) => a.brand.localeCompare(b.brand, 'sl'));
+}
+
 async function renderTaxonomy() {
     const c = document.getElementById('adm-content');
     c.innerHTML = `
-      <div class="adm-tabs" id="tax-tabs">
-        <button class="adm-tab active" data-tab="brands">Znamke</button>
-        <button class="adm-tab" data-tab="models">Modeli</button>
-        <button class="adm-tab" data-tab="import">Excel uvoz</button>
-      </div>
-      <div id="tax-content"></div>`;
+      <div class="adm-card">
+        <div class="adm-card-header" style="flex-wrap:wrap;gap:.75rem">
+          <h3 style="margin:0">Taksonomija vozil</h3>
+          <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-left:auto">
+            <div class="adm-tabs" style="margin:0;border:none;gap:.25rem">
+              ${Object.entries(TAX_SOURCES).map(([k, v]) => `
+                <button class="adm-tab${k === 'avto' ? ' active' : ''}" data-tax-cat="${k}">${v.label}</button>
+              `).join('')}
+            </div>
+            <select id="tax-type-filter" class="adm-select adm-input-sm" style="width:140px;display:none">
+              <option value="">Vse vrste</option>
+            </select>
+            <input id="tax-search" class="adm-input adm-input-sm" type="search" placeholder="Išči…" style="width:170px">
+            <button class="adm-btn adm-btn-sm adm-btn-green" id="tax-export-btn">⬇ Izvozi Excel</button>
+            <button class="adm-btn adm-btn-sm adm-btn-primary" id="tax-add-brand-btn">+ Znamka</button>
+          </div>
+        </div>
+        <div style="padding:.5rem 1rem;border-bottom:1px solid #f1f5f9;font-size:.8rem;color:#6b7280" id="tax-stats"></div>
+        <div id="tax-tree"></div>
+      </div>`;
 
-    const tabs = document.querySelectorAll('#tax-tabs .adm-tab');
-    tabs.forEach(t => t.addEventListener('click', () => {
-        tabs.forEach(x => x.classList.remove('active'));
-        t.classList.add('active');
-        taxSwitch(t.dataset.tab);
+    let activeCat = 'avto';
+
+    const tabBtns = c.querySelectorAll('[data-tax-cat]');
+    tabBtns.forEach(btn => btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCat = btn.dataset.taxCat;
+        document.getElementById('tax-search').value = '';
+        document.getElementById('tax-type-filter').value = '';
+        loadTaxTree(activeCat);
     }));
 
-    taxSwitch('brands');
+    document.getElementById('tax-search').addEventListener('input', debounce(() => loadTaxTree(activeCat), 200));
+    document.getElementById('tax-type-filter').addEventListener('change', () => loadTaxTree(activeCat));
+    document.getElementById('tax-export-btn').addEventListener('click', () => exportTaxExcel(activeCat));
+    document.getElementById('tax-add-brand-btn').addEventListener('click', () => openTaxAddBrandModal(activeCat));
+
+    loadTaxTree('avto');
 }
 
-async function taxSwitch(tab) {
-    const c = document.getElementById('tax-content');
-    if (tab === 'brands') await renderBrandsTab(c);
-    if (tab === 'models') await renderModelsTab(c);
-    if (tab === 'import') renderImportTab(c);
-}
-
-async function renderBrandsTab(c) {
-    c.innerHTML = `
-      <div class="adm-card">
-        <div class="adm-card-header">
-          <h3>Znamke vozil</h3>
-          <div style="display:flex;gap:.5rem">
-            <select id="brand-cat-filter" class="adm-select">
-              <option value="">Vse kategorije</option>
-              <option value="avto">Avto</option>
-              <option value="moto">Moto</option>
-              <option value="gospodarska">Gospodarska</option>
-            </select>
-            <button class="adm-btn adm-btn-primary" id="brand-add-btn">+ Dodaj znamko</button>
-          </div>
-        </div>
-        <div class="adm-table-wrap" id="brands-table"></div>
-      </div>`;
-
-    document.getElementById('brand-cat-filter').addEventListener('change', async e => {
-        loadBrandsTable(e.target.value);
-    });
-    document.getElementById('brand-add-btn').addEventListener('click', () => openBrandModal(null));
-
-    loadBrandsTable('');
-}
-
-async function loadBrandsTable(catFilter) {
-    const wrap = document.getElementById('brands-table');
+async function loadTaxTree(cat) {
+    const wrap = document.getElementById('tax-tree');
     if (!wrap) return;
-    wrap.innerHTML = '<div class="adm-loading"><div class="adm-spinner"></div></div>';
+    const search = (document.getElementById('tax-search')?.value || '').toLowerCase().trim();
+    const typeFilter = document.getElementById('tax-type-filter')?.value || '';
+    wrap.innerHTML = '<div class="adm-loading"><div class="adm-spinner"></div> Nalagam…</div>';
     try {
-        const brands = await getBrands(catFilter || null);
-        if (!brands.length) { wrap.innerHTML = '<div class="adm-empty">Ni znamk.</div>'; return; }
-        wrap.innerHTML = `
-          <table class="adm-table">
-            <thead><tr><th>Znamka</th><th>Slug</th><th>Kategorija</th><th>Akcije</th></tr></thead>
-            <tbody>
-              ${brands.map(b => `
-                <tr>
-                  <td><strong>${escHtml(b.name)}</strong></td>
-                  <td class="adm-sub">${escHtml(b.slug || '')}</td>
-                  <td>${escHtml(b.category || '')}</td>
-                  <td class="adm-actions">
-                    <button class="adm-btn adm-btn-xs" onclick="window.__brandEdit('${b.id}')">✏️ Uredi</button>
-                    <button class="adm-btn adm-btn-xs adm-btn-red" onclick="window.__brandDel('${b.id}')">🗑</button>
-                  </td>
-                </tr>`).join('')}
-            </tbody>
-          </table>`;
+        const raw = await loadTaxJson(cat);
+        let brands = parseTaxData(raw, cat);
 
-        window.__brandEdit = id => openBrandModal(brands.find(b => b.id === id));
-        window.__brandDel  = id => confirmAction('Izbrisati znamko?', async () => {
-            await deleteBrand(id);
-            await addAuditLog(_adminUser.uid, _adminUser.displayName, 'BRAND_DELETE', id);
-            showToast('Znamka izbrisana.', 'success');
-            loadBrandsTable(catFilter);
+        // Populate type filter for moto/gospodarska
+        const typeFilterEl = document.getElementById('tax-type-filter');
+        if (cat !== 'avto') {
+            const allTypes = [...new Set(brands.flatMap(b => b.models.map(m => m.type)).filter(Boolean))].sort();
+            typeFilterEl.style.display = '';
+            const curVal = typeFilterEl.value;
+            typeFilterEl.innerHTML = '<option value="">Vse vrste</option>' +
+                allTypes.map(t => `<option value="${t}"${t === curVal ? ' selected' : ''}>${escHtml(t)}</option>`).join('');
+        } else {
+            typeFilterEl.style.display = 'none';
+        }
+
+        // Apply type filter
+        if (typeFilter) {
+            brands = brands.map(b => ({
+                ...b,
+                models: b.models.filter(m => m.type === typeFilter),
+            })).filter(b => b.models.length);
+        }
+
+        // Apply search
+        if (search) {
+            brands = brands.map(b => {
+                const brandMatch = b.brand.toLowerCase().includes(search);
+                const filteredModels = b.models.filter(m =>
+                    m.name.toLowerCase().includes(search) ||
+                    m.variants.some(v => v.toLowerCase().includes(search))
+                );
+                if (brandMatch) return b;
+                if (filteredModels.length) return { ...b, models: filteredModels };
+                return null;
+            }).filter(Boolean);
+        }
+
+        // Stats
+        const totalBrands = brands.length;
+        const totalModels = brands.reduce((s, b) => s + b.models.length, 0);
+        const totalVariants = brands.reduce((s, b) => s + b.models.reduce((ss, m) => ss + m.variants.length, 0), 0);
+        const statsEl = document.getElementById('tax-stats');
+        if (statsEl) statsEl.textContent = `${totalBrands} znamk · ${totalModels} modelov · ${totalVariants} različic`;
+
+        if (!brands.length) {
+            wrap.innerHTML = '<div class="adm-empty">Ni rezultatov.</div>';
+            return;
+        }
+
+        wrap.innerHTML = brands.map((b, bi) => taxBrandRow(b, bi, cat, search)).join('');
+
+        // Wire expand/collapse on brand rows
+        wrap.querySelectorAll('.tax-brand-row').forEach(row => {
+            row.addEventListener('click', e => {
+                if (e.target.closest('button')) return;
+                row.classList.toggle('expanded');
+                const next = row.nextElementSibling;
+                if (next?.classList.contains('tax-models-wrap'))
+                    next.style.display = row.classList.contains('expanded') ? 'block' : 'none';
+            });
         });
+
+        // Wire expand/collapse on model rows (for variants)
+        wrap.querySelectorAll('.tax-model-row').forEach(row => {
+            row.addEventListener('click', e => {
+                if (e.target.closest('button')) return;
+                const varWrap = row.nextElementSibling;
+                if (!varWrap?.classList.contains('tax-variants-wrap')) return;
+                row.classList.toggle('expanded');
+                varWrap.style.display = row.classList.contains('expanded') ? 'block' : 'none';
+            });
+        });
+
+        // Auto-expand on search
+        if (search) {
+            wrap.querySelectorAll('.tax-brand-row').forEach(row => {
+                row.classList.add('expanded');
+                const next = row.nextElementSibling;
+                if (next?.classList.contains('tax-models-wrap')) next.style.display = 'block';
+            });
+            wrap.querySelectorAll('.tax-model-row').forEach(row => {
+                const varWrap = row.nextElementSibling;
+                if (!varWrap?.classList.contains('tax-variants-wrap')) return;
+                const hasMatch = varWrap.querySelector('.tax-variant-match');
+                if (hasMatch) { row.classList.add('expanded'); varWrap.style.display = 'block'; }
+            });
+        }
+
+        // Delete handlers
+        window.__taxDelModel = (cat, brand, model) => {
+            if (!confirm(`Izbrisati model "${model}" iz znamke "${brand}"?`)) return;
+            deleteTaxEntry(cat, brand, model, null);
+        };
+        window.__taxDelVariant = (cat, brand, model, variant) => {
+            if (!confirm(`Izbrisati različico "${variant}"?`)) return;
+            deleteTaxEntry(cat, brand, model, variant);
+        };
+        window.__taxDelBrand = (cat, brand) => {
+            if (!confirm(`Izbrisati znamko "${brand}" in vse njene modele?`)) return;
+            deleteTaxEntry(cat, brand, null, null);
+        };
+        window.__taxAddModel = (cat, brand) => openTaxAddModelModal(cat, brand);
+        window.__taxAddVariant = (cat, brand, model) => openTaxAddVariantModal(cat, brand, model);
+
     } catch (e) { wrap.innerHTML = errBox(e); }
 }
 
-async function renderModelsTab(c) {
-    const brands = await getBrands();
+function taxBrandRow(b, bi, cat, search) {
+    const chevron = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="9 18 15 12 9 6"/></svg>`;
+    const mc = b.models.length;
+    const catArg = escHtml(cat), brandArg = escHtml(b.brand).replace(/'/g, "\\'");
+    return `
+      <div class="tax-brand-row">
+        <span class="tax-chevron">${chevron}</span>
+        <span class="tax-row-name">${escHtml(b.brand)}</span>
+        <span class="tax-row-count">${mc} ${mc === 1 ? 'model' : 'modelov'}</span>
+        <span class="tax-row-actions">
+          <button class="adm-btn adm-btn-xs adm-btn-green" onclick="window.__taxAddModel('${catArg}','${brandArg}')">+ Model</button>
+          <button class="adm-btn adm-btn-xs adm-btn-red" onclick="window.__taxDelBrand('${catArg}','${brandArg}')">Briši</button>
+        </span>
+      </div>
+      <div class="tax-models-wrap" style="display:none">
+        ${mc ? b.models.map(m => taxModelRow(m, cat, b.brand, search)).join('') : '<div class="tax-model-empty">Ni modelov.</div>'}
+      </div>`;
+}
+
+function taxModelRow(m, cat, brand, search) {
+    const chevron = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg>`;
+    const vc = m.variants.length;
+    const catArg = escHtml(cat);
+    const brandArg = escHtml(brand).replace(/'/g, "\\'");
+    const modelArg = escHtml(m.name).replace(/'/g, "\\'");
+    const typeBadge = m.type ? `<span class="adm-badge adm-badge-blue" style="font-size:.65rem;padding:.1rem .4rem">${escHtml(m.type)}</span>` : '';
+    const variantsHtml = vc ? m.variants.map(v => {
+        const vArg = escHtml(v).replace(/'/g, "\\'");
+        const highlight = search && v.toLowerCase().includes(search);
+        return `<div class="tax-variant-row${highlight ? ' tax-variant-match' : ''}">
+          <span class="tax-variant-name">${escHtml(v)}</span>
+          <span class="tax-row-actions">
+            <button class="adm-btn adm-btn-xs adm-btn-red" onclick="window.__taxDelVariant('${catArg}','${brandArg}','${modelArg}','${vArg}')">Briši</button>
+          </span>
+        </div>`;
+    }).join('') : '';
+    return `
+      <div class="tax-model-row${vc ? ' has-variants' : ''}">
+        ${vc ? `<span class="tax-chevron" style="width:12px;height:12px;margin-left:.5rem">${chevron}</span>` : '<span style="width:24px;display:inline-block"></span>'}
+        <span class="tax-model-name">${escHtml(m.name)}</span>
+        ${typeBadge}
+        ${vc ? `<span class="tax-model-slug adm-sub">${vc} različic</span>` : ''}
+        <span class="tax-row-actions">
+          <button class="adm-btn adm-btn-xs adm-btn-green" onclick="window.__taxAddVariant('${catArg}','${brandArg}','${modelArg}')">+ Različica</button>
+          <button class="adm-btn adm-btn-xs adm-btn-red" onclick="window.__taxDelModel('${catArg}','${brandArg}','${modelArg}')">Briši</button>
+        </span>
+      </div>
+      ${vc ? `<div class="tax-variants-wrap" style="display:none">${variantsHtml}</div>` : ''}`;
+}
+
+// ── Taxonomy mutations (write back to JSON via download) ──────────────────────
+
+async function deleteTaxEntry(cat, brand, model, variant) {
+    const raw = await loadTaxJson(cat);
+    if (variant) {
+        if (cat === 'avto') {
+            raw[brand][model] = raw[brand][model].filter(v => v !== variant);
+        } else {
+            raw[brand][model].variants = raw[brand][model].variants.filter(v => v !== variant);
+        }
+    } else if (model) {
+        delete raw[brand][model];
+        if (Object.keys(raw[brand]).length === 0) delete raw[brand];
+    } else {
+        delete raw[brand];
+    }
+    _taxCache[cat] = raw;
+    showToast('Izbrisano. Izvozi JSON za trajno spremembo.', 'info');
+    loadTaxTree(cat);
+}
+
+function openTaxAddBrandModal(cat) {
+    const hasType = cat !== 'avto';
+    openModal(`Dodaj znamko — ${TAX_SOURCES[cat].label}`, `
+      <div class="adm-form-row"><label>Ime znamke</label>
+        <input id="tax-new-brand" class="adm-input" placeholder="npr. Lamborghini">
+      </div>`, async el => {
+        const name = document.getElementById('tax-new-brand').value.trim();
+        if (!name) { showToast('Vnesite ime znamke.', 'error'); return; }
+        const raw = await loadTaxJson(cat);
+        if (raw[name]) { showToast('Znamka že obstaja.', 'warn'); return; }
+        raw[name] = {};
+        _taxCache[cat] = raw;
+        el.remove();
+        showToast(`Znamka "${name}" dodana.`, 'success');
+        loadTaxTree(cat);
+    });
+}
+
+function openTaxAddModelModal(cat, brand) {
+    const hasType = cat !== 'avto';
+    const typeOptions = cat === 'moto'
+        ? ['SportniMotor','NakedBike','Enduro','Chopper','Tourer','Supermoto','Trial','Cross','Skuter','Minimoto','Gocart','MotorneSani','EVozila']
+        : cat === 'gospodarska'
+        ? ['Dostavna','Tovorna','Avtobus','TovornePrikolice','Gradbena','Kmetijska','Komunalna','Gozdarska','Vilicarji']
+        : [];
+    openModal(`Dodaj model — ${escHtml(brand)}`, `
+      <div class="adm-form-row"><label>Ime modela</label>
+        <input id="tax-new-model" class="adm-input" placeholder="npr. S 1000 RR">
+      </div>
+      ${hasType ? `<div class="adm-form-row"><label>Vrsta vozila</label>
+        <select id="tax-new-type" class="adm-select">
+          ${typeOptions.map(t => `<option value="${t}">${t}</option>`).join('')}
+        </select></div>` : ''}`, async el => {
+        const name = document.getElementById('tax-new-model').value.trim();
+        const type = hasType ? document.getElementById('tax-new-type').value : null;
+        if (!name) { showToast('Vnesite ime modela.', 'error'); return; }
+        const raw = await loadTaxJson(cat);
+        if (!raw[brand]) raw[brand] = {};
+        if (cat === 'avto') {
+            raw[brand][name] = [];
+        } else {
+            raw[brand][name] = { type, variants: [] };
+        }
+        _taxCache[cat] = raw;
+        el.remove();
+        showToast(`Model "${name}" dodan.`, 'success');
+        loadTaxTree(cat);
+    });
+}
+
+function openTaxAddVariantModal(cat, brand, model) {
+    openModal(`Dodaj različico — ${escHtml(model)}`, `
+      <div class="adm-form-row"><label>Ime različice</label>
+        <input id="tax-new-variant" class="adm-input" placeholder="npr. S 1000 RR M">
+      </div>`, async el => {
+        const name = document.getElementById('tax-new-variant').value.trim();
+        if (!name) { showToast('Vnesite ime različice.', 'error'); return; }
+        const raw = await loadTaxJson(cat);
+        if (cat === 'avto') {
+            if (!Array.isArray(raw[brand][model])) raw[brand][model] = [];
+            raw[brand][model].push(name);
+        } else {
+            if (!Array.isArray(raw[brand][model].variants)) raw[brand][model].variants = [];
+            raw[brand][model].variants.push(name);
+        }
+        _taxCache[cat] = raw;
+        el.remove();
+        showToast(`Različica "${name}" dodana.`, 'success');
+        loadTaxTree(cat);
+    });
+}
+
+async function exportTaxExcel(cat) {
+    if (typeof XLSX === 'undefined') { showToast('XLSX knjižnica ni naložena.', 'error'); return; }
+    const raw = await loadTaxJson(cat);
+    const brands = parseTaxData(raw, cat);
+    const search = (document.getElementById('tax-search')?.value || '').toLowerCase().trim();
+    const typeFilter = document.getElementById('tax-type-filter')?.value || '';
+
+    const rows = [['Znamka', 'Model', 'Vrsta', 'Različica']];
+    for (const b of brands) {
+        for (const m of b.models) {
+            if (typeFilter && m.type !== typeFilter) continue;
+            if (search && !b.brand.toLowerCase().includes(search) && !m.name.toLowerCase().includes(search)) continue;
+            if (m.variants.length) {
+                for (const v of m.variants) {
+                    if (search && !b.brand.toLowerCase().includes(search) && !m.name.toLowerCase().includes(search) && !v.toLowerCase().includes(search)) continue;
+                    rows.push([b.brand, m.name, m.type || '', v]);
+                }
+            } else {
+                rows.push([b.brand, m.name, m.type || '', '']);
+            }
+        }
+    }
+
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, TAX_SOURCES[cat].label);
+    XLSX.writeFile(wb, `taksonomija_${cat}_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+function catColor(cat) {
+    return { avto: 'blue', moto: 'orange', gospodarska: 'teal', deli: 'purple', pnevmatike: 'green' }[cat] || 'gray';
+}
+
+// ── 4b. VOZILA UVOZ — Excel import with duplicate detection ───────────────────
+
+async function renderVozilaUvoz() {
+    const c = document.getElementById('adm-content');
     c.innerHTML = `
       <div class="adm-card">
         <div class="adm-card-header">
-          <h3>Modeli vozil</h3>
-          <div style="display:flex;gap:.5rem">
-            <select id="model-brand-filter" class="adm-select">
-              <option value="">Vse znamke</option>
-              ${brands.map(b => `<option value="${b.id}">${escHtml(b.name)}</option>`).join('')}
-            </select>
-            <button class="adm-btn adm-btn-primary" id="model-add-btn">+ Dodaj model</button>
-          </div>
+          <h3>Vnos vozil — Excel uvoz</h3>
+          <a class="adm-btn adm-btn-sm" id="voz-template-btn">⬇ Prenesi predlogo</a>
         </div>
-        <div class="adm-table-wrap" id="models-table"></div>
-      </div>`;
-
-    document.getElementById('model-brand-filter').addEventListener('change', async e => {
-        loadModelsTable(e.target.value, brands);
-    });
-    document.getElementById('model-add-btn').addEventListener('click', () => openModelModal(null, brands));
-
-    loadModelsTable('', brands);
-}
-
-async function loadModelsTable(brandId, brands) {
-    const wrap = document.getElementById('models-table');
-    if (!wrap) return;
-    wrap.innerHTML = '<div class="adm-loading"><div class="adm-spinner"></div></div>';
-    try {
-        const models = await getModels(brandId || null);
-        if (!models.length) { wrap.innerHTML = '<div class="adm-empty">Ni modelov.</div>'; return; }
-        wrap.innerHTML = `
-          <table class="adm-table">
-            <thead><tr><th>Model</th><th>Znamka</th><th>Kategorija</th><th>Akcije</th></tr></thead>
-            <tbody>
-              ${models.map(m => `
-                <tr>
-                  <td><strong>${escHtml(m.name)}</strong></td>
-                  <td>${escHtml(m.brandName || '')}</td>
-                  <td>${escHtml(m.category || '')}</td>
-                  <td class="adm-actions">
-                    <button class="adm-btn adm-btn-xs" onclick="window.__modelEdit('${m.id}')">✏️</button>
-                    <button class="adm-btn adm-btn-xs adm-btn-red" onclick="window.__modelDel('${m.id}')">🗑</button>
-                  </td>
-                </tr>`).join('')}
-            </tbody>
-          </table>`;
-
-        window.__modelEdit = id => openModelModal(models.find(m => m.id === id), brands);
-        window.__modelDel  = id => confirmAction('Izbrisati model?', async () => {
-            await deleteModel(id);
-            showToast('Model izbrisan.', 'success');
-            loadModelsTable(brandId, brands);
-        });
-    } catch (e) { wrap.innerHTML = errBox(e); }
-}
-
-function renderImportTab(c) {
-    c.innerHTML = `
-      <div class="adm-card">
-        <div class="adm-card-header"><h3>Excel uvoz taksonomije</h3></div>
-        <div style="padding:1.5rem">
-          <p style="color:#6b7280;margin-bottom:1rem">Podprta formata: <strong>.xlsx</strong> ali <strong>.csv</strong>. Stolpci: <code>category | brand | model</code></p>
-
-          <div class="adm-dropzone" id="excel-dropzone">
-            <div style="font-size:2.5rem;margin-bottom:.5rem">📂</div>
-            <div>Povlecite datoteko sem ali <label for="excel-file-input" style="color:#2563eb;cursor:pointer;font-weight:600">izberite datoteko</label></div>
-            <input type="file" id="excel-file-input" accept=".xlsx,.xls,.csv" style="display:none">
+        <div style="padding:1.25rem">
+          <p style="color:#6b7280;font-size:.875rem;margin:0 0 1rem">
+            Stolpci: <code>category</code> · <code>brand</code> · <code>model</code> (obvezni) +
+            <code>variant</code> · <code>year</code> · <code>fuel</code> (neobvezni).<br>
+            Podvojen vnos = ista znamka + model + različica → <strong>preskočen, ne podvojen</strong>.
+          </p>
+          <div class="adm-dropzone" id="voz-dropzone">
+            <div style="font-size:2rem;margin-bottom:.4rem">📂</div>
+            <div>Povlecite datoteko sem ali <label for="voz-file" style="color:#2563eb;cursor:pointer;font-weight:600">izberite datoteko</label></div>
+            <div style="font-size:.78rem;color:#9ca3af;margin-top:.3rem">.xlsx · .xls · .csv</div>
+            <input type="file" id="voz-file" accept=".xlsx,.xls,.csv" style="display:none">
           </div>
-
-          <div id="excel-preview" style="display:none">
-            <h4 style="margin:1.5rem 0 .5rem">Predogled (prvih 10 vrstic):</h4>
-            <div class="adm-table-wrap" id="excel-preview-table"></div>
-            <div id="excel-validation" style="margin-top:1rem"></div>
-            <div style="display:flex;gap:.75rem;margin-top:1.25rem">
-              <button class="adm-btn adm-btn-primary" id="excel-import-btn">📥 Uvozi vse</button>
-              <button class="adm-btn" id="excel-reset-btn">✕ Ponastavi</button>
+          <div id="voz-preview" style="display:none;margin-top:1.25rem">
+            <div id="voz-dedup-summary"></div>
+            <h4 style="margin:.75rem 0 .5rem;font-size:.875rem;font-weight:700">Predogled (prvih 20 vrstic):</h4>
+            <div class="adm-table-wrap" id="voz-preview-table"></div>
+            <div style="display:flex;gap:.75rem;margin-top:1rem;align-items:center">
+              <button class="adm-btn adm-btn-primary" id="voz-import-btn">📥 Uvozi</button>
+              <button class="adm-btn" id="voz-reset-btn">✕ Ponastavi</button>
+              <span id="voz-count-label" style="font-size:.82rem;color:#6b7280"></span>
             </div>
           </div>
-          <div id="excel-result" style="margin-top:1rem"></div>
-        </div>
-      </div>
-
-      <div class="adm-card" style="margin-top:1rem">
-        <div class="adm-card-header"><h3>Excel predloga za prenos</h3></div>
-        <div style="padding:1.5rem">
-          <p style="color:#6b7280;margin-bottom:1rem">Prenesite pripravljeno predlogo z ustreznimi stolpci.</p>
-          <button class="adm-btn adm-btn-primary" id="excel-template-btn">⬇️ Prenesi predlogo</button>
+          <div id="voz-result" style="margin-top:1rem"></div>
         </div>
       </div>`;
 
-    setupExcelImport();
-}
+    document.getElementById('voz-template-btn').addEventListener('click', downloadVozilaTemplate);
 
-function setupExcelImport() {
     let parsedRows = [];
+    let existingBrands = [], existingModels = [];
 
-    const fileInput = document.getElementById('excel-file-input');
-    const dropzone  = document.getElementById('excel-dropzone');
+    // pre-load existing data for dedup preview
+    try {
+        [existingBrands, existingModels] = await Promise.all([getBrands(), getModels()]);
+    } catch { /* ignore — dedup info won't show */ }
 
-    fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+    const fileInput = document.getElementById('voz-file');
+    const dropzone  = document.getElementById('voz-dropzone');
 
-    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('adm-dropzone--hover'); });
+    fileInput.addEventListener('change', e => handleVozFile(e.target.files[0]));
+    dropzone.addEventListener('dragover',  e => { e.preventDefault(); dropzone.classList.add('adm-dropzone--hover'); });
     dropzone.addEventListener('dragleave', () => dropzone.classList.remove('adm-dropzone--hover'));
-    dropzone.addEventListener('drop', e => {
-        e.preventDefault();
-        dropzone.classList.remove('adm-dropzone--hover');
-        handleFile(e.dataTransfer.files[0]);
-    });
+    dropzone.addEventListener('drop', e => { e.preventDefault(); dropzone.classList.remove('adm-dropzone--hover'); handleVozFile(e.dataTransfer.files[0]); });
     dropzone.addEventListener('click', () => fileInput.click());
 
-    document.getElementById('excel-template-btn').addEventListener('click', downloadExcelTemplate);
-    document.getElementById('excel-reset-btn')?.addEventListener('click', () => {
+    document.getElementById('voz-reset-btn')?.addEventListener('click', () => {
         parsedRows = [];
-        document.getElementById('excel-preview').style.display = 'none';
-        document.getElementById('excel-result').innerHTML = '';
+        document.getElementById('voz-preview').style.display = 'none';
+        document.getElementById('voz-result').innerHTML = '';
+        fileInput.value = '';
     });
-    document.getElementById('excel-import-btn')?.addEventListener('click', async () => {
+
+    document.getElementById('voz-import-btn')?.addEventListener('click', async () => {
         if (!parsedRows.length) return;
-        const btn = document.getElementById('excel-import-btn');
+        const btn = document.getElementById('voz-import-btn');
         btn.disabled = true; btn.textContent = '⏳ Uvažam…';
         try {
             const result = await importTaxonomyRows(parsedRows, _adminUser.uid, _adminUser.displayName);
-            document.getElementById('excel-result').innerHTML = `
+            document.getElementById('voz-result').innerHTML = `
               <div class="adm-alert adm-alert-success">
-                ✅ Uvoz končan: <strong>${result.imported}</strong> uvoženih,
-                <strong>${result.skipped}</strong> preskočenih (duplikati).
+                ✅ Uvoz končan: <strong>${result.imported}</strong> novih zapisov,
+                <strong>${result.skipped}</strong> preskočenih (podvojeni).
                 ${result.errors.length ? `<br>⚠️ ${result.errors.length} napak.` : ''}
               </div>`;
             showToast('Uvoz uspešen!', 'success');
+            await addAuditLog(_adminUser.uid, _adminUser.displayName, 'VEHICLE_IMPORT', 'taxonomy', { imported: result.imported, skipped: result.skipped });
         } catch (e) {
-            document.getElementById('excel-result').innerHTML = `<div class="adm-alert adm-alert-error">Napaka: ${e.message}</div>`;
+            document.getElementById('voz-result').innerHTML = `<div class="adm-alert adm-alert-error">Napaka: ${e.message}</div>`;
         }
-        btn.disabled = false; btn.textContent = '📥 Uvozi vse';
+        btn.disabled = false; btn.textContent = '📥 Uvozi';
     });
 
-    async function handleFile(file) {
+    function handleVozFile(file) {
         if (!file) return;
-        if (typeof XLSX === 'undefined') { showToast('SheetJS ni naložen. Preverite CDN.', 'error'); return; }
-
+        if (typeof XLSX === 'undefined') { showToast('SheetJS ni naložen.', 'error'); return; }
         const reader = new FileReader();
         reader.onload = e => {
             try {
@@ -741,60 +1002,94 @@ function setupExcelImport() {
                 const ws = wb.Sheets[wb.SheetNames[0]];
                 const raw = XLSX.utils.sheet_to_json(ws, { defval: '' });
 
-                // Normalize headers (case insensitive)
                 parsedRows = raw.map(r => {
                     const row = {};
                     Object.entries(r).forEach(([k, v]) => { row[k.toLowerCase().trim()] = String(v).trim(); });
-                    return { category: row['category'] || row['kategorija'] || 'avto',
-                             brand: row['brand'] || row['znamka'] || '',
-                             model: row['model'] || '' };
+                    return {
+                        category: row['category'] || row['kategorija'] || 'avto',
+                        brand:    row['brand']    || row['znamka']     || '',
+                        model:    row['model']    || '',
+                        variant:  row['variant']  || row['razlicica']  || '',
+                        year:     row['year']     || row['leto']       || '',
+                        fuel:     row['fuel']     || row['gorivo']     || '',
+                    };
                 }).filter(r => r.brand);
 
-                renderPreview(parsedRows);
-            } catch (ex) {
-                showToast('Napaka pri branju datoteke: ' + ex.message, 'error');
-            }
+                renderVozPreview(parsedRows);
+            } catch (ex) { showToast('Napaka pri branju: ' + ex.message, 'error'); }
         };
         reader.readAsArrayBuffer(file);
     }
 
-    function renderPreview(rows) {
-        const preview = document.getElementById('excel-preview');
-        const tableWrap = document.getElementById('excel-preview-table');
-        const validation = document.getElementById('excel-validation');
-        preview.style.display = 'block';
+    function renderVozPreview(rows) {
+        document.getElementById('voz-preview').style.display = 'block';
 
-        const show = rows.slice(0, 10);
-        const empty = rows.filter(r => !r.brand);
+        // dedup analysis against existing data
+        const brandMap  = new Map(existingBrands.map(b => [b.name.toLowerCase() + '|' + b.category, b]));
+        const modelMap  = new Map(existingModels.map(m => [m.name.toLowerCase() + '|' + (m.brandId || ''), m]));
 
-        tableWrap.innerHTML = `
+        let newBrands = 0, dupBrands = 0, newModels = 0, dupModels = 0;
+        rows.forEach(r => {
+            const bKey = r.brand.toLowerCase() + '|' + r.category;
+            if (brandMap.has(bKey)) dupBrands++; else newBrands++;
+            if (r.model) {
+                const existing = existingBrands.find(b => b.name.toLowerCase() === r.brand.toLowerCase() && b.category === r.category);
+                const mKey = r.model.toLowerCase() + '|' + (existing?.id || '__new__');
+                if (modelMap.has(mKey)) dupModels++; else newModels++;
+            }
+        });
+
+        document.getElementById('voz-dedup-summary').innerHTML = `
+          <div class="voz-dedup-grid">
+            <div class="voz-dedup-cell voz-new"><span>${newBrands}</span><small>novih znamk</small></div>
+            <div class="voz-dedup-cell voz-dup"><span>${dupBrands}</span><small>obstoječih znamk</small></div>
+            <div class="voz-dedup-cell voz-new"><span>${newModels}</span><small>novih modelov</small></div>
+            <div class="voz-dedup-cell voz-dup"><span>${dupModels}</span><small>obstoječih modelov</small></div>
+          </div>`;
+
+        const show = rows.slice(0, 20);
+        document.getElementById('voz-preview-table').innerHTML = `
           <table class="adm-table">
-            <thead><tr><th>Kategorija</th><th>Znamka</th><th>Model</th></tr></thead>
+            <thead><tr><th>Kat.</th><th>Znamka</th><th>Model</th><th>Različica</th><th>Leto</th><th>Gorivo</th><th>Status</th></tr></thead>
             <tbody>
-              ${show.map(r => `<tr><td>${escHtml(r.category)}</td><td>${escHtml(r.brand)}</td><td>${escHtml(r.model)}</td></tr>`).join('')}
-              ${rows.length > 10 ? `<tr><td colspan="3" style="color:#6b7280;text-align:center">… in še ${rows.length - 10} vrstic</td></tr>` : ''}
+              ${show.map(r => {
+                  const bKey = r.brand.toLowerCase() + '|' + r.category;
+                  const isDup = brandMap.has(bKey);
+                  return `<tr class="${isDup ? 'voz-row-dup' : 'voz-row-new'}">
+                    <td><span class="adm-badge adm-badge-${catColor(r.category)}">${escHtml(r.category)}</span></td>
+                    <td><strong>${escHtml(r.brand)}</strong></td>
+                    <td>${escHtml(r.model)}</td>
+                    <td class="adm-sub">${escHtml(r.variant)}</td>
+                    <td class="adm-sub">${escHtml(r.year)}</td>
+                    <td class="adm-sub">${escHtml(r.fuel)}</td>
+                    <td>${isDup ? '<span class="adm-badge adm-badge-gray">Obstoječ</span>' : '<span class="adm-badge adm-badge-green">Nov</span>'}</td>
+                  </tr>`;
+              }).join('')}
+              ${rows.length > 20 ? `<tr><td colspan="7" style="color:#6b7280;text-align:center;padding:.75rem">… in še ${rows.length - 20} vrstic</td></tr>` : ''}
             </tbody>
           </table>`;
 
-        validation.innerHTML = empty.length
-            ? `<div class="adm-alert adm-alert-warn">⚠️ ${empty.length} vrstic brez znamke bo preskočenih.</div>`
-            : `<div class="adm-alert adm-alert-success">✅ ${rows.length} veljavnih vrstic pripravljenih za uvoz.</div>`;
+        document.getElementById('voz-count-label').textContent =
+            `${rows.length} vrstic skupaj · ${newBrands + newModels} novih zapisov`;
     }
 }
 
-function downloadExcelTemplate() {
+function downloadVozilaTemplate() {
     if (typeof XLSX === 'undefined') { showToast('SheetJS ni naložen.', 'error'); return; }
     const ws = XLSX.utils.aoa_to_sheet([
-        ['category', 'brand', 'model'],
-        ['avto', 'BMW', 'X5'],
-        ['avto', 'BMW', '3 Series'],
-        ['moto', 'Honda', 'CB500F'],
-        ['gospodarska', 'Mercedes-Benz', 'Sprinter'],
+        ['category', 'brand', 'model', 'variant', 'year', 'fuel'],
+        ['avto', 'BMW', 'X5', 'xDrive30d', '2022', 'diesel'],
+        ['avto', 'BMW', '3 Series', '320d', '2021', 'diesel'],
+        ['avto', 'Volkswagen', 'Golf', 'GTI', '2023', 'bencin'],
+        ['moto', 'Honda', 'CB500F', '', '2022', 'bencin'],
+        ['gospodarska', 'Mercedes-Benz', 'Sprinter', '314 CDI', '2021', 'diesel'],
     ]);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Taksonomija');
-    XLSX.writeFile(wb, 'mojavto-taxonomy-template.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, 'Vozila');
+    XLSX.writeFile(wb, 'mojavto-vozila-predloga.xlsx');
 }
+
+// ── Static taxonomy reference lists ──────────────────────────────────────────
 
 // ── 5. FEATURED / SPONSORED ───────────────────────────────────────────────────
 async function renderFeatured() {
@@ -1317,9 +1612,11 @@ function openBrandModal(brand) {
       </div>
       <div class="adm-form-row"><label>Kategorija</label>
         <select id="brand-cat" class="adm-select">
-          <option value="avto" ${brand?.category === 'avto' ? 'selected' : ''}>Avto</option>
-          <option value="moto" ${brand?.category === 'moto' ? 'selected' : ''}>Moto</option>
-          <option value="gospodarska" ${brand?.category === 'gospodarska' ? 'selected' : ''}>Gospodarska</option>
+          <option value="avto"         ${brand?.category === 'avto'         ? 'selected' : ''}>Avto</option>
+          <option value="moto"         ${brand?.category === 'moto'         ? 'selected' : ''}>Moto</option>
+          <option value="gospodarska"  ${brand?.category === 'gospodarska'  ? 'selected' : ''}>Gospodarska</option>
+          <option value="deli"         ${brand?.category === 'deli'         ? 'selected' : ''}>Deli in oprema</option>
+          <option value="pnevmatike"   ${brand?.category === 'pnevmatike'   ? 'selected' : ''}>Pnevmatike in platišča</option>
         </select>
       </div>`, async (el) => {
         const name = document.getElementById('brand-name').value.trim();
@@ -1340,11 +1637,11 @@ function openBrandModal(brand) {
     });
 }
 
-function openModelModal(model, brands) {
+function openModelModal(model, brands, defaultBrandId) {
     openModal(model ? 'Uredi model' : 'Dodaj model', `
       <div class="adm-form-row"><label>Znamka</label>
         <select id="model-brand" class="adm-select">
-          ${brands.map(b => `<option value="${b.id}" data-name="${escHtml(b.name)}" ${model?.brandId === b.id ? 'selected' : ''}>${escHtml(b.name)}</option>`).join('')}
+          ${brands.map(b => `<option value="${b.id}" data-name="${escHtml(b.name)}" ${(model?.brandId ?? defaultBrandId) === b.id ? 'selected' : ''}>${escHtml(b.name)}</option>`).join('')}
         </select>
       </div>
       <div class="adm-form-row"><label>Ime modela</label>
@@ -1546,6 +1843,8 @@ function escHtml(str) {
 function errBox(e) {
     return `<div class="adm-alert adm-alert-error">Napaka: ${escHtml(e?.message || String(e))}</div>`;
 }
+
+window.__adminNav = s => navigateTo(s);
 
 function showToast(msg, type = 'success') {
     document.querySelector('.adm-toast')?.remove();

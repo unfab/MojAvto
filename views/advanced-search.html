@@ -6,6 +6,7 @@
 
     #group-bodyType {
         order: -1;
+        text-align: center;
     }
 
     .adv-acc-body {
@@ -271,8 +272,7 @@
                     <input type="hidden" name="bodyType" id="bodyTypeHidden" value="">
 
                     <!-- Avto body types -->
-                    <div class="body-type-grid" id="grid-cars"
-                        style="display:grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1rem;">
+                    <div class="body-type-grid" id="grid-cars">
                         <button type="button" class="body-type-card" data-value="Limuzina"><i
                                 data-lucide="car-front"></i><span>Limuzina</span></button>
                         <button type="button" class="body-type-card" data-value="Kombilimuzina"><i
@@ -298,8 +298,7 @@
                     </div>
 
                     <!-- Moto vehicle types (populated dynamically from categories.js) -->
-                    <div class="body-type-grid" id="grid-motorbikes"
-                        style="display:none; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1rem;">
+                    <div class="body-type-grid" id="grid-motorbikes" style="display:none;">
                         <button type="button" class="body-type-card" data-value="SportniMotor"><i
                                 class="fas fa-motorcycle"></i><span>Športni motor</span></button>
                         <button type="button" class="body-type-card" data-value="NakedBike"><i
@@ -335,8 +334,7 @@
                     </div>
 
                     <!-- Gospodarska body types -->
-                    <div class="body-type-grid" id="grid-commercial"
-                        style="display:none; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1rem;">
+                    <div class="body-type-grid" id="grid-commercial" style="display:none;">
                         <button type="button" class="body-type-card" data-value="Dostavna"><i
                                 class="fas fa-shuttle-van"></i><span>Dostavna</span></button>
                         <button type="button" class="body-type-card" data-value="Tovorna"><i
@@ -358,8 +356,7 @@
                     </div>
 
                     <!-- Prosti čas body types -->
-                    <div class="body-type-grid" id="grid-leisure"
-                        style="display:none; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1rem;">
+                    <div class="body-type-grid" id="grid-leisure" style="display:none;">
                         <button type="button" class="body-type-card" data-value="Avtodom"><i
                                 class="fas fa-caravan"></i><span>Avtodom</span></button>
                         <button type="button" class="body-type-card" data-value="PocitniiskaPrikolica"><i
@@ -731,8 +728,8 @@
         </div>
 
         <!-- ══ 5. NOTRANJOST IN UDOBJE ══════════════════════════════════ -->
-        <div class="adv-accordion glass-card car-only-field"
-            style="border-radius:2rem; margin-bottom:1rem;" id="acc-interior">
+        <div class="adv-accordion glass-card car-only-field" style="border-radius:2rem; margin-bottom:1rem;"
+            id="acc-interior">
             <div class="adv-acc-header">
                 <button type="button" class="adv-acc-trigger" aria-expanded="false">
                     <span class="adv-acc-title"><i data-lucide="armchair"></i> Notranjost in udobje</span>

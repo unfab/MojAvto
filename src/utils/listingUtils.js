@@ -91,3 +91,20 @@ export function getTransmissionPill(transStr) {
         <strong>${code}</strong>
     </div>`;
 }
+
+export function getYearPill(year) {
+    if (!year) return '';
+    return `<div class="spec-pill year-pill">
+        <i data-lucide="calendar"></i>
+        <span>${year}</span>
+    </div>`;
+}
+
+export function getKmPill(km) {
+    if (km === undefined || km === null) return '';
+    const formattedKm = typeof km === 'number' ? new Intl.NumberFormat('sl-SI').format(km) + ' km' : km;
+    return `<div class="spec-pill km-pill">
+        <i data-lucide="gauge"></i>
+        <span>${formattedKm}</span>
+    </div>`;
+}

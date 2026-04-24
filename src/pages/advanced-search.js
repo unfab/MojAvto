@@ -196,6 +196,7 @@ function bindSearchLogic(catContext) {
             activeTab = btn.dataset.tab;
             showGridForTab(activeTab);
             toggleVehicleSpecificFields(activeTab);
+            loadBrandData(activeTab);
             updateLiveCount();
         });
     });
@@ -364,100 +365,160 @@ function bindSearchLogic(catContext) {
     });
 
     // --- Load Brand Data ---
-    fetch("/json/brands_models_global.json")
-        .then(r => r.json())
-        .then(data => {
-            window._brandModelData = data;
-            const sorted = Object.keys(data).sort();
-            sorted.forEach(brand => {
-                const o1 = document.createElement("option"); o1.value = brand; o1.textContent = brand; makeSelect.appendChild(o1);
-                if (excludeSelect) { const o2 = document.createElement("option"); o2.value = brand; o2.textContent = brand; excludeSelect.appendChild(o2); }
+    const TAX_JSON = {
+        avto:        '/json/brands_models_global.json',
+        moto:        '/json/brands_models_moto.json',
+        gospodarska: '/json/brands_models_gospodarska.json',
+    };
+    const _taxCache = {};
+
+    function getVariants(data, brand, model) {
+        const m = data[brand]?.[model];
+        if (!m) return [];
+        if (Array.isArray(m)) return m;
+        if (Array.isArray(m.variants)) return m.variants;
+        return [];
+    }
+
+    function getModelKeys(data, brand) {
+        const entry = data[brand];
+        if (!entry) return [];
+        return Object.keys(entry).sort();
+    }
+
+    function populateMake(data, select, otherSelect) {
+        const val = select.value;
+        select.innerHTML = '<option value="">Znamka</option>';
+        Object.keys(data).sort().forEach(brand => {
+            const o = document.createElement('option');
+            o.value = brand; o.textContent = brand;
+            select.appendChild(o);
+        });
+        select.value = val || '';
+        if (otherSelect) {
+            const oval = otherSelect.value;
+            otherSelect.innerHTML = '<option value="">Znamka</option>';
+            Object.keys(data).sort().forEach(brand => {
+                const o = document.createElement('option');
+                o.value = brand; o.textContent = brand;
+                otherSelect.appendChild(o);
             });
+            otherSelect.value = oval || '';
+        }
+    }
 
-            import('../utils/customSelect.js').then(m => {
-                m.createCustomSelect(makeSelect);
-                m.createCustomSelect(modelSelect);
-                if (variantSelect) m.createCustomSelect(variantSelect);
-                m.createCustomSelect(yearFromSelect);
-                m.createCustomSelect(yearToSelect);
-                if (excludeSelect) m.createCustomSelect(excludeSelect);
-                if (excludeModelSelect) m.createCustomSelect(excludeModelSelect);
-                if (excludeVariantSelect) m.createCustomSelect(excludeVariantSelect);
-            });
-
-            // Make → populate models
-            makeSelect.addEventListener("change", () => {
-                const val = makeSelect.value;
-                modelSelect.innerHTML = '<option value="">Model</option>';
-                variantSelect.innerHTML = '<option value="">Različica</option>';
-                modelSelect.disabled = true; variantSelect.disabled = true;
-                if (val && data[val]) {
-                    const models = data[val];
-                    const keys = typeof models === 'object' && !Array.isArray(models) ? Object.keys(models).sort() : (Array.isArray(models) ? models.sort() : []);
-                    keys.forEach(m => { const o = document.createElement("option"); o.value = m; o.textContent = m; modelSelect.appendChild(o); });
-                    if (keys.length) modelSelect.disabled = false;
-                }
-            });
-
-            // Model → populate variants
-            modelSelect.addEventListener("change", () => {
-                const mk = makeSelect.value, md = modelSelect.value;
-                variantSelect.innerHTML = '<option value="">Različica</option>';
-                variantSelect.disabled = true;
-                if (mk && md && data[mk] && data[mk][md] && Array.isArray(data[mk][md])) {
-                    data[mk][md].forEach(v => { const o = document.createElement("option"); o.value = v; o.textContent = v; variantSelect.appendChild(o); });
-                    if (data[mk][md].length) variantSelect.disabled = false;
-                }
-            });
-
-            // Exclude flow
-            if (excludeSelect) {
-                excludeSelect.addEventListener("change", () => {
-                    const mk = excludeSelect.value;
-                    excludeModelSelect.innerHTML = '<option value="">Model</option>';
-                    excludeVariantSelect.innerHTML = '<option value="">Različica</option>';
-                    excludeModelSelect.disabled = true; excludeVariantSelect.disabled = true;
-                    if (mk && data[mk]) {
-                        const models = data[mk];
-                        const keys = typeof models === 'object' && !Array.isArray(models) ? Object.keys(models).sort() : (Array.isArray(models) ? models.sort() : []);
-                        keys.forEach(m => { const o = document.createElement("option"); o.value = m; o.textContent = m; excludeModelSelect.appendChild(o); });
-                        if (keys.length) excludeModelSelect.disabled = false;
-                    }
-                });
-                excludeModelSelect.addEventListener("change", () => {
-                    const mk = excludeSelect.value, md = excludeModelSelect.value;
-                    excludeVariantSelect.innerHTML = '<option value="">Različica</option>';
-                    excludeVariantSelect.disabled = true;
-                    if (mk && md && data[mk] && data[mk][md] && Array.isArray(data[mk][md])) {
-                        data[mk][md].forEach(v => { const o = document.createElement("option"); o.value = v; o.textContent = v; excludeVariantSelect.appendChild(o); });
-                        if (data[mk][md].length) excludeVariantSelect.disabled = false;
-                    }
-                });
-
-                addExcludeBtn.addEventListener('click', () => {
-                    const make = excludeSelect.value;
-                    if (!make) return;
-                    const model = excludeModelSelect.value || '';
-                    const variant = excludeVariantSelect.value || '';
-                    excludedVehicles.push({ make, model, variant });
-                    excludeSelect.value = '';
-                    excludeModelSelect.innerHTML = '<option value="">Model</option>'; excludeModelSelect.disabled = true;
-                    excludeVariantSelect.innerHTML = '<option value="">Različica</option>'; excludeVariantSelect.disabled = true;
-                    renderExcludeChips();
-                    updateLiveCount();
-                });
+    async function loadBrandData(tab) {
+        const file = TAX_JSON[tab] || TAX_JSON.avto;
+        if (!_taxCache[tab]) {
+            try {
+                const r = await fetch(file);
+                _taxCache[tab] = await r.json();
+            } catch (e) {
+                console.warn('Could not load', file, e);
+                _taxCache[tab] = {};
             }
+        }
+        const data = _taxCache[tab];
+        window._brandModelData = data;
 
-            // Toggle exclude section
-            if (toggleExcludeBtn && excludeSection) {
-                toggleExcludeBtn.addEventListener('click', () => {
-                    const isHidden = excludeSection.style.display === 'none';
-                    excludeSection.style.display = isHidden ? 'flex' : 'none';
-                    toggleExcludeBtn.style.display = isHidden ? 'none' : 'flex';
-                    if (isHidden && window.lucide) window.lucide.createIcons({ scope: excludeSection });
+        populateMake(data, makeSelect, excludeSelect);
+
+        // Reset model/variant
+        modelSelect.innerHTML = '<option value="">Model</option>'; modelSelect.disabled = true;
+        variantSelect.innerHTML = '<option value="">Različica</option>'; variantSelect.disabled = true;
+        if (excludeModelSelect) { excludeModelSelect.innerHTML = '<option value="">Model</option>'; excludeModelSelect.disabled = true; }
+        if (excludeVariantSelect) { excludeVariantSelect.innerHTML = '<option value="">Različica</option>'; excludeVariantSelect.disabled = true; }
+
+        return data;
+    }
+
+    // Wire make→model→variant using always-current _brandModelData
+    makeSelect.addEventListener('change', () => {
+        const data = window._brandModelData || {};
+        const val = makeSelect.value;
+        modelSelect.innerHTML = '<option value="">Model</option>';
+        variantSelect.innerHTML = '<option value="">Različica</option>';
+        modelSelect.disabled = true; variantSelect.disabled = true;
+        if (val && data[val]) {
+            getModelKeys(data, val).forEach(m => {
+                const o = document.createElement('option'); o.value = m; o.textContent = m; modelSelect.appendChild(o);
+            });
+            if (Object.keys(data[val]).length) modelSelect.disabled = false;
+        }
+    });
+
+    modelSelect.addEventListener('change', () => {
+        const data = window._brandModelData || {};
+        const mk = makeSelect.value, md = modelSelect.value;
+        variantSelect.innerHTML = '<option value="">Različica</option>';
+        variantSelect.disabled = true;
+        const variants = getVariants(data, mk, md);
+        variants.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; variantSelect.appendChild(o); });
+        if (variants.length) variantSelect.disabled = false;
+    });
+
+    // Exclude flow
+    if (excludeSelect) {
+        excludeSelect.addEventListener('change', () => {
+            const data = window._brandModelData || {};
+            const mk = excludeSelect.value;
+            excludeModelSelect.innerHTML = '<option value="">Model</option>';
+            excludeVariantSelect.innerHTML = '<option value="">Različica</option>';
+            excludeModelSelect.disabled = true; excludeVariantSelect.disabled = true;
+            if (mk && data[mk]) {
+                getModelKeys(data, mk).forEach(m => {
+                    const o = document.createElement('option'); o.value = m; o.textContent = m; excludeModelSelect.appendChild(o);
                 });
+                if (Object.keys(data[mk]).length) excludeModelSelect.disabled = false;
             }
-        }).catch(err => console.warn("Could not load brands_models_global.json.", err));
+        });
+        excludeModelSelect.addEventListener('change', () => {
+            const data = window._brandModelData || {};
+            const mk = excludeSelect.value, md = excludeModelSelect.value;
+            excludeVariantSelect.innerHTML = '<option value="">Različica</option>';
+            excludeVariantSelect.disabled = true;
+            const variants = getVariants(data, mk, md);
+            variants.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; excludeVariantSelect.appendChild(o); });
+            if (variants.length) excludeVariantSelect.disabled = false;
+        });
+        addExcludeBtn.addEventListener('click', () => {
+            const make = excludeSelect.value;
+            if (!make) return;
+            const model = excludeModelSelect.value || '';
+            const variant = excludeVariantSelect.value || '';
+            excludedVehicles.push({ make, model, variant });
+            excludeSelect.value = '';
+            excludeModelSelect.innerHTML = '<option value="">Model</option>'; excludeModelSelect.disabled = true;
+            excludeVariantSelect.innerHTML = '<option value="">Različica</option>'; excludeVariantSelect.disabled = true;
+            renderExcludeChips();
+            updateLiveCount();
+        });
+    }
+
+    // Toggle exclude section
+    if (toggleExcludeBtn && excludeSection) {
+        toggleExcludeBtn.addEventListener('click', () => {
+            const isHidden = excludeSection.style.display === 'none';
+            excludeSection.style.display = isHidden ? 'flex' : 'none';
+            toggleExcludeBtn.style.display = isHidden ? 'none' : 'flex';
+            if (isHidden && window.lucide) window.lucide.createIcons({ scope: excludeSection });
+        });
+    }
+
+    // Init custom selects once, then load initial data
+    import('../utils/customSelect.js').then(m => {
+        m.createCustomSelect(makeSelect);
+        m.createCustomSelect(modelSelect);
+        if (variantSelect) m.createCustomSelect(variantSelect);
+        m.createCustomSelect(yearFromSelect);
+        m.createCustomSelect(yearToSelect);
+        if (excludeSelect) m.createCustomSelect(excludeSelect);
+        if (excludeModelSelect) m.createCustomSelect(excludeModelSelect);
+        if (excludeVariantSelect) m.createCustomSelect(excludeVariantSelect);
+    });
+
+    // Load data for initial tab
+    loadBrandData(activeTab);
 
     // ═══════════════════════════════════════════════════════════════════
     // Live Count

@@ -17,7 +17,9 @@ import {
     getFuelPill,
     getPowerPill,
     getConsumptionPill,
-    getTransmissionPill
+    getTransmissionPill,
+    getYearPill,
+    getKmPill
 } from '../utils/listingUtils.js';
 
 import { getVehicleRating } from '../utils/valuationScore.js';
@@ -274,13 +276,9 @@ function renderCarCard(car) {
             </div>
 
             <div class="listing-card-action-bar">
-                <div class="primary-specs">
-                    <div class="spec-pill">
-                        <i data-lucide="calendar"></i> ${car.year}
-                    </div>
-                    <div class="spec-pill">
-                        <i data-lucide="gauge"></i> ${car.mileage}
-                    </div>
+                <div class="primary-specs centered">
+                    ${getYearPill(car.year)}
+                    ${getKmPill(car.mileage)}
                     ${getPowerPill(car.powerKw)}
                 </div>
 
@@ -297,9 +295,9 @@ function renderCarCard(car) {
                 </div>
             </div>
 
-            <div class="listing-card-specs">
-                <div class="spec-row secondary">
-                    <div class="spec-group-left">
+            <div class="listing-card-specs centered">
+                <div class="spec-row secondary centered">
+                    <div class="spec-group-center">
                         ${getFuelPill(car.fuel)}
                         ${getTransmissionPill(car.transmission)}
                         ${getConsumptionPill(car)}
