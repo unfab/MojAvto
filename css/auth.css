@@ -454,3 +454,296 @@ body.dark-mode .auth-gate-title { color: #f1f5f9; }
 }
 
 .auth-gate-submit:active { transform: scale(0.98); }
+
+/* ── B2B Onboarding Wizard ──────────────────────────────────────────────────*/
+
+/* Wider card for wizard */
+.auth-card--wide {
+  max-width: 520px;
+}
+
+/* Account type tabs (pill switcher) */
+.auth-tabs {
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 9999px;
+  padding: 4px;
+  margin-bottom: 1.5rem;
+  gap: 2px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 0.55rem 1rem;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  background: transparent;
+  color: #64748b;
+  transition: background 0.22s, color 0.22s, box-shadow 0.22s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.auth-tab.active {
+  background: #fff;
+  color: #1e40af;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+}
+
+.auth-tab:not(.active):hover {
+  color: #334155;
+}
+
+/* Progress bar */
+.wizard-progress {
+  height: 5px;
+  background: #e2e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.wizard-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #3b82f6);
+  border-radius: 99px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wizard-step-label {
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin: 0 0 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Individual step containers */
+.wizard-step {
+  animation: wizardFadeIn 0.25s ease;
+}
+
+@keyframes wizardFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wizard-step-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.25rem;
+  text-align: center;
+}
+
+.wizard-step-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-align: center;
+  margin: 0 0 1.25rem;
+}
+
+/* Wizard nav (Back + Submit row) */
+.wizard-nav {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.wizard-nav .btn {
+  flex: 1;
+  justify-content: center;
+}
+
+/* Secondary button */
+.btn-secondary {
+  background: #f1f5f9;
+  color: #374151;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 9999px;
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+/* Role selection cards */
+.role-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.role-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  user-select: none;
+}
+
+.role-card:hover {
+  border-color: #a5b4fc;
+  background: rgba(238, 242, 255, 0.7);
+}
+
+.role-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.role-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.role-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 0.75rem;
+  background: #f1f5f9;
+  color: #6366f1;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.role-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.role-check-mark {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+/* Checked state */
+.role-card:has(.role-checkbox:checked) {
+  border-color: #6366f1;
+  background: rgba(238, 242, 255, 0.85);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.role-card:has(.role-checkbox:checked) .role-icon {
+  background: #6366f1;
+  color: #fff;
+}
+
+.role-card:has(.role-checkbox:checked) .role-check-mark {
+  background: #6366f1;
+  border-color: #6366f1;
+  color: #fff;
+}
+
+/* Success step */
+.wizard-success {
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.success-icon {
+  font-size: 3.5rem;
+  color: #10b981;
+  margin-bottom: 0.75rem;
+  animation: successPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes successPop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.wizard-success-msg {
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.unlocked-features {
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 0.875rem;
+  padding: 1rem 1.25rem;
+  text-align: left;
+}
+
+.unlocked-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #15803d;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.unlocked-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  color: #166534;
+  padding: 0.3rem 0;
+}
+
+.unlocked-item i {
+  color: #16a34a;
+  width: 16px;
+  text-align: center;
+}
+
+/* Dark mode adjustments */
+body.dark-mode .auth-tabs { background: #1e293b; }
+body.dark-mode .auth-tab.active { background: #334155; color: #93c5fd; }
+body.dark-mode .wizard-step-title { color: #f1f5f9; }
+body.dark-mode .role-card { background: rgba(30, 41, 59, 0.7); border-color: #334155; }
+body.dark-mode .role-card:hover { background: rgba(49, 46, 129, 0.3); border-color: #6366f1; }
+body.dark-mode .role-label { color: #e2e8f0; }
+body.dark-mode .role-icon { background: #334155; }
+body.dark-mode .unlocked-features { background: #052e16; border-color: #166534; }
+body.dark-mode .unlocked-title { color: #4ade80; }
+body.dark-mode .unlocked-item { color: #86efac; }

@@ -21,7 +21,10 @@ async function ensureUserDoc(user) {
             photoURL: user.photoURL || '',
             region: '',
             phone: '',
-            sellerType: 'private', // 'private' or 'business'
+            sellerType: 'private',
+            businessTier: null,
+            companyDetails: null,
+            businessRoles: [],
             membershipTier: 'free',
             membershipExpiry: null,
             createdAt: serverTimestamp(),
@@ -32,7 +35,7 @@ async function ensureUserDoc(user) {
 }
 
 // ── Email / Password Registration ─────────────────────────────────────────────
-export async function registerWithEmail({ fullname, email, password, region }) {
+export async function registerWithEmail({ fullname, email, password, region, isBusiness, companyName, taxId, address, roles }) {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(cred.user, { displayName: fullname });
     const ref = doc(db, 'users', cred.user.uid);
@@ -42,7 +45,10 @@ export async function registerWithEmail({ fullname, email, password, region }) {
         photoURL: '',
         region: region || '',
         phone: '',
-        sellerType: 'private', 
+        sellerType: isBusiness ? 'business' : 'private',
+        businessTier: isBusiness ? 'unverified' : null,
+        companyDetails: isBusiness ? { companyName, taxId, address } : null,
+        businessRoles: isBusiness ? (roles || []) : [],
         membershipTier: 'free',
         membershipExpiry: null,
         createdAt: serverTimestamp(),

@@ -1,78 +1,209 @@
 <section class="auth-page">
-    <div class="auth-card">
+    <div class="auth-card auth-card--wide">
         <div class="auth-logo">
             <a href="#/">MojAvto<span class="logo-dot">.si</span></a>
         </div>
         <h1 class="auth-title">Ustvari račun</h1>
 
-        <button id="googleRegisterBtn" class="btn-google">
-            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"
-                    fill="#4285F4" />
-                <path
-                    d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"
-                    fill="#34A853" />
-                <path
-                    d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"
-                    fill="#FBBC05" />
-                <path
-                    d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"
-                    fill="#EA4335" />
-            </svg>
-            Registracija z Google
-        </button>
+        <!-- Account type tabs -->
+        <div class="auth-tabs" role="tablist">
+            <button class="auth-tab active" id="tab-private" role="tab" aria-selected="true" data-type="private">
+                <i class="fas fa-user"></i> Fizična oseba
+            </button>
+            <button class="auth-tab" id="tab-business" role="tab" aria-selected="false" data-type="business">
+                <i class="fas fa-building"></i> Pravna oseba
+            </button>
+        </div>
 
-        <div class="auth-divider"><span>ali</span></div>
+        <!-- ── PRIVATE PANEL ─────────────────────────────────────────────── -->
+        <div id="panel-private">
+            <button id="googleRegisterBtn" class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+                    <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+                    <path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+                    <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+                </svg>
+                Registracija z Google
+            </button>
 
-        <form id="registerForm" novalidate>
-            <div class="form-group">
-                <label for="fullname">Ime in priimek</label>
-                <input type="text" id="fullname" name="fullname" placeholder="Janez Novak" required />
-            </div>
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" placeholder="vas@email.com" required />
-            </div>
-            <div class="form-group">
-                <label for="region">Regija</label>
-                <select id="region" name="region">
-                    <option value="">Izberi regijo...</option>
-                    <option value="Osrednjeslovenska">Osrednjeslovenska</option>
-                    <option value="Podravska">Podravska</option>
-                    <option value="Savinjska">Savinjska</option>
-                    <option value="Gorenjska">Gorenjska</option>
-                    <option value="Obalno-kraška">Obalno-kraška</option>
-                    <option value="Jugovzhodna Slovenija">Jugovzhodna Slovenija</option>
-                    <option value="Goriška">Goriška</option>
-                    <option value="Pomurska">Pomurska</option>
-                    <option value="Koroška">Koroška</option>
-                    <option value="Zasavska">Zasavska</option>
-                    <option value="Posavska">Posavska</option>
-                    <option value="Primorsko-notranjska">Primorsko-notranjska</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="password">Geslo</label>
-                <div class="password-wrapper">
-                    <input type="password" id="password" name="password" placeholder="Vsaj 8 znakov" required />
-                    <button type="button" class="toggle-pw" aria-label="Pokaži geslo"><i
-                            class="fas fa-eye"></i></button>
+            <div class="auth-divider"><span>ali</span></div>
+
+            <form id="registerForm" novalidate>
+                <div class="form-group">
+                    <label for="fullname">Ime in priimek</label>
+                    <input type="text" id="fullname" name="fullname" placeholder="Janez Novak" required />
                 </div>
-                <div class="strength-container">
-                    <div id="strength-bar" class="strength-bar"></div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="vas@email.com" required />
+                </div>
+                <div class="form-group">
+                    <label for="region">Regija</label>
+                    <select id="region" name="region">
+                        <option value="">Izberi regijo...</option>
+                        <option value="Osrednjeslovenska">Osrednjeslovenska</option>
+                        <option value="Podravska">Podravska</option>
+                        <option value="Savinjska">Savinjska</option>
+                        <option value="Gorenjska">Gorenjska</option>
+                        <option value="Obalno-kraška">Obalno-kraška</option>
+                        <option value="Jugovzhodna Slovenija">Jugovzhodna Slovenija</option>
+                        <option value="Goriška">Goriška</option>
+                        <option value="Pomurska">Pomurska</option>
+                        <option value="Koroška">Koroška</option>
+                        <option value="Zasavska">Zasavska</option>
+                        <option value="Posavska">Posavska</option>
+                        <option value="Primorsko-notranjska">Primorsko-notranjska</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="password">Geslo</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" placeholder="Vsaj 8 znakov" required />
+                        <button type="button" class="toggle-pw" aria-label="Pokaži geslo"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="strength-container">
+                        <div id="strength-bar" class="strength-bar"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Potrditev gesla</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Ponovi geslo" required />
+                </div>
+
+                <p id="error-message" class="auth-error" aria-live="polite"></p>
+
+                <button type="submit" class="btn btn-primary btn-full">Registracija</button>
+            </form>
+        </div>
+
+        <!-- ── BUSINESS PANEL ────────────────────────────────────────────── -->
+        <div id="panel-business" class="wizard-panel" hidden>
+
+            <!-- Progress bar -->
+            <div class="wizard-progress" aria-label="Napredek registracije">
+                <div class="wizard-progress-bar" id="wizardProgressBar" style="width:33%"></div>
+            </div>
+            <p class="wizard-step-label" id="wizardStepLabel">Korak 1 od 3</p>
+
+            <!-- Step 1 – Company basics -->
+            <div class="wizard-step" id="biz-step-1">
+                <h2 class="wizard-step-title">Osnovni podatki podjetja</h2>
+
+                <div class="form-group">
+                    <label for="biz-fullname">Ime in priimek kontaktne osebe</label>
+                    <input type="text" id="biz-fullname" placeholder="Janez Novak" />
+                </div>
+                <div class="form-group">
+                    <label for="biz-email">E-mail</label>
+                    <input type="email" id="biz-email" placeholder="info@podjetje.si" />
+                </div>
+                <div class="form-group">
+                    <label for="biz-password">Geslo</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="biz-password" placeholder="Vsaj 8 znakov" />
+                        <button type="button" class="toggle-pw" aria-label="Pokaži geslo"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="strength-container">
+                        <div id="biz-strength-bar" class="strength-bar"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="biz-confirm-password">Potrditev gesla</label>
+                    <input type="password" id="biz-confirm-password" placeholder="Ponovi geslo" />
+                </div>
+                <div class="form-group">
+                    <label for="biz-company-name">Ime podjetja</label>
+                    <input type="text" id="biz-company-name" placeholder="Avto d.o.o." />
+                </div>
+                <div class="form-group">
+                    <label for="biz-tax-id">Davčna številka</label>
+                    <input type="text" id="biz-tax-id" placeholder="SI12345678" />
+                </div>
+                <div class="form-group">
+                    <label for="biz-address">Naslov podjetja</label>
+                    <input type="text" id="biz-address" placeholder="Dunajska cesta 1, Ljubljana" />
+                </div>
+
+                <p id="biz-error-1" class="auth-error" aria-live="polite"></p>
+                <button class="btn btn-primary btn-full" id="bizNext1">
+                    Nadaljuj na izbiro dejavnosti <i class="fas fa-arrow-right" style="margin-left:6px"></i>
+                </button>
+            </div>
+
+            <!-- Step 2 – Business roles -->
+            <div class="wizard-step" id="biz-step-2" hidden>
+                <h2 class="wizard-step-title">Izbira dejavnosti</h2>
+                <p class="wizard-step-subtitle">Izberete lahko več možnosti.</p>
+
+                <div class="role-cards">
+                    <label class="role-card" for="role-dealer">
+                        <input type="checkbox" id="role-dealer" value="dealer" class="role-checkbox" />
+                        <div class="role-card-inner">
+                            <span class="role-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+                                </svg>
+                            </span>
+                            <span class="role-label">Avtohiša / Preprodajalec</span>
+                        </div>
+                        <span class="role-check-mark"><i class="fas fa-check"></i></span>
+                    </label>
+
+                    <label class="role-card" for="role-mechanic">
+                        <input type="checkbox" id="role-mechanic" value="mechanic" class="role-checkbox" />
+                        <div class="role-card-inner">
+                            <span class="role-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+                                </svg>
+                            </span>
+                            <span class="role-label">Pooblaščeni Servis</span>
+                        </div>
+                        <span class="role-check-mark"><i class="fas fa-check"></i></span>
+                    </label>
+
+                    <label class="role-card" for="role-vulcanizer">
+                        <input type="checkbox" id="role-vulcanizer" value="vulcanizer" class="role-checkbox" />
+                        <div class="role-card-inner">
+                            <span class="role-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+                                </svg>
+                            </span>
+                            <span class="role-label">Vulkanizer</span>
+                        </div>
+                        <span class="role-check-mark"><i class="fas fa-check"></i></span>
+                    </label>
+                </div>
+
+                <p id="biz-error-2" class="auth-error" aria-live="polite"></p>
+
+                <div class="wizard-nav">
+                    <button class="btn btn-secondary" id="bizBack2">
+                        <i class="fas fa-arrow-left" style="margin-right:6px"></i> Nazaj
+                    </button>
+                    <button class="btn btn-primary" id="bizSubmit">
+                        Zaključi registracijo <i class="fas fa-check" style="margin-left:6px"></i>
+                    </button>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="confirmPassword">Potrditev gesla</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Ponovi geslo"
-                    required />
+
+            <!-- Step 3 – Success -->
+            <div class="wizard-step wizard-success" id="biz-step-3" hidden>
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 class="wizard-step-title">Dobrodošli!</h2>
+                <p class="wizard-success-msg">Vaš poslovni račun je bil ustvarjen in je <strong>v preverjanju</strong>. Administrator bo v kratkem potrdil vaš profil.</p>
+
+                <div class="unlocked-features" id="unlockedFeatures"></div>
+
+                <a href="#/dashboard" class="btn btn-primary btn-full" style="margin-top:1.5rem; text-decoration:none; display:flex; justify-content:center;">
+                    Pojdi na nadzorno ploščo
+                </a>
             </div>
-
-            <p id="error-message" class="auth-error" aria-live="polite"></p>
-
-            <button type="submit" class="btn btn-primary btn-full">Registracija</button>
-        </form>
+        </div>
 
         <p class="auth-switch">Že imaš račun? <a href="#/prijava">Prijava</a></p>
     </div>
