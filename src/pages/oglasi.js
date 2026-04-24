@@ -276,7 +276,7 @@ function renderCarCard(car) {
             </div>
 
             <div class="listing-card-action-bar">
-                <div class="primary-specs centered">
+                <div class="primary-specs">
                     ${getYearPill(car.year)}
                     ${getKmPill(car.mileage)}
                     ${getPowerPill(car.powerKw)}
@@ -295,9 +295,9 @@ function renderCarCard(car) {
                 </div>
             </div>
 
-            <div class="listing-card-specs centered">
-                <div class="spec-row secondary centered">
-                    <div class="spec-group-center">
+            <div class="listing-card-specs">
+                <div class="spec-row secondary">
+                    <div class="spec-group-left">
                         ${getFuelPill(car.fuel)}
                         ${getTransmissionPill(car.transmission)}
                         ${getConsumptionPill(car)}

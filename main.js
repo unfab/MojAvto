@@ -3,7 +3,12 @@ import './src/router.js';
 import './src/pageController.js';
 import { onAuth } from './src/auth/auth.js';
 import { initHeader } from './src/components/header.js';
+import { bindB2BContext, onB2BChange } from './src/core/b2bContext.js';
+import { registerDefaultExtensions } from './src/core/extensions.js';
 import './src/index.css';
+
+// Register B2B extension registry (once)
+registerDefaultExtensions();
 
 // Boot header (persists across route changes)
 initHeader();
@@ -21,6 +26,14 @@ fetch('/views/footer.html')
 window.__authReady = new Promise(resolve => {
     onAuth(user => {
         window.__currentUser = user || null;
+        // Bind/unbind B2B profile snapshot whenever auth changes
+        bindB2BContext(user);
         resolve(user);
     });
+});
+
+// Keep <body> class in sync with B2B mode so CSS can adapt globally
+onB2BChange(profile => {
+    const isBiz = profile?.sellerType === 'business';
+    document.body.classList.toggle('is-b2b', isBiz);
 });

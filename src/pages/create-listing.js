@@ -50,19 +50,19 @@ function parseNumberFromCommas(s) {
 
 // ── Step definitions ──────────────────────────────────────────────────────────
 const STEPS = [
-    { id: 'entry',       title: null },       // 0: entry mode
-    { id: 'vin',         title: null,         condition: s => s.entryType === 'vin' },
-    { id: 'category',    title: 'Kategorija', number: true },
-    { id: 'basic',       title: 'Osnovni podatki', number: true },
-    { id: 'technical',   title: 'Tehnični podatki', number: true },
-    { id: 'equipment',   title: 'Oprema', number: true },
-    { id: 'media',       title: 'Fotografije', number: true },
+    { id: 'entry', title: null },       // 0: entry mode
+    { id: 'vin', title: null, condition: s => s.entryType === 'vin' },
+    { id: 'category', title: 'Kategorija', number: true },
+    { id: 'basic', title: 'Osnovni podatki', number: true },
+    { id: 'technical', title: 'Tehnični podatki', number: true },
+    { id: 'equipment', title: 'Oprema', number: true },
+    { id: 'media', title: 'Fotografije', number: true },
     { id: 'description', title: 'Opis', number: true },
-    { id: 'price',       title: 'Cena', number: true },
-    { id: 'location',    title: 'Lokacija in kontakt', number: true },
-    { id: 'promotion',   title: 'Vidnost oglasa', number: true },
-    { id: 'review',      title: 'Pregled oglasa', number: true },
-    { id: 'auth',        title: 'Prijava', condition: () => !auth.currentUser },
+    { id: 'price', title: 'Cena', number: true },
+    { id: 'location', title: 'Lokacija in kontakt', number: true },
+    { id: 'promotion', title: 'Vidnost oglasa', number: true },
+    { id: 'review', title: 'Pregled oglasa', number: true },
+    { id: 'auth', title: 'Prijava', condition: () => !auth.currentUser },
 ];
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -109,7 +109,7 @@ export async function initCreateListingPage() {
     fetch('/json/brands_models_global.json')
         .then(r => r.json())
         .then(d => { brandModelData = d; })
-        .catch(() => {});
+        .catch(() => { });
 
     // Restore draft if available
     const saved = loadDraft();
@@ -125,7 +125,7 @@ export async function initCreateListingPage() {
             clearDraft();
         }
     }
-    
+
     // Check if user is logged in to pre-set seller type
     if (auth.currentUser) {
         try {
@@ -184,19 +184,19 @@ function renderCurrentStep() {
     updateProgress();
 
     const renderers = {
-        entry:       renderEntryStep,
-        vin:         renderVinStep,
-        category:    renderCategoryStep,
-        basic:       renderBasicStep,
-        technical:   renderTechnicalStep,
-        equipment:   renderEquipmentStep,
-        media:       renderMediaStep,
+        entry: renderEntryStep,
+        vin: renderVinStep,
+        category: renderCategoryStep,
+        basic: renderBasicStep,
+        technical: renderTechnicalStep,
+        equipment: renderEquipmentStep,
+        media: renderMediaStep,
         description: renderDescriptionStep,
-        price:       renderPriceStep,
-        location:    renderLocationStep,
-        promotion:   renderPromotionStep,
-        review:      renderReviewStep,
-        auth:        renderAuthStep,
+        price: renderPriceStep,
+        location: renderLocationStep,
+        promotion: renderPromotionStep,
+        review: renderReviewStep,
+        auth: renderAuthStep,
     };
 
     const fn = renderers[def.id];
@@ -241,12 +241,12 @@ function renderEntryStep() {
 
             <div class="cl-field" style="margin-bottom:1.5rem;">
                 <label class="cl-label">Tip prodajalca</label>
-                ${auth.currentUser 
-                    ? `<div style="padding:0.75rem 1rem;background:rgba(255,255,255,0.4);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,0.5);border-radius:12px;display:flex;align-items:center;gap:0.75rem;font-weight:600;">
+                ${auth.currentUser
+            ? `<div style="padding:0.75rem 1rem;background:rgba(255,255,255,0.4);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,0.5);border-radius:12px;display:flex;align-items:center;gap:0.75rem;font-weight:600;">
                          ${state.sellerType === 'business' ? '🏢 Pravna oseba / Salon' : '👤 Fizična oseba'}
                          <span style="font-size:0.75rem;color:#64748b;font-weight:400;margin-left:auto;">Prijavljen kot: ${auth.currentUser.displayName || auth.currentUser.email}</span>
                        </div>`
-                    : `<div class="cl-seller-toggle">
+            : `<div class="cl-seller-toggle">
                         <button class="cl-seller-btn ${state.sellerType === 'private' ? 'active' : ''}" data-type="private">
                             👤 Fizična oseba
                         </button>
@@ -254,7 +254,7 @@ function renderEntryStep() {
                             🏢 Pravna oseba / Salon
                         </button>
                     </div>`
-                }
+        }
             </div>
 
             <!-- Smart Import -->
@@ -329,12 +329,12 @@ function renderEntryStep() {
 
 // ── Smart Import ──────────────────────────────────────────────────────────────
 async function runSmartImport() {
-    const urlInput  = document.getElementById('importUrlInput');
-    const loader    = document.getElementById('importLoader');
+    const urlInput = document.getElementById('importUrlInput');
+    const loader = document.getElementById('importLoader');
     const loaderTxt = document.getElementById('importLoaderText');
-    const warning   = document.getElementById('importWarning');
-    const errorEl   = document.getElementById('importError');
-    const btn       = document.getElementById('btnSmartImport');
+    const warning = document.getElementById('importWarning');
+    const errorEl = document.getElementById('importError');
+    const btn = document.getElementById('btnSmartImport');
 
     const url = urlInput?.value?.trim();
     if (!url || !url.startsWith('http')) {
@@ -344,7 +344,7 @@ async function runSmartImport() {
 
     // UI: loading state
     btn.disabled = true;
-    if (loader)  loader.style.display  = 'flex';
+    if (loader) loader.style.display = 'flex';
     if (warning) warning.style.display = 'none';
     if (errorEl) errorEl.style.display = 'none';
 
@@ -355,7 +355,7 @@ async function runSmartImport() {
 
         // Step 2: collect allowed values from local data
         const allowedBrands = brandModelData ? Object.keys(brandModelData) : [];
-        const allowedSlugs  = EQUIPMENT_GROUPS.flatMap(g => g.items.map(i => i.value));
+        const allowedSlugs = EQUIPMENT_GROUPS.flatMap(g => g.items.map(i => i.value));
 
         // Step 3: send to Gemini
         if (loaderTxt) loaderTxt.textContent = 'Umetna inteligenca analizira oglas...';
@@ -365,7 +365,7 @@ async function runSmartImport() {
         applyImportedData(parsed);
 
         // UI: success
-        if (loader)  loader.style.display  = 'none';
+        if (loader) loader.style.display = 'none';
         if (warning) warning.style.display = 'block';
 
     } catch (err) {
@@ -387,14 +387,14 @@ function applyImportedData(d) {
     if (!d || typeof d !== 'object') return;
 
     // Basic fields → state (steps will read from state when rendered)
-    if (d.brand)        state.make         = d.brand;
-    if (d.model)        state.model        = d.model;
-    if (d.year)         state.year         = Number(d.year);
-    if (d.mileage)      state.mileageKm    = Number(d.mileage);
-    if (d.fuel)         state.fuel         = d.fuel;
+    if (d.brand) state.make = d.brand;
+    if (d.model) state.model = d.model;
+    if (d.year) state.year = Number(d.year);
+    if (d.mileage) state.mileageKm = Number(d.mileage);
+    if (d.fuel) state.fuel = d.fuel;
     if (d.transmission) state.transmission = d.transmission;
-    if (d.powerKw)      state.powerKw      = Number(d.powerKw);
-    if (d.price)        state.priceEur     = Number(d.price);
+    if (d.powerKw) state.powerKw = Number(d.powerKw);
+    if (d.price) state.priceEur = Number(d.price);
 
     // Equipment — merge with existing selection
     if (Array.isArray(d.equipment) && d.equipment.length) {
@@ -578,10 +578,10 @@ function mapVinFuel(engineType) {
 
 // ── Step 2: Category ──────────────────────────────────────────────────────────
 const CATEGORIES = [
-    { 
-        id: 'avto',        
-        label: 'Avto',           
-        icon: 'car',       
+    {
+        id: 'avto',
+        label: 'Avto',
+        icon: 'car',
         subs: [
             { name: 'Limuzina', icon: 'car' },
             { name: 'SUV / Terensko', icon: 'mountain' },
@@ -592,56 +592,58 @@ const CATEGORIES = [
             { name: 'Enoprostorec', icon: 'users' },
             { name: 'Pick-up', icon: 'truck' },
             { name: 'Oldtimer', icon: 'history' }
-        ] 
+        ]
     },
-    { 
-        id: 'moto',        
-        label: 'Moto',            
-        icon: 'bike',      
+    {
+        id: 'moto',
+        label: 'Moto',
+        icon: 'bike',
         subs: [
-            { name: 'Motocikel', icon: 'bike' },
-            { name: 'Skuter', icon: 'car' },
-            { name: 'Enduro', icon: 'mountain' },
-            { name: 'Chopper', icon: 'wind' },
-            { name: 'Tourer', icon: 'map' },
-            { name: 'ATV / UTV', icon: 'maximize' },
-            { name: 'E-Moto', icon: 'zap' }
-        ] 
+            { name: 'Motocikel', value: 'SportniMotor', icon: 'bike' },
+            { name: 'Športno turističen', value: 'SportniTourer', icon: 'map-pin' },
+            { name: 'Adventure', value: 'Adventure', icon: 'mountain' },
+            { name: 'Skuter', value: 'Skuter', icon: 'car' },
+            { name: 'Enduro', value: 'Enduro', icon: 'mountain' },
+            { name: 'Chopper', value: 'Chopper', icon: 'wind' },
+            { name: 'Tourer', value: 'Tourer', icon: 'map' },
+            { name: 'ATV / UTV', value: 'atv_utv', icon: 'maximize' },
+            { name: 'E-Moto', value: 'EMoto', icon: 'zap' }
+        ]
     },
-    { 
-        id: 'gospodarska', 
-        label: 'Gospodarska',     
-        icon: 'truck',     
+    {
+        id: 'gospodarska',
+        label: 'Gospodarska',
+        icon: 'truck',
         subs: [
             { name: 'Dostavna vozila', icon: 'package' },
             { name: 'Tovorna vozila', icon: 'truck' },
             { name: 'Avtobus', icon: 'users' },
             { name: 'Tovorne prikolice', icon: 'link' }
-        ] 
+        ]
     },
-    { 
+    {
         id: 'mehanizacija',
-        label: 'Mehanizacija',   
-        icon: 'tractor',   
+        label: 'Mehanizacija',
+        icon: 'tractor',
         subs: [
             { name: 'Gradbena mehanizacija', icon: 'hammer' },
             { name: 'Kmetijska mehanizacija', icon: 'tractor' },
             { name: 'Viličarji', icon: 'chevrons-up' },
             { name: 'Komunalna', icon: 'trash-2' }
-        ] 
+        ]
     },
-    { 
-        id: 'prosti-cas',  
-        label: 'Prosti čas',     
-        icon: 'palmtree',  
+    {
+        id: 'prosti-cas',
+        label: 'Prosti čas',
+        icon: 'palmtree',
         subs: [
             { name: 'Avtodom', icon: 'home' },
             { name: 'Počitniška prikolica', icon: 'box' },
             { name: 'Mobilna hišica', icon: 'home' },
             { name: 'Šotorska prikolica', icon: 'tent' }
-        ] 
+        ]
     },
-    { id: 'deli',        label: 'Deli in oprema', icon: 'wrench',    subs: [] },
+    { id: 'deli', label: 'Deli in oprema', icon: 'wrench', subs: [] },
 ];
 
 function renderCategoryStep() {
@@ -694,7 +696,7 @@ function renderSubcategories() {
     if (!cat || cat.subs.length === 0) { row.innerHTML = ''; return; }
 
     row.innerHTML = cat.subs.map(s => `
-        <button class="cl-subcategory-pill ${state.subcategory === s.name ? 'selected' : ''}" data-sub="${s.name}">
+        <button class="cl-subcategory-pill ${state.subcategory === (s.value || s.name) ? 'selected' : ''}" data-sub="${s.value || s.name}">
             <i data-lucide="${s.icon}" class="cl-sub-icon"></i>
             ${s.name}
         </button>`).join('');
@@ -799,15 +801,15 @@ function renderBasicStep() {
                 <div class="cl-field">
                     <label class="cl-label">Stanje <span class="req">*</span></label>
                     <select class="cl-select" id="fCondition">
-                        ${['Rabljeno','Novo','Razstavno vozilo','Starodobnik','Za dele'].map(c =>
-                            `<option value="${c}" ${state.condition === c ? 'selected' : ''}>${c}</option>`).join('')}
+                        ${['Rabljeno', 'Novo', 'Razstavno vozilo', 'Starodobnik', 'Za dele'].map(c =>
+        `<option value="${c}" ${state.condition === c ? 'selected' : ''}>${c}</option>`).join('')}
                     </select>
                 </div>
                 <div class="cl-field">
                     <label class="cl-label">Barva tipa</label>
                     <select class="cl-select" id="fColorType">
-                        ${[['solid','Enobarvna'],['metallic','Kovinska'],['matte','Mat'],['pearl','Biserna']].map(([v,l]) =>
-                            `<option value="${v}" ${state.colorType === v ? 'selected' : ''}>${l}</option>`).join('')}
+                        ${[['solid', 'Enobarvna'], ['metallic', 'Kovinska'], ['matte', 'Mat'], ['pearl', 'Biserna']].map(([v, l]) =>
+            `<option value="${v}" ${state.colorType === v ? 'selected' : ''}>${l}</option>`).join('')}
                     </select>
                 </div>
             </div>
@@ -817,14 +819,14 @@ function renderBasicStep() {
                     <label class="cl-label">Število vrat</label>
                     <select class="cl-select" id="fDoors">
                         <option value="">—</option>
-                        ${[2,3,4,5,6].map(n => `<option value="${n}" ${Number(state.doorsCount)===n ? 'selected':''}>${n}</option>`).join('')}
+                        ${[2, 3, 4, 5, 6].map(n => `<option value="${n}" ${Number(state.doorsCount) === n ? 'selected' : ''}>${n}</option>`).join('')}
                     </select>
                 </div>
                 <div class="cl-field">
                     <label class="cl-label">Število sedežev</label>
                     <select class="cl-select" id="fSeats">
                         <option value="">—</option>
-                        ${[2,3,4,5,6,7,8,9].map(n => `<option value="${n}" ${Number(state.seatsCount)===n ? 'selected':''}>${n}</option>`).join('')}
+                        ${[2, 3, 4, 5, 6, 7, 8, 9].map(n => `<option value="${n}" ${Number(state.seatsCount) === n ? 'selected' : ''}>${n}</option>`).join('')}
                     </select>
                 </div>
             </div>
@@ -836,10 +838,10 @@ function renderBasicStep() {
                         <select class="cl-select" id="fFirstRegMonth">
                             <option value="">Mesec</option>
                             ${[...Array(12)].map((_, i) => {
-                                const m = (i + 1).toString().padStart(2, '0');
-                                const currentM = state.firstRegistration ? state.firstRegistration.split('-')[1] : '';
-                                return `<option value="${m}" ${currentM === m ? 'selected' : ''}>${m}.</option>`;
-                            }).join('')}
+                const m = (i + 1).toString().padStart(2, '0');
+                const currentM = state.firstRegistration ? state.firstRegistration.split('-')[1] : '';
+                return `<option value="${m}" ${currentM === m ? 'selected' : ''}>${m}.</option>`;
+            }).join('')}
                         </select>
                         <select class="cl-select" id="fFirstRegYear">
                             <option value="">Leto</option>
@@ -851,8 +853,8 @@ function renderBasicStep() {
                     <label class="cl-label">Število preteklih lastnikov</label>
                     <select class="cl-select" id="fPrevOwners">
                         <option value="">—</option>
-                        ${['1. lastnik','2. lastnik','3. lastnik','4. lastnik','5 ali več'].map(l =>
-                            `<option value="${l}" ${state.previousOwnersCount === l ? 'selected' : ''}>${l}</option>`).join('')}
+                        ${['1. lastnik', '2. lastnik', '3. lastnik', '4. lastnik', '5 ali več'].map(l =>
+                `<option value="${l}" ${state.previousOwnersCount === l ? 'selected' : ''}>${l}</option>`).join('')}
                     </select>
                 </div>
             </div>
@@ -873,10 +875,10 @@ function renderBasicStep() {
     // Highlight imported fields
     if (state._imported) {
         const imp = state._imported;
-        if (imp.brand)    makeSel?.classList.add('imported-field');
-        if (imp.model)    modelSel?.classList.add('imported-field');
-        if (imp.year)     document.getElementById('fYear')?.classList.add('imported-field');
-        if (imp.mileage)  document.getElementById('fMileage')?.classList.add('imported-field');
+        if (imp.brand) makeSel?.classList.add('imported-field');
+        if (imp.model) modelSel?.classList.add('imported-field');
+        if (imp.year) document.getElementById('fYear')?.classList.add('imported-field');
+        if (imp.mileage) document.getElementById('fMileage')?.classList.add('imported-field');
     }
 
     // Populate Brands
@@ -895,7 +897,7 @@ function renderBasicStep() {
         const currentModel = state.model;
         modelSel.innerHTML = '<option value="">Izberi model</option>';
         variantSel.innerHTML = '<option value="">Najprej izberi model</option>';
-        
+
         if (make && brandModelData && brandModelData[make]) {
             const models = brandModelData[make];
             const modelKeys = Array.isArray(models) ? models : Object.keys(models);
@@ -918,7 +920,7 @@ function renderBasicStep() {
         const model = modelSel.value;
         const currentVariant = state.variant;
         variantSel.innerHTML = '<option value="">Izberi različico</option>';
-        
+
         if (make && model && brandModelData && brandModelData[make]) {
             const models = brandModelData[make];
             if (!Array.isArray(models) && models[model]) {
@@ -982,7 +984,7 @@ function renderBasicStep() {
             }
             const formatted = formatNumberWithCommas(raw);
             e.target.value = formatted;
-            
+
             // Update unit label visibility (optional effect)
             const unit = document.querySelector('.cl-mileage-unit');
             if (unit) unit.style.opacity = e.target.value ? '1' : '0.4';
@@ -1021,10 +1023,10 @@ function renderBasicStep() {
 
 // ── Step 4: Technical ─────────────────────────────────────────────────────────
 function renderTechnicalStep() {
-    const fuels = ['Bencin','Dizel','Hibrid','Elektrika','LPG','CNG','Vodik'];
-    const transmissions = ['Ročni','Avtomatski','Polavtomatski'];
-    const drives = ['FWD (sprednji)','RWD (zadnji)','AWD / 4x4'];
-    const euros = ['Euro 4','Euro 5','Euro 6','Euro 6d','Euro 6d-temp'];
+    const fuels = ['Bencin', 'Dizel', 'Hibrid', 'Elektrika', 'LPG', 'CNG', 'Vodik'];
+    const transmissions = ['Ročni', 'Avtomatski', 'Polavtomatski'];
+    const drives = ['FWD (sprednji)', 'RWD (zadnji)', 'AWD / 4x4'];
+    const euros = ['Euro 4', 'Euro 5', 'Euro 6', 'Euro 6d', 'Euro 6d-temp'];
 
     const isVin = state.vinVerified;
     const fuelLocked = isVin && !state.vinOverrides?.fuel;
@@ -1039,7 +1041,7 @@ function renderTechnicalStep() {
                     <label class="cl-label">Vrsta goriva <span class="req">*</span></label>
                     <select class="cl-select" id="fFuel" ${fuelLocked ? 'disabled' : ''}>
                         <option value="">Izberi</option>
-                        ${fuels.map(f => `<option value="${f}" ${state.fuel===f?'selected':''}>${f}</option>`).join('')}
+                        ${fuels.map(f => `<option value="${f}" ${state.fuel === f ? 'selected' : ''}>${f}</option>`).join('')}
                     </select>
                     ${fuelLocked ? '<span class="cl-field-badge cl-field-badge--locked"><i data-lucide="lock"></i> Preverjeno (VIN)</span>' : ''}
                 </div>
@@ -1047,7 +1049,7 @@ function renderTechnicalStep() {
                     <label class="cl-label">Menjalnik <span class="req">*</span></label>
                     <select class="cl-select" id="fTransmission">
                         <option value="">Izberi</option>
-                        ${transmissions.map(t => `<option value="${t}" ${state.transmission===t?'selected':''}>${t}</option>`).join('')}
+                        ${transmissions.map(t => `<option value="${t}" ${state.transmission === t ? 'selected' : ''}>${t}</option>`).join('')}
                     </select>
                 </div>
             </div>
@@ -1057,12 +1059,12 @@ function renderTechnicalStep() {
                     <label class="cl-label">Pogon</label>
                     <select class="cl-select" id="fDrive">
                         <option value="">Izberi</option>
-                        ${drives.map(d => `<option value="${d}" ${state.driveType===d?'selected':''}>${d}</option>`).join('')}
+                        ${drives.map(d => `<option value="${d}" ${state.driveType === d ? 'selected' : ''}>${d}</option>`).join('')}
                     </select>
                 </div>
                 <div class="cl-field">
                     <label class="cl-label">Prostornina motorja (cc) <span class="req">*</span></label>
-                    <input class="cl-input" id="fEngineCC" type="number" min="0" value="${state.engineCc||''}" placeholder="npr. 1968" />
+                    <input class="cl-input" id="fEngineCC" type="number" min="0" value="${state.engineCc || ''}" placeholder="npr. 1968" />
                 </div>
             </div>
 
@@ -1082,7 +1084,7 @@ function renderTechnicalStep() {
                 </div>
                 <div class="cl-field">
                     <label class="cl-label">CO₂ (g/km)</label>
-                    <input class="cl-input" id="fCo2" type="number" min="0" value="${state.co2||''}" placeholder="npr. 142" />
+                    <input class="cl-input" id="fCo2" type="number" min="0" value="${state.co2 || ''}" placeholder="npr. 142" />
                 </div>
             </div>
 
@@ -1091,12 +1093,12 @@ function renderTechnicalStep() {
                     <label class="cl-label">Emisijski razred</label>
                     <select class="cl-select" id="fEuro">
                         <option value="">—</option>
-                        ${euros.map(e => `<option value="${e}" ${state.emissionClass===e?'selected':''}>${e}</option>`).join('')}
+                        ${euros.map(e => `<option value="${e}" ${state.emissionClass === e ? 'selected' : ''}>${e}</option>`).join('')}
                     </select>
                 </div>
                 <div class="cl-field">
                     <label class="cl-label">Vlečna masa (kg)</label>
-                    <input class="cl-input" id="fTow" type="number" min="0" value="${state.towingKg||''}" placeholder="npr. 1500" />
+                    <input class="cl-input" id="fTow" type="number" min="0" value="${state.towingKg || ''}" placeholder="npr. 1500" />
                 </div>
             </div>
 
@@ -1107,15 +1109,15 @@ function renderTechnicalStep() {
                 <div class="cl-row">
                     <div class="cl-field">
                         <label class="cl-label">Kombinirana</label>
-                        <input class="cl-input" id="fConsCombined" type="number" step="0.1" min="0" value="${state.fuelL100kmCombined||''}" placeholder="npr. 6.5" />
+                        <input class="cl-input" id="fConsCombined" type="number" step="0.1" min="0" value="${state.fuelL100kmCombined || ''}" placeholder="npr. 6.5" />
                     </div>
                     <div class="cl-field">
                         <label class="cl-label">Mestna</label>
-                        <input class="cl-input" id="fConsCity" type="number" step="0.1" min="0" value="${state.fuelL100kmCity||''}" placeholder="npr. 8.2" />
+                        <input class="cl-input" id="fConsCity" type="number" step="0.1" min="0" value="${state.fuelL100kmCity || ''}" placeholder="npr. 8.2" />
                     </div>
                     <div class="cl-field">
                         <label class="cl-label">Izvenmestna</label>
-                        <input class="cl-input" id="fConsHighway" type="number" step="0.1" min="0" value="${state.fuelL100kmHighway||''}" placeholder="npr. 5.1" />
+                        <input class="cl-input" id="fConsHighway" type="number" step="0.1" min="0" value="${state.fuelL100kmHighway || ''}" placeholder="npr. 5.1" />
                     </div>
                 </div>
             </div>
@@ -1125,11 +1127,11 @@ function renderTechnicalStep() {
                 <div class="cl-row">
                     <div class="cl-field">
                         <label class="cl-label">Kapaciteta baterije (kWh)</label>
-                        <input class="cl-input" id="fBattery" type="number" min="0" value="${state.batteryKwh||''}" placeholder="npr. 77" />
+                        <input class="cl-input" id="fBattery" type="number" min="0" value="${state.batteryKwh || ''}" placeholder="npr. 77" />
                     </div>
                     <div class="cl-field">
                         <label class="cl-label">Domet WLTP (km)</label>
-                        <input class="cl-input" id="fRange" type="number" min="0" value="${state.rangeKm||''}" placeholder="npr. 550" />
+                        <input class="cl-input" id="fRange" type="number" min="0" value="${state.rangeKm || ''}" placeholder="npr. 550" />
                     </div>
                 </div>
             </div>
@@ -1140,8 +1142,8 @@ function renderTechnicalStep() {
                     <label class="cl-label">Tip hibrida</label>
                     <select class="cl-select" id="fHybridType">
                         <option value="">Izberi</option>
-                        ${[['BencinHibrid','Bencin hibrid'],['DizelHibrid','Dizel hibrid'],['PlugIn','Plug-in hibrid'],['MildHibrid','Mild hibrid']].map(([v,l]) =>
-                            `<option value="${v}" ${state.hybridType===v?'selected':''}>${l}</option>`).join('')}
+                        ${[['BencinHibrid', 'Bencin hibrid'], ['DizelHibrid', 'Dizel hibrid'], ['PlugIn', 'Plug-in hibrid'], ['MildHibrid', 'Mild hibrid']].map(([v, l]) =>
+        `<option value="${v}" ${state.hybridType === v ? 'selected' : ''}>${l}</option>`).join('')}
                     </select>
                 </div>
             </div>
@@ -1158,9 +1160,9 @@ function renderTechnicalStep() {
     // Highlight imported fields in technical step
     if (state._imported) {
         const imp = state._imported;
-        if (imp.fuel)         document.getElementById('fFuel')?.classList.add('imported-field');
+        if (imp.fuel) document.getElementById('fFuel')?.classList.add('imported-field');
         if (imp.transmission) document.getElementById('fTransmission')?.classList.add('imported-field');
-        if (imp.powerKw)      document.getElementById('fPower')?.classList.add('imported-field');
+        if (imp.powerKw) document.getElementById('fPower')?.classList.add('imported-field');
     }
 
     const fuelSel = document.getElementById('fFuel');
@@ -1380,7 +1382,7 @@ function renderThumbs() {
 
     grid.innerHTML = urls.map((url, i) => `
         <div class="cl-thumb ${isExterior && i === state.coverIndex ? 'is-cover' : ''}" data-idx="${i}">
-            <img src="${url}" alt="Slika ${i+1}" />
+            <img src="${url}" alt="Slika ${i + 1}" />
             ${isExterior && i === state.coverIndex ? '<span class="cl-thumb-cover-badge">⭐ Naslovna</span>' : ''}
             <button class="cl-thumb-remove" data-remove="${i}" title="Odstrani">×</button>
         </div>`).join('');
@@ -1422,7 +1424,7 @@ function renderDescriptionStep() {
             <div class="cl-field">
                 <label class="cl-label">Opis</label>
                 <textarea class="cl-textarea" id="fDesc" maxlength="3000" placeholder="Opišite vozilo — servisna knjiga, vzdrževanje, posebnosti, razlog prodaje...">${escHtml(state.description || '')}</textarea>
-                <span id="descCount" style="font-size:0.75rem;color:#94a3b8;text-align:right;">${(state.description||'').length} / 3000</span>
+                <span id="descCount" style="font-size:0.75rem;color:#94a3b8;text-align:right;">${(state.description || '').length} / 3000</span>
             </div>
 
             ${isBusiness ? `
@@ -1514,7 +1516,7 @@ function renderPriceStep() {
                     <textarea class="cl-textarea" id="fLeasingConditions" maxlength="1000"
                         placeholder="Opišite pogoje leasinga ali hitrega kredita — partnerske banke, minimalni znesek, ročnost, obrestna mera..."
                         style="min-height:120px;">${escHtml(state.leasingConditions || '')}</textarea>
-                    <span style="font-size:0.75rem;color:#94a3b8;text-align:right;display:block;" id="leasingCount">${(state.leasingConditions||'').length} / 1000</span>
+                    <span style="font-size:0.75rem;color:#94a3b8;text-align:right;display:block;" id="leasingCount">${(state.leasingConditions || '').length} / 1000</span>
                 </div>
             </div>` : ''}
 
@@ -1592,7 +1594,7 @@ function renderPriceStep() {
 
 // ── Step 9: Location & contact ────────────────────────────────────────────────
 function renderLocationStep() {
-    const regions = ['Osrednjeslovenska','Gorenjska','Podravska','Savinjska','Dolenjska','Obalno-kraška','Koroška','Pomurska','Zasavska','Posavska','Primorsko-notranjska','Goriška'];
+    const regions = ['Osrednjeslovenska', 'Gorenjska', 'Podravska', 'Savinjska', 'Dolenjska', 'Obalno-kraška', 'Koroška', 'Pomurska', 'Zasavska', 'Posavska', 'Primorsko-notranjska', 'Goriška'];
     const isBusiness = state.sellerType === 'business';
 
     const BH_DAYS = [
@@ -1614,11 +1616,11 @@ function renderLocationStep() {
             <div class="cl-row">
                 <div class="cl-field">
                     <label class="cl-label">Mesto <span class="req">*</span></label>
-                    <input class="cl-input" id="fCity" type="text" value="${escHtml(state.location?.city||'')}" placeholder="npr. Ljubljana" />
+                    <input class="cl-input" id="fCity" type="text" value="${escHtml(state.location?.city || '')}" placeholder="npr. Ljubljana" />
                 </div>
                 <div class="cl-field">
                     <label class="cl-label">Poštna številka</label>
-                    <input class="cl-input" id="fPostal" type="text" value="${escHtml(state.location?.postalCode||'')}" placeholder="npr. 1000" />
+                    <input class="cl-input" id="fPostal" type="text" value="${escHtml(state.location?.postalCode || '')}" placeholder="npr. 1000" />
                 </div>
             </div>
 
@@ -1626,7 +1628,7 @@ function renderLocationStep() {
                 <label class="cl-label">Regija</label>
                 <select class="cl-select" id="fRegion">
                     <option value="">Izberi regijo</option>
-                    ${regions.map(r => `<option value="${r}" ${state.location?.region===r?'selected':''}>${r}</option>`).join('')}
+                    ${regions.map(r => `<option value="${r}" ${state.location?.region === r ? 'selected' : ''}>${r}</option>`).join('')}
                 </select>
             </div>
 
@@ -1634,13 +1636,13 @@ function renderLocationStep() {
 
             <div class="cl-field">
                 <label class="cl-label">Ime kontaktne osebe <span class="req">*</span></label>
-                <input class="cl-input" id="fContactName" type="text" value="${escHtml(state.contact?.name||'')}" />
+                <input class="cl-input" id="fContactName" type="text" value="${escHtml(state.contact?.name || '')}" />
             </div>
 
             <div class="cl-row">
                 <div class="cl-field">
                     <label class="cl-label">Telefonska številka</label>
-                    <input class="cl-input" id="fPhone" type="tel" value="${escHtml(state.contact?.phone||'')}" placeholder="+386 ..." />
+                    <input class="cl-input" id="fPhone" type="tel" value="${escHtml(state.contact?.phone || '')}" placeholder="+386 ..." />
                 </div>
                 <div class="cl-field" style="justify-content:flex-end;">
                     <label class="cl-checkbox-label" style="margin-top:1.6rem;">
@@ -1655,7 +1657,7 @@ function renderLocationStep() {
             <div class="cl-field">
                 <label class="cl-label">Opomnik za kupce <span style="font-size:0.78rem;color:#94a3b8;">(neobvezno)</span></label>
                 <textarea class="cl-input" id="fSellerNote" rows="3" placeholder="npr. Kliči samo po 17:00 uri, Ogled možen ob vikendih..."
-                    style="resize:vertical;">${escHtml(state.sellerNote||'')}</textarea>
+                    style="resize:vertical;">${escHtml(state.sellerNote || '')}</textarea>
                 <span class="cl-hint">Prikazano pod vašim profilom na oglasu.</span>
             </div>` : ''}
 
@@ -1670,10 +1672,10 @@ function renderLocationStep() {
                             <input type="checkbox" class="bh-check" data-day="${d.key}" ${bh[d.key] ? 'checked' : ''} />
                             ${d.label}
                         </label>
-                        <input class="cl-input" type="time" id="bh_${d.key}_from" value="${escHtml(bh[d.key]?.from||'08:00')}"
+                        <input class="cl-input" type="time" id="bh_${d.key}_from" value="${escHtml(bh[d.key]?.from || '08:00')}"
                             ${bh[d.key] ? '' : 'disabled'} style="padding:0.4rem;" />
                         <span style="text-align:center;color:#94a3b8;">–</span>
-                        <input class="cl-input" type="time" id="bh_${d.key}_to" value="${escHtml(bh[d.key]?.to||'17:00')}"
+                        <input class="cl-input" type="time" id="bh_${d.key}_to" value="${escHtml(bh[d.key]?.to || '17:00')}"
                             ${bh[d.key] ? '' : 'disabled'} style="padding:0.4rem;" />
                         <span class="cl-bh-closed" id="bh_${d.key}_label"
                             style="font-size:0.75rem;color:#94a3b8;width:4rem;">${bh[d.key] ? '' : 'Zaprto'}</span>
@@ -1732,7 +1734,7 @@ function renderLocationStep() {
                 if (cb?.checked) {
                     hours[d.key] = {
                         from: document.getElementById(`bh_${d.key}_from`).value || '08:00',
-                        to:   document.getElementById(`bh_${d.key}_to`).value   || '17:00',
+                        to: document.getElementById(`bh_${d.key}_to`).value || '17:00',
                     };
                 }
             });
@@ -1809,7 +1811,7 @@ function renderReviewStep() {
         : '';
 
     function section(title, stepId, rows) {
-        const items = rows.filter(([,v]) => v).map(([l,v]) => `
+        const items = rows.filter(([, v]) => v).map(([l, v]) => `
             <div class="cl-review-item">
                 <span class="cl-review-item-label">${l}</span>
                 <span class="cl-review-item-value">${escHtml(String(v))}</span>
@@ -1835,45 +1837,45 @@ function renderReviewStep() {
             </p>
 
             ${section('Kategorija', 'category', [
-                ['Kategorija', state.category],
-                ['Podkategorija', state.subcategory],
-            ])}
+        ['Kategorija', state.category],
+        ['Podkategorija', state.subcategory],
+    ])}
 
             ${section('Osnovni podatki', 'basic', [
-                ['Znamka', state.make],
-                ['Model', state.model],
-                ['Letnik', state.year],
-                ['Km', state.mileageKm ? fmt(state.mileageKm) + ' km' : ''],
-                ['Stanje', state.condition],
-                ['Barva', state.color],
-            ])}
+        ['Znamka', state.make],
+        ['Model', state.model],
+        ['Letnik', state.year],
+        ['Km', state.mileageKm ? fmt(state.mileageKm) + ' km' : ''],
+        ['Stanje', state.condition],
+        ['Barva', state.color],
+    ])}
 
             ${section('Tehnični podatki', 'technical', [
-                ['Gorivo', state.fuel],
-                ['Menjalnik', state.transmission],
-                ['Moč', state.powerKw ? state.powerKw + ' kW (' + Math.round(state.powerKw * 1.35962) + ' KM)' : ''],
-                ['Prostornina', state.engineCc ? state.engineCc + ' cc' : ''],
-                ['Poraba (komb.)', state.fuelL100kmCombined ? state.fuelL100kmCombined + ' L/100km' : ''],
-                ['Poraba (mesto)', state.fuelL100kmCity ? state.fuelL100kmCity + ' L/100km' : ''],
-                ['Poraba (izven)', state.fuelL100kmHighway ? state.fuelL100kmHighway + ' L/100km' : ''],
-                ['Domet WLTP', state.rangeKm ? state.rangeKm + ' km' : ''],
-                ['Emisije', state.emissionClass],
-            ])}
+        ['Gorivo', state.fuel],
+        ['Menjalnik', state.transmission],
+        ['Moč', state.powerKw ? state.powerKw + ' kW (' + Math.round(state.powerKw * 1.35962) + ' KM)' : ''],
+        ['Prostornina', state.engineCc ? state.engineCc + ' cc' : ''],
+        ['Poraba (komb.)', state.fuelL100kmCombined ? state.fuelL100kmCombined + ' L/100km' : ''],
+        ['Poraba (mesto)', state.fuelL100kmCity ? state.fuelL100kmCity + ' L/100km' : ''],
+        ['Poraba (izven)', state.fuelL100kmHighway ? state.fuelL100kmHighway + ' L/100km' : ''],
+        ['Domet WLTP', state.rangeKm ? state.rangeKm + ' km' : ''],
+        ['Emisije', state.emissionClass],
+    ])}
 
             ${section('Cena', 'price', [
-                ['Cena', state.callForPrice ? 'Pokliči za ceno' : (state.priceEur ? fmt(state.priceEur) + ' €' : '')],
-                ['Pogajanje', state.priceNegotiable ? 'Da' : 'Ne'],
-            ])}
+        ['Cena', state.callForPrice ? 'Pokliči za ceno' : (state.priceEur ? fmt(state.priceEur) + ' €' : '')],
+        ['Pogajanje', state.priceNegotiable ? 'Da' : 'Ne'],
+    ])}
 
             ${section('Lokacija', 'location', [
-                ['Mesto', state.location?.city],
-                ['Regija', state.location?.region],
-                ['Kontakt', state.contact?.name],
-            ])}
+        ['Mesto', state.location?.city],
+        ['Regija', state.location?.region],
+        ['Kontakt', state.contact?.name],
+    ])}
 
             ${section('Vidnost', 'promotion', [
-                ['Tier', tierLabels[state.promotionTier] || state.promotionTier],
-            ])}
+        ['Tier', tierLabels[state.promotionTier] || state.promotionTier],
+    ])}
 
             ${state.vinVerified ? `
             <div class="cl-review-section">
@@ -2033,5 +2035,5 @@ function setHtml(html) {
 }
 
 function escHtml(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }

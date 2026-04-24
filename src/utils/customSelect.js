@@ -20,7 +20,7 @@ export function createCustomSelect(select) {
 
     const container = document.createElement('div');
     container.className = 'custom-select-container';
-    
+
     const trigger = document.createElement('div');
     trigger.className = 'custom-select-trigger';
     trigger.innerHTML = `
@@ -58,7 +58,7 @@ export function createCustomSelect(select) {
             if (index === select.selectedIndex) optionElem.classList.add('selected');
             optionElem.textContent = opt.text;
             optionElem.dataset.value = opt.value;
-            
+
             optionElem.addEventListener('click', () => {
                 select.selectedIndex = index;
                 select.dispatchEvent(new Event('change'));
@@ -136,7 +136,7 @@ export function createCustomSelect(select) {
     searchInput.addEventListener('keydown', (e) => {
         const visible = getVisibleOptions();
         if (visible.length === 0) return;
-        
+
         if (e.key === 'ArrowDown') {
             e.preventDefault();
             const next = (highlightedIndex + 1) % visible.length;

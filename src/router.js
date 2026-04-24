@@ -1,6 +1,7 @@
 // SPA Router — MojAvto.si
 import { auth } from './firebase.js';
 import { onAuthStateChanged } from 'firebase/auth';
+import { fetchB2BProfile } from './core/b2bContext.js';
 
 // ── Route definitions ─────────────────────────────────────────────────────────
 const routes = {
@@ -29,17 +30,40 @@ const routes = {
     '/del':              { view: 'parts-listing', protected: false },
     '/servis/vnos':      { view: 'service-entry', protected: true },
     '/b2b/oceni':        { view: 'b2b-evaluate', protected: false },
+
+    // ── B2B Operating System ──
+    '/b2b':              { view: 'b2b-dashboard',       protected: true, b2bOnly: true },
+    '/b2b/rezervacije':  { view: 'b2b-reservations',    protected: true, b2bOnly: true },
+    '/b2b/storitve':     { view: 'b2b-services',        protected: true, b2bOnly: true },
+    '/b2b/profil':       { view: 'b2b-profile-editor',  protected: true, b2bOnly: true },
+    '/b2b/zaloga':       { view: 'b2b-inventory',       protected: true, b2bOnly: true },
+    '/b2b/leads':        { view: 'b2b-leads',           protected: true, b2bOnly: true },
+    '/b2b/orodja':       { view: 'b2b-tools',           protected: true, b2bOnly: true },
+    '/b2b/delavnica':    { view: 'b2b-workshop',        protected: true, b2bOnly: true },
+    '/b2b/servis-vnos':  { view: 'service-entry',       protected: true, b2bOnly: true },
+    '/b2b/hotel-gum':    { view: 'b2b-tire-hotel',      protected: true, b2bOnly: true },
 };
 
 const PROTECTED_REDIRECT = '/prijava';
 const APP = document.getElementById('app-container');
 
+// Views that render entirely in JS (no matching /views/*.html file)
+const JS_ONLY_VIEWS = new Set([
+    'b2b-dashboard', 'b2b-reservations', 'b2b-services', 'b2b-profile-editor',
+    'b2b-inventory', 'b2b-leads', 'b2b-tools', 'b2b-workshop', 'b2b-tire-hotel',
+]);
+
 // ── Load a view HTML into the main container ──────────────────────────────────
 async function loadView(viewName) {
     try {
-        const res = await fetch(`/views/${viewName}.html?v=${new Date().getTime()}`);
-        if (!res.ok) throw new Error(`View not found: ${viewName}`);
-        APP.innerHTML = await res.text();
+        if (JS_ONLY_VIEWS.has(viewName)) {
+            // JS-only pages: clear container and let the page init render into it.
+            APP.innerHTML = '';
+        } else {
+            const res = await fetch(`/views/${viewName}.html?v=${new Date().getTime()}`);
+            if (!res.ok) throw new Error(`View not found: ${viewName}`);
+            APP.innerHTML = await res.text();
+        }
         // Dispatch so page-specific scripts can init
         document.dispatchEvent(new CustomEvent('routeChanged', { detail: { view: viewName } }));
     } catch {
@@ -69,13 +93,32 @@ async function router() {
     if (route.protected) {
         // Wait for auth state before deciding
         await new Promise(resolve => {
-            const unsub = onAuthStateChanged(auth, user => {
+            const unsub = onAuthStateChanged(auth, async user => {
                 unsub();
                 if (!user) {
                     window.location.hash = PROTECTED_REDIRECT;
-                } else {
-                    loadView(route.view);
+                    resolve();
+                    return;
                 }
+                // B2B-only gate
+                if (route.b2bOnly) {
+                    const profile = await fetchB2BProfile(user);
+                    if (profile?.sellerType !== 'business') {
+                        window.location.hash = '/dashboard';
+                        resolve();
+                        return;
+                    }
+                }
+                // Auto-redirect business users to B2B home if they hit /dashboard
+                if (route.view === 'dashboard') {
+                    const profile = await fetchB2BProfile(user);
+                    if (profile?.sellerType === 'business') {
+                        window.location.hash = '/b2b';
+                        resolve();
+                        return;
+                    }
+                }
+                loadView(route.view);
                 resolve();
             });
         });

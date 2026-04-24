@@ -178,6 +178,9 @@ export function initRegisterPage() {
             await registerWithEmail(payload);
             renderUnlockedFeatures(selectedRoles);
             setWizardStep(3);
+            // Business users default to the B2B app once they leave the success step.
+            // The manual nav button on step 3 goes to /dashboard, but the router
+            // auto-redirects business users to /b2b when they hit /dashboard.
         } catch (e) {
             const msgs = {
                 'auth/email-already-in-use': 'Ta e-mail je že v uporabi.',

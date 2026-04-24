@@ -123,10 +123,10 @@ function injectRating(listing, allListings) {
     // Pick badge colour by label
     const labelColor = {
         'Odlična vrednost': '#22c55e',
-        'Dobra vrednost':   '#86efac',
-        'Poštena cena':     '#94a3b8',
-        'Nad povprečjem':   '#fb923c',
-        'Predrago':         '#ef4444',
+        'Dobra vrednost': '#86efac',
+        'Poštena cena': '#94a3b8',
+        'Nad povprečjem': '#fb923c',
+        'Predrago': '#ef4444',
     }[rating.label] || 'var(--color-primary-start)';
 
     slot.innerHTML = `
@@ -796,8 +796,8 @@ function buildConsumptionLabel(l) {
 }
 
 // ── Seller card ───────────────────────────────────────────────────────────────
-const BH_DAY_LABELS = { mon:'Pon', tue:'Tor', wed:'Sre', thu:'Čet', fri:'Pet', sat:'Sob', sun:'Ned' };
-const BH_DAY_ORDER  = ['mon','tue','wed','thu','fri','sat','sun'];
+const BH_DAY_LABELS = { mon: 'Pon', tue: 'Tor', wed: 'Sre', thu: 'Čet', fri: 'Pet', sat: 'Sob', sun: 'Ned' };
+const BH_DAY_ORDER = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
 function renderSellerCardHtml(l) {
     const contact = l.contact || {};

@@ -388,6 +388,15 @@
 .adm-btn-green { background: #dcfce7; color: #15803d; border-color: #86efac; }
 .adm-btn-green:hover { background: #bbf7d0; }
 
+.adm-btn-blue { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
+.adm-btn-blue:hover { background: #bfdbfe; }
+
+.adm-btn-orange { background: #ffedd5; color: #c2410c; border-color: #fdba74; }
+.adm-btn-orange:hover { background: #fed7aa; }
+
+.adm-btn-teal { background: #ccfbf1; color: #0f766e; border-color: #5eead4; }
+.adm-btn-teal:hover { background: #99f6e4; }
+
 .adm-btn-red { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
 .adm-btn-red:hover { background: #fecaca; }
 

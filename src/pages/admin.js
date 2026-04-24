@@ -826,7 +826,7 @@ function openTaxAddBrandModal(cat) {
 function openTaxAddModelModal(cat, brand) {
     const hasType = cat !== 'avto';
     const typeOptions = cat === 'moto'
-        ? ['SportniMotor','NakedBike','Enduro','Chopper','Tourer','Supermoto','Trial','Cross','Skuter','Minimoto','Gocart','MotorneSani','EVozila']
+        ? ['SportniMotor', 'SportniTourer', 'Adventure', 'NakedBike', 'Enduro', 'Chopper', 'Tourer', 'Supermoto', 'Trial', 'Cross', 'Skuter', 'Minimoto', 'Gocart', 'MotorneSani', 'EVozila']
         : cat === 'gospodarska'
         ? ['Dostavna','Tovorna','Avtobus','TovornePrikolice','Gradbena','Kmetijska','Komunalna','Gozdarska','Vilicarji']
         : [];
@@ -918,12 +918,17 @@ async function renderVozilaUvoz() {
       <div class="adm-card">
         <div class="adm-card-header">
           <h3>Vnos vozil — Excel uvoz</h3>
-          <a class="adm-btn adm-btn-sm" id="voz-template-btn">⬇ Prenesi predlogo</a>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <button class="adm-btn adm-btn-sm adm-btn-blue"   id="voz-tpl-avto">⬇ Predloga Avto</button>
+            <button class="adm-btn adm-btn-sm adm-btn-orange" id="voz-tpl-moto">⬇ Predloga Motorji</button>
+            <button class="adm-btn adm-btn-sm adm-btn-teal"   id="voz-tpl-gosp">⬇ Predloga Gospodarska</button>
+          </div>
         </div>
         <div style="padding:1.25rem">
           <p style="color:#6b7280;font-size:.875rem;margin:0 0 1rem">
-            Stolpci: <code>category</code> · <code>brand</code> · <code>model</code> (obvezni) +
-            <code>variant</code> · <code>year</code> · <code>fuel</code> (neobvezni).<br>
+            <strong>Avto / Gospodarska:</strong> <code>category · brand · model · variant</code><br>
+            <strong>Motorji:</strong> <code>Znamka · Model · Različica · Kategorija · Takt · Konfiguracija</code>
+            — Kategorija z <code>/</code> loči več tipov (npr. <em>Športni / Naked</em>).<br>
             Podvojen vnos = ista znamka + model + različica → <strong>preskočen, ne podvojen</strong>.
           </p>
           <div class="adm-dropzone" id="voz-dropzone">
@@ -946,7 +951,9 @@ async function renderVozilaUvoz() {
         </div>
       </div>`;
 
-    document.getElementById('voz-template-btn').addEventListener('click', downloadVozilaTemplate);
+    document.getElementById('voz-tpl-avto').addEventListener('click', () => downloadVozilaTemplate('avto'));
+    document.getElementById('voz-tpl-moto').addEventListener('click', () => downloadVozilaTemplate('moto'));
+    document.getElementById('voz-tpl-gosp').addEventListener('click', () => downloadVozilaTemplate('gospodarska'));
 
     let parsedRows = [];
     let existingBrands = [], existingModels = [];
@@ -992,6 +999,11 @@ async function renderVozilaUvoz() {
         btn.disabled = false; btn.textContent = '📥 Uvozi';
     });
 
+    function detectMotoFormat(row) {
+        // moto template uses Slovenian column headers: Znamka, Model, Različica, Kategorija, Takt, Konfiguracija
+        return 'znamka' in row || 'kategorija' in row || 'takt' in row || 'konfiguracija' in row;
+    }
+
     function handleVozFile(file) {
         if (!file) return;
         if (typeof XLSX === 'undefined') { showToast('SheetJS ni naložen.', 'error'); return; }
@@ -1002,31 +1014,49 @@ async function renderVozilaUvoz() {
                 const ws = wb.Sheets[wb.SheetNames[0]];
                 const raw = XLSX.utils.sheet_to_json(ws, { defval: '' });
 
-                parsedRows = raw.map(r => {
+                const normalised = raw.map(r => {
                     const row = {};
                     Object.entries(r).forEach(([k, v]) => { row[k.toLowerCase().trim()] = String(v).trim(); });
+                    return row;
+                });
+
+                const isMoto = normalised.length > 0 && detectMotoFormat(normalised[0]);
+
+                parsedRows = normalised.map(row => {
+                    if (isMoto) {
+                        // moto format: Kategorija may contain "/" to denote multiple types, stored as array
+                        const katRaw = row['kategorija'] || '';
+                        const categories = katRaw.split('/').map(s => s.trim()).filter(Boolean);
+                        return {
+                            category:    'moto',
+                            brand:       row['znamka']       || '',
+                            model:       row['model']        || '',
+                            variant:     row['različica']    || row['razlicica'] || row['variant'] || 'Base',
+                            motoType:    categories,          // array, editable manually later
+                            takt:        row['takt']         || '',
+                            konfiguracija: row['konfiguracija'] || '',
+                        };
+                    }
                     return {
                         category: row['category'] || row['kategorija'] || 'avto',
                         brand:    row['brand']    || row['znamka']     || '',
                         model:    row['model']    || '',
-                        variant:  row['variant']  || row['razlicica']  || '',
-                        year:     row['year']     || row['leto']       || '',
-                        fuel:     row['fuel']     || row['gorivo']     || '',
+                        variant:  row['variant']  || row['različica']  || row['razlicica'] || '',
                     };
                 }).filter(r => r.brand);
 
-                renderVozPreview(parsedRows);
+                renderVozPreview(parsedRows, isMoto);
             } catch (ex) { showToast('Napaka pri branju: ' + ex.message, 'error'); }
         };
         reader.readAsArrayBuffer(file);
     }
 
-    function renderVozPreview(rows) {
+    function renderVozPreview(rows, isMoto) {
         document.getElementById('voz-preview').style.display = 'block';
 
         // dedup analysis against existing data
-        const brandMap  = new Map(existingBrands.map(b => [b.name.toLowerCase() + '|' + b.category, b]));
-        const modelMap  = new Map(existingModels.map(m => [m.name.toLowerCase() + '|' + (m.brandId || ''), m]));
+        const brandMap = new Map(existingBrands.map(b => [b.name.toLowerCase() + '|' + b.category, b]));
+        const modelMap = new Map(existingModels.map(m => [m.name.toLowerCase() + '|' + (m.brandId || ''), m]));
 
         let newBrands = 0, dupBrands = 0, newModels = 0, dupModels = 0;
         rows.forEach(r => {
@@ -1048,24 +1078,42 @@ async function renderVozilaUvoz() {
           </div>`;
 
         const show = rows.slice(0, 20);
+        const headers = isMoto
+            ? `<tr><th>Znamka</th><th>Model</th><th>Različica</th><th>Kategorija</th><th>Takt</th><th>Konfiguracija</th><th>Status</th></tr>`
+            : `<tr><th>Kat.</th><th>Znamka</th><th>Model</th><th>Različica</th><th>Status</th></tr>`;
+        const colSpan = isMoto ? 7 : 5;
+
         document.getElementById('voz-preview-table').innerHTML = `
           <table class="adm-table">
-            <thead><tr><th>Kat.</th><th>Znamka</th><th>Model</th><th>Različica</th><th>Leto</th><th>Gorivo</th><th>Status</th></tr></thead>
+            <thead>${headers}</thead>
             <tbody>
               ${show.map(r => {
                   const bKey = r.brand.toLowerCase() + '|' + r.category;
                   const isDup = brandMap.has(bKey);
+                  const statusBadge = isDup
+                      ? '<span class="adm-badge adm-badge-gray">Obstoječ</span>'
+                      : '<span class="adm-badge adm-badge-green">Nov</span>';
+                  if (isMoto) {
+                      const katLabel = Array.isArray(r.motoType) ? r.motoType.join(' / ') : '';
+                      return `<tr class="${isDup ? 'voz-row-dup' : 'voz-row-new'}">
+                        <td><strong>${escHtml(r.brand)}</strong></td>
+                        <td>${escHtml(r.model)}</td>
+                        <td class="adm-sub">${escHtml(r.variant)}</td>
+                        <td class="adm-sub">${escHtml(katLabel)}</td>
+                        <td class="adm-sub">${escHtml(r.takt)}</td>
+                        <td class="adm-sub">${escHtml(r.konfiguracija)}</td>
+                        <td>${statusBadge}</td>
+                      </tr>`;
+                  }
                   return `<tr class="${isDup ? 'voz-row-dup' : 'voz-row-new'}">
                     <td><span class="adm-badge adm-badge-${catColor(r.category)}">${escHtml(r.category)}</span></td>
                     <td><strong>${escHtml(r.brand)}</strong></td>
                     <td>${escHtml(r.model)}</td>
                     <td class="adm-sub">${escHtml(r.variant)}</td>
-                    <td class="adm-sub">${escHtml(r.year)}</td>
-                    <td class="adm-sub">${escHtml(r.fuel)}</td>
-                    <td>${isDup ? '<span class="adm-badge adm-badge-gray">Obstoječ</span>' : '<span class="adm-badge adm-badge-green">Nov</span>'}</td>
+                    <td>${statusBadge}</td>
                   </tr>`;
               }).join('')}
-              ${rows.length > 20 ? `<tr><td colspan="7" style="color:#6b7280;text-align:center;padding:.75rem">… in še ${rows.length - 20} vrstic</td></tr>` : ''}
+              ${rows.length > 20 ? `<tr><td colspan="${colSpan}" style="color:#6b7280;text-align:center;padding:.75rem">… in še ${rows.length - 20} vrstic</td></tr>` : ''}
             </tbody>
           </table>`;
 
@@ -1074,19 +1122,48 @@ async function renderVozilaUvoz() {
     }
 }
 
-function downloadVozilaTemplate() {
+function downloadVozilaTemplate(type) {
     if (typeof XLSX === 'undefined') { showToast('SheetJS ni naložen.', 'error'); return; }
-    const ws = XLSX.utils.aoa_to_sheet([
-        ['category', 'brand', 'model', 'variant', 'year', 'fuel'],
-        ['avto', 'BMW', 'X5', 'xDrive30d', '2022', 'diesel'],
-        ['avto', 'BMW', '3 Series', '320d', '2021', 'diesel'],
-        ['avto', 'Volkswagen', 'Golf', 'GTI', '2023', 'bencin'],
-        ['moto', 'Honda', 'CB500F', '', '2022', 'bencin'],
-        ['gospodarska', 'Mercedes-Benz', 'Sprinter', '314 CDI', '2021', 'diesel'],
-    ]);
+
+    let data, sheetName, filename;
+
+    if (type === 'moto') {
+        data = [
+            ['Znamka', 'Model', 'Različica', 'Kategorija', 'Takt', 'Konfiguracija'],
+            ['Aprilia', 'RS250', 'Base', 'Športni motor', '2', 'V2'],
+            ['Aprilia', 'RS 660', 'Base', 'Športni / Naked', '4', 'I2'],
+            ['BMW Motorrad', 'S 1000 RR', 'S 1000 RR', 'Športni motor', '4', 'I4'],
+            ['Honda', 'Africa Twin', 'CRF 1100L', 'Adventure', '4', 'I2'],
+            ['Yamaha', 'MT-09', 'MT-09 SP', 'Naked', '4', 'I3'],
+        ];
+        sheetName = 'Motorji';
+        filename  = 'mojavto-motorji-predloga.xlsx';
+    } else if (type === 'gospodarska') {
+        data = [
+            ['category', 'brand', 'model', 'variant'],
+            ['gospodarska', 'Mercedes-Benz', 'Sprinter', '314 CDI'],
+            ['gospodarska', 'Volkswagen', 'Crafter', '35 2.0 TDI'],
+            ['gospodarska', 'Ford', 'Transit', 'Custom 2.0 EcoBlue'],
+        ];
+        sheetName = 'Gospodarska';
+        filename  = 'mojavto-gospodarska-predloga.xlsx';
+    } else {
+        // avto
+        data = [
+            ['category', 'brand', 'model', 'variant'],
+            ['avto', 'BMW', 'X5', 'xDrive30d'],
+            ['avto', 'BMW', '3 Series', '320d'],
+            ['avto', 'Volkswagen', 'Golf', 'GTI'],
+            ['avto', 'Toyota', 'Corolla', '1.8 Hybrid'],
+        ];
+        sheetName = 'Avto';
+        filename  = 'mojavto-avto-predloga.xlsx';
+    }
+
+    const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Vozila');
-    XLSX.writeFile(wb, 'mojavto-vozila-predloga.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+    XLSX.writeFile(wb, filename);
 }
 
 // ── Static taxonomy reference lists ──────────────────────────────────────────

@@ -26,6 +26,17 @@ const pageModules = {
     admin: () => import('./pages/admin.js').then(m => m.initAdminPage()),
     'service-entry': () => import('./pages/service-entry.js').then(m => m.initServiceEntryPage()),
     'b2b-evaluate':  () => import('./pages/b2b-evaluate.js').then(m => m.initB2bEvaluatePage()),
+
+    // ── B2B Operating System ──
+    'b2b-dashboard':      () => import('./pages/b2b-dashboard.js').then(m => m.initB2bDashboardPage()),
+    'b2b-reservations':   () => import('./pages/b2b-reservations.js').then(m => m.initB2bReservationsPage()),
+    'b2b-services':       () => import('./pages/b2b-services.js').then(m => m.initB2bServicesPage()),
+    'b2b-profile-editor': () => import('./pages/b2b-profile-editor.js').then(m => m.initB2bProfileEditorPage()),
+    'b2b-inventory':      () => import('./pages/b2b-inventory.js').then(m => m.initB2bInventoryPage()),
+    'b2b-leads':          () => import('./pages/b2b-leads.js').then(m => m.initB2bLeadsPage()),
+    'b2b-tools':          () => import('./pages/b2b-tools.js').then(m => m.initB2bToolsPage()),
+    'b2b-workshop':       () => import('./pages/b2b-workshop.js').then(m => m.initB2bWorkshopPage()),
+    'b2b-tire-hotel':     () => import('./pages/b2b-tire-hotel.js').then(m => m.initB2bTireHotelPage()),
 };
 
 document.addEventListener('beforeRouteChange', () => {

@@ -24,6 +24,8 @@ export const MAIN_CATEGORIES = {
                 searchType: 'vozilo', // default — searching for the vehicle itself
                 vehicleTypes: [
                     { value: 'SportniMotor', label: 'Športni motor' },
+                    { value: 'SportniTourer', label: 'Športno turističen' },
+                    { value: 'Adventure', label: 'Adventure' },
                     { value: 'NakedBike', label: 'Naked bike' },
                     { value: 'Enduro', label: 'Enduro' },
                     { value: 'Chopper', label: 'Chopper' },
