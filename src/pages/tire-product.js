@@ -6,6 +6,7 @@
 import { getTireById, MOCK_PRICE_HISTORY } from '../data/tireMockData.js';
 import { SPEED_RATINGS, LOAD_INDICES } from '../data/tireDimensions.js';
 import { mockBusinesses } from '../data/businesses.js';
+import { submitTireOrder } from '../services/b2bService.js';
 
 export async function initTireProductPage() {
     console.log('[TireProduct] init');
@@ -36,7 +37,7 @@ export async function initTireProductPage() {
     bindSavingsCalc(tire);
     bindPackageSelect();
     renderPriceHistoryChart(id);
-    bindBuyAndBook(tire);
+    bindCTAButtons(tire);
 
     if (window.lucide) window.lucide.createIcons();
 }
@@ -123,10 +124,29 @@ function renderProductPage(tire) {
             </div>
 
             <!-- Buy & Book CTA -->
-            <div style="margin-top:1rem;">
-                <button class="tp-buy-book-btn" id="btnBuyAndBook">
-                    <i data-lucide="wrench"></i> Kupi in rezerviraj montažo
+            <div class="tp-cta-group" id="tpCtaGroup">
+                <button class="tp-info-btn" id="tpInfoBtn" aria-label="Kako deluje nakup?" type="button">
+                    <i data-lucide="info"></i>
                 </button>
+                <a class="tp-buy-only-btn" id="btnBuyOnly" href="#" target="_blank" rel="noopener">
+                    <i data-lucide="shopping-cart"></i> Samo nakup
+                </a>
+                <button class="tp-buy-book-btn" id="btnBuyAndBook" type="button">
+                    <i data-lucide="wrench"></i> Nakup in montaža
+                </button>
+            </div>
+
+            <!-- Info modal -->
+            <div class="tp-info-modal" id="tpInfoModal" hidden>
+                <div class="tp-info-modal-inner glass-card">
+                    <button class="tp-modal-close" id="tpInfoClose" aria-label="Zapri"><i data-lucide="x"></i></button>
+                    <div class="tp-info-modal-title"><i data-lucide="info"></i> Kako deluje nakup?</div>
+                    <ol class="tp-info-steps">
+                        <li><strong>Samo nakup:</strong> Gume naročite direktno pri spletni trgovini in vam jih dostavijo domov.</li>
+                        <li><strong>Nakup in montaža:</strong> Izberete vulkanizerja → mi pošljemo zahtevek → vulkanizer potrdi sprejem gum → prejmete SMS s povezavo za rezervacijo termina.</li>
+                    </ol>
+                    <p class="tp-info-note">Gume bodo dostavljene neposredno k vulkanizerju. Termin montaže izberete šele po potrditvi sprejema (pričakovana dostava: 3 delovne dni).</p>
+                </div>
             </div>
         </div>
     </div>
@@ -443,25 +463,25 @@ function bindPackageSelect() {
 // ─────────────────────────────────────────────────────────────────────────────
 // Buy & Book — vulcanizer picker modal
 // ─────────────────────────────────────────────────────────────────────────────
-function bindBuyAndBook(tire) {
-    const btn = document.getElementById('btnBuyAndBook');
-    if (!btn) return;
+function bindCTAButtons(tire) {
+    const btnBook = document.getElementById('btnBuyAndBook');
+    if (btnBook) {
+        btnBook.addEventListener('click', () => openVulcanizerModal(tire));
+    }
 
-    btn.addEventListener('click', () => {
-        openVulcanizerModal(tire);
-    });
+    const infoBtn = document.getElementById('tpInfoBtn');
+    const infoModal = document.getElementById('tpInfoModal');
+    const infoClose = document.getElementById('tpInfoClose');
+    if (infoBtn && infoModal) {
+        infoBtn.addEventListener('click', () => { infoModal.hidden = false; if (window.lucide) window.lucide.createIcons(); });
+        infoClose?.addEventListener('click', () => { infoModal.hidden = true; });
+        infoModal.addEventListener('click', e => { if (e.target === infoModal) infoModal.hidden = true; });
+    }
 }
 
-function openVulcanizerModal(tire) {
-    // Remove any existing modal
-    document.getElementById('tpVulcanizerModal')?.remove();
-
-    const vulcanizers = mockBusinesses.filter(b =>
-        b.businessTypes.includes('vulcanizer') && b.verified
-    );
-
-    const listHtml = vulcanizers.map(v => `
-        <div class="tp-vuln-card" data-id="${v.id}" role="button" tabindex="0">
+function renderVulcanizerCard(v) {
+    return `
+        <div class="tp-vuln-card" data-id="${v.id}" data-name="${v.name.toLowerCase()} ${v.location.city.toLowerCase()}" role="button" tabindex="0">
             <img class="tp-vuln-logo" src="${v.logo}" alt="${v.name}" />
             <div class="tp-vuln-info">
                 <div class="tp-vuln-name">${v.name}</div>
@@ -475,7 +495,18 @@ function openVulcanizerModal(tire) {
             </div>
             <div class="tp-vuln-arrow"><i data-lucide="chevron-right"></i></div>
         </div>
-    `).join('');
+    `;
+}
+
+function openVulcanizerModal(tire) {
+    // Remove any existing modal
+    document.getElementById('tpVulcanizerModal')?.remove();
+
+    const vulcanizers = mockBusinesses.filter(b =>
+        b.businessTypes.includes('vulcanizer') && b.verified
+    );
+
+    const listHtml = vulcanizers.map(renderVulcanizerCard).join('');
 
     const modal = document.createElement('div');
     modal.id = 'tpVulcanizerModal';
@@ -499,8 +530,16 @@ function openVulcanizerModal(tire) {
                 <i data-lucide="circle-dot" style="width:13px;height:13px;"></i>
                 ${tire.brand} ${tire.model} &mdash; ${tire.width}/${tire.height} R${tire.diameter}
             </div>
+            <div class="tp-vuln-search-wrap">
+                <i data-lucide="search" class="tp-vuln-search-icon"></i>
+                <input class="tp-vuln-search-input" id="tpVulnSearch" type="text" placeholder="Išči po imenu ali mestu…" autocomplete="off" />
+            </div>
             <div class="tp-vuln-list" id="tpVulnList">
                 ${listHtml}
+            </div>
+            <div class="tp-vuln-empty" id="tpVulnEmpty" style="display:none;">
+                <i data-lucide="search-x" style="width:20px;height:20px;opacity:0.4;"></i>
+                <span>Ni zadetkov.</span>
             </div>
         </div>
     `;
@@ -513,13 +552,24 @@ function openVulcanizerModal(tire) {
     document.getElementById('tpModalBackdrop').addEventListener('click', closeVulcanizerModal);
     document.addEventListener('keydown', handleModalEsc);
 
+    // Search filter
+    document.getElementById('tpVulnSearch').addEventListener('input', e => {
+        const q = e.target.value.toLowerCase().trim();
+        const cards = modal.querySelectorAll('.tp-vuln-card');
+        let visible = 0;
+        cards.forEach(card => {
+            const match = !q || card.dataset.name.includes(q);
+            card.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        document.getElementById('tpVulnEmpty').style.display = visible === 0 ? 'flex' : 'none';
+    });
+
     // Vulcanizer selection
     modal.querySelectorAll('.tp-vuln-card').forEach(card => {
-        const select = () => {
+        const select = async () => {
             const selectedId = card.getAttribute('data-id');
-            const qty = parseInt(document.getElementById('packageOptions')
-                ?.querySelector('.package-card.selected')
-                ?.dataset.mounting !== undefined ? 4 : 4) || 4;
+            const qty = 4;
 
             const handoff = {
                 vulcanizerId: selectedId,
@@ -527,15 +577,56 @@ function openVulcanizerModal(tire) {
                 tireModel: tire.model,
                 tireDim: `${tire.width}/${tire.height} R${tire.diameter}`,
                 quantity: qty,
+                price: tire.lowestPrice,
                 type: 'tire_purchase_and_fit',
             };
-            sessionStorage.setItem('mojavto_tire_handoff', JSON.stringify(handoff));
-            closeVulcanizerModal();
-            window.location.hash = `/booking?businessId=${selectedId}`;
+
+            modal.querySelectorAll('.tp-vuln-card').forEach(c => c.style.pointerEvents = 'none');
+            card.querySelector('.tp-vuln-arrow').innerHTML = '<i data-lucide="loader" style="width:16px;height:16px;"></i>';
+            if (window.lucide) window.lucide.createIcons();
+
+            try {
+                const { id: tireOrderId, estimatedDeliveryDate } = await submitTireOrder(handoff, selectedId);
+                sessionStorage.setItem('mojavto_tire_handoff', JSON.stringify({ ...handoff, tireOrderId, estimatedDeliveryDate }));
+                closeVulcanizerModal();
+                showTireOrderSuccess(estimatedDeliveryDate);
+            } catch (err) {
+                if (err.message === 'Potrebna prijava.') {
+                    closeVulcanizerModal();
+                    window.location.hash = '/prijava';
+                } else {
+                    console.error('[TireProduct] submitTireOrder failed', err);
+                    alert('Napaka pri oddaji zahtevka: ' + err.message);
+                    modal.querySelectorAll('.tp-vuln-card').forEach(c => c.style.pointerEvents = '');
+                    card.querySelector('.tp-vuln-arrow').innerHTML = '<i data-lucide="chevron-right"></i>';
+                    if (window.lucide) window.lucide.createIcons();
+                }
+            }
         };
         card.addEventListener('click', select);
         card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') select(); });
     });
+}
+
+function showTireOrderSuccess(estimatedDeliveryDate) {
+    const ctaGroup = document.getElementById('tpCtaGroup');
+    if (!ctaGroup) return;
+    const dateLabel = estimatedDeliveryDate
+        ? `Pričakovana dostava: <strong>${estimatedDeliveryDate}</strong>.`
+        : '';
+    ctaGroup.innerHTML = `
+        <div class="tp-order-success">
+            <i data-lucide="check-circle" style="color:#16a34a;width:24px;height:24px;flex-shrink:0;"></i>
+            <div>
+                <strong>Zahtevek oddan!</strong><br>
+                <span style="font-size:0.82rem;color:#475569;">
+                    Vulkanizer bo potrdil sprejem gum. Termin montaže boste rezervirali po potrditvi.
+                    ${dateLabel}
+                </span>
+            </div>
+        </div>
+    `;
+    if (window.lucide) window.lucide.createIcons();
 }
 
 function closeVulcanizerModal() {

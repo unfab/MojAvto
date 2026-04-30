@@ -202,6 +202,19 @@ export function initRegisterPage() {
         const container = document.getElementById('unlockedFeatures');
         container.innerHTML = '<p class="unlocked-title"><i class="fas fa-unlock-alt"></i> Odklenjene funkcije:</p>' +
             roles.map(r => featureMap[r] ? `<div class="unlocked-item"><i class="fas ${featureMap[r].icon}"></i><span>${featureMap[r].label}</span></div>` : '').join('');
+
+        if (roles.includes('vulcanizer')) {
+            container.insertAdjacentHTML('beforeend', `
+                <div class="unlocked-item" style="padding-left:1.5rem;">
+                    <i class="fas fa-inbox"></i>
+                    <span>Prejemali boste zahtevke za montažo pnevmatik</span>
+                </div>
+                <div class="unlocked-item" style="padding-left:1.5rem;">
+                    <i class="fas fa-check-double"></i>
+                    <span>Vaša prva naloga je potrditev sprejema gum, šele nato stranka izbere termin</span>
+                </div>
+            `);
+        }
     }
 }
 

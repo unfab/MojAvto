@@ -43,7 +43,7 @@ export function initHeader() {
 
             <div class="nav-actions">
               ${user ? `
-                <a href="#/novi-oglas" class="pill-btn primary btn-sm"><i data-lucide="plus"></i> Objavi oglas</a>
+                <a href="#/novi-oglas" class="pill-btn primary btn-sm"><i data-lucide="plus"></i><span> Objavi oglas</span></a>
                 <div id="userMenu" class="relative">
                   <button id="userMenuBtn" class="pill-btn secondary user-btn">
                     ${user.photoURL

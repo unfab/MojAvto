@@ -174,10 +174,18 @@ export async function incrementViewCount(listingId) {
 
 // ── Get all listings (with promotion-aware sorting) ───────────────────────────
 export async function getListings() {
-    const q = query(collection(db, 'listings'), orderBy('createdAt', 'desc'));
-    const snapshot = await getDocs(q);
-    const listings = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-    return sortByPromotion(listings);
+    let listings = [];
+    try {
+        const q = query(collection(db, 'listings'), orderBy('createdAt', 'desc'));
+        const snapshot = await getDocs(q);
+        listings = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (err) {
+        console.warn("Could not fetch listings from Firestore, using only sample data.", err);
+    }
+
+    // Merge with sample cars for demo purposes
+    const allListings = [...listings, ...sampleCars];
+    return sortByPromotion(allListings);
 }
 
 // ── Get user listings ─────────────────────────────────────────────────────────

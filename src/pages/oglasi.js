@@ -203,7 +203,21 @@ async function checkFavouriteStates() {
 // ── Render Car Card ──────────────────────────────────────────
 function renderCarCard(car) {
     const inCompare = isInCompare(car.id);
-    const images = car.images?.exterior || [car.image];
+    // Display logic: 1st exterior and 1st interior if available, otherwise first 2 images
+    let displayImages = [];
+    if (car.images) {
+        if (car.images.exterior?.[0]) displayImages.push(car.images.exterior[0]);
+        if (car.images.interior?.[0]) {
+            displayImages.push(car.images.interior[0]);
+        } else if (car.images.exterior?.[1]) {
+            displayImages.push(car.images.exterior[1]);
+        }
+    }
+    if (displayImages.length === 0) displayImages.push(car.image || '/images/car-placeholder.png');
+    
+    // Ensure unique images and limit to 2 for the board view
+    const images = [...new Set(displayImages)].slice(0, 2);
+
     const rating = getPriceRating(car, sampleCars);
 
     // Normalise car to listing shape for getVehicleRating
@@ -239,10 +253,6 @@ function renderCarCard(car) {
                 ${images.map(img => `<img src="${img}" alt="${car.title}" loading="lazy">`).join('')}
             </div>
             
-            <div class="img-overlay-count">
-                <i data-lucide="camera"></i> ${car.imgCount || images.length}
-            </div>
-
             ${car.isNew ? '<span class="badge-new-pill overlay">NEU</span>' : ''}
             
             ${images.length > 1 ? `
@@ -289,9 +299,6 @@ function renderCarCard(car) {
                     <button class="action-pill-btn listing-compare-btn ${inCompare ? 'active' : ''}" data-car-id="${car.id}" title="Primerjaj">
                         <i data-lucide="scale"></i>
                     </button>
-                    <button class="action-pill-btn contact-btn accent" data-car-id="${car.id}" title="Kontakt">
-                        <i data-lucide="phone"></i>
-                    </button>
                 </div>
             </div>
 
@@ -305,11 +312,17 @@ function renderCarCard(car) {
                 </div>
             </div>
 
-            ${note ? `
-            <div class="seller-note-card">
-                <i data-lucide="message-square"></i>
-                <em>"${note}"</em>
-            </div>` : ''}
+            <div class="note-contact-row">
+                ${note ? `
+                <div class="seller-note-card">
+                    <i data-lucide="bell-ring"></i>
+                    <span>"${note}"</span>
+                </div>
+                ` : '<div style="flex: 1;"></div>'}
+                <button class="action-pill-btn contact-btn accent" data-car-id="${car.id}" onclick="showContactPopup('${car.id}'); event.stopPropagation();" title="Kontakt">
+                    <i data-lucide="phone"></i>
+                </button>
+            </div>
         </div>
     </div>`;
 }

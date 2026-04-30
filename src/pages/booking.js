@@ -20,6 +20,7 @@ import {
 import { store } from '../store/store.js';
 import QRCode from 'qrcode';
 import { buildGoogleCalendarUrl } from '../services/googleCalendarService.js';
+import { getTireOrder, markTireOrderOrdered } from '../services/b2bService.js';
 
 // ── Wizard state (reset on every initBookingPage call) ────────
 let state = {};
@@ -61,6 +62,11 @@ function resetState() {
 
         // Computed
         priceBreakdown: null,
+
+        // Tire order (from URL param tireOrderId)
+        tireOrder: null,
+        tireOrderId: null,
+        skipProductsForTireOrder: false,
     };
 }
 
@@ -100,7 +106,24 @@ function getUserId() {
 
 // Returns true if there are no products for selected services (step 4 should be skipped)
 function shouldSkipProductsStep() {
+    if (state.skipProductsForTireOrder) return true;
     return getProductsForServices(state.selectedServiceIds).length === 0;
+}
+
+function getMinBookingDate() {
+    if (state.tireOrder?.estimatedDeliveryDate) {
+        const d = new Date(state.tireOrder.estimatedDeliveryDate);
+        d.setHours(0, 0, 0, 0);
+        return d;
+    }
+    if (state.tireHandoff?.estimatedDeliveryDate) {
+        const d = new Date(state.tireHandoff.estimatedDeliveryDate);
+        d.setHours(0, 0, 0, 0);
+        return d;
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
 }
 
 // Generates a human-readable service number
@@ -626,11 +649,12 @@ function buildCalendarGrid(year, month) {
         cells += `<div class="cal-day other-month">${daysInPrev - i}</div>`;
     }
     // Days of current month
+    const minDate = getMinBookingDate();
     for (let d = 1; d <= daysInMonth; d++) {
         const date   = new Date(year, month, d);
         const iso    = date.toISOString().slice(0, 10);
         const isSun  = date.getDay() === 0;
-        const isPast = date < today;
+        const isPast = date < minDate;
         const isTod  = date.getTime() === today.getTime();
         const isSel  = state.selectedDate === iso;
 
@@ -661,9 +685,17 @@ function buildStep5() {
     const { calendarYear: yr, calendarMonth: mo } = state;
     const prevOk = !(yr === new Date().getFullYear() && mo <= new Date().getMonth());
 
+    const deliveryNote = state.tireOrder?.estimatedDeliveryDate
+        ? `<div style="display:flex;align-items:center;gap:0.5rem;background:rgba(37,99,235,0.06);border:1px solid rgba(37,99,235,0.15);border-radius:0.625rem;padding:0.5rem 0.875rem;font-size:0.8rem;color:#1e40af;margin-bottom:1rem;">
+               <i data-lucide="truck" style="width:14px;height:14px;flex-shrink:0;"></i>
+               Gume pričakovane <strong style="margin-left:0.25rem;">${state.tireOrder.estimatedDeliveryDate}</strong> — termini pred tem datumom so onemogočeni.
+           </div>`
+        : '';
+
     return `
     <div class="wizard-step">
         <h2 class="step-title"><i data-lucide="calendar"></i> Izberite termin</h2>
+        ${deliveryNote}
         <div class="datetime-layout">
 
             <div class="cal-section">
@@ -941,6 +973,13 @@ function confirmBooking() {
     const saved = saveBooking(bookingData);
     store.addBooking(saved);
 
+    // Mark tire order as ordered if applicable
+    if (state.tireOrderId) {
+        markTireOrderOrdered(state.tireOrderId).catch(err =>
+            console.warn('[Booking] Failed to mark tire order as ordered', err)
+        );
+    }
+
     // Mock notifications
     if (state.sendConfirmEmail) console.info('[Booking] Email s QR kodo poslan na:', userId);
     if (state.sendConfirmSms)   console.info('[Booking] SMS z linkom poslan na:', userId);
@@ -1157,6 +1196,40 @@ function renderTireHandoffBanner(handoff) {
     if (window.lucide) window.lucide.createIcons();
 }
 
+// ── Tire order banner (for confirmed Firestore orders) ────────
+function renderTireOrderBanner(tireOrder) {
+    const existing = document.getElementById('tireHandoffBanner');
+    if (existing) return;
+
+    const td = tireOrder.tireData || {};
+    const banner = document.createElement('div');
+    banner.id = 'tireHandoffBanner';
+    banner.style.cssText = [
+        'background:linear-gradient(135deg,rgba(37,99,235,0.12),rgba(79,70,229,0.10))',
+        'border:1px solid rgba(37,99,235,0.25)',
+        'border-radius:1rem',
+        'padding:0.875rem 1.125rem',
+        'margin-bottom:1.25rem',
+        'display:flex',
+        'align-items:center',
+        'gap:0.75rem',
+        'font-size:0.82rem',
+        'color:#1e40af',
+    ].join(';');
+    banner.innerHTML = `
+        <i data-lucide="package-check" style="width:18px;height:18px;flex-shrink:0;color:#2563eb;"></i>
+        <span>
+            <strong>Gume so bile naročene preko MojAvto in bodo dostavljene na vaš naslov.</strong>
+            ${td.quantity}× ${td.brand} ${td.model} (${td.dimension}) —
+            izberite termin montaže po dostavi.
+        </span>
+    `;
+
+    const progress = document.getElementById('bookingProgress');
+    progress?.insertAdjacentElement('afterend', banner);
+    if (window.lucide) window.lucide.createIcons();
+}
+
 // ── Page init ─────────────────────────────────────────────────
 export async function initBookingPage() {
     console.log('[BookingPage] init');
@@ -1174,6 +1247,7 @@ export async function initBookingPage() {
     const hash = window.location.hash;
     const bizIdMatch = hash.match(/[?&]businessId=([^&]+)/);
     const serviceParam = (hash.match(/[?&]service=([^&]+)/) || [])[1];
+    const tireOrderIdParam = (hash.match(/[?&]tireOrderId=([^&]+)/) || [])[1] || null;
 
     // Handoff overrides businessId from URL if present
     state.businessId = (tireHandoff?.vulcanizerId) || (bizIdMatch ? bizIdMatch[1] : null);
@@ -1225,6 +1299,28 @@ export async function initBookingPage() {
         state.selectedServiceIds = [serviceParam];
     }
 
+    // Load tire order from Firestore if tireOrderId is in URL
+    if (tireOrderIdParam) {
+        try {
+            const tireOrder = await getTireOrder(tireOrderIdParam);
+            if (tireOrder && tireOrder.status === 'confirmed') {
+                state.tireOrderId = tireOrderIdParam;
+                state.tireOrder = tireOrder;
+                state.skipProductsForTireOrder = true;
+            } else if (tireOrder) {
+                const wizard = document.getElementById('bookingWizard');
+                if (wizard) wizard.innerHTML = `
+                    <div class="booking-error">
+                        <h2>Naročilo gum še ni potrjeno</h2>
+                        <p>Vulkanizer še ni potrdil sprejema gum. Termin boste lahko rezervirali po potrditvi.</p>
+                    </div>`;
+                return;
+            }
+        } catch (err) {
+            console.warn('[Booking] Failed to load tire order', err);
+        }
+    }
+
     // Apply tire handoff automation
     if (tireHandoff) {
         state.tireHandoff = tireHandoff;
@@ -1243,6 +1339,17 @@ export async function initBookingPage() {
         state.notes = `SISTEMSKO SPOROČILO: Naročene pnevmatike (${tireHandoff.quantity}× ${tireHandoff.tireBrand} ${tireHandoff.tireModel}, dimenzije: ${tireHandoff.tireDim}) bodo dostavljene na vaš naslov. Stranka želi montažo.`;
     }
 
+    // Override notes if we have a confirmed tire order from Firestore
+    if (state.tireOrder) {
+        const to = state.tireOrder;
+        state.bookingType = 'bring_own';
+        if (state.business.servicesOffered.includes('tyre_change') &&
+            !state.selectedServiceIds.includes('tyre_change')) {
+            state.selectedServiceIds.push('tyre_change');
+        }
+        state.notes = `Montaža dostavljenih gum (naročilo MojAvto #${to.id}). Gume bodo dostavljene na vaš naslov.`;
+    }
+
     // Update back button
     const backLabel = document.getElementById('bookingBackLabel');
     if (backLabel) backLabel.textContent = 'Nazaj na profil';
@@ -1257,6 +1364,7 @@ export async function initBookingPage() {
 
     // Show handoff banner after progress bar
     if (tireHandoff) renderTireHandoffBanner(tireHandoff);
+    if (state.tireOrder) renderTireOrderBanner(state.tireOrder);
 
     // Render first step
     renderStep(1);

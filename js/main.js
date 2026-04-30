@@ -18,18 +18,21 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentPage = 1;
 
     const initialListings = [
-        { id: 1, make: "Toyota", model: "Corolla", title: "Toyota Corolla 1.8 Hybrid", year: 2019, mileage: 35000, price: 15900, power: 90, fuel: "Hibrid", transmission: "Avtomatski", region: "Osrednjeslovenska", phone: "041 123 456", images: { exterior: ["https://cdn3.avto.net/images/2024/07/21/1/300427843.1.jpg"], interior: [] } },
-        { id: 2, make: "Volkswagen", model: "Golf", title: "Volkswagen Golf 8 2.0 TDI", year: 2021, mileage: 48000, price: 24500, power: 110, fuel: "Dizel", transmission: "Ročni", region: "Podravska", images: { exterior: ["https://cdn3.avto.net/images/2024/07/22/1/300516801.1.jpg"], interior: [] } },
-        { id: 3, make: "BMW", model: "Series 3", title: "BMW 320d M Sport", year: 2020, mileage: 65000, price: 31800, power: 140, fuel: "Dizel", transmission: "Avtomatski", region: "Savinjska", phone: "031 987 654", images: { exterior: ["https://cdn3.avto.net/images/2024/07/19/1/300171060.1.jpg"], interior: [] } },
-        { id: 4, make: "Tesla", model: "Model 3", title: "Tesla Model 3 Long Range", year: 2022, mileage: 55000, price: 38900, power: 324, fuel: "Elektrika", transmission: "Avtomatski", battery: 75, range: 560, region: "Osrednjeslovenska", images: { exterior: ["https://cdn3.avto.net/images/2024/07/22/1/300512689.1.jpg"], interior: [] } }
+        { id: 1, type: "Avtomobili", make: "Toyota", model: "Corolla", title: "Toyota Corolla 1.8 Hybrid", year: 2019, mileage: 35000, price: 15900, power: 90, fuel: "Hibrid", transmission: "Avtomatski", region: "Osrednjeslovenska", phone: "041 123 456", images: { exterior: ["https://cdn3.avto.net/images/2024/07/21/1/300427843.1.jpg"], interior: [] } },
+        { id: 2, type: "Avtomobili", make: "Volkswagen", model: "Golf", title: "Volkswagen Golf 8 2.0 TDI", year: 2021, mileage: 48000, price: 24500, power: 110, fuel: "Dizel", transmission: "Ročni", region: "Podravska", images: { exterior: ["https://cdn3.avto.net/images/2024/07/22/1/300516801.1.jpg"], interior: [] } },
+        { id: 3, type: "Avtomobili", make: "BMW", model: "Series 3", title: "BMW 320d M Sport", year: 2020, mileage: 65000, price: 31800, power: 140, fuel: "Dizel", transmission: "Avtomatski", region: "Savinjska", phone: "031 987 654", images: { exterior: ["https://cdn3.avto.net/images/2024/07/19/1/300171060.1.jpg"], interior: [] } },
+        { id: 4, type: "Avtomobili", make: "Tesla", model: "Model 3", title: "Tesla Model 3 Long Range", year: 2022, mileage: 55000, price: 38900, power: 324, fuel: "Elektrika", transmission: "Avtomatski", battery: 75, range: 560, region: "Osrednjeslovenska", images: { exterior: ["https://cdn3.avto.net/images/2024/07/22/1/300512689.1.jpg"], interior: [] } },
+        // Motorji
+        { id: 5, type: "Motorji", make: "BMW Motorrad", model: "R 1250 GS", title: "BMW R 1250 GS Adventure", year: 2023, mileage: 5200, price: 21500, power: 100, fuel: "Bencin", transmission: "Ročni", region: "Gorenjska", phone: "040 111 222", images: { exterior: ["bmw_r1250gs_moto_1777103973226.png"], interior: [] } },
+        { id: 6, type: "Motorji", make: "Honda", model: "CB 650R", title: "Honda CB 650R Neo Sports Cafe", year: 2022, mileage: 8400, price: 7900, power: 70, fuel: "Bencin", transmission: "Ročni", region: "Osrednjeslovenska", images: { exterior: ["honda_cb650r_moto_1777103989405.png"], interior: [] } },
+        // Gospodarska vozila
+        { id: 7, type: "Gospodarska vozila", make: "Mercedes-Benz", model: "Sprinter", title: "Mercedes-Benz Sprinter 316 CDI", year: 2020, mileage: 125000, price: 28900, power: 120, fuel: "Dizel", transmission: "Ročni", region: "Savinjska", images: { exterior: ["mercedes_sprinter_van_1777104003932.png"], interior: [] } },
+        { id: 8, type: "Gospodarska vozila", make: "Volvo", model: "FH", title: "Volvo FH 500 Globetrotter XL", year: 2021, mileage: 350000, price: 85000, power: 368, fuel: "Dizel", transmission: "Avtomatski", region: "Podravska", images: { exterior: ["volvo_fh500_truck_1777104017900.png"], interior: [] } }
     ];
 
-    if (localStorage.getItem("mojavto_listings")) {
-        allListings = JSON.parse(localStorage.getItem("mojavto_listings"));
-    } else {
-        allListings = initialListings;
-        localStorage.setItem("mojavto_listings", JSON.stringify(allListings));
-    }
+    allListings = initialListings;
+    localStorage.setItem("mojavto_listings", JSON.stringify(allListings));
+
     currentFilteredListings = allListings;
 
     fetch("json/brands_models_global.json")
@@ -129,9 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Tab Filter
         if (criteria.vehicleType) {
-             // Let's assume the mock data doesn't have `type` yet so we won't strictly filter if we don't have to, 
-             // but if `vehicleType` is on the listing we would do:
-             // filtered = filtered.filter(item => item.type === criteria.vehicleType);
+            filtered = filtered.filter(item => item.type === criteria.vehicleType);
         }
 
         if (criteria.make) filtered = filtered.filter(item => item.make === criteria.make);
@@ -281,18 +282,20 @@ document.addEventListener("DOMContentLoaded", () => {
             const title = btn.getAttribute('title');
             if (title) currentVehicleType = title;
 
-            // Hide/show bodyType based on vehicle type
-            const bodyTypeGroup = document.getElementById('group-home-bodyType');
-            if (bodyTypeGroup) {
-                if (currentVehicleType === 'Motorji' || currentVehicleType === 'Gospodarska vozila') {
-                    bodyTypeGroup.style.display = 'none';
-                    if (document.getElementById('home-bodyType')) document.getElementById('home-bodyType').value = "";
-                } else {
-                    bodyTypeGroup.style.display = 'block';
-                }
-            }
+            // Update brands data based on type
+            let jsonFile = "json/brands_models_global.json";
+            if (currentVehicleType === 'Motorji') jsonFile = "json/brands_models_moto.json";
+            if (currentVehicleType === 'Gospodarska vozila') jsonFile = "json/brands_models_gospodarska.json";
 
-            handleFilterChange();
+            fetch(jsonFile)
+                .then(res => res.json())
+                .then(data => {
+                    brandModelData = data;
+                    populateMakeOptions();
+                    modelSelect.innerHTML = `<option value="">${translate('all_models') || 'Vsi modeli'}</option>`;
+                    modelSelect.disabled = true;
+                    handleFilterChange();
+                });
         });
     });
 

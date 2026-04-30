@@ -1,0 +1,20 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Listing images — authenticated users can upload/read; only owner can delete
+    match /listings/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.size < 15 * 1024 * 1024   // 15 MB per file
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Deny everything else
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

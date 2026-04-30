@@ -128,6 +128,17 @@ service cloud.firestore {
       allow create: if isSignedIn() && request.resource.data.userId == uid();
     }
 
+    // ── Tire orders ───────────────────────────────────────────────────────────
+    match /tire_orders/{orderId} {
+      // Buyer creates and reads their own orders
+      allow create: if isSignedIn() && request.resource.data.buyerId == uid();
+      allow read: if isSignedIn() &&
+                     (resource.data.buyerId == uid() ||
+                      resource.data.vulcanizerId == uid());
+      // Vulcanizer confirms (status → confirmed, bookingUrl set)
+      allow update: if isSignedIn() && resource.data.vulcanizerId == uid();
+    }
+
     // ── Deny everything else ──────────────────────────────────────────────────
     match /{document=**} {
       allow read, write: if false;

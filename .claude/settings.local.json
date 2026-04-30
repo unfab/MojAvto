@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep *)",
+      "Bash(sed \"s/.*db, '//\")",
+      "Bash(sed \"s/'.*$//\")",
+      "Bash(firebase deploy *)"
+    ]
+  }
+}

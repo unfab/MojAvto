@@ -1,6 +1,6 @@
 // b2b-reservations.js — Provider-side booking management
 import { mountB2BShell } from '../layouts/b2b-layout.js';
-import { listMyBookings, updateBookingStatus, blockSlot } from '../services/b2bService.js';
+import { listMyBookings, updateBookingStatus, blockSlot, listPendingTireOrders, confirmTireOrderReceival } from '../services/b2bService.js';
 
 const STATUS_META = {
     pending:   { label: 'Čaka potrditve', color: '#d97706', bg: '#fffbeb' },
@@ -17,22 +17,39 @@ export async function initB2bReservationsPage() {
     const urlStatus = new URLSearchParams((location.hash.split('?')[1] || '')).get('status') || '';
 
     main.innerHTML = `
-        <div class="b2b-toolbar">
-            <div class="b2b-filters">
-                <select id="resStatusFilter" class="b2b-select">
-                    <option value="">Vsi statusi</option>
-                    ${Object.entries(STATUS_META).map(([k, v]) => `<option value="${k}" ${k === urlStatus ? 'selected' : ''}>${v.label}</option>`).join('')}
-                </select>
-                <div class="b2b-view-toggle">
-                    <button class="b2b-view-btn active" data-view="list"><i data-lucide="list"></i> Seznam</button>
-                    <button class="b2b-view-btn" data-view="calendar"><i data-lucide="calendar"></i> Koledar</button>
-                </div>
-            </div>
-            <button id="blockSlotBtn" class="btn b2b-btn-secondary"><i data-lucide="ban"></i> Blokiraj termin</button>
+        <div class="b2b-tabs" id="b2bResTabs">
+            <button class="b2b-tab active" data-tab="bookings">
+                <i data-lucide="calendar-check"></i> Rezervacije
+            </button>
+            <button class="b2b-tab" data-tab="tire-orders">
+                <i data-lucide="package"></i> Naročila gum
+                <span class="b2b-tab-badge" id="tireOrderBadge" style="display:none;">0</span>
+            </button>
         </div>
 
-        <div id="resContent" class="b2b-card b2b-card-flush">
-            <div class="b2b-loading"><i data-lucide="loader"></i> Nalagam rezervacije…</div>
+        <div id="panelBookings">
+            <div class="b2b-toolbar">
+                <div class="b2b-filters">
+                    <select id="resStatusFilter" class="b2b-select">
+                        <option value="">Vsi statusi</option>
+                        ${Object.entries(STATUS_META).map(([k, v]) => `<option value="${k}" ${k === urlStatus ? 'selected' : ''}>${v.label}</option>`).join('')}
+                    </select>
+                    <div class="b2b-view-toggle">
+                        <button class="b2b-view-btn active" data-view="list"><i data-lucide="list"></i> Seznam</button>
+                        <button class="b2b-view-btn" data-view="calendar"><i data-lucide="calendar"></i> Koledar</button>
+                    </div>
+                </div>
+                <button id="blockSlotBtn" class="btn b2b-btn-secondary"><i data-lucide="ban"></i> Blokiraj termin</button>
+            </div>
+            <div id="resContent" class="b2b-card b2b-card-flush">
+                <div class="b2b-loading"><i data-lucide="loader"></i> Nalagam rezervacije…</div>
+            </div>
+        </div>
+
+        <div id="panelTireOrders" style="display:none;">
+            <div id="tireOrdersContent" class="b2b-card b2b-card-flush">
+                <div class="b2b-loading"><i data-lucide="loader"></i> Nalagam naročila…</div>
+            </div>
         </div>
     `;
     if (window.lucide) window.lucide.createIcons();
@@ -77,7 +94,85 @@ export async function initB2bReservationsPage() {
     });
     document.getElementById('blockSlotBtn').addEventListener('click', openBlockDialog);
 
+    // Tab switching
+    document.querySelectorAll('.b2b-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.b2b-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const which = tab.dataset.tab;
+            document.getElementById('panelBookings').style.display = which === 'bookings' ? '' : 'none';
+            document.getElementById('panelTireOrders').style.display = which === 'tire-orders' ? '' : 'none';
+            if (which === 'tire-orders') loadTireOrders();
+        });
+    });
+
     load();
+    loadTireOrdersBadge();
+
+    async function loadTireOrders() {
+        const root = document.getElementById('tireOrdersContent');
+        root.innerHTML = `<div class="b2b-loading"><i data-lucide="loader"></i> Nalagam naročila…</div>`;
+        if (window.lucide) window.lucide.createIcons();
+        try {
+            const orders = await listPendingTireOrders();
+            const badge = document.getElementById('tireOrderBadge');
+            if (badge) {
+                badge.textContent = orders.length;
+                badge.style.display = orders.length ? 'inline-flex' : 'none';
+            }
+            if (orders.length === 0) {
+                root.innerHTML = `<div class="b2b-empty"><i data-lucide="package"></i><p>Ni čakajočih naročil gum.</p></div>`;
+                if (window.lucide) window.lucide.createIcons();
+                return;
+            }
+            root.innerHTML = `<div class="b2b-tire-orders-list">${orders.map(renderTireOrderCard).join('')}</div>`;
+            bindTireOrderActions(root);
+            if (window.lucide) window.lucide.createIcons();
+        } catch (err) {
+            root.innerHTML = `<div class="b2b-empty"><i data-lucide="alert-triangle"></i><p>Napaka: ${esc(err.message)}</p></div>`;
+            if (window.lucide) window.lucide.createIcons();
+        }
+    }
+
+    async function loadTireOrdersBadge() {
+        try {
+            const orders = await listPendingTireOrders();
+            const badge = document.getElementById('tireOrderBadge');
+            if (badge && orders.length > 0) {
+                badge.textContent = orders.length;
+                badge.style.display = 'inline-flex';
+            }
+        } catch (_) {}
+    }
+
+    function bindTireOrderActions(root) {
+        root.querySelectorAll('.b2b-confirm-tire-order').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const orderId = btn.dataset.orderId;
+                btn.disabled = true;
+                btn.innerHTML = '<i data-lucide="loader"></i> Potrjujem...';
+                if (window.lucide) window.lucide.createIcons();
+                try {
+                    await confirmTireOrderReceival(orderId);
+                    const card = btn.closest('.b2b-tire-order-card');
+                    card.innerHTML = `
+                        <div class="b2b-tire-order-confirmed">
+                            <i data-lucide="check-circle" style="color:#16a34a;width:20px;height:20px;"></i>
+                            <div>
+                                <strong>Sprejem potrjen!</strong><br>
+                                <span style="font-size:0.82rem;color:#475569;">Kupec bo prejel SMS z linkom za rezervacijo termina.</span>
+                            </div>
+                        </div>`;
+                    if (window.lucide) window.lucide.createIcons();
+                } catch (err) {
+                    alert('Napaka: ' + err.message);
+                    btn.disabled = false;
+                    btn.innerHTML = '<i data-lucide="check-circle"></i> Potrdi sprejem';
+                    if (window.lucide) window.lucide.createIcons();
+                }
+            });
+        });
+    }
 
     async function openBlockDialog() {
         const date = prompt('Datum (YYYY-MM-DD):');
@@ -177,6 +272,39 @@ function renderCalendar(bookings) {
                     </div>
                 </div>
             `).join('')}
+        </div>
+    `;
+}
+
+function renderTireOrderCard(order) {
+    const td = order.tireData || {};
+    const submittedLabel = order.submittedAt?.toDate
+        ? order.submittedAt.toDate().toLocaleString('sl-SI')
+        : '—';
+    return `
+        <div class="b2b-tire-order-card" data-order-id="${order.id}">
+            <div class="b2b-tire-order-header">
+                <div class="b2b-tire-order-title">
+                    <i data-lucide="circle-dot" style="color:#2563eb;width:16px;height:16px;"></i>
+                    <strong>${esc(td.brand)} ${esc(td.model)}</strong>
+                    &mdash; ${esc(td.dimension)} &times; ${td.quantity || '?'} kos
+                </div>
+                <div class="b2b-tire-order-time">
+                    <i data-lucide="clock" style="width:12px;height:12px;"></i>
+                    ${esc(submittedLabel)}
+                </div>
+            </div>
+            <div class="b2b-tire-order-meta">
+                <span>Kupec: ${esc(order.buyerId)}</span>
+                <span>Pričakovana dostava: <strong>${esc(order.estimatedDeliveryDate || '—')}</strong></span>
+            </div>
+            <div class="b2b-tire-order-banner">
+                <i data-lucide="truck" style="width:14px;height:14px;"></i>
+                Gume bodo dostavljene na vaš naslov.
+            </div>
+            <button class="btn b2b-btn-primary b2b-confirm-tire-order" data-order-id="${order.id}">
+                <i data-lucide="check-circle"></i> Potrdi sprejem
+            </button>
         </div>
     `;
 }

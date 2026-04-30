@@ -9,31 +9,49 @@ import {
     getKmPill
 } from '../utils/listingUtils.js';
 
+let allListings = [];
 
 export async function initHomePage() {
     console.log('[HomePage] init');
-
-    // Load dropdown options for the search
-    setupSearchForm();
 
     // Setup rotating sponsored ads
     setupRotatingAds();
 
     // Fetch listings and populate sections
     try {
-        const listings = await getListings();
-
-        // Temporarily using the same listings for featured and popular until we have real stats
-        renderListingsSection('featured-container', 'featured-section', listings.filter(l => l.isPremium), true);
-
-        setupCarousels();
+        allListings = await getListings();
+        
+        // Initial render (cars)
+        updateHomeCategory('Avtomobili');
     } catch (err) {
         console.error("Error loading home page listings:", err);
     }
 
+    setupSearchForm();
+    setupCarousels();
+
     if (window.lucide) {
         window.lucide.createIcons();
     }
+}
+
+/**
+ * Updates the homepage content based on selected category tab
+ * @param {string} title - Tab title (Avtomobili, Motorji, Gospodarska vozila)
+ */
+function updateHomeCategory(title) {
+    let category = 'avto';
+    if (title === 'Motorji') category = 'motor';
+    if (title === 'Gospodarska vozila') category = 'gospodarska';
+
+    // Filter featured listings for this category
+    const categoryListings = allListings.filter(l => l.category === category);
+    const featured = categoryListings.filter(l => l.isPremium);
+    
+    renderListingsSection('featured-container', 'featured-section', featured, false);
+    
+    // Reload brands for the search form
+    reloadBrands(category);
 }
 
 function setupRotatingAds() {
@@ -42,7 +60,8 @@ function setupRotatingAds() {
     const nextBtn = document.getElementById('rot-next-btn');
     if (!track || !prevBtn || !nextBtn) return;
 
-    const sponsored = [...sampleCars];
+    // Filter for rotating ads (usually premium/sponsored across all categories)
+    const sponsored = allListings.length > 0 ? allListings.filter(l => l.isPremium) : [...sampleCars];
     if (sponsored.length === 0) return;
 
     function renderAdCard(car) {
@@ -66,7 +85,7 @@ function setupRotatingAds() {
                             ${getConsumptionPill(car)}
                         </div>
                     </div>
-                    <div class="sponsored-price">${car.price}</div>
+                    <div class="sponsored-price">${typeof car.price === 'number' ? new Intl.NumberFormat('sl-SI', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(car.price) : car.price}</div>
                 </a>
             </div>
         `;
@@ -80,44 +99,28 @@ function setupRotatingAds() {
     let targetScroll = 0;
     let step = 0.8; // Speed of auto-scroll
     let isPaused = false;
-    let animationId = null;
 
     function startAnimation() {
         if (!isPaused) {
-            // Smoothly move targetScroll forward by auto-scroll step
             targetScroll += step;
-            
-            // Loop logic for targetScroll
             if (targetScroll >= track.scrollWidth / 2) {
                 targetScroll = 0;
-                scrollAmount = 0; // jump immediately to avoid visible glitch
+                scrollAmount = 0;
             }
         }
-
-        // Standard ease-out chase: move scrollAmount toward targetScroll
-        // current += (target - current) * ease
         scrollAmount += (targetScroll - scrollAmount) * 0.1;
-        
         track.style.transform = `translateX(-${scrollAmount}px)`;
-        animationId = requestAnimationFrame(startAnimation);
+        requestAnimationFrame(startAnimation);
     }
 
-    // Start
     startAnimation();
 
-    // Pause on hover
     track.addEventListener('mouseenter', () => { isPaused = true; });
     track.addEventListener('mouseleave', () => { isPaused = false; });
 
-    // Buttons functionality with smooth chase
     const jumpSize = 400;
-    nextBtn.addEventListener('click', () => {
-        targetScroll += jumpSize;
-    });
-
-    prevBtn.addEventListener('click', () => {
-        targetScroll -= jumpSize;
-    });
+    nextBtn.addEventListener('click', () => { targetScroll += jumpSize; });
+    prevBtn.addEventListener('click', () => { targetScroll -= jumpSize; });
 }
 
 function renderListingsSection(containerId, sectionId, listings, hideIfEmpty = false) {
@@ -130,7 +133,7 @@ function renderListingsSection(containerId, sectionId, listings, hideIfEmpty = f
             section.style.display = 'none';
         } else {
             section.style.display = 'block';
-            container.innerHTML = '<p style="padding: 2rem; color: #6b7280; text-align: center; width: 100%;">Trenutno ni oglasov v tej kategoriji.</p>';
+            container.innerHTML = '<p style="padding: 2rem; color: #6b7280; text-align: center; width: 100%;">Trenutno ni izpostavljenih oglasov v tej kategoriji.</p>';
         }
         return;
     }
@@ -140,7 +143,9 @@ function renderListingsSection(containerId, sectionId, listings, hideIfEmpty = f
     let html = '';
     listings.forEach(listing => {
         const imgUrl = listing.images?.exterior?.[0] || 'https://via.placeholder.com/300x200?text=Ni+slike';
-        const price = new Intl.NumberFormat('sl-SI', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(listing.price);
+        const price = typeof listing.price === 'number' ? 
+            new Intl.NumberFormat('sl-SI', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(listing.price) : 
+            listing.price;
 
         html += `
             <div class="carousel-item">
@@ -185,7 +190,7 @@ function setupCarousels() {
 
         if (!track || !prevBtn || !nextBtn) return;
 
-        const scrollAmount = 300; // rough width of a card + gap
+        const scrollAmount = 300; 
 
         prevBtn.addEventListener('click', () => {
             track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -197,26 +202,23 @@ function setupCarousels() {
     });
 }
 
-function setupSearchForm() {
+function reloadBrands(category) {
     const brandSelect = document.getElementById("home-make");
     const modelSelect = document.getElementById("home-model");
-    const yearSelect = document.getElementById("home-reg-from");
+    if (!brandSelect || !modelSelect) return;
 
-    if (!brandSelect || !modelSelect || !yearSelect) return;
+    let jsonFile = "/json/brands_models_global.json";
+    if (category === 'motor') jsonFile = "/json/brands_models_moto.json";
+    if (category === 'gospodarska') jsonFile = "/json/brands_models_gospodarska.json";
 
-    // Populate years
-    const currentYear = new Date().getFullYear();
-    for (let y = currentYear; y >= 1980; y--) {
-        const option = document.createElement("option");
-        option.value = y;
-        option.textContent = y;
-        yearSelect.appendChild(option);
-    }
-
-    // Load brands and models
-    fetch("/json/brands_models_global.json")
+    fetch(jsonFile)
         .then(res => res.json())
         .then(brandModelData => {
+            // Clear current options
+            brandSelect.innerHTML = '<option value="">Vse znamke</option>';
+            modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
+            modelSelect.disabled = true;
+
             Object.keys(brandModelData).sort().forEach(brand => {
                 const option = document.createElement("option");
                 option.value = brand;
@@ -224,23 +226,13 @@ function setupSearchForm() {
                 brandSelect.appendChild(option);
             });
 
-            // Initialize custom selects after options are added
+            // Update custom selects
             import('../utils/customSelect.js').then(m => {
                 m.createCustomSelect(brandSelect);
                 m.createCustomSelect(modelSelect);
-                m.createCustomSelect(yearSelect);
-                
-                // Also fuel and mileage if they are on home page
-                const fuelSelect = document.getElementById("home-fuel-type");
-                if (fuelSelect) m.createCustomSelect(fuelSelect);
-                
-                const mileageSelect = document.getElementById("home-mileage-to");
-                if (mileageSelect) m.createCustomSelect(mileageSelect);
-
-                const priceSelect = document.getElementById("home-price-to");
-                if (priceSelect) m.createCustomSelect(priceSelect);
             });
 
+            // Model change listener
             brandSelect.addEventListener("change", function () {
                 const selectedMake = brandSelect.value;
                 modelSelect.innerHTML = '<option value="">Vsi modeli</option>';
@@ -257,15 +249,45 @@ function setupSearchForm() {
                     });
                     modelSelect.disabled = false;
                 }
+                
+                import('../utils/customSelect.js').then(m => {
+                    m.createCustomSelect(modelSelect);
+                });
             });
-        }).catch(err => console.warn("Could not load brands for home search.", err));
+        });
+}
+
+function setupSearchForm() {
+    const yearSelect = document.getElementById("home-reg-from");
+    if (!yearSelect) return;
+
+    // Populate years
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear; y >= 1980; y--) {
+        const option = document.createElement("option");
+        option.value = y;
+        option.textContent = y;
+        yearSelect.appendChild(option);
+    }
+
+    import('../utils/customSelect.js').then(m => {
+        m.createCustomSelect(yearSelect);
+        
+        const fuelSelect = document.getElementById("home-fuel-type");
+        if (fuelSelect) m.createCustomSelect(fuelSelect);
+        
+        const mileageSelect = document.getElementById("home-mileage-to");
+        if (mileageSelect) m.createCustomSelect(mileageSelect);
+
+        const priceSelect = document.getElementById("home-price-to");
+        if (priceSelect) m.createCustomSelect(priceSelect);
+    });
 
     // Simple search redirect
     const form = document.getElementById('homeSearchForm');
     if (form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            // In Phase 2 this should ideally navigate to advanced-search with query params
             window.location.hash = '/iskanje';
         });
     }
@@ -278,13 +300,12 @@ function setupSearchForm() {
             btn.classList.add('active');
             
             const title = btn.getAttribute('title');
+            updateHomeCategory(title);
+
             const bodyTypeGroup = document.getElementById('group-home-bodyType');
-            
             if (bodyTypeGroup) {
                 if (title === 'Motorji' || title === 'Gospodarska vozila') {
                     bodyTypeGroup.style.display = 'none';
-                    const btSelect = document.getElementById('home-bodyType');
-                    if (btSelect) btSelect.value = "";
                 } else {
                     bodyTypeGroup.style.display = 'flex';
                 }

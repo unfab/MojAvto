@@ -225,3 +225,111 @@ export async function getDashboardStats() {
         },
     };
 }
+
+// ════════════════════════════════════════════════════════════════════════════
+// TIRE ORDERS (tire_orders collection)
+// Flow: buyer submits → vulkanizer confirms → buyer books appointment
+// ════════════════════════════════════════════════════════════════════════════
+
+function addBusinessDays(startDate, days) {
+    const d = new Date(startDate);
+    let added = 0;
+    while (added < days) {
+        d.setDate(d.getDate() + 1);
+        const dow = d.getDay();
+        if (dow !== 0 && dow !== 6) added++;
+    }
+    return d;
+}
+
+export async function submitTireOrder(tireData, vulcanizerId) {
+    const u = auth.currentUser;
+    if (!u) throw new Error('Potrebna prijava.');
+
+    const estimatedDeliveryDate = addBusinessDays(new Date(), 3).toISOString().slice(0, 10);
+
+    const orderData = {
+        vulcanizerId,
+        buyerId: u.uid,
+        tireData: {
+            brand: tireData.tireBrand,
+            model: tireData.tireModel,
+            dimension: tireData.tireDim,
+            quantity: tireData.quantity,
+        },
+        status: 'pending_confirmation',
+        submittedAt: serverTimestamp(),
+        confirmedAt: null,
+        orderedAt: null,
+        estimatedDeliveryDate,
+        priceSnapshot: tireData.price || null,
+        currentPrice: tireData.price || null,
+        bookingUrl: null,
+    };
+
+    const ref = await addDoc(collection(db, 'tire_orders'), orderData);
+    console.info(`[TireOrder] Novo naročilo ${ref.id} za vulkanizerja ${vulcanizerId}. Mock obvestilo: "Novo naročilo gum čaka potrditev."`);
+
+    return { id: ref.id, estimatedDeliveryDate };
+}
+
+export async function getTireOrder(tireOrderId) {
+    const snap = await getDoc(doc(db, 'tire_orders', tireOrderId));
+    if (!snap.exists()) return null;
+    return { id: snap.id, ...snap.data() };
+}
+
+export async function listPendingTireOrders() {
+    const uid = requireProvider();
+    const q = query(
+        collection(db, 'tire_orders'),
+        where('vulcanizerId', '==', uid),
+        where('status', '==', 'pending_confirmation'),
+        orderBy('submittedAt', 'desc')
+    );
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+export async function confirmTireOrderReceival(tireOrderId) {
+    const uid = requireProvider();
+    const ref = doc(db, 'tire_orders', tireOrderId);
+    const snap = await getDoc(ref);
+    if (!snap.exists() || snap.data().vulcanizerId !== uid) {
+        throw new Error('Dostop zavrnjen.');
+    }
+
+    const bookingUrl = `${window.location.origin}/#/booking?businessId=${uid}&tireOrderId=${tireOrderId}`;
+
+    await updateDoc(ref, {
+        status: 'confirmed',
+        confirmedAt: serverTimestamp(),
+        bookingUrl,
+    });
+
+    const order = snap.data();
+    console.info(`[TireOrder] Naročilo ${tireOrderId} potrjeno. Mock SMS kupcu (buyerId: ${order.buyerId}): "Vaše gume so sprejete. Rezervirajte termin: ${bookingUrl}"`);
+
+    return { bookingUrl };
+}
+
+export async function checkAndHandlePriceChange(tireOrderId, newPrice) {
+    const uid = requireProvider();
+    const ref = doc(db, 'tire_orders', tireOrderId);
+    const snap = await getDoc(ref);
+    if (!snap.exists() || snap.data().vulcanizerId !== uid) throw new Error('Dostop zavrnjen.');
+
+    const order = snap.data();
+    if (order.priceSnapshot !== newPrice) {
+        await updateDoc(ref, { status: 'price_changed', currentPrice: newPrice, updatedAt: serverTimestamp() });
+        console.info(`[TireOrder] Cena spremenjena za ${tireOrderId}. Mock SMS kupcu: "Cena gum se je spremenila z ${order.priceSnapshot}€ na ${newPrice}€. Potrdite nakup."`);
+    }
+}
+
+export async function markTireOrderOrdered(tireOrderId) {
+    const ref = doc(db, 'tire_orders', tireOrderId);
+    await updateDoc(ref, {
+        status: 'ordered',
+        orderedAt: serverTimestamp(),
+    });
+}
